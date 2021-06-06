@@ -1,5 +1,7 @@
 import React from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { StyleSheet, Button } from 'react-native'
+import View from './../../../components/View';
+import Text from './../../../components/Text';
 
 const ComingSoonScreen = ({ navigation }) => {
     return (
