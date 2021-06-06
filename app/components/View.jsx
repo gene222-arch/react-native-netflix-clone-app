@@ -1,6 +1,6 @@
 import React from 'react'
 import { View as DefaultView, useColorScheme } from 'react-native'
-import Colors from './../constants/Colors';
+import Colors from '../constants/Colors';
 
 const View = ({ style, ...props }) =>
 {

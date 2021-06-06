@@ -1,7 +1,7 @@
 import React from 'react'
 import { useColorScheme } from 'react-native'
 import { Text as DefaultText } from 'react-native-elements'
-import Colors from './../constants/Colors';
+import Colors from '../constants/Colors';
 
 const Text = ({ style, ...props }) =>
 {

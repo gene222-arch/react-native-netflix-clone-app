@@ -1,15 +1,15 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import HomeScreen from './../screens/bottom-tabs/home';
-import TabTwoScreen from './../screens/bottom-tabs/home/TabTwoScreen';
-import DownloadsScreen from './../screens/bottom-tabs/downloads';
-import DownloadTabTwoScreen from './../screens/bottom-tabs/downloads/DownloadTabTwoScreen';
-import SearchScreen from './../screens/bottom-tabs/search';
-import SearchTabTwoScreen from './../screens/bottom-tabs/search/SearchTabTwoScreen';
-import ComingSoonScreen from './../screens/bottom-tabs/coming-soon';
-import TabTwoScreenCS from './../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
-import AccountScreen from './../screens/bottom-tabs/account';
-import AccountTabTwoScreen from './../screens/bottom-tabs/account/AccountTabTwoScreen';
+import HomeScreen from '../screens/bottom-tabs/home';
+import TabTwoScreen from '../screens/bottom-tabs/home/TabTwoScreen';
+import DownloadsScreen from '../screens/bottom-tabs/downloads';
+import DownloadTabTwoScreen from '../screens/bottom-tabs/downloads/DownloadTabTwoScreen';
+import SearchScreen from '../screens/bottom-tabs/search';
+import SearchTabTwoScreen from '../screens/bottom-tabs/search/SearchTabTwoScreen';
+import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
+import TabTwoScreenCS from '../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
+import AccountScreen from '../screens/bottom-tabs/account';
+import AccountTabTwoScreen from '../screens/bottom-tabs/account/AccountTabTwoScreen'
 
 
 const screenOptions = {

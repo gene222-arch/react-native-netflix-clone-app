@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { StyleSheet, Text, View, Button } from 'react-native'
-import * as AUTH_ACTION from './../../redux/modules/auth/actions'
+import * as AUTH_ACTION from '../../redux/modules/auth/actions'
 
 const LoginScreen = ({ navigation }) => 
 {

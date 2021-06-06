@@ -1,8 +1,8 @@
 import React from 'react'
 import { Image } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
-import styles from './../../assets/stylesheets/homeCategory';
-import Text from './../Text';
+import styles from '../../assets/stylesheets/homeCategory';
+import Text from '../Text';
 
 const HomeCategory = ({ title, categories }) => 
 {
