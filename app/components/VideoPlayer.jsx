@@ -3,8 +3,9 @@ import View from './View';
 import Text from './Text';
 import { Video } from 'expo-av'
 import styles from './../assets/stylesheets/videoPlayer';
+import { Pressable } from 'react-native';
 
-const VideoPlayer = ({ episode, shouldPlay }) => 
+const VideoPlayer = ({ episode, shouldPlay, handlePressToggleVideo }) => 
 {
     const video = useRef(null)
     const [ usePoster, setUsePoster ] = useState(true);
@@ -28,23 +29,21 @@ const VideoPlayer = ({ episode, shouldPlay }) =>
     }, [episode])
 
     return (
-        <View>
-            <Video 
-                ref={ video }
-                style={ styles.video }
-                source={{
-                    uri: episode.video
-                }}
-                onLoad={ () => setUsePoster(false) }
-                usePoster={ usePoster }
-                posterSource={{ uri: episode.poster }}
-                posterStyle={ styles.poster }
-                useNativeControls
-                resizeMode='contain'
-                onPlaybackStatusUpdate={ handleUpdateStatus }
-                shouldPlay={ shouldPlay }
-            />
-        </View>
+        <Video 
+            ref={ video }
+            style={ styles.video }
+            source={{
+                uri: episode.video
+            }}
+            onLoad={ () => setUsePoster(false) }
+            usePoster={ usePoster }
+            posterSource={{ uri: episode.poster }}
+            posterStyle={ styles.poster }
+            useNativeControls
+            resizeMode='contain'
+            onPlaybackStatusUpdate={ handleUpdateStatus }
+            shouldPlay={ shouldPlay }
+        />
     )
 }
 

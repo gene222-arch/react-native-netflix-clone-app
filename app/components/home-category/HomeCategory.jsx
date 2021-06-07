@@ -1,5 +1,6 @@
 import React from 'react'
-import { ActivityIndicator } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { ActivityIndicator, Pressable } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
@@ -7,6 +8,10 @@ import Image from './../Image';
 
 const HomeCategory = ({ title, categories }) => 
 {
+    const navigation = useNavigation();
+
+    const handlePressMovieImage = ({ id }) => navigation.navigate('MovieDetailScreen', { id });
+
     return (
         <>
             <Text h4>{ title }</Text>
@@ -14,13 +19,14 @@ const HomeCategory = ({ title, categories }) =>
                 keyExtractor={({ id }) => id}
                 data={ categories }
                 renderItem={({ item }) => (
-                    <Image 
-                        style={ styles.image }
-                        source={{
-                            uri: item.poster
-                        }}
-                        PlaceholderContent={<ActivityIndicator />}
-                    />
+                    <Pressable onPress={ () => handlePressMovieImage(item) }>
+                        <Image 
+                            style={ styles.image }
+                            source={{
+                                uri: item.poster
+                            }}
+                        />
+                    </Pressable>
                 )}
                 maxToRenderPerBatch={ 3 }
                 horizontal

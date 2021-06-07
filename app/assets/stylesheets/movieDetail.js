@@ -81,6 +81,8 @@ const styles = StyleSheet.create({
     tabItem: {
 
     },
+    videoPlayerContainer: {
+    },  
     year: {
         color: Colors.grey
     }

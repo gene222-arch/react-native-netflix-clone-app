@@ -1,4 +1,4 @@
-const movies = {
+const movies = [{
     id: 'movie1',
     title: 'Suits',
     year: 2019,
@@ -76,6 +76,6 @@ const movies = {
             }
         ]
     }
-};
+}];
 
 export default movies

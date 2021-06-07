@@ -23,22 +23,23 @@ import styles from '../../../../assets/stylesheets/movieDetail';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import movie from './../../../../services/data/movies';
+import movieAPI from './../../../../services/data/movies';
 import VideoPlayer from './../../../../components/VideoPlayer';
 
-const seasons = movie.seasons.items.map(({ name }) => name);
 
-const DEFAULT_SEASON = movie.seasons.items[0];
-const DEFAULT_SEASON_NAME = DEFAULT_SEASON.name;
-const DEFAULT_EPISODES = DEFAULT_SEASON.episodes.items;
-const DEFAULT_EPISODE = DEFAULT_SEASON.episodes.items[0];
-
-const MovieDetailsScreen = ({ Movie }) => 
+const MovieDetailsScreen = ({ Movie, route }) => 
 {   
+    const movie = movieAPI.find(({ id }) => id === route.params.id);
+
+    const seasons = movie.seasons.items.map(({ name }) => name);
+    const DEFAULT_SEASON = movie.seasons.items[0];
+    const DEFAULT_EPISODES = DEFAULT_SEASON.episodes.items;
+    const DEFAULT_EPISODE = DEFAULT_SEASON.episodes.items[0];
+
     const [ toggleVideo, setToggleVideo ] = useState(false);
     const [ currentEpisode, setCurrentEpisode ] = useState(DEFAULT_EPISODE);
     const [ currentSeason, setCurrentSeason ] = useState(DEFAULT_EPISODES);
-    const [ selectedSeason, setSelectedSeason ] = useState(DEFAULT_SEASON_NAME);
+    const [ selectedSeason, setSelectedSeason ] = useState(DEFAULT_SEASON.name);
     const [ selectedTab, setSelectedTab ] = useState(0);
 
     const handlePressToggleVideo = () => setToggleVideo(!toggleVideo);
@@ -52,9 +53,16 @@ const MovieDetailsScreen = ({ Movie }) =>
     
     const handlePressTabs = (index) => setSelectedTab(index);
 
+    
     return (
         <View style={ styles.container }>
-            <VideoPlayer episode={ currentEpisode } shouldPlay={ toggleVideo }/>
+            <View style={ styles.videoPlayerContainer }>
+                <VideoPlayer 
+                    episode={ currentEpisode } 
+                    shouldPlay={ toggleVideo } 
+                    handlePressToggleVideo={ handlePressToggleVideo }
+                />
+            </View>
             <FlatList 
                 data={ currentSeason }
                 renderItem={ ({ item }) => (

@@ -14,7 +14,7 @@ import AccountTabTwoScreen from '../screens/bottom-tabs/account/AccountTabTwoScr
 
 
 const options = {
-    headerShown: false
+    headerTitle: ''
 };
 
 const HomeStack = createStackNavigator();
@@ -22,21 +22,21 @@ const HomeStack = createStackNavigator();
 export const HomeTab = () => 
 {
     return (
-        <HomeStack.Navigator initialRouteName='MovieDetail'>
+        <HomeStack.Navigator initialRouteName='Home'>
             <HomeStack.Screen 
                 name='Home' 
                 component={ HomeScreen } 
-                options={ options }
+                options={{ ...options, headerShown: false }}
             />
             <HomeStack.Screen 
                 name='TabTwo' 
                 component={ TabTwoScreen } 
-                options={{ headerTitle: 'Home Tab Two', ...options }}
+                options={ options }
             />
             <HomeStack.Screen 
-                name='MovieDetail' 
+                name='MovieDetailScreen' 
                 component={ MovieDetailsScreen } 
-                options={{ headerTitle: 'Movie Details Screen', ...options }}
+                options={ options }
             />
         </HomeStack.Navigator>
     );
@@ -56,7 +56,7 @@ export const DownloadsTab = () =>
             <DownloadsStack.Screen 
                 name='DownloadTabTwo' 
                 component={ DownloadTabTwoScreen } 
-                options={{ headerTitle: 'Downloads Tab Two', ...options }}
+                options={ options }
             />
         </DownloadsStack.Navigator>
     );
@@ -76,7 +76,7 @@ export const SearchTab = () =>
             <SearchStack.Screen 
                 name='SearchTabTwo' 
                 component={ SearchTabTwoScreen }
-                options={{ headerTitle: 'Search Tab Two', ...options }} 
+                options={ options } 
             />
         </SearchStack.Navigator>
     );
@@ -96,7 +96,7 @@ export const ComingSoonTab = () =>
             <ComingSoonStack.Screen 
                 name='ComingSoonTabTwo' 
                 component={ TabTwoScreenCS } 
-                options={{ headerTitle: 'Coming Soon Tab Two', ...options }} 
+                options={ options } 
             />
         </ComingSoonStack.Navigator>
     );
@@ -116,7 +116,7 @@ export const AccountTab = () =>
             <AccountSoonStack.Screen 
                 name='AccountTabTwo' 
                 component={ AccountTabTwoScreen } 
-                options={{ headerTitle: 'Account Tab Two', ...options }} 
+                options={ options } 
             />
         </AccountSoonStack.Navigator>
     );
