@@ -24,7 +24,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import movie from './../../../../services/data/movies';
-import { Alert } from 'react-native';
+import VideoPlayer from './../../../../components/VideoPlayer';
 
 const seasons = movie.seasons.items.map(({ name }) => name);
 
@@ -35,9 +35,15 @@ const DEFAULT_EPISODE = DEFAULT_SEASON.episodes.items[0];
 
 const MovieDetailsScreen = ({ Movie }) => 
 {   
+    const [ toggleVideo, setToggleVideo ] = useState(false);
+    const [ currentEpisode, setCurrentEpisode ] = useState(DEFAULT_EPISODE);
     const [ currentSeason, setCurrentSeason ] = useState(DEFAULT_EPISODES);
     const [ selectedSeason, setSelectedSeason ] = useState(DEFAULT_SEASON_NAME);
     const [ selectedTab, setSelectedTab ] = useState(0);
+
+    const handlePressToggleVideo = () => setToggleVideo(!toggleVideo);
+
+    const handlePressEpisode = (episode) => setCurrentEpisode(episode);
 
     const handleChangeSeason = (name, index) => {
         setSelectedSeason(name);
@@ -48,11 +54,11 @@ const MovieDetailsScreen = ({ Movie }) =>
 
     return (
         <View style={ styles.container }>
-            <Image style={ styles.moviePoster } source={{ uri: DEFAULT_EPISODE.poster }} />
+            <VideoPlayer episode={ currentEpisode } shouldPlay={ toggleVideo }/>
             <FlatList 
                 data={ currentSeason }
                 renderItem={ ({ item }) => (
-                    <EpisodeItem episode={ item }/>
+                    <EpisodeItem episode={ item } onPress={ () => handlePressEpisode(item) }/>
                 )}
                 ListHeaderComponent={(
                     <View>
@@ -73,14 +79,15 @@ const MovieDetailsScreen = ({ Movie }) =>
                             <Button
                                 icon={
                                     <MaterialCommunityIcon
-                                        name="play"
+                                        name={ toggleVideo ? 'pause' : 'play' }
                                         size={ 24 }
                                         color="black"
                                     />
                                 }
-                                title='Play'
+                                title={ toggleVideo ? 'Pause' : 'Play' }
                                 buttonStyle={ styles.playBtn }
                                 titleStyle={ styles.playBtnTitle }
+                                onPress={ handlePressToggleVideo }
                             />
                             <Button 
                                 icon={
@@ -90,7 +97,7 @@ const MovieDetailsScreen = ({ Movie }) =>
                                         color="white"
                                     />
                                 }
-                                title='Download'
+                                title=' Download'
                                 buttonStyle={ styles.downloadBtn }
                             />
                         </View>

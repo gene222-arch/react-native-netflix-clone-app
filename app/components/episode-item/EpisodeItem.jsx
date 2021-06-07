@@ -4,12 +4,13 @@ import Text from './../Text';
 import styles from './../../assets/stylesheets/episodeItem';
 import Image from './../Image';
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import { Pressable } from 'react-native';
 
-const EpisodeItem = ({ episode }) => 
+const EpisodeItem = ({ episode, onPress }) => 
 {
     return (
-        <View style={ styles.container }>
-            <View>
+        <Pressable onPress={ onPress }>
+            <View style={ styles.container }>
                 <View row={ true } justifyContent='space-between' alignItems='center' padding={ 2 }>
                     <Image 
                         source={{
@@ -29,7 +30,7 @@ const EpisodeItem = ({ episode }) =>
                 </View>
                 <Text style={ styles.plot }>{ episode.plot }</Text>
             </View>
-        </View>
+        </Pressable>
     )
 }
 

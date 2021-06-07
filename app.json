@@ -3,7 +3,7 @@
     "name": "netflix-clone-app",
     "slug": "netflix-clone-app",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
