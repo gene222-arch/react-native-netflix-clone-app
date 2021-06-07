@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import FeatherIcon from 'react-native-vector-icons/Feather'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 /** Screens */
@@ -60,8 +61,8 @@ const NavigationBottomTabs = () =>
                 component={ DownloadsTab } 
                 options={{
                     tabBarIcon: (({ color }) => (
-                        <MaterialIcons 
-                            name='cloud-download' 
+                        <FeatherIcon 
+                            name='download' 
                             size={ 24 } 
                             color={ color }
                             style={ styles.tabBarIcon }

@@ -1,25 +1,31 @@
 import React from 'react'
-import { useSelector } from 'react-redux' 
 import { DarkTheme, NavigationContainer, DefaultTheme } from '@react-navigation/native';
+
+import { authSelector } from './../redux/modules/auth/selectors'
 
 /** Components */
 import NavigationBottomTabs from './NavigationBottomTabs';
 import AuthenticationStack from './AuthenticationStack';
 import { navigationRef } from './RootNavigation';
 import { useColorScheme } from 'react-native';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 
-const Navigation = () => 
+const Navigation = ({ AUTH }) => 
 {
-    const auth = useSelector(state => state.auth);
     const scheme = useColorScheme();
 
     return (
         <NavigationContainer ref={ navigationRef } theme={ DarkTheme }>
         {
-            !auth.isAuthenticated ? <AuthenticationStack /> : <NavigationBottomTabs />
+            !AUTH.isAuthenticated ? <AuthenticationStack /> : <NavigationBottomTabs />
         }
         </NavigationContainer>  
     )
 }
 
-export default Navigation
+const mapStateToProps = (state) => createStructuredSelector({
+    AUTH: authSelector
+})
+
+export default connect(mapStateToProps)(Navigation)

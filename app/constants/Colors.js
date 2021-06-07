@@ -2,6 +2,14 @@ const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
 const Colors = {
+    error: '#f44336',
+    dark: '#000',
+    info: '#2196f3',
+    success: '#4caf50',
+    warning: '#ff9800',
+    white: '#fff',
+    grey: '#9e9e9e',
+    darkGrey: '#424242',
     theme: {
         container: {
             light: {

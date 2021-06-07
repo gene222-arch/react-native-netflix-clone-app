@@ -1,8 +1,9 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { ActivityIndicator } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
+import Image from './../Image';
 
 const HomeCategory = ({ title, categories }) => 
 {
@@ -18,11 +19,13 @@ const HomeCategory = ({ title, categories }) =>
                         source={{
                             uri: item.poster
                         }}
+                        PlaceholderContent={<ActivityIndicator />}
                     />
                 )}
                 maxToRenderPerBatch={ 3 }
                 horizontal
                 style={ styles.categoryContainer }
+                showsHorizontalScrollIndicator={ false }
             />
         </>
     )

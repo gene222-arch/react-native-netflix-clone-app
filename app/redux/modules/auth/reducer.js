@@ -29,7 +29,7 @@ export default (state = initialState, { type, payload }) =>
     switch (type) 
     {
         case LOGIN_START:
-        case LOGIN_START:
+        case LOGOUT_START:
             return { 
                 ...state, 
                 isLoading
