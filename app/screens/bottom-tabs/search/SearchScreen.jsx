@@ -109,6 +109,7 @@ const SearchScreen = () =>
                     )
                     : (
                         <FlatList 
+                            keyExtractor={ ({ id }) => id.toString() }
                             data={ searchList }
                             renderItem={ ({ item }) => (
                                 <TouchableOpacity>

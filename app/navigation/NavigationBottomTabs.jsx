@@ -5,7 +5,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 /** Screens */
-import { HomeTab, ComingSoonTab, SearchTab, DownloadsTab, AccountTab } from './BottomTabStacks'
+import { HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab } from './BottomTabStacks'
 import Colors from './../constants/Colors';
 
 
@@ -76,12 +76,12 @@ const NavigationBottomTabs = () =>
                 }}
             />
             <Tab.Screen 
-                name="Account" 
-                component={ AccountTab } 
+                name="More" 
+                component={ MoreTab } 
                 options={{
                     tabBarIcon: (({ color }) => (
-                        <MaterialIcons 
-                            name='account-circle' 
+                        <FeatherIcon 
+                            name='align-justify' 
                             size={ 24 } 
                             color={ color }
                             style={ styles.tabBarIcon }

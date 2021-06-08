@@ -1,5 +1,5 @@
 import React from 'react'
-import { DarkTheme, NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 
 import { authSelector } from './../redux/modules/auth/selectors'
 

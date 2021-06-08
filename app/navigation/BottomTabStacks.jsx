@@ -9,8 +9,8 @@ import SearchScreen from '../screens/bottom-tabs/search';
 import SearchTabTwoScreen from '../screens/bottom-tabs/search/SearchTabTwoScreen';
 import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
 import TabTwoScreenCS from '../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
-import AccountScreen from '../screens/bottom-tabs/account';
-import AccountTabTwoScreen from '../screens/bottom-tabs/account/AccountTabTwoScreen'
+import MoreScreen from '../screens/bottom-tabs/more'
+import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
 
 
 const options = {
@@ -104,18 +104,18 @@ export const ComingSoonTab = () =>
 
 const AccountSoonStack = createStackNavigator();
 
-export const AccountTab = () => 
+export const MoreTab = () => 
 {
     return (
-        <AccountSoonStack.Navigator initialRouteName='Account'>
+        <AccountSoonStack.Navigator initialRouteName='More'>
             <AccountSoonStack.Screen 
-                name='Account' 
-                component={ AccountScreen } 
+                name='More' 
+                component={ MoreScreen } 
                 options={ options }
             />
             <AccountSoonStack.Screen 
-                name='AccountTabTwo' 
-                component={ AccountTabTwoScreen } 
+                name='MoreTabTwo' 
+                component={ MoreTabTwoScreen } 
                 options={ options } 
             />
         </AccountSoonStack.Navigator>
