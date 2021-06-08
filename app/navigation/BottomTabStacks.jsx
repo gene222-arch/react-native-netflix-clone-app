@@ -14,7 +14,7 @@ import AccountTabTwoScreen from '../screens/bottom-tabs/account/AccountTabTwoScr
 
 
 const options = {
-    headerTitle: ''
+    headerShown: false
 };
 
 const HomeStack = createStackNavigator();

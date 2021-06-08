@@ -10,7 +10,7 @@ const Colors = {
     warning: '#ff9800',
     white: '#fff',
     grey: '#9e9e9e',
-    darkGrey: '#424242',
+    darkGrey: '#2c2c2c',
     theme: {
         container: {
             light: {
