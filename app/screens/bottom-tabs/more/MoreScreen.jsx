@@ -75,6 +75,7 @@ const MoreScreen = () =>
                         name={ name } 
                         uri={ profile_photo }
                         isSelected={ selectedImg === id }
+                        onPress={ () => setSelectedImg(id) }
                     />
                 ))
             }
