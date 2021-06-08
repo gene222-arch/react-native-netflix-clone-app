@@ -9,13 +9,22 @@ const {
     LOGOUT_FAILED
 } = ACTION_TYPES;
 
+const CREDENTIALS_DEFAULT_PROPS = {
+    email: '',
+    password: '',
+    remember_me: false
+};
+
 const USER_DEFAULT_PROPS = {
-    first_name: 'Gene Phillip',
-    last_name: 'Artista'
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: ''
 };
 
 const initialState = {
     isAuthenticated: false,
+    credentials: CREDENTIALS_DEFAULT_PROPS,
     user: USER_DEFAULT_PROPS,
     isLoading: false,
     errors: []
@@ -38,6 +47,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGIN_SUCCESS:
             return { 
                 ...state, 
+                credentials: payload.credentials,
                 isAuthenticated: true,
                 isLoading: false,
                 errors

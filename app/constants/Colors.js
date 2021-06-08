@@ -2,6 +2,7 @@ const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
 const Colors = {
+    netFlixRed: '#FF0000',
     error: '#f44336',
     dark: '#000',
     info: '#2196f3',

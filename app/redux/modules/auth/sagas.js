@@ -2,7 +2,7 @@ import { all, take, put, call } from 'redux-saga/effects'
 import * as API from './../../../services/User'
 import ACTION_TYPES from './action.types'
 import { loginSuccess, loginFailed, logoutSuccess, logoutFailed } from './actions'
-import AsyncStorage  from '@react-native-async-storage/async-storage';
+import * as AsyncStorage from './../../../utils/asyncStorage'
 
 const {
     LOGIN_START,
@@ -12,13 +12,13 @@ const {
 
 /** Sagas */
 
-function* loginSaga()  
+function* loginSaga(payload)  
 {
     try {
-        // const data = yield call(API.index);
-        yield put(loginSuccess());
+        // const data = yield call(API.index);   
+        yield put(loginSuccess({ credentials: payload }));
 
-        AsyncStorage.setItem('@access_token', 'token');
+        yield call(AsyncStorage.setItem, '@access_token', 'token');
     } catch ({ message }) {
         yield put(loginFailed({ message }));
     }
@@ -30,7 +30,6 @@ function* logoutSaga()
         // const data = yield call(API.index);
         yield put(logoutSuccess());
 
-        AsyncStorage.removeItem('@access_token');
     } catch ({ message }) {
         yield put(logoutFailed({ message }));
     }
@@ -41,8 +40,8 @@ function* logoutSaga()
 function* loginWatcher()
 {
     while (true) {
-        yield take(LOGIN_START);
-        yield call(loginSaga);
+        const { payload } = yield take(LOGIN_START);
+        yield call(loginSaga, payload);
     }
 }
 
