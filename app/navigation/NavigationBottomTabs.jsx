@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 /** Screens */
 import { HomeTab, ComingSoonTab, SearchTab, DownloadsTab, AccountTab } from './BottomTabStacks'
+import Colors from './../constants/Colors';
 
 
 const Tab = createBottomTabNavigator();
@@ -13,7 +14,11 @@ const Tab = createBottomTabNavigator();
 const NavigationBottomTabs = () => 
 {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            tabBarOptions={{
+                activeTintColor: Colors.white
+            }}
+        >
             <Tab.Screen 
                 name="Home" 
                 component={ HomeTab } 

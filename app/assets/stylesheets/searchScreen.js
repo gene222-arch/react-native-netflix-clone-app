@@ -1,9 +1,17 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1
+    },
+    listContainer: {
         backgroundColor: Colors.darkGrey
+    },
+    emptyList: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     listContentText: {
         textAlign: 'center'
@@ -25,7 +33,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.dark,
         padding: 2,
         paddingTop: 7,
-        paddingBottom: 5
     },
     searchInputContainer: {
         borderWidth: 0,

@@ -51,7 +51,7 @@ export const DownloadsTab = () =>
             <DownloadsStack.Screen 
                 name='Downloads' 
                 component={ DownloadsScreen } 
-                options={ options }
+                options={{ headerTitle: 'Downloads' }}
             />
             <DownloadsStack.Screen 
                 name='DownloadTabTwo' 
