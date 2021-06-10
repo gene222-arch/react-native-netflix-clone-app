@@ -5,11 +5,12 @@ import Image from './../Image';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { TouchableOpacity } from 'react-native';
 import styles from './../../assets/stylesheets/downloadItem';
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
-const DownloadItem = ({ downloadedVideo, onPress }) => 
+const DownloadItem = ({ downloadedVideo, onLongPress, showType, handlePressNonSeries, handlePressSeries }) => 
 {
     return (
-        <TouchableOpacity onPress={ onPress }>
+        <TouchableOpacity onLongPress={ onLongPress }>
             <View style={ styles.container }>
                 <View row={ true } justifyContent='space-between' alignItems='center' padding={ 2 }>
                     <View>
@@ -32,11 +33,27 @@ const DownloadItem = ({ downloadedVideo, onPress }) =>
                             { `Episode ${downloadedVideo.episode} | ${ downloadedVideo.size }` }
                         </Text>
                     </View>
-                    <FeatherIcon
-                        name={ !downloadedVideo.isFinished ? 'loader' : 'chevron-right' }
-                        size={ 20 }
-                        color='#fff'
-                    />
+                    {
+                        showType !== 'series'
+                            ? (
+                                <TouchableNativeFeedback onPress={ handlePressNonSeries }>
+                                    <FeatherIcon
+                                        name='film'
+                                        size={ 20 }
+                                        color='#fff'
+                                    />
+                                </TouchableNativeFeedback>
+                            )
+                            : (
+                                <TouchableNativeFeedback onPress={ handlePressSeries }>
+                                    <FeatherIcon
+                                        name='chevron-right'
+                                        size={ 20 }
+                                        color='#fff'
+                                    />
+                                </TouchableNativeFeedback>
+                            )
+                    }
                 </View>
             </View>
         </TouchableOpacity>

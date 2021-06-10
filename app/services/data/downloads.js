@@ -1,8 +1,9 @@
 const downloads = 
 [
     {
-        id: 'download1',
-        title: '1. Pilot Part 1 & 2',
+        id: 1,
+        title: 'Pilot Part 1 & 2',
+        show_type: 'series',
         episode: 3,
         isFinished: false,
         size: '24 MB',
@@ -12,9 +13,23 @@ const downloads =
         video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     }, 
     {
-        id: 'download2',
-        title: '2. Errors and Omissions',
+        id: 2,
+        title: 'Another Movie',
+        show_type: 'movie',
         episode: 4,
+        isFinished: false,
+        size: '24 MB',
+        poster: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/netflix/ep0.jpg',
+        duration: '1h 21m',
+        plot: 'When Harvey\'s promotion requires him to recruit and hire a graduate of Harvard Law, he chooses Mike Ross. But Mike doesn\'t actualy have a law degree',
+        video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+    }, 
+    {
+        id: 3,
+        title: 'Errors and Omissions',
+        show_type: 'movie',
+        episode: 4,
+        season: 1,
         isFinished: true,
         size: '24 MB',
         poster: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/netflix/ep1.jpg',

@@ -5,7 +5,7 @@ import { Video } from 'expo-av'
 import styles from './../assets/stylesheets/videoPlayer';
 import { Pressable } from 'react-native';
 
-const VideoPlayer = ({ episode, shouldPlay, handlePressToggleVideo }) => 
+const VideoPlayer = ({ episode, shouldPlay }) => 
 {
     const video = useRef(null)
     const [ usePoster, setUsePoster ] = useState(true);

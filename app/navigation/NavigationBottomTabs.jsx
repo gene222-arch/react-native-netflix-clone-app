@@ -16,7 +16,8 @@ const NavigationBottomTabs = () =>
     return (
         <Tab.Navigator
             tabBarOptions={{
-                activeTintColor: Colors.white
+                activeTintColor: Colors.white,
+                keyboardHidesTabBar: true
             }}
         >
             <Tab.Screen 
@@ -34,12 +35,12 @@ const NavigationBottomTabs = () =>
                 }}
             />
             <Tab.Screen 
-                name="Coming soon" 
-                component={ ComingSoonTab } 
+                name="Search" 
+                component={ SearchTab } 
                 options={{
                     tabBarIcon: (({ color }) => (
-                        <MaterialIcons 
-                            name='video-library' 
+                        <FeatherIcon 
+                            name='search' 
                             size={ 24 } 
                             color={ color }
                             style={ styles.tabBarIcon }
@@ -48,12 +49,12 @@ const NavigationBottomTabs = () =>
                 }}
             />
             <Tab.Screen 
-                name="Search" 
-                component={ SearchTab } 
+                name="Coming soon" 
+                component={ ComingSoonTab } 
                 options={{
                     tabBarIcon: (({ color }) => (
                         <MaterialIcons 
-                            name='youtube-searched-for' 
+                            name='video-library' 
                             size={ 24 } 
                             color={ color }
                             style={ styles.tabBarIcon }

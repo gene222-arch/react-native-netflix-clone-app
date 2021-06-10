@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
@@ -19,6 +19,13 @@ const styles = StyleSheet.create({
     },
     lastUpdateIcon: {
         color: Colors.grey, 
+    },
+    overlay: {
+        backgroundColor: Colors.darkGrey,
+        width: Dimensions.get('window').width / 2
+    },
+    overLayText: {
+        marginVertical: 10
     },
     queryBtn: {
         backgroundColor: Colors.darkGrey

@@ -4,13 +4,14 @@ import HomeScreen from '../screens/bottom-tabs/home';
 import MovieDetailsScreen from './../screens/bottom-tabs/home/movie-details-screen/index';
 import TabTwoScreen from '../screens/bottom-tabs/home/TabTwoScreen';
 import DownloadsScreen from '../screens/bottom-tabs/downloads';
-import DownloadTabTwoScreen from '../screens/bottom-tabs/downloads/DownloadTabTwoScreen';
+import MoreDownloadsScreen from '../screens/bottom-tabs/downloads/MoreDownloadsScreen';
 import SearchScreen from '../screens/bottom-tabs/search';
 import SearchTabTwoScreen from '../screens/bottom-tabs/search/SearchTabTwoScreen';
 import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
 import TabTwoScreenCS from '../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
 import MoreScreen from '../screens/bottom-tabs/more'
 import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
+import { useNavigation } from '@react-navigation/native';
 
 
 const options = {
@@ -36,7 +37,7 @@ export const HomeTab = () =>
             <HomeStack.Screen 
                 name='MovieDetailScreen' 
                 component={ MovieDetailsScreen } 
-                options={ options }
+                options={{ ...options, headerShown: true, headerTitle: '' }}
             />
         </HomeStack.Navigator>
     );
@@ -51,12 +52,12 @@ export const DownloadsTab = () =>
             <DownloadsStack.Screen 
                 name='Downloads' 
                 component={ DownloadsScreen } 
-                options={{ headerTitle: 'Downloads' }}
+                options={ options }
             />
             <DownloadsStack.Screen 
-                name='DownloadTabTwo' 
-                component={ DownloadTabTwoScreen } 
-                options={ options }
+                name='MoreDownloads' 
+                component={ MoreDownloadsScreen } 
+                options={({ route }) => ({ headerTitle: route.params.headerTitle })}
             />
         </DownloadsStack.Navigator>
     );
