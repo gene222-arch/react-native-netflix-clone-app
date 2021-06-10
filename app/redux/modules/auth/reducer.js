@@ -6,7 +6,10 @@ const {
     LOGIN_FAILED,
     LOGOUT_START,
     LOGOUT_SUCCESS,
-    LOGOUT_FAILED
+    LOGOUT_FAILED,
+    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
+    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
+    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED
 } = ACTION_TYPES;
 
 const CREDENTIALS_DEFAULT_PROPS = {
@@ -26,12 +29,17 @@ const initialState = {
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
     user: USER_DEFAULT_PROPS,
+    remindedComingSoonShows: [],
     isLoading: false,
     errors: []
 }
 
 export default (state = initialState, { type, payload }) => 
 {
+    const {
+        remindedComingSoonShows
+    } = state;
+
     const isLoading = true;
     const errors = [];
 
@@ -39,6 +47,7 @@ export default (state = initialState, { type, payload }) =>
     {
         case LOGIN_START:
         case LOGOUT_START:
+        case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
             return { 
                 ...state, 
                 isLoading
@@ -73,6 +82,34 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: true,
+                isLoading: false,
+                errors: payload.message
+            }
+
+        case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
+
+            const { comingSoonShowID } = payload;
+            const hasComingSoonShow = remindedComingSoonShows.includes(comingSoonShowID); 
+            
+            let remindedComingSoonShows_ = [];
+
+            if (!hasComingSoonShow) {
+                remindedComingSoonShows_ = [ ...remindedComingSoonShows, comingSoonShowID ];
+            }
+            else {
+                remindedComingSoonShows_ = remindedComingSoonShows.filter(id => id !== comingSoonShowID);
+            }
+
+            return {
+                ...state,
+                remindedComingSoonShows: remindedComingSoonShows_,
+                isLoading: false,
+                errors
+            }
+
+        case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:
+            return {
+                ...state,
                 isLoading: false,
                 errors: payload.message
             }

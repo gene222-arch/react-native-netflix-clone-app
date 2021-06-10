@@ -11,7 +11,7 @@ const Text = ({ style, touchableFeedback = false, ...props }) =>
     if (touchableFeedback) {
         return (
             <TouchableNativeFeedback>
-                <DefaultText style={ [{ ...Colors.theme.typography[theme] }, { ...style }] } {...props} />
+                <DefaultText style={ [{ ...Colors.theme.typography[theme], lineHeight: 20 }, { ...style }] } {...props} />
             </TouchableNativeFeedback>
         )
     }

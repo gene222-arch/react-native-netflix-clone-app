@@ -9,7 +9,7 @@ const Colors = {
     success: '#4caf50',
     warning: '#ff9800',
     white: '#fff',
-    grey: '#dddddd',
+    grey: 'rgba(255, 255, 255, 0.5)',
     darkGrey: '#2c2c2c',
     theme: {
         container: {

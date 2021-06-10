@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import View from './View';
-import Text from './Text';
 import { Video } from 'expo-av'
 import styles from './../assets/stylesheets/videoPlayer';
-import { Pressable } from 'react-native';
 
 const VideoPlayer = ({ episode, shouldPlay }) => 
 {
