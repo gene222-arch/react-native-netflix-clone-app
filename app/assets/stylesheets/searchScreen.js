@@ -10,8 +10,7 @@ const styles = StyleSheet.create({
     },
     emptyList: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        padding: 15
     },
     listContentText: {
         textAlign: 'center'
@@ -23,6 +22,10 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         color: Colors.grey
     },
+    notFoundCaption: {
+        color: Colors.grey,
+        fontSize: 16
+    },
     searchInput: {
         fontSize: 14
     },
@@ -33,6 +36,10 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.dark,
         padding: 2,
         paddingTop: 7,
+    },
+    searchHeaderTitle: {
+        marginBottom: 25,
+        paddingLeft: 10
     },
     searchInputContainer: {
         borderWidth: 0,
