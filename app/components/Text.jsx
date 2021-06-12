@@ -4,15 +4,15 @@ import { Text as DefaultText } from 'react-native-elements'
 import { TouchableOpacity, TouchableNativeFeedback } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
 
-const Text = ({ style, touchableFeedback = false, ...props }) =>
+const Text = ({ style, touchableOpacity = false, onPress, ...props }) =>
 {
     const theme = useColorScheme();
   
-    if (touchableFeedback) {
+    if (touchableOpacity) {
         return (
-            <TouchableNativeFeedback>
+            <TouchableOpacity onPress={ onPress }>
                 <DefaultText style={ [{ ...Colors.theme.typography[theme], lineHeight: 20 }, { ...style }] } {...props} />
-            </TouchableNativeFeedback>
+            </TouchableOpacity>
         )
     }
 

@@ -73,20 +73,20 @@ const ComingSoonScreen = ({ AUTH }) =>
                     
                         {/* Notifications Container */}
                         <View style={ styles.notificationsContainer }>
-                        <View style={ styles.notificationsContainer }>
-                            <FontAwesome5 
-                                name='bell'
+                            <View style={ styles.notificationsContainer }>
+                                <FontAwesome5 
+                                    name='bell'
+                                    size={ 24 }
+                                    color='#fff'
+                                />
+                                <Text style={ styles.notificationsText }>       Notifications</Text>
+                            </View>
+                            <FeatherIcon 
+                                name='chevron-right'
                                 size={ 24 }
                                 color='#fff'
                             />
-                            <Text style={ styles.notificationsText }>       Notifications</Text>
                         </View>
-                        <FeatherIcon 
-                            name='chevron-right'
-                            size={ 24 }
-                            color='#fff'
-                        />
-                    </View>
                     </>
                 }
             />
