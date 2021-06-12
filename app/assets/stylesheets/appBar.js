@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: 'transparent',
-        padding: 5,
+        paddingRight: 10,
+        paddingLeft: 5,
         marginBottom: 5,
         height: 55
     },
@@ -26,7 +27,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'transparent',
     }
 });
 

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     image: {
-        width: 100,
+        width: 125,
         height: 170,
         resizeMode: 'cover',
         borderRadius: 5,

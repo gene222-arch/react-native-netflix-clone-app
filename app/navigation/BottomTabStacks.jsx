@@ -44,9 +44,10 @@ export const HomeTab = () =>
                 name='MyListScreen'
                 component={ MyListScreen }
                 options={{ 
-                    headerTitle: props => <AppBar headerTitle='Categories'/>,
+                    headerTitle: props => <AppBar showLogo={ false } headerTitle='Categories'/>,
                     headerStyle: {
                         backgroundColor: '#000',
+                        
                     },
                 }}
             />

@@ -1,0 +1,38 @@
+import { StyleSheet } from 'react-native';
+import Colors from './../../constants/Colors';
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    video: {
+        width: 125,
+        height: 170,
+        marginRight: 10,
+        borderTopRightRadius: 5,
+        borderTopLeftRadius: 5,
+        resizeMode: 'contain',
+        backgroundColor: Colors.grey
+    },
+    infoMoreContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: Colors.darkMode,
+        paddingVertical: 10,
+        marginRight: 10,
+        borderBottomRightRadius: 5,
+        borderBottomLeftRadius: 5
+    },
+    playIcon: {
+        position: 'absolute',
+        top: '30%',
+        left: '25%',
+        backgroundColor: 'rgba(0, 0, 0, .5)',
+        borderRadius: 60
+    },
+    poster: {
+        resizeMode: 'cover'
+    },
+});
+
+export default styles;
