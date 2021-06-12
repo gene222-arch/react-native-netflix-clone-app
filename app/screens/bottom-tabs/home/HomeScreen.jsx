@@ -10,7 +10,7 @@ import { Tab } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import AppBar from './../../AppBar';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Categories from './Categories';
+import CategoriesMenu from './CategoriesMenu';
 
 const HomeScreen = () => 
 {
@@ -28,7 +28,7 @@ const HomeScreen = () =>
     return (
         <View style={ styles.container }>
             <AppBar />
-            <Categories isVisible={ showCategories } setIsVisible={ setShowCategories }/>
+            <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
             <View style={ styles.tabContainer }>
                 <Text 
                     touchableOpacity={ true } 

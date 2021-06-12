@@ -11,7 +11,9 @@ import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
 import TabTwoScreenCS from '../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
 import MoreScreen from '../screens/bottom-tabs/more'
 import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
-import { useNavigation } from '@react-navigation/native';
+import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
+import Text from './../components/Text';
+import StackAppBar from './../components/stack-app-bar/StackAppBar';
 
 
 const options = {
@@ -38,6 +40,16 @@ export const HomeTab = () =>
                 name='MovieDetailScreen' 
                 component={ MovieDetailsScreen } 
                 options={{ ...options, headerShown: true, headerTitle: '' }}
+            />
+            <HomeStack.Screen 
+                name='MyListScreen'
+                component={ MyListScreen }
+                options={{ 
+                    headerTitle: props => <StackAppBar headerTitle='Categories'/>,
+                    headerStyle: {
+                        backgroundColor: '#000',
+                    },
+                }}
             />
         </HomeStack.Navigator>
     );

@@ -5,9 +5,14 @@ import { TouchableOpacity } from 'react-native'
 import styles from './../../../assets/stylesheets/appBarCategories';
 import Colors from './../../../constants/Colors';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
 
-const Categories = ({ isVisible, setIsVisible }) => 
+const CategoriesMenu = ({ isVisible, setIsVisible }) => 
 {
+    const navigation = useNavigation();
+
+    const headerTitle = 'Categories';
+
     const list = 
     [
         { 
@@ -21,7 +26,7 @@ const Categories = ({ isVisible, setIsVisible }) =>
         },
         { 
             title: 'My List',
-            onPress: () => console.log('Clicked') 
+            onPress: () => navigation.navigate('MyListScreen', { headerTitle })
         },
         { 
             title: 'Available for Download',
@@ -93,4 +98,4 @@ const Categories = ({ isVisible, setIsVisible }) =>
     )
 }
 
-export default Categories
+export default CategoriesMenu
