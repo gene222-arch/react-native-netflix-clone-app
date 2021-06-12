@@ -34,12 +34,16 @@ const HomeScreen = () =>
                     touchableOpacity={ true } 
                     style={ styles.tabItem }
                     onPress={ handlePressTvShows }
-                >TV Shows</Text>
+                >
+                    TV Shows
+                </Text>
                 <Text 
                     touchableOpacity={ true } 
                     style={ styles.tabItem }
                     onPress={ handlePressMovies }
-                >Movies</Text>
+                >
+                    Movies
+                </Text>
                 <TouchableOpacity onPress={ handlePressCategories }>
                     <View style={ styles.categoriesContainer }>
                         <Text style={ styles.tabItem }>Categories</Text>

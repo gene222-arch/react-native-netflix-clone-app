@@ -17,11 +17,10 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     tabItem: {
-        fontSize: 16
+        fontSize: 16,
     },  
     container: {
-        flex: 1,
-        padding: 5
+        flex: 1
     },
     tabTitle: {
         fontSize: 12,

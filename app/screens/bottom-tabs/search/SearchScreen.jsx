@@ -5,11 +5,11 @@ import { SearchBar, ListItem, Avatar } from 'react-native-elements';
 import styles from './../../../assets/stylesheets/searchScreen';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import SearchItem from './../../../components/search-item/index';
-import searchList from './../../../services/data/searchList';
+import searchList_ from './../../../services/data/searchList';
 
 const SearchScreen = () => 
 {
-    const [ searchList, setSearchList ] = useState(searchList);
+    const [ searchList, setSearchList ] = useState(searchList_);
     const [ searchInput, setSearchInput ] = useState('');
 
     const handleChangeSearchInput = text => {

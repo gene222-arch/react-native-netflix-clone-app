@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'transparent',
         padding: 5,
-        marginBottom: 5
+        marginBottom: 5,
+        height: 55
     },
     searchIcon: {
         marginRight: 30

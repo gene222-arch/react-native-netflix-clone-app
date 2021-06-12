@@ -4,9 +4,6 @@ const styles = StyleSheet.create({
     avatarIcon: {
         borderRadius: 5
     },
-    container: {
-        flex: 1,
-    },
     frontPage: {
         width: '100%',
         height: Dimensions.get('window').height
@@ -16,13 +13,19 @@ const styles = StyleSheet.create({
         height: 50,
         resizeMode: 'contain'
     },
+    iconContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     notificationsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: 'transparent',
-        padding: 10,
-        paddingBottom: 20
+        paddingLeft: 15,
+        paddingRight: 5,
+        paddingBottom: 20,
+        marginTop: 20
     },
     notificationsText: {
         fontWeight: 'bold',

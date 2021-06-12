@@ -5,22 +5,33 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import { Avatar } from 'react-native-elements';
 import styles from './../assets/stylesheets/appBar';
 import Image from './../components/Image';
+import { useNavigation } from '@react-navigation/native';
 
-const AppBar = () => {
+const AppBar = ({ showLogo = true, headerTitle = '' }) => 
+{
+    const navigation = useNavigation();
+
     return (
         <View style={ styles.searchContainer }>
-            <Image 
-                source={{
-                    uri: 'https://pngimg.com/uploads/netflix/netflix_PNG15.png'
-                }}
-                style={ styles.netflixLogo }
-            />
+            {
+                !showLogo 
+                    ? <Text h4>{ headerTitle }</Text>
+                    : (
+                        <Image 
+                            source={{
+                                uri: 'https://pngimg.com/uploads/netflix/netflix_PNG15.png'
+                            }}
+                            style={ styles.netflixLogo }
+                        />
+                    )
+            }
             <View style={ styles.searchIconContainer }>
                 <FeatherIcon 
                     name='search'
                     size={ 34 }
                     color='#fff'
                     style={ styles.searchIcon }
+                    onPress={ () => navigation.navigate('SearchScreen') }
                 />
                 <Avatar
                     source={{

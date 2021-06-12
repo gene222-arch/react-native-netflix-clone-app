@@ -12,8 +12,7 @@ import TabTwoScreenCS from '../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
 import MoreScreen from '../screens/bottom-tabs/more'
 import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
 import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
-import Text from './../components/Text';
-import StackAppBar from './../components/stack-app-bar/StackAppBar';
+import AppBar from './../screens/AppBar';
 
 
 const options = {
@@ -45,7 +44,7 @@ export const HomeTab = () =>
                 name='MyListScreen'
                 component={ MyListScreen }
                 options={{ 
-                    headerTitle: props => <StackAppBar headerTitle='Categories'/>,
+                    headerTitle: props => <AppBar headerTitle='Categories'/>,
                     headerStyle: {
                         backgroundColor: '#000',
                     },
@@ -80,9 +79,9 @@ const SearchStack = createStackNavigator();
 export const SearchTab = () => 
 {
     return (
-        <SearchStack.Navigator initialRouteName='Search'>
+        <SearchStack.Navigator initialRouteName='SearchScreen'>
             <SearchStack.Screen 
-                name='Search' 
+                name='SearchScreen' 
                 component={ SearchScreen } 
                 options={ options }
             />
