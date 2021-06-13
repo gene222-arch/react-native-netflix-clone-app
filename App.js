@@ -7,6 +7,8 @@ import Navigation from './app/navigation/index';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 const { persistor, store } = configureStore();
 
+
+
 const App = () => 
 {
 	const style = Platform.OS === 'android' ? { marginTop: StatusBar.currentHeight } : {};

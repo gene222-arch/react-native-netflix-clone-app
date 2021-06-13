@@ -5,50 +5,60 @@ import { connect, useDispatch } from 'react-redux';
 import { TouchableOpacity, ImageBackground } from 'react-native'
 
 /** Selectors */
-import { authSelector } from './../../../redux/modules/auth/selectors';
+import { authSelector } from './../../../../redux/modules/auth/selectors';
 
 /** Actions */
-import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
+import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
 
 /** API */
-import categories_ from './../../../services/data/categories';
-import downloads from './../../../services/data/downloads';
+import categories_ from './../../../../services/data/categories';
+import downloads from './../../../../services/data/downloads';
 
 /** RNE Components */
 import { Tab, Button } from 'react-native-elements';
 
 /** Components */
-import AppBar from './../../AppBar';
-import CategoriesMenu from './CategoriesMenu';
-import Image from './../../../components/Image';
-import ContinueWatchingForItem from './../../../components/continue-watching-for-item/ContinueWatchingForItem';
-import View from './../../../components/View';
-import Text from './../../../components/Text';
-import HomeCategory from '../../../components/home-category/HomeCategory';
+import Image from './../../../../components/Image';
+import ContinueWatchingForItem from './../../../../components/continue-watching-for-item/ContinueWatchingForItem';
+import View from './../../../../components/View';
+import Text from './../../../../components/Text';
+import HomeCategory from './../../../../components/home-category/HomeCategory';
 
 /** Icons */
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 /** Styles */
-import styles from './../../../assets/stylesheets/homeScreen';
-import recommendations_ from './../../../services/data/recommendations';
-import frontPageShows from './../../../services/data/frontPageShows';
-import { useNavigation } from '@react-navigation/native';
+import styles from './../../../../assets/stylesheets/homeScreen';
+import recommendations_ from './../../../../services/data/recommendations';
+import frontPageShows from './../../../../services/data/frontPageShows';
 
-const HomeScreen = ({ AUTH }) => 
+
+const CategoriesScreen = ({ AUTH, route }) => 
 {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
+    const { categoryName } = route.params;
 
-    const [ frontPage, setFrontPage ] = useState(frontPageShows[0]);
+    const [ frontPage, setFrontPage ] = useState(frontPageShows.find(({ category }) => category === categoryName));
     const [ categories, setCategories ] = useState(categories_);
     const [ recommendations, setRecommendations ] = useState(recommendations_);
     const [ showCategories, setShowCategories ] = useState(false);
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
-    const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
+    const handlePressCategory = (CATEGORY) => 
+    {
+        setFrontPage(frontPageShows.find(({ category }) => category === CATEGORY));
+
+        const newCategories = categories_.items.map(category => {
+
+            const filterMovies = category.movies.filter(({ show_type }) => show_type === CATEGORY);
+
+            return { ...category, movies: filterMovies };
+        });
+
+        setCategories(newCategories);
+    }
 
     const handleToggleCategories = () => setShowCategories(!showCategories);
 
@@ -87,8 +97,6 @@ const HomeScreen = ({ AUTH }) =>
                             >
                             {/* Nav Bar */}
                             <View style={ styles.topMenuContainer }>
-                                <AppBar />
-                                <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
                                 <View style={ styles.tabContainer }>
                                     <Text 
                                         touchableOpacity={ true } 
@@ -200,4 +208,4 @@ const mapStateToProps = createStructuredSelector({
     AUTH: authSelector
 });
 
-export default connect(mapStateToProps)(HomeScreen)
+export default connect(mapStateToProps)(CategoriesScreen)

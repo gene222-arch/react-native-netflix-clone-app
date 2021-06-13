@@ -26,9 +26,7 @@ const styles = StyleSheet.create({
     playIcon: {
         position: 'absolute',
         top: '30%',
-        left: '25%',
-        backgroundColor: 'rgba(0, 0, 0, .5)',
-        borderRadius: 60
+        left: '25%'
     },
     poster: {
         resizeMode: 'cover'

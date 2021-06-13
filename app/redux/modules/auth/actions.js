@@ -9,7 +9,10 @@ const {
     LOGOUT_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
-    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED
+    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
+    TOGGLE_ADD_TO_MY_LIST_START,
+    TOGGLE_ADD_TO_MY_LIST_SUCCESS,
+    TOGGLE_ADD_TO_MY_LIST_FAILED
 } = ACTION_TYPES;
 
 export const loginStart = (payload) => ({
@@ -57,5 +60,21 @@ export const toggleRemindMeOfComingShowSuccess = (payload) => ({
 
 export const toggleRemindMeOfComingShowFailed = (payload) => ({
     type: TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
+    payload
+});
+
+/** Toggle add to my list */
+export const toggleAddToMyListStart = (payload) => ({
+    type: TOGGLE_ADD_TO_MY_LIST_START,
+    payload
+});
+
+export const toggleAddToMyListSuccess = (payload) => ({
+    type: TOGGLE_ADD_TO_MY_LIST_SUCCESS,
+    payload
+});
+
+export const toggleAddToMyListFailed = (payload) => ({
+    type: TOGGLE_ADD_TO_MY_LIST_FAILED,
     payload
 });

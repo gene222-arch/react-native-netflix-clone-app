@@ -6,8 +6,10 @@ import {
     loginFailed, 
     logoutSuccess, 
     logoutFailed, 
+    toggleAddToMyListSuccess,
+    toggleAddToMyListFailed,
     toggleRemindMeOfComingShowSuccess, 
-    toggleRemindMeOfComingShowFailed 
+    toggleRemindMeOfComingShowFailed,
 } from './actions'
 import * as AsyncStorage from './../../../utils/asyncStorage'
 
@@ -15,6 +17,7 @@ const {
     LOGIN_START,
     LOGOUT_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
+    TOGGLE_ADD_TO_MY_LIST_START
 } = ACTION_TYPES;
 
 
@@ -40,6 +43,15 @@ function* logoutSaga()
 
     } catch ({ message }) {
         yield put(logoutFailed({ message }));
+    }
+}
+
+function* toggleAddToMyListSaga(payload)
+{
+    try {
+        yield put(toggleAddToMyListSuccess({ show: payload }));
+    } catch ({ message }) {
+        yield put(toggleAddToMyListFailed({ message }));
     }
 }
 
@@ -71,6 +83,14 @@ function* logoutWatcher()
     }
 }
 
+function* toggleAddToMyListWatcher()
+{
+    while (true) {
+        const { payload } = yield take(TOGGLE_ADD_TO_MY_LIST_START);
+        yield call(toggleAddToMyListSaga, payload);
+    }
+}
+
 function* toggleRemindMeOfComingShowWatcher()
 {
     while (true) {
@@ -84,6 +104,7 @@ export default function* ()
     yield all([
         loginWatcher(),
         logoutWatcher(),
+        toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher()
     ]);
 }

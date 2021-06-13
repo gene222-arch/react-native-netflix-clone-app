@@ -13,6 +13,7 @@ import MoreScreen from '../screens/bottom-tabs/more'
 import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
 import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
 import AppBar from './../screens/AppBar';
+import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menus/CategoriesScreen';
 
 
 const options = {
@@ -50,6 +51,17 @@ export const HomeTab = () =>
                         
                     },
                 }}
+            />
+            <HomeStack.Screen 
+                name='CategoriesScreen'
+                component={ CategoriesScreen }
+                options={({ route }) => ({ 
+                    headerTitle: props => <AppBar showLogo={ false } headerTitle={ route.params.headerTitle }/>,
+                    headerStyle: {
+                        backgroundColor: '#000',
+                        
+                    },
+                })}
             />
         </HomeStack.Navigator>
     );

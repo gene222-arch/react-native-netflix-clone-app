@@ -22,9 +22,7 @@ const HomeCategory = ({ title, categories }) =>
                     <Pressable onPress={ () => handlePressMovieImage(item) }>
                         <Image 
                             style={ styles.image }
-                            source={{
-                                uri: item.poster
-                            }}
+                            source={ item.poster }
                         />
                     </Pressable>
                 )}

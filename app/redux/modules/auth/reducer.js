@@ -1,4 +1,5 @@
 import ACTION_TYPES from './action.types';
+import myList from './../../../services/data/myList';
 
 const {
     LOGIN_START,
@@ -9,7 +10,10 @@ const {
     LOGOUT_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
-    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED
+    TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
+    TOGGLE_ADD_TO_MY_LIST_START,
+    TOGGLE_ADD_TO_MY_LIST_SUCCESS,
+    TOGGLE_ADD_TO_MY_LIST_FAILED
 } = ACTION_TYPES;
 
 const CREDENTIALS_DEFAULT_PROPS = {
@@ -29,6 +33,7 @@ const initialState = {
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
     user: USER_DEFAULT_PROPS,
+    myList,
     remindedComingSoonShows: [],
     isLoading: false,
     errors: []
@@ -37,7 +42,8 @@ const initialState = {
 export default (state = initialState, { type, payload }) => 
 {
     const {
-        remindedComingSoonShows
+        myList,
+        remindedComingSoonShows,
     } = state;
 
     const isLoading = true;
@@ -47,6 +53,7 @@ export default (state = initialState, { type, payload }) =>
     {
         case LOGIN_START:
         case LOGOUT_START:
+        case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
             return { 
                 ...state, 
@@ -86,6 +93,27 @@ export default (state = initialState, { type, payload }) =>
                 errors: payload.message
             }
 
+        case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
+
+            let newMyList = [];
+            const { show } = payload;
+
+            const isAlreadyInList = myList.find(list => list.id === show.id); 
+
+            if (!isAlreadyInList) {
+                newMyList = [ ...myList, show ];
+            }
+            else {
+                newMyList = myList.filter(({ id }) => id !== show.id);
+            }
+
+            return {
+                ...state,
+                myList: newMyList,
+                isLoading: false,
+                errors
+            }            
+
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
 
             const { comingSoonShowID } = payload;
@@ -107,6 +135,7 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case TOGGLE_ADD_TO_MY_LIST_FAILED:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:
             return {
                 ...state,

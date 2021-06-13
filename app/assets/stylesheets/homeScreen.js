@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     continueWatchingForContainer: {
-        marginTop: 20,
-        marginBottom: 10,
+        marginVertical: 30,
     },
     frontPageOptions: {
         alignItems: 'center',

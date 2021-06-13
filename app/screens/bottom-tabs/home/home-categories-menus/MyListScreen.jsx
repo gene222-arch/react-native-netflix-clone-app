@@ -6,6 +6,9 @@ import styles from './../../../../assets/stylesheets/myList';
 import { FlatList } from 'react-native-gesture-handler';
 import myList from './../../../../services/data/myList';
 import MyListItem from './../../../../components/my-list-item/MyListItem';
+import { createStructuredSelector } from 'reselect';
+import { authSelector } from './../../../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
 const DEFAULT_PICKER_LIST = [
     'My List',
@@ -13,14 +16,14 @@ const DEFAULT_PICKER_LIST = [
     'Pick 3'
 ];
 
-const MyListScreen = () => 
+const MyListScreen = ({ AUTH }) => 
 {
     const [ selectedPicker, setSelectedPicker ] = useState('My List')
 
     const handleChangePicker = (value, index) => setSelectedPicker(value);
 
     return (
-        <View>
+        <View style={ styles.container }>
             <Picker
                 selectedValue={ selectedPicker }
                 onValueChange={ handleChangePicker }
@@ -39,7 +42,7 @@ const MyListScreen = () =>
             </Picker>
             <FlatList
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ myList }
+                data={ AUTH.myList }
                 renderItem={ ({ item }) => <MyListItem uri={ item.poster }/> }
                 numColumns={ 3 }
             />
@@ -47,4 +50,8 @@ const MyListScreen = () =>
     )
 }
 
-export default MyListScreen
+const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector
+});
+
+export default connect(mapStateToProps)(MyListScreen)
