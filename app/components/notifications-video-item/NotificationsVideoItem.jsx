@@ -9,6 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as FileSystem from 'expo-file-system'
 import { getExtension } from './../../utils/file';
+import { getCachedFile } from './../../utils/cacheImage';
 
 const DisplayTags = ({ tagsLength, tagName, index}) => {
     return (
@@ -47,12 +48,8 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
             <Video 
                 ref={ video }
                 style={ styles.video }
-                source={{
-                    uri: `${ FileSystem.cacheDirectory }ComingSoon/Videos/${ comingSoon.id }.${ getExtension(comingSoon.video) }`
-                }}
-                posterSource={{ 
-                    uri: `${ FileSystem.cacheDirectory }ComingSoon/Posters/${ comingSoon.id }.${ getExtension(comingSoon.poster) }` 
-                }}
+                source={{ uri: getCachedFile('ComingSoon/Videos/', comingSoon.id, comingSoon.video) }}
+                posterSource={{ uri: getCachedFile('ComingSoon/Posters/', comingSoon.id, comingSoon.poster) }}
                 posterStyle={ styles.posterStyle}
                 usePoster={ shouldShowPoster }
                 shouldPlay={ shouldPlay }

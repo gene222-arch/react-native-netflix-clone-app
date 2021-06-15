@@ -1,6 +1,11 @@
 import * as FileSystem from 'expo-file-system'
 import { getExtension } from './file';
 
+
+export const getCachedFile = (directory, fileName, URI) => {
+    return `${ FileSystem.cacheDirectory }${ directory }${ fileName }.${ getExtension( URI ) }`;
+}
+
 export const cacheImage = async (uri, uniqueDocID, directory = '') => 
 {
     const DIRECTORY = `${ FileSystem.cacheDirectory }${ directory }`;

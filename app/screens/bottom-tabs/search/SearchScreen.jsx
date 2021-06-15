@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react'
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import { InteractionManager } from 'react-native'
-import { SearchBar, ListItem, Avatar } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import styles from './../../../assets/stylesheets/searchScreen';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 import SearchItem from './../../../components/search-item/index';
 import searchListAPI from './../../../services/data/searchList';
 import SearchNotFound from './../../errors/SearchNotFound';
-import { cacheImage } from './../../../utils/cacheImage';
-import * as FileSystem from 'expo-file-system'
-import { getExtension } from './../../../utils/file';
+import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 
 const SearchScreen = () => 
 {
@@ -68,8 +66,8 @@ const SearchScreen = () =>
                                 keyExtractor={ ({ id }) => id.toString() }
                                 data={ searchList }
                                 renderItem={ ({ item }) => (
-                                    <SearchItem 
-                                        uri={ `${ FileSystem.cacheDirectory }SearchList/${ item.id }.${ getExtension(item.poster) }` } 
+                                    <SearchItem
+                                        uri={ getCachedFile('SearchList/', item.id, item.poster) } 
                                         title={ item.title }
                                         onPress={ () => console.log(`${ item.title } is now Playing`) }
                                     />

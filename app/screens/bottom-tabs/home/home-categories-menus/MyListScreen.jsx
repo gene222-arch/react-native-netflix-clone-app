@@ -10,7 +10,7 @@ import { authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { InteractionManager } from 'react-native'
 import LoadingScreen from './../../../../components/LoadingScreen';
-import { cacheImage } from './../../../../utils/cacheImage';
+import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import * as FileSystem from 'expo-file-system';
 import { getExtension } from './../../../../utils/file';
 
@@ -66,7 +66,9 @@ const MyListScreen = ({ AUTH }) =>
             <FlatList
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ myList }
-                renderItem={ ({ item }) => <MyListItem uri={ `${ FileSystem.cacheDirectory }Users/Gene/MyList/Posters/${ item.id }.${ getExtension(item.poster) }` }/> }
+                renderItem={ ({ item }) => (
+                    <MyListItem uri={ getCachedFile('Users/Gene/MyList/Posters/', item.id, item.poster) }/>
+                )}
                 numColumns={ 3 }
             />
         </View>

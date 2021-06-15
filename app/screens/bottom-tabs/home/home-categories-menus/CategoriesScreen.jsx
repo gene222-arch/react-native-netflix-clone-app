@@ -12,10 +12,9 @@ import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
 
 /** API */
 import categories_ from './../../../../services/data/categories';
-import downloads from './../../../../services/data/downloads';
 
 /** RNE Components */
-import { Tab, Button } from 'react-native-elements';
+import {  Button } from 'react-native-elements';
 
 /** Components */
 import Image from './../../../../components/Image';
@@ -33,9 +32,7 @@ import styles from './../../../../assets/stylesheets/categories';
 import recommendations_ from './../../../../services/data/recommendations';
 import frontPageShows from './../../../../services/data/frontPageShows';
 import CategoriesMenu from './../CategoriesMenu';
-import { cacheImage } from './../../../../utils/cacheImage';
-import * as FileSystem from 'expo-file-system';
-import { getExtension } from './../../../../utils/file';
+import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -184,7 +181,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                 {
                     <>
                         <ImageBackground 
-                            source={{ uri: `${ FileSystem.cacheDirectory }HomeCategoriesFrontPages/BackgroundImage/${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` }} 
+                            source={{ uri: getCachedFile('HomeCategoriesFrontPages/BackgroundImage/', frontPage.id, frontPage.backgroundImage)}} 
                             style={ styles.homeFrontPage }
                         >
                             {/* Nav Bar */}
@@ -220,7 +217,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                             <View style={ styles.frontPageOptions }>
                                     <Image 
                                         source={{ 
-                                            uri: `${ FileSystem.cacheDirectory }HomeCategoriesFrontPages/Poster/${ frontPage.id }.${ getExtension(frontPage.poster) }` 
+                                            uri: getCachedFile('HomeCategoriesFrontPages/BackgroundImage/', frontPage.id, frontPage.poster) 
                                         }}
                                         style={ styles.homeFrontPageShowLogo }
                                     />

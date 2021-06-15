@@ -36,7 +36,7 @@ import recommendations_ from './../../../services/data/recommendations';
 import frontPageShows from './../../../services/data/frontPageShows';
 import { useNavigation } from '@react-navigation/native';
 import Info from './../../../components/continue-watching-for-item/Info';
-import { cacheImage } from './../../../utils/cacheImage';
+import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import * as FileSystem from 'expo-file-system';
 import { getExtension } from './../../../utils/file';
 
@@ -163,9 +163,7 @@ const HomeScreen = ({ AUTH }) =>
                     <>
                         {/* Front page */}
                         <ImageBackground
-                                source={{ 
-                                    uri: `${ FileSystem.cacheDirectory }FrontPages/${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` 
-                                }}
+                                source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
                                 style={ styles.homeFrontPage }
                             >
                             {/* Nav Bar */}
@@ -205,7 +203,7 @@ const HomeScreen = ({ AUTH }) =>
                             <View style={ styles.frontPageOptions }>
                                 <Image 
                                     source={{ 
-                                        uri: `${ FileSystem.cacheDirectory }FrontPages/${ frontPage.id }.${ getExtension(frontPage.poster) }` }}
+                                        uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster) }}
                                     style={ styles.homeFrontPageShowLogo }
                                 />
                                 <View style={ styles.tagsContainer }>

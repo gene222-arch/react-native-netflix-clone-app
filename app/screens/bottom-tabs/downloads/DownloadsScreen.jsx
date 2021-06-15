@@ -20,7 +20,7 @@ import DownloadItem from '../../../components/download-item/DownloadItem';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/downloads';
-import { cacheImage } from './../../../utils/cacheImage';
+import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import * as FileSystem from 'expo-file-system'
 
 const DownloadsScreen = () => 
@@ -80,9 +80,9 @@ const DownloadsScreen = () =>
         return (
             <View>
                 <PlayDownloadScreen 
-                uri={ 
-                    `${ FileSystem.cacheDirectory }Downloads/Videos/${ download.id }.${ getExtension(download.video) }`
-                } setShowVideo={ setShowVideo }/>
+                    uri={ getCachedFile('Downloads/Videos/', download.id, download.video) } 
+                    setShowVideo={ setShowVideo }
+                />
             </View>
         )
     }

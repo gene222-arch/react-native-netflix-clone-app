@@ -6,6 +6,7 @@ import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import Image from './../Image';
 import * as FileSystem from 'expo-file-system'
+import { getCachedFile } from './../../utils/cacheImage';
 
 
 const HomeCategory = ({ title, categories }) => 
@@ -24,7 +25,7 @@ const HomeCategory = ({ title, categories }) =>
                     <Pressable onPress={ () => handlePressMovieImage(item) }>
                         <Image 
                             style={ styles.image }
-                            source={{ uri: `${ FileSystem.cacheDirectory }Categories/${ item.id }.jpg` }}
+                            source={{ uri: getCachedFile('FrontPages/', item.i, item.poster) }}
                         />
                     </Pressable>
                 )}
