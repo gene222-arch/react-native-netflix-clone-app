@@ -104,18 +104,18 @@ const HomeScreen = ({ AUTH }) =>
     const cacheImages = () => 
     {
         /** Cache Categories */
-        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id)));
+        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id, 'Categories/')));
 
         /** Cache Front Page */
         frontPageShows.map(({ id, poster, backgroundImage }) => {
-            cacheImage(poster, id);
-            cacheImage(backgroundImage, id);
+            cacheImage(poster, id, 'FrontPages/');
+            cacheImage(backgroundImage, id, 'FrontPages/');
         });
 
         /** Cache Recommendations */
         recommendations_.map(({ id, poster, video }) => {
-            cacheImage(poster, id);
-            cacheImage(video, id);
+            cacheImage(poster, id, 'Recommendations/');
+            cacheImage(video, id, 'Recommendations/');
         });
     }
 
@@ -163,7 +163,9 @@ const HomeScreen = ({ AUTH }) =>
                     <>
                         {/* Front page */}
                         <ImageBackground
-                                source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` }}
+                                source={{ 
+                                    uri: `${ FileSystem.cacheDirectory }FrontPages/${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` 
+                                }}
                                 style={ styles.homeFrontPage }
                             >
                             {/* Nav Bar */}
@@ -202,7 +204,8 @@ const HomeScreen = ({ AUTH }) =>
                             {/* Front Page Options/Action Buttons */}
                             <View style={ styles.frontPageOptions }>
                                 <Image 
-                                    source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.poster) }` }}
+                                    source={{ 
+                                        uri: `${ FileSystem.cacheDirectory }FrontPages/${ frontPage.id }.${ getExtension(frontPage.poster) }` }}
                                     style={ styles.homeFrontPageShowLogo }
                                 />
                                 <View style={ styles.tagsContainer }>

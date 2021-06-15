@@ -74,7 +74,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
 {
     const dispatch = useDispatch();
 
-    const [ interactionsIsComplete, setInteractionsIsComplete ] = useState(false);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ categoryItems, setCategoryItems ] = useState([]);
     const [ recommendations, setRecommendations ] = useState([]);
@@ -130,18 +130,18 @@ const CategoriesScreen = ({ AUTH, route }) =>
     const cacheImages = () => 
     {
         /** Cache Categories */
-        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id)));
+        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id, 'Categories/')));
 
         /** Cache Front Page */
         frontPageShows.map(({ id, poster, backgroundImage }) => {
-            cacheImage(poster, id);
-            cacheImage(backgroundImage, id);
+            cacheImage(poster, id, 'HomeCategoriesFrontPages/Poster/');
+            cacheImage(backgroundImage, id, 'HomeCategoriesFrontPages/BackgroundImage/');
         });
 
         /** Cache Recommendations */
         recommendations_.map(({ id, poster, video }) => {
-            cacheImage(poster, id);
-            cacheImage(video, id);
+            cacheImage(poster, id, 'Recommendations/');
+            cacheImage(video, id, 'Recommendations/');
         });
     }
 
@@ -152,7 +152,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
         cacheImages();
         handlePressCategory(categoryName);
         setRecommendations(recommendations_);
-        setInteractionsIsComplete(true);
+        setIsInteractionsComplete(true);
     }
 
     useEffect(() => {
@@ -166,7 +166,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
         }
     }, []);
 
-    if (!interactionsIsComplete) {
+    if (!isInteractionsComplete) {
         return <Text h4>Loading ...</Text>
     }
     
@@ -184,7 +184,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                 {
                     <>
                         <ImageBackground 
-                            source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` }} 
+                            source={{ uri: `${ FileSystem.cacheDirectory }HomeCategoriesFrontPages/BackgroundImage/${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` }} 
                             style={ styles.homeFrontPage }
                         >
                             {/* Nav Bar */}
@@ -219,7 +219,9 @@ const CategoriesScreen = ({ AUTH, route }) =>
                             {/* Front Page Options/Action Buttons */}
                             <View style={ styles.frontPageOptions }>
                                     <Image 
-                                        source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.poster) }` }}
+                                        source={{ 
+                                            uri: `${ FileSystem.cacheDirectory }HomeCategoriesFrontPages/Poster/${ frontPage.id }.${ getExtension(frontPage.poster) }` 
+                                        }}
                                         style={ styles.homeFrontPageShowLogo }
                                     />
                                     <View style={ styles.tagsContainer }>

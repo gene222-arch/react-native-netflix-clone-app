@@ -10,6 +10,11 @@ import { authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { InteractionManager } from 'react-native'
 import LoadingScreen from './../../../../components/LoadingScreen';
+import { cacheImage } from './../../../../utils/cacheImage';
+import * as FileSystem from 'expo-file-system';
+import { getExtension } from './../../../../utils/file';
+
+
 
 const DEFAULT_PICKER_LIST = [
     'My List',
@@ -26,6 +31,8 @@ const MyListScreen = ({ AUTH }) =>
     const handleChangePicker = (value, index) => setSelectedPicker(value);
 
     const runAfterInteractions = () => {
+        AUTH.myList.map(({ id, poster }) => cacheImage(poster, id, 'Users/Gene/MyList/Posters/'))
+
         setMyList(AUTH.myList);
         setIsInteractionsComplete(true);
     }
@@ -59,7 +66,7 @@ const MyListScreen = ({ AUTH }) =>
             <FlatList
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ myList }
-                renderItem={ ({ item }) => <MyListItem uri={ item.poster }/> }
+                renderItem={ ({ item }) => <MyListItem uri={ `${ FileSystem.cacheDirectory }Users/Gene/MyList/Posters/${ item.id }.${ getExtension(item.poster) }` }/> }
                 numColumns={ 3 }
             />
         </View>

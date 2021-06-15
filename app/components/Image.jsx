@@ -5,7 +5,6 @@ import { Image as DefaultImage } from 'react-native-elements'
 const Image = (props) => (
     <DefaultImage 
         {...props}
-        PlaceholderContent={ <ActivityIndicator /> } 
     />
 )
 

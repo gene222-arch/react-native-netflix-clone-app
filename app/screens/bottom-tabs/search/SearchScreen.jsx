@@ -24,8 +24,10 @@ const SearchScreen = () =>
         setSearchList(searchList.filter(({ title }) => (title.toLowerCase()).includes(text)));
     }
 
+    const handleOnCancel = () => setSearchList(searchListAPI);
+
     const runAfterInteractions = () => {
-        searchListAPI.map(({ id, poster }) => cacheImage(poster, id));
+        searchListAPI.map(({ id, poster }) => cacheImage(poster, id, 'SearchList/'));
         
         setSearchList(searchListAPI)
         setIsInteractionsComplete(true);
@@ -33,6 +35,10 @@ const SearchScreen = () =>
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            setSearchList([]);
+        }
     }, []);
 
     
@@ -49,8 +55,8 @@ const SearchScreen = () =>
                 inputStyle={ styles.searchInput }
                 containerStyle={ styles.searchContainer }
                 inputContainerStyle={ styles.searchInputContainer }
-                showLoading
-                rightIconContainerStyle={{ backgroundColor: '#FFF' }}
+                onCancel={ handleOnCancel }
+                showLoading={ true }
             />
             {
                 (!searchList.length) 
@@ -63,7 +69,7 @@ const SearchScreen = () =>
                                 data={ searchList }
                                 renderItem={ ({ item }) => (
                                     <SearchItem 
-                                        uri={ `${ FileSystem.documentDirectory }${ item.id }.${ getExtension(item.poster) }` } 
+                                        uri={ `${ FileSystem.cacheDirectory }SearchList/${ item.id }.${ getExtension(item.poster) }` } 
                                         title={ item.title }
                                         onPress={ () => console.log(`${ item.title } is now Playing`) }
                                     />

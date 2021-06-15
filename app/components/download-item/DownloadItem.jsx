@@ -6,6 +6,9 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import { TouchableOpacity } from 'react-native';
 import styles from './../../assets/stylesheets/downloadItem';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import * as FileSystem from 'expo-file-system'
+import { getExtension } from './../../utils/file';
+
 
 const DownloadItem = ({ downloadedVideo, onLongPress, showType, handlePressNonSeries, handlePressSeries }) => 
 {
@@ -16,7 +19,7 @@ const DownloadItem = ({ downloadedVideo, onLongPress, showType, handlePressNonSe
                     <View>
                         <Image 
                             source={{
-                                uri: downloadedVideo.poster
+                                uri: `${ FileSystem.cacheDirectory }Downloads/Posters/${ downloadedVideo.id }.${ getExtension(downloadedVideo.poster) }`
                             }}
                             style={ styles.posterImg }
                         />

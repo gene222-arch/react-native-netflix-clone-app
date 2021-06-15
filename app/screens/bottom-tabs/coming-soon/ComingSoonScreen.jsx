@@ -51,9 +51,9 @@ const ComingSoonScreen = ({ AUTH }) =>
     const runAfterInteractions = () => {
 
         notifications.map(({ id, video, poster, title_logo }) => {
-            cacheImage(video, id);
-            cacheImage(poster, id);
-            cacheImage(title_logo, id);
+            cacheImage(video, id, 'ComingSoon/Videos/');
+            cacheImage(poster, id, 'ComingSoon/Posters/');
+            cacheImage(title_logo, id, 'ComingSoon/TitleLogos/');
         });
 
         setComingSoonShows(notifications);

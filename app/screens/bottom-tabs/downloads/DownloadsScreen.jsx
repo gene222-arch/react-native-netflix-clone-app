@@ -20,7 +20,8 @@ import DownloadItem from '../../../components/download-item/DownloadItem';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/downloads';
-
+import { cacheImage } from './../../../utils/cacheImage';
+import * as FileSystem from 'expo-file-system'
 
 const DownloadsScreen = () => 
 {
@@ -57,6 +58,12 @@ const DownloadsScreen = () =>
 
 
     const runAfterInteractions = () => {
+
+        downloadsAPI.map(({ id, poster, video }) => {
+            cacheImage(poster, id, 'Downloads/Posters/');
+            cacheImage(video, id, 'Downloads/Videos/');
+        });
+
         setDownloads(downloadsAPI);
         setIsInteractionsComplete(true);
     }
@@ -72,7 +79,10 @@ const DownloadsScreen = () =>
     if (showVideo) {
         return (
             <View>
-                <PlayDownloadScreen uri={ download.video } setShowVideo={ setShowVideo }/>
+                <PlayDownloadScreen 
+                uri={ 
+                    `${ FileSystem.cacheDirectory }Downloads/Videos/${ download.id }.${ getExtension(download.video) }`
+                } setShowVideo={ setShowVideo }/>
             </View>
         )
     }

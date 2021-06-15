@@ -37,10 +37,10 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: `${ FileSystem.documentDirectory }${ episode.id }.${ getExtension(episode.video) }`
+                    uri: `${ FileSystem.cacheDirectory }Recommendations/${ episode.id }.${ getExtension(episode.video) }`
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: `${ FileSystem.documentDirectory }${ episode.id }.${ getExtension(episode.poster) }` }}
+                posterSource={{ uri: `${ FileSystem.cacheDirectory }Recommendations/${ episode.id }.${ getExtension(episode.poster) }` }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />

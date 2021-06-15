@@ -48,9 +48,11 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: `${ FileSystem.documentDirectory }${ comingSoon.id }.${ getExtension(comingSoon.video) }`
+                    uri: `${ FileSystem.cacheDirectory }ComingSoon/Videos/${ comingSoon.id }.${ getExtension(comingSoon.video) }`
                 }}
-                posterSource={{ uri: `${ FileSystem.documentDirectory }${ comingSoon.id }.${ getExtension(comingSoon.poster) }` }}
+                posterSource={{ 
+                    uri: `${ FileSystem.cacheDirectory }ComingSoon/Posters/${ comingSoon.id }.${ getExtension(comingSoon.poster) }` 
+                }}
                 posterStyle={ styles.posterStyle}
                 usePoster={ shouldShowPoster }
                 shouldPlay={ shouldPlay }
@@ -60,7 +62,7 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
             <View style={ styles.comingSoonVideoContainer }>
                 <Image 
                     source={{
-                        uri: `${ FileSystem.documentDirectory }${ comingSoon.id }.${ getExtension(comingSoon.title_logo) }`
+                        uri: `${ FileSystem.cacheDirectory }ComingSoon/TitleLogos/${ comingSoon.id }.${ getExtension(comingSoon.title_logo) }`
                     }}
                     style={ styles.poster }
                 />

@@ -24,7 +24,7 @@ const HomeCategory = ({ title, categories }) =>
                     <Pressable onPress={ () => handlePressMovieImage(item) }>
                         <Image 
                             style={ styles.image }
-                            source={{ uri: `${ FileSystem.documentDirectory }${ item.id }.jpg` }}
+                            source={{ uri: `${ FileSystem.cacheDirectory }Categories/${ item.id }.jpg` }}
                         />
                     </Pressable>
                 )}
