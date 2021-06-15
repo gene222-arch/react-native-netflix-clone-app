@@ -1,20 +1,31 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import { InteractionManager } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler';
+import { createStructuredSelector } from 'reselect';
+import { useDispatch, connect } from 'react-redux';
+
+/** Actions */
+import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
+
+/** API */
+import notifications from './../../../services/data/notifications';
+
+/** Styles */
+import styles from './../../../assets/stylesheets/comingSoon';
+
+/** Selectors */
+import { authSelector } from './../../../redux/modules/auth/selectors'
+
+/** Components */
 import View from './../../../components/View';
 import Text from './../../../components/Text';
-import styles from './../../../assets/stylesheets/comingSoon';
-import Image from './../../../components/Image';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import { Avatar } from 'react-native-elements';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import notifications from './../../../services/data/notifications';
 import NotificationsVideoItem from '../../../components/notifications-video-item';
-import { FlatList } from 'react-native-gesture-handler';
-import { Dimensions } from 'react-native';
-import { createStructuredSelector } from 'reselect';
-import { authSelector } from './../../../redux/modules/auth/selectors'
-import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
-import { useDispatch, connect } from 'react-redux';
 import AppBar from './../../AppBar';
+
+/** RNV Icons */
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { cacheImage } from './../../../utils/cacheImage';
 
 
 const ITEM_HEIGHT = 500;
@@ -23,6 +34,8 @@ const ComingSoonScreen = ({ AUTH }) =>
 {
     const dispatch = useDispatch();
 
+    const [ comingSoonShows, setComingSoonShows ] = useState([]);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ focusedIndex, setFocusedIndex ] = useState(0);
 
     const handleScroll = useCallback(e => 
@@ -34,12 +47,33 @@ const ComingSoonScreen = ({ AUTH }) =>
 
     const handlePressToggleRemindMe = (comingSoonShowID) => dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ comingSoonShowID }));
 
+    
+    const runAfterInteractions = () => {
+
+        notifications.map(({ id, video, poster, title_logo }) => {
+            cacheImage(video, id);
+            cacheImage(poster, id);
+            cacheImage(title_logo, id);
+        });
+
+        setComingSoonShows(notifications);
+        setIsInteractionsComplete(true);
+    }
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+    }, []);
+
+    if (!isInteractionsComplete) {
+        return <Text>Loading ...</Text>
+    }
+
     return (
         <View style={ styles.container }>
             {/* Coming Soon Videos */}
             <FlatList 
                 onScroll={handleScroll}
-                data={ notifications }
+                data={ comingSoonShows }
                 renderItem={ ({ item, index }) => (
                     <NotificationsVideoItem 
                         comingSoon={ item } 

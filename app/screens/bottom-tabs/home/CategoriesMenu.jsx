@@ -1,32 +1,52 @@
-import React, { useState } from 'react'
-import { BottomSheet, ListItem, FAB } from 'react-native-elements';
-import { FlatList } from 'react-native-gesture-handler';
+import React, { useState, useEffect, useRef } from 'react'
+import { BottomSheet, ListItem, FAB, Button } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native'
 import styles from './../../../assets/stylesheets/appBarCategories';
 import Colors from './../../../constants/Colors';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import View from './../../../components/View';
+
+
+const DisplayCategory = ({ category }) => {
+    return (
+        <TouchableOpacity onPress={ category.onPress }>
+            <ListItem containerStyle={[ styles.listContainer, category.containerStyle ]}>
+                <ListItem.Content style={ styles.listItemContent }>
+                    <ListItem.Title style={[ styles.listTitle, category.customStyle ]}>{ category.title }</ListItem.Title>
+                </ListItem.Content>
+            </ListItem>
+        </TouchableOpacity>
+    )
+}
 
 const CategoriesMenu = ({ isVisible, setIsVisible }) => 
 {
+    console.log('CATEGORY MENU RENDER');
     const navigation = useNavigation();
 
     const headerTitle = 'Categories';
 
-    const list = 
+    const orientationRef = useRef('PORTRAIT');
+    const handlePressNavigateToMyList = () => {
+        setIsVisible(false);
+        navigation.navigate('MyListScreen', { headerTitle });
+    }
+
+    const categories = 
     [
         { 
             title: 'Home',
             customStyle: {
                 fontWeight: 'bold',
                 fontSize: 24,
-                color: Colors.white
+                color: Colors.white,
+                marginTop: 80,
             },
             onPress: () => console.log('Clicked')
         },
         { 
             title: 'My List',
-            onPress: () => navigation.navigate('MyListScreen', { headerTitle })
+            onPress: handlePressNavigateToMyList
         },
         { 
             title: 'Available for Download',
@@ -64,37 +84,49 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
             title: 'Fantasy',
             onPress: () => console.log('Clicked') 
         },
-        {
-            title: <FAB 
-                        title="X" 
-                        buttonStyle={ styles.closeBtn } 
-                        titleStyle={ styles.closeBtnTitle }
-                        containerStyle={ styles.closeBtnContainer }
-                        onPress={ () => setIsVisible(false) }
-                    />
+        { 
+            title: 'Horror',
+            onPress: () => console.log('Clicked') 
         },
-    ];
-    
-    return (
-        <BottomSheet
-            modalProps={{
-                animationType: 'slide'
-            }}
-            isVisible={ isVisible }
-            containerStyle={ styles.container }
-        >
-        {
-            list.map((l, index) => (
-                <TouchableOpacity key={ index } onPress={ l.onPress }>
-                    <ListItem containerStyle={ styles.listContainer }>
-                        <ListItem.Content style={ styles.listItemContent }>
-                            <ListItem.Title style={[ styles.listTitle, l.customStyle ]}>{ l.title }</ListItem.Title>
-                        </ListItem.Content>
-                    </ListItem>
-                </TouchableOpacity>
-            ))
+        { 
+            title: 'Trending',
+            onPress: () => console.log('Clicked') 
+        },
+        { 
+            title: 'Kids',
+            onPress: () => console.log('Clicked') 
+        },
+        { 
+            title: 'Science Fiction',
+            onPress: () => console.log('Clicked') 
+        },
+        { 
+            title: 'Detective',
+            onPress: () => console.log('Clicked') 
         }
-        </BottomSheet>
+    ];
+
+    return (
+        <View style={ styles.container }>
+            <BottomSheet
+                modalProps={{
+                    animationType: 'slide'
+                }}
+                isVisible={ isVisible }
+                containerStyle={ styles.bottomSheetContainer }
+            >
+                {
+                    categories.map((category, index) => <DisplayCategory key={ index } category={ category }/>)
+                }
+                <Button
+                    title='X'
+                    buttonStyle={ styles.closeBtn }
+                    containerStyle={ styles.closeBtnContainerPortrait }
+                    titleStyle={ styles.closeBtnTitle }
+                    onPress={ () => setIsVisible(false) }
+                />
+            </BottomSheet>
+        </View>
     )
 }
 

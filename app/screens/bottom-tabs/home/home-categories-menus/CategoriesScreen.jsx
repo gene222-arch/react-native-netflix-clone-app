@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList } from 'react-native-gesture-handler';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
-import { TouchableOpacity, ImageBackground } from 'react-native'
+import { TouchableOpacity, ImageBackground, InteractionManager } from 'react-native'
 
 /** Selectors */
 import { authSelector } from './../../../../redux/modules/auth/selectors';
@@ -29,19 +29,55 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 /** Styles */
-import styles from './../../../../assets/stylesheets/homeScreen';
+import styles from './../../../../assets/stylesheets/categories';
 import recommendations_ from './../../../../services/data/recommendations';
 import frontPageShows from './../../../../services/data/frontPageShows';
+import CategoriesMenu from './../CategoriesMenu';
+import { cacheImage } from './../../../../utils/cacheImage';
+import * as FileSystem from 'expo-file-system';
+import { getExtension } from './../../../../utils/file';
 
+
+const DEFAULT_FRONT_PAGE = {
+    id: '',
+    category: '',
+    title: '',
+    backgroundImage: null,
+    poster: null,
+    tags: [],
+    isAddedToMyList: false
+}
+
+
+const DisplayContinueWatchingFor = ({ recommendations, handleToggleLikeRecommendation, handleToggleUnLikeRecommendation, handlePressRemoveRecommendation }) => {
+    return (
+        <View style={ styles.continueWatchingForContainer }>
+            <Text h4>Continue Watching For KNSM</Text>
+            <FlatList 
+                keyExtractor={ ({ id }) => id.toString()}
+                data={ recommendations }
+                renderItem={({ item }) =>  (
+                    <ContinueWatchingForItem 
+                        episode={ item } 
+                        handleToggleLikeRecommendation={ handleToggleLikeRecommendation }
+                        handleToggleUnLikeRecommendation={ handleToggleUnLikeRecommendation }
+                        handlePressRemoveRecommendation={ handlePressRemoveRecommendation }
+                    />
+                )}
+                horizontal
+            />    
+        </View>
+    )
+}
 
 const CategoriesScreen = ({ AUTH, route }) => 
 {
     const dispatch = useDispatch();
-    const { categoryName } = route.params;
 
-    const [ frontPage, setFrontPage ] = useState(frontPageShows.find(({ category }) => category === categoryName));
-    const [ categories, setCategories ] = useState(categories_);
-    const [ recommendations, setRecommendations ] = useState(recommendations_);
+    const [ interactionsIsComplete, setInteractionsIsComplete ] = useState(false);
+    const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
+    const [ categoryItems, setCategoryItems ] = useState([]);
+    const [ recommendations, setRecommendations ] = useState([]);
     const [ showCategories, setShowCategories ] = useState(false);
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
@@ -57,17 +93,30 @@ const CategoriesScreen = ({ AUTH, route }) =>
             return { ...category, movies: filterMovies };
         });
 
-        setCategories(newCategories);
+        setCategoryItems(newCategories);
     }
 
     const handleToggleCategories = () => setShowCategories(!showCategories);
 
-    const handleToggleLikeRecommendation = (recommendationID) => {
-        const newRecommendations = recommendations.map((rec) => 
-            (rec.id === recommendationID) && (!rec.isLiked)
-                ? { ...rec, isLiked: true }
-                : { ...rec, isLiked: false }
-        );
+    const handleToggleLikeRecommendation = (recommendationID, rate) => {
+        const newRecommendations = recommendations.map((rec) => {
+
+            if (rec.id === recommendationID) 
+            {
+                if (!rec.isRated) {
+                    return { ...rec, isRated: true, rate };
+                }
+
+                if (rec.isRated && rec.rate !== rate) {
+                    return { ...rec, isRated: true, rate };
+                }
+                else {
+                    return { ...rec, isRated: false, rate: '' };
+                }
+            }
+
+            return rec;
+        });
 
         setRecommendations(newRecommendations);
     }
@@ -78,10 +127,53 @@ const CategoriesScreen = ({ AUTH, route }) =>
         setRecommendations(newRecommendations);
     }
 
+    const cacheImages = () => 
+    {
+        /** Cache Categories */
+        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id)));
+
+        /** Cache Front Page */
+        frontPageShows.map(({ id, poster, backgroundImage }) => {
+            cacheImage(poster, id);
+            cacheImage(backgroundImage, id);
+        });
+
+        /** Cache Recommendations */
+        recommendations_.map(({ id, poster, video }) => {
+            cacheImage(poster, id);
+            cacheImage(video, id);
+        });
+    }
+
+    const runAfterInteractions = () => 
+    {
+        const { categoryName } = route.params;
+
+        cacheImages();
+        handlePressCategory(categoryName);
+        setRecommendations(recommendations_);
+        setInteractionsIsComplete(true);
+    }
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            setCategoryItems([]);
+            setFrontPage(DEFAULT_FRONT_PAGE);
+            setRecommendations([]);
+            setIsInteractionsComplete(false);
+        }
+    }, []);
+
+    if (!interactionsIsComplete) {
+        return <Text h4>Loading ...</Text>
+    }
+    
     return (
         <View style={ styles.container }>
             <FlatList 
-                data={ categories.items }
+                data={ categoryItems }
                 renderItem={({ item }) => (
                     <HomeCategory 
                         title={ item.title }
@@ -91,30 +183,28 @@ const CategoriesScreen = ({ AUTH, route }) =>
                 ListHeaderComponent=
                 {
                     <>
-                        <ImageBackground
-                                source={ frontPage.backgroundImage }
-                                style={ styles.homeFrontPage }
-                            >
+                        <ImageBackground 
+                            source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` }} 
+                            style={ styles.homeFrontPage }
+                        >
                             {/* Nav Bar */}
                             <View style={ styles.topMenuContainer }>
+                                <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
                                 <View style={ styles.tabContainer }>
-                                    <Text 
-                                        touchableOpacity={ true } 
-                                        style={ styles.tabItem }
-                                        onPress={ () => handlePressCategory('TV Shows') }
-                                    >
-                                        TV Shows
-                                    </Text>
-                                    <Text 
-                                        touchableOpacity={ true } 
-                                        style={ styles.tabItem }
-                                        onPress={ () => handlePressCategory('Movies') }
-                                    >
-                                        Movies
-                                    </Text>
                                     <TouchableOpacity onPress={ handleToggleCategories }>
                                         <View style={ styles.categoriesContainer }>
-                                            <Text style={ styles.tabItem }>Categories</Text>
+                                            <Text style={ styles.tabItem }>TV Shows</Text>
+                                            <FontAwesome5 
+                                                name='sort-down'
+                                                size={ 12 }
+                                                color='#fff'
+                                                style={ styles.categoriesIcon }
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={ handleToggleCategories }>
+                                        <View style={ styles.categoriesContainer }>
+                                            <Text style={ styles.tabItem }>All Categories</Text>
                                             <FontAwesome5 
                                                 name='sort-down'
                                                 size={ 12 }
@@ -128,75 +218,66 @@ const CategoriesScreen = ({ AUTH, route }) =>
                             
                             {/* Front Page Options/Action Buttons */}
                             <View style={ styles.frontPageOptions }>
-                                <Image 
-                                    source={ frontPage.poster }
-                                    style={ styles.homeFrontPageShowLogo }
-                                />
-                                <View style={ styles.tagsContainer }>
-                                {
-                                    frontPage.tags.map((name, index) => (
-                                        <Text 
-                                            key={ index }
-                                            style={ styles.tagItem }
-                                        >
-                                            { (frontPage.tags.length - 1) !== index ? `${ name }  · ` : name }
-                                        </Text>
-                                    ))
-                                }
-                                </View>
-                                <View style={ styles.actionBtnsContainer }>
-                                    <TouchableOpacity onPress={ handleToggleAddToMyList }>
+                                    <Image 
+                                        source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.poster) }` }}
+                                        style={ styles.homeFrontPageShowLogo }
+                                    />
+                                    <View style={ styles.tagsContainer }>
+                                    {
+                                        frontPage.tags.map((name, index) => (
+                                            <Text 
+                                                key={ index }
+                                                style={ styles.tagItem }
+                                            >
+                                                { (frontPage.tags.length - 1) !== index ? `${ name }  · ` : name }
+                                            </Text>
+                                        ))
+                                    }
+                                    </View>
+                                    <View style={ styles.actionBtnsContainer }>
+                                        <TouchableOpacity onPress={ handleToggleAddToMyList }>
+                                            <View style={ styles.myListInfoActionContainer }>
+                                                <FeatherIcon 
+                                                    name={ !AUTH.myList.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
+                                                    size={ 24 }
+                                                    color='#fff'
+                                                />
+                                                <Text style={ styles.myListInfoActionText }>My List</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <Button 
+                                            title='   Play'
+                                            icon={
+                                                <FontAwesome5 
+                                                    name='play'
+                                                    size={ 16 }
+                                                    color='#000'
+                                                />
+                                            }
+                                            iconPosition='left'
+                                            onPress={ () => console.log('Dr. Stone is Playing...') }
+                                            buttonStyle={ styles.playBtn }
+                                            titleStyle={ styles.playBtnTitle }
+                                        />
                                         <View style={ styles.myListInfoActionContainer }>
                                             <FeatherIcon 
-                                                name={ !AUTH.myList.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
+                                                name='info'
                                                 size={ 24 }
                                                 color='#fff'
                                             />
-                                            <Text style={ styles.myListInfoActionText }>My List</Text>
+                                            <Text style={ styles.myListInfoActionText }>Info</Text>
                                         </View>
-                                    </TouchableOpacity>
-                                    <Button 
-                                        title='   Play'
-                                        icon={
-                                            <FontAwesome5 
-                                                name='play'
-                                                size={ 16 }
-                                                color='#000'
-                                            />
-                                        }
-                                        iconPosition='left'
-                                        onPress={ () => console.log('Dr. Stone is Playing...') }
-                                        buttonStyle={ styles.playBtn }
-                                        titleStyle={ styles.playBtnTitle }
-                                    />
-                                    <View style={ styles.myListInfoActionContainer }>
-                                        <FeatherIcon 
-                                            name='info'
-                                            size={ 24 }
-                                            color='#fff'
-                                        />
-                                        <Text style={ styles.myListInfoActionText }>Info</Text>
                                     </View>
                                 </View>
-                            </View>
                         </ImageBackground>   
 
                         {/* Continue Watching For */}
-                        <View style={ styles.continueWatchingForContainer }>
-                            <Text h4>Continue Watching For KNSM</Text>
-                            <FlatList 
-                                keyExtractor={ ({ id }) => id.toString()}
-                                data={ recommendations }
-                                renderItem={({ item }) =>  (
-                                    <ContinueWatchingForItem 
-                                        episode={ item } 
-                                        handleToggleLikeRecommendation={ () => handleToggleLikeRecommendation(item.id) }
-                                        handlePressRemoveRecommendation={ () => handlePressRemoveRecommendation(item.id) }
-                                    />
-                                )}
-                                horizontal
-                            />    
-                        </View>   
+                        <DisplayContinueWatchingFor 
+                            recommendations={ recommendations }
+                            handleToggleLikeRecommendation={ () => handleToggleLikeRecommendation(item.id, 'like') }
+                            handleToggleUnLikeRecommendation={ () => handleToggleLikeRecommendation(item.id, 'not for me') }
+                            handlePressRemoveRecommendation={ () => handlePressRemoveRecommendation(item.id) }
+                        /> 
                     </>             
                 }
             />

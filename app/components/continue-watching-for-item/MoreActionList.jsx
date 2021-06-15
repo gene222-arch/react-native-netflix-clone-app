@@ -3,10 +3,45 @@ import { TouchableOpacity } from 'react-native'
 import { BottomSheet, ListItem, Icon } from 'react-native-elements';
 import styles from './../../assets/stylesheets/moreActionList';
 
-
-const MoreActionList = ({ selectedVideo , handlePressRemoveRecommendation, handleToggleLikeRecommendation, isVisible, setIsVisible }) => 
+const DisplayAction = ({ actionType }) => 
 {
-    const list = 
+    return (
+        <ListItem containerStyle={[ styles.listItemContainer, actionType.containerStyle ]} onPress={ actionType.onPress }>
+        {
+            actionType.iconName && (
+                <Icon 
+                    name={ actionType.iconName }
+                    type={ actionType.iconType }
+                    size={ 24 }
+                    color='#fff'  
+                    solid={ actionType.isSolid }
+                />
+            )
+        }
+        <ListItem.Content>
+            <ListItem.Title style={ [styles.listItemTitle, actionType.titleStyle] }>{ actionType.title }</ListItem.Title>
+        </ListItem.Content>
+        {
+            actionType.iconNameOnEnd && (
+                <TouchableOpacity onPress={ actionType.onPress }>
+                    <Icon 
+                        name={ actionType.iconNameOnEnd }
+                        type={ actionType.iconType }
+                        size={ 24 }
+                        color='#fff'  
+                    />
+                </TouchableOpacity>
+            )
+        }
+    </ListItem>
+    )
+}
+
+const MoreActionList = ({ selectedVideo, handlePressRemoveRecommendation, handleToggleLikeRecommendation, handleToggleUnLikeRecommendation, isVisible, setIsVisible }) => 
+{
+    const currentSelectedVideoIsRated = !(selectedVideo.rate === 'like' || selectedVideo.rate === 'not for me');
+
+    const actionList = 
     [
         {
             title: selectedVideo?.title ?? '',
@@ -30,18 +65,20 @@ const MoreActionList = ({ selectedVideo , handlePressRemoveRecommendation, handl
             show: true,
         },
         { 
-            title: !selectedVideo.isLiked ? 'Like' : 'Rated', 
+            title: currentSelectedVideoIsRated ? 'Like' : 'Rated', 
             iconName: 'thumbs-up',
             iconType: 'font-awesome-5',
-            isSolid: selectedVideo.isLiked,
+            isSolid: selectedVideo.rate === 'like',
             onPress: handleToggleLikeRecommendation,
-            show: true,
+            show: !selectedVideo.rate || selectedVideo.rate === 'like',
         },
         { 
-            title: 'Not For Me', 
+            title: currentSelectedVideoIsRated ? 'Not For Me' : 'Rated', 
             iconName: 'thumbs-down',
             iconType: 'font-awesome-5',
-            show: !selectedVideo.isLiked,
+            isSolid: selectedVideo.rate === 'not for me',
+            onPress: handleToggleUnLikeRecommendation,
+            show: !selectedVideo.rate || selectedVideo.rate === 'not for me',
         },
         {
             title: 'Remove From Row',
@@ -54,38 +91,11 @@ const MoreActionList = ({ selectedVideo , handlePressRemoveRecommendation, handl
 
     return (
         <BottomSheet
-            isVisible={isVisible}
+            isVisible={ isVisible }
             containerStyle={ styles.container }
         >
-            {list.map((l, i) => l.show && (
-                <ListItem key={ i } containerStyle={[ styles.listItemContainer, l.containerStyle ]} onPress={ l.onPress }>
-                    {
-                        l.iconName && (
-                            <Icon 
-                                name={ l.iconName }
-                                type={ l.iconType }
-                                size={ 24 }
-                                color='#fff'  
-                                solid={ l.isSolid }
-                            />
-                        )
-                    }
-                    <ListItem.Content>
-                        <ListItem.Title style={ [styles.listItemTitle, l.titleStyle] }>{ l.title }</ListItem.Title>
-                    </ListItem.Content>
-                    {
-                        l.iconNameOnEnd && (
-                            <TouchableOpacity onPress={ l.onPress }>
-                                <Icon 
-                                    name={ l.iconNameOnEnd }
-                                    type={ l.iconType }
-                                    size={ 24 }
-                                    color='#fff'  
-                                />
-                            </TouchableOpacity>
-                        )
-                    }
-                </ListItem>
+            {actionList.map((action, i) => action.show && (
+                <DisplayAction key={ i } actionType={ action }/>
             ))}
         </BottomSheet>
     )

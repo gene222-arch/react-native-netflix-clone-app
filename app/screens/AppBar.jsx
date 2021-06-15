@@ -6,6 +6,7 @@ import { Avatar } from 'react-native-elements';
 import styles from './../assets/stylesheets/appBar';
 import Image from './../components/Image';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native'
 
 const AppBar = ({ showLogo = true, headerTitle = '' }) => 
 {
@@ -26,13 +27,14 @@ const AppBar = ({ showLogo = true, headerTitle = '' }) =>
                     )
             }
             <View style={ styles.searchIconContainer }>
-                <FeatherIcon 
-                    name='search'
-                    size={ 34 }
-                    color='#fff'
-                    style={ styles.searchIcon }
-                    onPress={ () => navigation.navigate('SearchScreen') }
-                />
+                <TouchableOpacity onPress={ () => navigation.navigate('Search')}>
+                    <FeatherIcon 
+                        name='search'
+                        size={ 34 }
+                        color='#fff'
+                        style={ styles.searchIcon }
+                    />
+                </TouchableOpacity>
                 <Avatar
                     source={{
                         uri:

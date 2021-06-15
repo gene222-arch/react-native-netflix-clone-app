@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../redux/modules/auth/selectors'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+
 const LoginScreen = ({ authReducer }) => 
 {
     const dispatch = useDispatch();

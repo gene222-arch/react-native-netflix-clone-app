@@ -1,11 +1,3 @@
-import STRANGER_THINGS from './../../assets/images/categories-poster/stranger-things.jpg'
-import THIRTEEN_REASONS_WHY from './../../assets/images/categories-poster/13-reasons-why.jpg'
-import IMPERIAL_DREAMS from './../../assets/images/categories-poster/imperial-dreams.jpg'
-import SWEET_HOME from './../../assets/images/categories-poster/sweet-home.jpg'
-import UNCLE_DREW from './../../assets/images/categories-poster/uncle-drew.jpg'
-
-
-
 const Categories = {
     items: [{
         id: 'category1',
@@ -13,118 +5,119 @@ const Categories = {
         movies: [{
             id: 'movie1',
             show_type: 'TV Shows',
-            poster: STRANGER_THINGS,
+            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
             id: 'movie2',
             show_type: 'TV Shows',
-            poster: THIRTEEN_REASONS_WHY,
+            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
             id: 'movie3',
             show_type: 'TV Shows',
-            poster: IMPERIAL_DREAMS,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
             id: 'movie4',
             show_type: 'TV Shows',
-            poster: SWEET_HOME,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
             id: 'movie5',
             show_type: 'TV Shows',
-            poster: UNCLE_DREW,
+            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category2',
         title: 'Trending Now',
         movies: [{
-            id: 'movie1',
+            id: 'movie6',
             show_type: 'Movies',
-            poster: STRANGER_THINGS,
+            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
-            id: 'movie2',
+            id: 'movie7',
             show_type: 'Movies',
-            poster: THIRTEEN_REASONS_WHY,
+            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
-            id: 'movie3',
+            id: 'movie8',
             show_type: 'Movies',
-            poster: IMPERIAL_DREAMS,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
-            id: 'movie4',
+            id: 'movie9',
             show_type: 'Anime',
-            poster: SWEET_HOME,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
-            id: 'movie5',
+            id: 'movie10',
             show_type: 'Movies',
-            poster: UNCLE_DREW,
+            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category3',
         title: 'Latin American Movies & TV',
         movies: [{
-            id: 'movie1',
+            id: 'movie11',
             show_type: 'Anime',
-            poster: STRANGER_THINGS,
+            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
-            id: 'movie2',
+            id: 'movie12',
             show_type: 'Anime',
-            poster: THIRTEEN_REASONS_WHY,
+            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
-            id: 'movie3',
+            id: 'movie13',
             show_type: 'Movies',
-            poster: IMPERIAL_DREAMS,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
-            id: 'movie4',
+            id: 'movie14',
             show_type: 'TV Shows',
-            poster: SWEET_HOME,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
-            id: 'movie5',
+            id: 'movie15',
             show_type: 'TV Shows',
-            poster: UNCLE_DREW,
+            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category4',
         title: 'Comedies',
         movies: [{
-            id: 'movie1',
+            id: 'movie16',
             show_type: 'TV Shows',
-            poster: STRANGER_THINGS,
+            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
-            id: 'movie2',
+            id: 'movie17',
             show_type: 'TV Shows',
-            poster: THIRTEEN_REASONS_WHY,
+            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
-            id: 'movie3',
+            id: 'movie18',
             show_type: 'TV Shows',
-            poster: IMPERIAL_DREAMS,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
-            id: 'movie4',
+            id: 'movie19',
             show_type: 'TV Shows',
-            poster: SWEET_HOME,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
-            id: 'movie5',
-            poster: UNCLE_DREW,
+            id: 'movie20',
+            show_type: 'TV Shows',
+            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category5',
         title: 'Top 10',
         movies: [{
-            id: 'movie1',
+            id: 'movie21',
             show_type: 'Movies',
-            poster: STRANGER_THINGS,
+            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
-            id: 'movie2',
+            id: 'movie22',
             show_type: 'Movies',
-            poster: THIRTEEN_REASONS_WHY,
+            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
-            id: 'movie3',
+            id: 'movie23',
             show_type: 'TV Shows',
-            poster: IMPERIAL_DREAMS,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
-            id: 'movie4',
+            id: 'movie24',
             show_type: 'Movies',
-            poster: SWEET_HOME,
+            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
-            id: 'movie5',
+            id: 'movie25',
             show_type: 'TV Shows',
-            poster: UNCLE_DREW,
+            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }]
 };

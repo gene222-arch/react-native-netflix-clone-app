@@ -5,6 +5,8 @@ import { FlatList } from 'react-native-gesture-handler';
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import Image from './../Image';
+import * as FileSystem from 'expo-file-system'
+
 
 const HomeCategory = ({ title, categories }) => 
 {
@@ -22,7 +24,7 @@ const HomeCategory = ({ title, categories }) =>
                     <Pressable onPress={ () => handlePressMovieImage(item) }>
                         <Image 
                             style={ styles.image }
-                            source={ item.poster }
+                            source={{ uri: `${ FileSystem.documentDirectory }${ item.id }.jpg` }}
                         />
                     </Pressable>
                 )}

@@ -6,12 +6,41 @@ import View from './../View';
 import Text from './../Text';
 import Image from './../Image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { StyleSheet } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as FileSystem from 'expo-file-system'
+import { getExtension } from './../../utils/file';
+
+const DisplayTags = ({ tagsLength, tagName, index}) => {
+    return (
+        <Text style={ styles.tags }>
+            { (tagsLength - 1) === index ? tagName : `${ tagName }  ·  ` }
+        </Text>
+    )
+}
+
 
 const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shouldFocus, handlePressToggleRemindMe, isReminded }) => 
 {
     const video = useRef(null);
+
+    const handleChangeIsReminded = () => 
+    {
+        return !isReminded 
+        ? (
+            <FeatherIcon 
+                name='check'
+                size={ 28 }
+                color='#fff'
+            />
+        )
+        : (
+            <MaterialCommunityIcon 
+                name='bell'
+                size={ 28 }
+                color='#fff'
+            />
+        )
+    }
 
     return (
         <View style={{ ...styles.container, opacity: shouldFocus ? 1 : 0.25 }}>
@@ -19,9 +48,9 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: comingSoon.video
+                    uri: `${ FileSystem.documentDirectory }${ comingSoon.id }.${ getExtension(comingSoon.video) }`
                 }}
-                posterSource={{ uri: comingSoon.poster }}
+                posterSource={{ uri: `${ FileSystem.documentDirectory }${ comingSoon.id }.${ getExtension(comingSoon.poster) }` }}
                 posterStyle={ styles.posterStyle}
                 usePoster={ shouldShowPoster }
                 shouldPlay={ shouldPlay }
@@ -31,30 +60,14 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
             <View style={ styles.comingSoonVideoContainer }>
                 <Image 
                     source={{
-                        uri: comingSoon.title_logo
+                        uri: `${ FileSystem.documentDirectory }${ comingSoon.id }.${ getExtension(comingSoon.title_logo) }`
                     }}
                     style={ styles.poster }
                 />
                 <View style={ styles.remindMeInfoContainer }>
                     <TouchableOpacity onPress={ handlePressToggleRemindMe }>
                         <View style={ styles.remindMeContainer }>
-                            {
-                                !isReminded 
-                                    ? (
-                                        <FeatherIcon 
-                                            name='check'
-                                            size={ 28 }
-                                            color='#fff'
-                                        />
-                                    )
-                                    : (
-                                        <MaterialCommunityIcon 
-                                            name='bell'
-                                            size={ 28 }
-                                            color='#fff'
-                                        />
-                                    )
-                            }
+                            { handleChangeIsReminded() }
                             <Text style={ styles.remindMeInfoText }>Remind Me</Text>
                         </View>
                     </TouchableOpacity>
@@ -77,9 +90,12 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
                 <View style={ styles.tagsContainer }>
                 {
                     comingSoon.tags.map((tag, index) => (
-                        <Text key={ index } style={ styles.tags }>
-                            { (comingSoon.tags.length - 1) === index ? tag : `${ tag }  ·  ` }
-                        </Text>
+                        <DisplayTags 
+                            key={ index } 
+                            tagsLength={ comingSoon.tags.length }
+                            tagName={ tag }
+                            index={ index }
+                        />
                     ))
                 }
                 </View>
@@ -87,9 +103,5 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
         </View>
     )
 }
-
-const dynamicFocus = (paramStyle) => StyleSheet.create({
-    paramStyle
-});
 
 export default NotificationsVideoItem

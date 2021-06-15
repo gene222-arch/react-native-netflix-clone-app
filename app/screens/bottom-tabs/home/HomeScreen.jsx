@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList } from 'react-native-gesture-handler';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
-import { TouchableOpacity, ImageBackground } from 'react-native'
+import { TouchableOpacity, ImageBackground, InteractionManager } from 'react-native'
 
 /** Selectors */
 import { authSelector } from './../../../redux/modules/auth/selectors';
@@ -35,16 +35,36 @@ import styles from './../../../assets/stylesheets/homeScreen';
 import recommendations_ from './../../../services/data/recommendations';
 import frontPageShows from './../../../services/data/frontPageShows';
 import { useNavigation } from '@react-navigation/native';
+import Info from './../../../components/continue-watching-for-item/Info';
+import { cacheImage } from './../../../utils/cacheImage';
+import * as FileSystem from 'expo-file-system';
+import { getExtension } from './../../../utils/file';
+
+
+const DEFAULT_FRONT_PAGE = {
+    id: '',
+    category: '',
+    title: '',
+    backgroundImage: null,
+    poster: null,
+    tags: [],
+    isAddedToMyList: false
+}
 
 const HomeScreen = ({ AUTH }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const [ frontPage, setFrontPage ] = useState(frontPageShows[0]);
-    const [ categories, setCategories ] = useState(categories_);
-    const [ recommendations, setRecommendations ] = useState(recommendations_);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+
+    const [ showFrontPageInfo, setShowFrontPageInfo ] = useState(false);
+    const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
+    const [ categories, setCategories ] = useState([]);
+    const [ recommendations, setRecommendations ] = useState([]);
     const [ showCategories, setShowCategories ] = useState(false);
+
+    const handleClickShowInfo = () => setShowFrontPageInfo(!showFrontPageInfo);
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
@@ -52,12 +72,25 @@ const HomeScreen = ({ AUTH }) =>
 
     const handleToggleCategories = () => setShowCategories(!showCategories);
 
-    const handleToggleLikeRecommendation = (recommendationID) => {
-        const newRecommendations = recommendations.map((rec) => 
-            (rec.id === recommendationID) && (!rec.isLiked)
-                ? { ...rec, isLiked: true }
-                : { ...rec, isLiked: false }
-        );
+    const handleToggleLikeRecommendation = (recommendationID, rate) => {
+        const newRecommendations = recommendations.map((rec) => {
+
+            if (rec.id === recommendationID) 
+            {
+                if (!rec.isRated) {
+                    return { ...rec, isRated: true, rate };
+                }
+
+                if (rec.isRated && rec.rate !== rate) {
+                    return { ...rec, isRated: true, rate };
+                }
+                else {
+                    return { ...rec, isRated: false, rate: '' };
+                }
+            }
+
+            return rec;
+        });
 
         setRecommendations(newRecommendations);
     }
@@ -68,8 +101,55 @@ const HomeScreen = ({ AUTH }) =>
         setRecommendations(newRecommendations);
     }
 
+    const cacheImages = () => 
+    {
+        /** Cache Categories */
+        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id)));
+
+        /** Cache Front Page */
+        frontPageShows.map(({ id, poster, backgroundImage }) => {
+            cacheImage(poster, id);
+            cacheImage(backgroundImage, id);
+        });
+
+        /** Cache Recommendations */
+        recommendations_.map(({ id, poster, video }) => {
+            cacheImage(poster, id);
+            cacheImage(video, id);
+        });
+    }
+
+    const runAfterInteractions = () => 
+    {
+        cacheImages();
+        setCategories(categories_);
+        setFrontPage(frontPageShows[0]);
+        setRecommendations(recommendations_);
+        setIsInteractionsComplete(true);
+    }
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            setCategories([]);
+            setFrontPage(DEFAULT_FRONT_PAGE);
+            setRecommendations([]);
+            setIsInteractionsComplete(false);
+        }
+    }, []);
+
+
+    if (!isInteractionsComplete) {
+        return <Text h4>Loading ...</Text>
+    }
+
     return (
         <View style={ styles.container }>
+            {/* Display front page info */}
+            <Info selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
+
+            {/* Display Categories */}
             <FlatList 
                 data={ categories.items }
                 renderItem={({ item }) => (
@@ -81,8 +161,9 @@ const HomeScreen = ({ AUTH }) =>
                 ListHeaderComponent=
                 {
                     <>
+                        {/* Front page */}
                         <ImageBackground
-                                source={ frontPage.backgroundImage }
+                                source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.backgroundImage) }` }}
                                 style={ styles.homeFrontPage }
                             >
                             {/* Nav Bar */}
@@ -121,7 +202,7 @@ const HomeScreen = ({ AUTH }) =>
                             {/* Front Page Options/Action Buttons */}
                             <View style={ styles.frontPageOptions }>
                                 <Image 
-                                    source={ frontPage.poster }
+                                    source={{ uri: `${ FileSystem.documentDirectory }${ frontPage.id }.${ getExtension(frontPage.poster) }` }}
                                     style={ styles.homeFrontPageShowLogo }
                                 />
                                 <View style={ styles.tagsContainer }>
@@ -162,12 +243,14 @@ const HomeScreen = ({ AUTH }) =>
                                         titleStyle={ styles.playBtnTitle }
                                     />
                                     <View style={ styles.myListInfoActionContainer }>
-                                        <FeatherIcon 
-                                            name='info'
-                                            size={ 24 }
-                                            color='#fff'
-                                        />
-                                        <Text style={ styles.myListInfoActionText }>Info</Text>
+                                        <TouchableOpacity onPress={ handleClickShowInfo }>
+                                            <FeatherIcon 
+                                                name='info'
+                                                size={ 24 }
+                                                color='#fff'
+                                            />
+                                            <Text style={ styles.myListInfoActionText }>Info</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
@@ -176,13 +259,14 @@ const HomeScreen = ({ AUTH }) =>
                         {/* Continue Watching For */}
                         <View style={ styles.continueWatchingForContainer }>
                             <Text h4>Continue Watching For KNSM</Text>
-                            <FlatList 
-                                keyExtractor={ ({ id }) => id.toString()}
+                            <FlatList
+                                keyExtractor={ item => item.id.toString() }
                                 data={ recommendations }
                                 renderItem={({ item }) =>  (
                                     <ContinueWatchingForItem 
                                         episode={ item } 
-                                        handleToggleLikeRecommendation={ () => handleToggleLikeRecommendation(item.id) }
+                                        handleToggleLikeRecommendation={ () => handleToggleLikeRecommendation(item.id, 'like') }
+                                        handleToggleUnLikeRecommendation={ () => handleToggleLikeRecommendation(item.id, 'not for me') }
                                         handlePressRemoveRecommendation={ () => handlePressRemoveRecommendation(item.id) }
                                     />
                                 )}

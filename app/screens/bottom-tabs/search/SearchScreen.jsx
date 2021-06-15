@@ -1,22 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import View from './../../../components/View';
 import Text from './../../../components/Text';
+import { InteractionManager } from 'react-native'
 import { SearchBar, ListItem, Avatar } from 'react-native-elements';
 import styles from './../../../assets/stylesheets/searchScreen';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import SearchItem from './../../../components/search-item/index';
-import searchList_ from './../../../services/data/searchList';
+import searchListAPI from './../../../services/data/searchList';
+import SearchNotFound from './../../errors/SearchNotFound';
+import { cacheImage } from './../../../utils/cacheImage';
+import * as FileSystem from 'expo-file-system'
+import { getExtension } from './../../../utils/file';
 
 const SearchScreen = () => 
 {
-    const [ searchList, setSearchList ] = useState(searchList_);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+
+    const [ searchList, setSearchList ] = useState([]);
     const [ searchInput, setSearchInput ] = useState('');
 
-    const handleChangeSearchInput = text => {
+    const handleChangeSearchInput = (text) => {
         setSearchInput(text);
-        setSearchList(list.filter(({ title }) => (title.toLowerCase()).includes(text)));
+        setSearchList(searchList.filter(({ title }) => (title.toLowerCase()).includes(text)));
     }
+
+    const runAfterInteractions = () => {
+        searchListAPI.map(({ id, poster }) => cacheImage(poster, id));
+        
+        setSearchList(searchListAPI)
+        setIsInteractionsComplete(true);
+    }
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+    }, []);
+
     
+    if (!isInteractionsComplete) {
+        return <Text>Loading ...</Text>
+    }
 
     return (
         <View style={ styles.container }>
@@ -28,15 +50,11 @@ const SearchScreen = () =>
                 containerStyle={ styles.searchContainer }
                 inputContainerStyle={ styles.searchInputContainer }
                 showLoading
+                rightIconContainerStyle={{ backgroundColor: '#FFF' }}
             />
             {
                 (!searchList.length) 
-                    ? (
-                        <View style={ styles.emptyList }>
-                            <Text h4>Oh darn. We don't have that.</Text>
-                            <Text style={ styles.notFoundCaption }>Try searching for another movie, show, actor, director, or genre.</Text>
-                        </View>
-                    )
+                    ? <SearchNotFound styles={ styles } />
                     : (
                         <>
                             <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
@@ -45,7 +63,7 @@ const SearchScreen = () =>
                                 data={ searchList }
                                 renderItem={ ({ item }) => (
                                     <SearchItem 
-                                        uri={ item.poster } 
+                                        uri={ `${ FileSystem.documentDirectory }${ item.id }.${ getExtension(item.poster) }` } 
                                         title={ item.title }
                                         onPress={ () => console.log(`${ item.title } is now Playing`) }
                                     />

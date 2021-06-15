@@ -7,16 +7,20 @@ import View from './../View';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoreActionList from './MoreActionList';
+import Info from './Info';
+import * as FileSystem from 'expo-file-system'
+import { getExtension } from './../../utils/file';
 
-const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, handlePressRemoveRecommendation }) => 
+const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, handleToggleUnLikeRecommendation, handlePressRemoveRecommendation }) => 
 {
     const video = useRef(null)
     const [ usePoster, setUsePoster ] = useState(true);
+    const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
 
-    const handlePressInfo = () => 1;
+    const handlePressShowInfo = () => setShowInfo(!showInfo);
 
-    const handlePressShowMoreOptions = () => setShowMoreOptions(true);
+    const handlePressShowMoreOptions = () => setShowMoreOptions(!showMoreOptions);
 
     return (
         <View style={ styles.container }>
@@ -25,16 +29,18 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
                 isVisible={ showMoreOptions } 
                 setIsVisible={ setShowMoreOptions } 
                 handleToggleLikeRecommendation={ handleToggleLikeRecommendation }
+                handleToggleUnLikeRecommendation={ handleToggleUnLikeRecommendation }
                 handlePressRemoveRecommendation={ handlePressRemoveRecommendation }
             />
+            <Info selectedShow={ episode } isVisible={ showInfo } setIsVisible={ setShowInfo } />
             <Video 
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: episode.video
+                    uri: `${ FileSystem.documentDirectory }${ episode.id }.${ getExtension(episode.video) }`
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: episode.poster }}
+                posterSource={{ uri: `${ FileSystem.documentDirectory }${ episode.id }.${ getExtension(episode.poster) }` }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />
@@ -45,7 +51,7 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
                 style={ styles.playIcon }
             />
             <View style={ styles.infoMoreContainer }>
-                <TouchableOpacity onPress={ handlePressInfo }>
+                <TouchableOpacity onPress={ handlePressShowInfo }>
                     <FeatherIcon 
                         name='info'
                         size={ 24 }

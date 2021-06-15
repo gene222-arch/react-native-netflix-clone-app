@@ -2,6 +2,7 @@ import React,{ useState, useEffect } from 'react'
 import { createStructuredSelector } from 'reselect';
 import { Picker } from '@react-native-picker/picker'
 import { FlatList } from 'react-native-gesture-handler';
+import { InteractionManager } from 'react-native'
 
 /** API */
 
@@ -27,19 +28,26 @@ import movieAPI from './../../../../services/data/movies';
 import VideoPlayer from './../../../../components/VideoPlayer';
 
 
-const MovieDetailsScreen = ({ Movie, route }) => 
+const DEFAULT_EPISODE = {
+    id: '',
+    title: '',
+    poster: '',
+    duration: '',
+    plot: '',
+    video: '',
+};
+
+
+const MovieDetailsScreen = ({ route }) => 
 {   
     const movie = movieAPI.find(({ id }) => id === route.params.id);
 
-    const seasons = movie.seasons.items.map(({ name }) => name);
-    const DEFAULT_SEASON = movie.seasons.items[0];
-    const DEFAULT_EPISODES = DEFAULT_SEASON.episodes.items;
-    const DEFAULT_EPISODE = DEFAULT_SEASON.episodes.items[0];
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     const [ toggleVideo, setToggleVideo ] = useState(false);
     const [ currentEpisode, setCurrentEpisode ] = useState(DEFAULT_EPISODE);
-    const [ currentSeason, setCurrentSeason ] = useState(DEFAULT_EPISODES);
-    const [ selectedSeason, setSelectedSeason ] = useState(DEFAULT_SEASON.name);
+    const [ currentSeason, setCurrentSeason ] = useState([]);
+    const [ selectedSeason, setSelectedSeason ] = useState('');
     const [ selectedTab, setSelectedTab ] = useState(0);
 
     const handlePressToggleVideo = () => setToggleVideo(!toggleVideo);
@@ -53,7 +61,29 @@ const MovieDetailsScreen = ({ Movie, route }) =>
     
     const handlePressTabs = (index) => setSelectedTab(index);
 
-    
+
+    const runAfterInteractions = () => {
+        const seasons = movie.seasons.items.map(({ name }) => name);
+            const season = movie.seasons.items[0];
+            const episode = seasons.episodes.items[0];
+            const episodeList = seasons.episodes.items;
+
+            setCurrentEpisode(episode);
+            setCurrentSeason(episodeList);
+            setSelectedSeason(season);
+            setIsInteractionsComplete(true);
+    }
+
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+    }, []);
+
+
+    if (!isInteractionsComplete) {
+        return <Text h4>Loading ...</Text>
+    }
+
     return (
         <View style={ styles.container }>
             <View style={ styles.videoPlayerContainer }>

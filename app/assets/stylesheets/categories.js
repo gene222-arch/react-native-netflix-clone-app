@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
     categoriesContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        marginRight: 10
     },  
     categoriesIcon: {
         paddingLeft: 10,
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     },
     homeFrontPage: {
         width: '100%',
-        height: Dimensions.get('window').height - (Dimensions.get('window').height * .25),
+        height: Dimensions.get('window').height - (Dimensions.get('window').height * .3),
         resizeMode: 'cover',
         opacity: .8,
         justifyContent: 'space-between'
@@ -56,7 +57,6 @@ const styles = StyleSheet.create({
     },
     tabContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         padding: 30,
         paddingTop: 10,
         backgroundColor: 'transparent'

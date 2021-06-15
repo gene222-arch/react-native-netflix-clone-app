@@ -19,8 +19,8 @@ const notifications =
         plot: "Rotten is an investigative documentary series produced by Zero Point Zero, focusing on corruption in the global food supply chain. The show's first season was released on Netflix in January 2018, and the second season in October 2019. ... The series uncovers wrongdoing by corporations who control the food that we eat.",
         video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         tags: [ 'Witty', 'Exciting', 'Mystery', 'Action', 'Comedy', 'Drama', 'TV'],
-        title_logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ76Z-3WBkIxm19yrMJHeVEZgILvOBllqxha-TyIjjReXOD0CvpRvacOaiw1HrU9bNNoA&usqp=CAU',
-        poster: 'https://cdn2.nogarlicnoonions.com/images/thumbs/image.php?width=2000&height=2000&image=/images/articles/2020-05/rotten2020-05-12-10-41-23.jpg'
+        title_logo: 'https://upload.wikimedia.org/wikipedia/en/a/ae/Buddy_Thunderstruck.png',
+        poster: 'https://media.netflixreleases.com/images/77b489acd75bbdd6ae51d4d29aa3ae52/thunderstruck-2012-poster.jpg'
     }
 ];
 

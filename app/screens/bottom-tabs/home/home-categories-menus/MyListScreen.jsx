@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import View from '../../../../components/View';
 import Text from '../../../../components/Text';
 import { Picker } from '@react-native-picker/picker';
 import styles from './../../../../assets/stylesheets/myList';
 import { FlatList } from 'react-native-gesture-handler';
-import myList from './../../../../services/data/myList';
 import MyListItem from './../../../../components/my-list-item/MyListItem';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
+import { InteractionManager } from 'react-native'
+import LoadingScreen from './../../../../components/LoadingScreen';
 
 const DEFAULT_PICKER_LIST = [
     'My List',
@@ -18,9 +19,24 @@ const DEFAULT_PICKER_LIST = [
 
 const MyListScreen = ({ AUTH }) => 
 {
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+    const [ myList, setMyList ] = useState([]);
     const [ selectedPicker, setSelectedPicker ] = useState('My List')
 
     const handleChangePicker = (value, index) => setSelectedPicker(value);
+
+    const runAfterInteractions = () => {
+        setMyList(AUTH.myList);
+        setIsInteractionsComplete(true);
+    }
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+    }, []);
+
+    if (!isInteractionsComplete) {
+        return <LoadingScreen />
+    }
 
     return (
         <View style={ styles.container }>
@@ -42,7 +58,7 @@ const MyListScreen = ({ AUTH }) =>
             </Picker>
             <FlatList
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ AUTH.myList }
+                data={ myList }
                 renderItem={ ({ item }) => <MyListItem uri={ item.poster }/> }
                 numColumns={ 3 }
             />

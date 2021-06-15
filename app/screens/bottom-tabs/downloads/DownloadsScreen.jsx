@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { InteractionManager } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 
 /** API */
@@ -25,8 +26,10 @@ const DownloadsScreen = () =>
 {
     const navigation = useNavigation();
 
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+
     const [ download, setDownload ] = useState(null);
-    const [ downloads, setDownloads ] = useState(downloadsAPI);
+    const [ downloads, setDownloads ] = useState([]);
     const [ showVideo, setShowVideo ] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -50,6 +53,20 @@ const DownloadsScreen = () =>
             id: downloadData.id, 
             headerTitle:  downloadData.title
         });
+    }
+
+
+    const runAfterInteractions = () => {
+        setDownloads(downloadsAPI);
+        setIsInteractionsComplete(true);
+    }
+
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(runAfterInteractions);
+    }, []);
+
+    if (!isInteractionsComplete) {
+        return <Text>Loading ...</Text>
     }
 
     if (showVideo) {
