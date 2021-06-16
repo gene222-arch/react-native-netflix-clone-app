@@ -9,6 +9,31 @@ import SearchItem from './../../../components/search-item/index';
 import searchListAPI from './../../../services/data/searchList';
 import SearchNotFound from './../../errors/SearchNotFound';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
+import LoadingScreen from './../../../components/LoadingScreen';
+
+const DisplaySearch = ({ searchList, searchListLength }) => 
+{
+    if (!searchListLength) {
+        return <SearchNotFound styles={ styles } />
+    }
+
+    return (
+        <View>
+            <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
+            <FlatList 
+                keyExtractor={ ({ id }) => id.toString() }
+                data={ searchList }
+                renderItem={ ({ item }) => (
+                    <SearchItem
+                        uri={ getCachedFile('SearchList/', item.id, item.poster) } 
+                        title={ item.title }
+                        onPress={ () => console.log(`${ item.title } is now Playing`) }
+                    />
+                )}
+            />
+        </View>
+    )
+}
 
 const SearchScreen = () => 
 {
@@ -35,7 +60,7 @@ const SearchScreen = () =>
         setIsInteractionsComplete(false);
         setSearchList([]);
         setSearchInput('');
-    }
+    }   
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
@@ -44,10 +69,9 @@ const SearchScreen = () =>
             cleanUp();
         }
     }, []);
-
     
     if (!isInteractionsComplete) {
-        return <Text>Loading ...</Text>
+        return <LoadingScreen />
     }
 
     return (
@@ -60,28 +84,9 @@ const SearchScreen = () =>
                 containerStyle={ styles.searchContainer }
                 inputContainerStyle={ styles.searchInputContainer }
                 onCancel={ handleOnCancel }
-                showLoading={ true }
+                showLoading
             />
-            {
-                (!searchList.length) 
-                    ? <SearchNotFound styles={ styles } />
-                    : (
-                        <>
-                            <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
-                            <FlatList 
-                                keyExtractor={ ({ id }) => id.toString() }
-                                data={ searchList }
-                                renderItem={ ({ item }) => (
-                                    <SearchItem
-                                        uri={ getCachedFile('SearchList/', item.id, item.poster) } 
-                                        title={ item.title }
-                                        onPress={ () => console.log(`${ item.title } is now Playing`) }
-                                    />
-                                )}
-                            />
-                        </>
-                    )
-            }
+            <DisplaySearch searchList={ searchList } searchListLength={ searchList.length } />
         </View>
     )
 }

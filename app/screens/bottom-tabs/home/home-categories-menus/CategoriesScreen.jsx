@@ -34,6 +34,7 @@ import frontPageShows from './../../../../services/data/frontPageShows';
 import CategoriesMenu from './../CategoriesMenu';
 import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import LoadingScreen from '../../../../components/LoadingScreen';
+import MainCategoriesMenu from './../MainCategoriesMenu';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -71,12 +72,15 @@ const DisplayContinueWatchingFor = ({ recommendations, handleToggleLikeRecommend
 const CategoriesScreen = ({ AUTH, route }) => 
 {
     const dispatch = useDispatch();
+    const { categoryName } = route.params;
+
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ categoryItems, setCategoryItems ] = useState([]);
     const [ recommendations, setRecommendations ] = useState([]);
     const [ showCategories, setShowCategories ] = useState(false);
+    const [ showMainCategories, setShowMainCategories ] = useState(false);
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
@@ -93,6 +97,8 @@ const CategoriesScreen = ({ AUTH, route }) =>
 
         setCategoryItems(newCategories);
     }
+
+    const handleToggleMainCategories = () => setShowMainCategories(!showMainCategories);
 
     const handleToggleCategories = () => setShowCategories(!showCategories);
 
@@ -145,8 +151,6 @@ const CategoriesScreen = ({ AUTH, route }) =>
 
     const runAfterInteractions = () => 
     {
-        const { categoryName } = route.params;
-
         cacheImages();
         handlePressCategory(categoryName);
         setRecommendations(recommendations_);
@@ -160,6 +164,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
         setRecommendations([]);
         setIsInteractionsComplete(false);
         setShowCategories(false);
+        setShowMainCategories(false);
     }
 
     useEffect(() => {
@@ -193,9 +198,20 @@ const CategoriesScreen = ({ AUTH, route }) =>
                         >
                             {/* Nav Bar */}
                             <View style={ styles.topMenuContainer }>
-                                <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
                                 <View style={ styles.tabContainer }>
-                                    <TouchableOpacity onPress={ handleToggleCategories }>
+                                    {/* Main Category List */}
+                                    <MainCategoriesMenu 
+                                        isVisible={ showMainCategories } 
+                                        setIsVisible={ setShowMainCategories } 
+                                        selectedMainCategory={ categoryName }
+                                    />
+
+                                    {/* Category list */}
+                                    <CategoriesMenu 
+                                        isVisible={ showCategories } 
+                                        setIsVisible={ setShowCategories }
+                                    />
+                                    <TouchableOpacity onPress={ handleToggleMainCategories }>
                                         <View style={ styles.categoriesContainer }>
                                             <Text style={ styles.tabItem }>TV Shows</Text>
                                             <FontAwesome5 
@@ -224,7 +240,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                             <View style={ styles.frontPageOptions }>
                                     <Image 
                                         source={{ 
-                                            uri: getCachedFile('HomeCategoriesFrontPages/BackgroundImage/', frontPage.id, frontPage.poster) 
+                                            uri: getCachedFile('HomeCategoriesFrontPages/Poster/', frontPage.id, frontPage.poster) 
                                         }}
                                         style={ styles.homeFrontPageShowLogo }
                                     />

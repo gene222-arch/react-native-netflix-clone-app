@@ -5,7 +5,7 @@ import styles from './../../../assets/stylesheets/appBarCategories';
 import Colors from './../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import View from './../../../components/View';
-
+import Text from './../../../components/Text';
 
 const DisplayCategory = ({ category }) => {
     return (

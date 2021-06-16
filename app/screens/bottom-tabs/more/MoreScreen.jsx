@@ -10,6 +10,7 @@ import { Avatar, Button, ListItem } from 'react-native-elements';
 import Text from './../../../components/Text';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import LoadingScreen from './../../../components/LoadingScreen';
 
 const moreOptions = (logoutHandler) =>
 [
@@ -105,7 +106,7 @@ const MoreScreen = () =>
     }, []); 
 
     if (!isInteractionsComplete) {
-        return <Text>Loading ...</Text>
+        return <LoadingScreen />
     }
 
     return (
