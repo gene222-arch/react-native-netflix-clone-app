@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Video } from 'expo-av'
 import { TouchableOpacity } from 'react-native'
 import styles from './../../assets/stylesheets/continueWatchingForItem';
@@ -21,6 +21,19 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
     const handlePressShowInfo = () => setShowInfo(!showInfo);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(!showMoreOptions);
+
+    const cleanUp = () => {
+        setUsePoster(true);
+        setShowInfo(false);
+        setShowMoreOptions(false);
+        video.current = null;
+    }
+
+    useEffect(() => {
+        return () => {
+            cleanUp();
+        }
+    }, []);
 
     return (
         <View style={ styles.container }>

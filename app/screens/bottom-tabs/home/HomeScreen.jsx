@@ -39,6 +39,7 @@ import Info from './../../../components/continue-watching-for-item/Info';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import * as FileSystem from 'expo-file-system';
 import { getExtension } from './../../../utils/file';
+import LoadingScreen from './../../../components/LoadingScreen';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -104,7 +105,9 @@ const HomeScreen = ({ AUTH }) =>
     const cacheImages = () => 
     {
         /** Cache Categories */
-        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id, 'Categories/')));
+        categories_.items.map(({ movies }) => {
+            movies.map(({ id, poster }) => cacheImage(poster, id, 'Categories/'))
+        });
 
         /** Cache Front Page */
         frontPageShows.map(({ id, poster, backgroundImage }) => {
@@ -128,20 +131,26 @@ const HomeScreen = ({ AUTH }) =>
         setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setCategories([]);
+        setFrontPage(DEFAULT_FRONT_PAGE);
+        setRecommendations([]);
+        setIsInteractionsComplete(false);
+        setShowFrontPageInfo(false);
+        setShowCategories(false);
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            setCategories([]);
-            setFrontPage(DEFAULT_FRONT_PAGE);
-            setRecommendations([]);
-            setIsInteractionsComplete(false);
+            cleanUp();
         }
     }, []);
 
 
     if (!isInteractionsComplete) {
-        return <Text h4>Loading ...</Text>
+        return <LoadingScreen />
     }
 
     return (

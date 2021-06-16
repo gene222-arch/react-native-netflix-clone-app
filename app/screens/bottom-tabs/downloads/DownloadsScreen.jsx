@@ -68,8 +68,20 @@ const DownloadsScreen = () =>
         setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setIsInteractionsComplete(false);
+        setDownload(null);
+        setDownloads([]);
+        setShowVideo(false);
+        setVisible(false);
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            cleanUp();
+        }
     }, []);
 
     if (!isInteractionsComplete) {

@@ -60,8 +60,18 @@ const ComingSoonScreen = ({ AUTH }) =>
         setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setComingSoonShows([]);
+        setIsInteractionsComplete(false);
+        setFocusedIndex(0);
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            cleanUp();
+        }
     }, []);
 
     if (!isInteractionsComplete) {

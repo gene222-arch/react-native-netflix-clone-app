@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, connect } from 'react-redux'
 import { Button, Text, CheckBox } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
-
 import * as AUTH_ACTION from '../../redux/modules/auth/actions'
 import styles from './../../assets/stylesheets/loginScreen';
 import { ImageBackground, View, TextInput } from 'react-native';
@@ -15,11 +13,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const LoginScreen = ({ authReducer }) => 
 {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
 
     const [ isChecked, setIsChecked ] = useState(false);
     const [ credentials, setCredentials ] = useState(authReducer.credentials)
 
+    
     const handleChange = ({ name, text }) => setCredentials({ ...credentials, [name]: text });
 
     const handlePressCheckbox = () => {
@@ -28,6 +26,11 @@ const LoginScreen = ({ authReducer }) =>
     }
 
     const login = () => dispatch(AUTH_ACTION.loginStart(credentials));
+
+    useEffect(() => {
+        setIsChecked(false);
+        setCredentials(authReducer.credentials);
+    }, []);
 
     return (
             <ImageBackground

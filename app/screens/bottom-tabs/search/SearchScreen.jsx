@@ -31,11 +31,17 @@ const SearchScreen = () =>
         setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setIsInteractionsComplete(false);
+        setSearchList([]);
+        setSearchInput('');
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            setSearchList([]);
+            cleanUp();
         }
     }, []);
 

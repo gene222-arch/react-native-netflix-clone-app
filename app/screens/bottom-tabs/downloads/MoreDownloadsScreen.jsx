@@ -6,12 +6,16 @@ import { FlatList } from 'react-native-gesture-handler';
 import MoreDownloadsSeason from './../../../components/more-downloads-season/MoreDownloadsSeason';
 import PlayDownloadScreen from './PlayDownloadScreen';
 
+const VIDEO_TO_PLAY_DEFAULT_PROPS = {
+    id: '', 
+    video: ''
+}
 
 const MoreDownloadsScreen = ({ route }) => 
 {
     const { id } = route.params;
 
-    const [ videoToPlay, setVideoToPlay ] = useState({ id: '', video: '' });
+    const [ videoToPlay, setVideoToPlay ] = useState(VIDEO_TO_PLAY_DEFAULT_PROPS);
     const [ videos, setVideos ] = useState([]);
     const [ seasons, setSeasons ] = useState([]);
     const [ showVideo, setShowVideo ] = useState(false);
@@ -29,8 +33,19 @@ const MoreDownloadsScreen = ({ route }) =>
         setShowVideo(true);
     }
 
+    const cleanUp = () => {
+        setVideoToPlay(VIDEO_TO_PLAY_DEFAULT_PROPS);
+        setVideos([]);
+        setSeasons([]);
+        setShowVideo(false);
+    }
+
     useEffect(() => {
         onLoadFetchDownloadsByID();
+
+        return () => {
+            cleanUp();
+        }
     },[]);
 
     if (showVideo) {

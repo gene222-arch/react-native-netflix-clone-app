@@ -33,6 +33,7 @@ import recommendations_ from './../../../../services/data/recommendations';
 import frontPageShows from './../../../../services/data/frontPageShows';
 import CategoriesMenu from './../CategoriesMenu';
 import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
+import LoadingScreen from '../../../../components/LoadingScreen';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -152,19 +153,25 @@ const CategoriesScreen = ({ AUTH, route }) =>
         setIsInteractionsComplete(true);
     }
 
+    
+    const cleanUp = () => {
+        setCategoryItems([]);
+        setFrontPage(DEFAULT_FRONT_PAGE);
+        setRecommendations([]);
+        setIsInteractionsComplete(false);
+        setShowCategories(false);
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            setCategoryItems([]);
-            setFrontPage(DEFAULT_FRONT_PAGE);
-            setRecommendations([]);
-            setIsInteractionsComplete(false);
+            cleanUp();
         }
     }, []);
 
     if (!isInteractionsComplete) {
-        return <Text h4>Loading ...</Text>
+        return <LoadingScreen />
     }
     
     return (

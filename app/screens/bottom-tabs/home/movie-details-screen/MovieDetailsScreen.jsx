@@ -74,9 +74,21 @@ const MovieDetailsScreen = ({ route }) =>
             setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setIsInteractionsComplete(false);
+        setToggleVideo(false);
+        setCurrentEpisode(DEFAULT_EPISODE);
+        setCurrentSeason([]);
+        setSelectedSeason('');
+        setSelectedTab(0);
+    }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            cleanUp();
+        }
     }, []);
 
 

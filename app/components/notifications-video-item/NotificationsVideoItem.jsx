@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Video } from 'expo-av';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -42,6 +42,12 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
             />
         )
     }
+
+    useEffect(() => {
+        return () => {
+            video.current = null;
+        }
+    }, []);
 
     return (
         <View style={{ ...styles.container, opacity: shouldFocus ? 1 : 0.25 }}>

@@ -25,7 +25,7 @@ const HomeCategory = ({ title, categories }) =>
                     <Pressable onPress={ () => handlePressMovieImage(item) }>
                         <Image 
                             style={ styles.image }
-                            source={{ uri: getCachedFile('FrontPages/', item.i, item.poster) }}
+                            source={{ uri: getCachedFile('Categories/', item.id, item.poster) }}
                         />
                     </Pressable>
                 )}
@@ -33,6 +33,7 @@ const HomeCategory = ({ title, categories }) =>
                 horizontal
                 style={ styles.categoryContainer }
                 showsHorizontalScrollIndicator={ false }
+                showsVerticalScrollIndicator={ false }
             />
         </>
     )

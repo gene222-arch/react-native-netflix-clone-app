@@ -90,8 +90,18 @@ const MoreScreen = () =>
         setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setIsInteractionsComplete(false);
+        setAccounts([]);
+        setSelectedImg(1);
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            cleanUp();
+        }
     }, []); 
 
     if (!isInteractionsComplete) {

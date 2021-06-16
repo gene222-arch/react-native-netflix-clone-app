@@ -31,6 +31,10 @@ const PlayDownloadScreen = ({ uri, setShowVideo }) =>
 
     useEffect(() => {
         showVideoInFullscreen();
+
+        return () => {
+            video.current = null;
+        }
     }, []);
 
     return (

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { BottomSheet, ListItem, FAB, Button } from 'react-native-elements';
+import React from 'react'
+import { BottomSheet, ListItem, Button } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native'
 import styles from './../../../assets/stylesheets/appBarCategories';
 import Colors from './../../../constants/Colors';
@@ -19,14 +19,12 @@ const DisplayCategory = ({ category }) => {
     )
 }
 
+const headerTitle = 'Categories';
+
 const CategoriesMenu = ({ isVisible, setIsVisible }) => 
 {
-    console.log('CATEGORY MENU RENDER');
     const navigation = useNavigation();
 
-    const headerTitle = 'Categories';
-
-    const orientationRef = useRef('PORTRAIT');
     const handlePressNavigateToMyList = () => {
         setIsVisible(false);
         navigation.navigate('MyListScreen', { headerTitle });

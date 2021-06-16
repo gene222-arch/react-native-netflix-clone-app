@@ -37,8 +37,18 @@ const MyListScreen = ({ AUTH }) =>
         setIsInteractionsComplete(true);
     }
 
+    const cleanUp = () => {
+        setIsInteractionsComplete(false);
+        setMyList([]);
+        setSelectedPicker('My List');
+    }
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        return () => {
+            cleanUp();
+        }
     }, []);
 
     if (!isInteractionsComplete) {
