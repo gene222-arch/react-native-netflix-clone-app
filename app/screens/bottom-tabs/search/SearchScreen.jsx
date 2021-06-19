@@ -10,6 +10,7 @@ import SearchNotFound from './../../errors/SearchNotFound';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import LoadingScreen from './../../../components/LoadingScreen';
 import SearchBar from './SearchBar';
+import { INTERRUPTION_MODE_IOS_DO_NOT_MIX } from 'expo-av/build/Audio';
 
 const DisplaySearch = ({ searchList, searchListLength }) => 
 {
@@ -40,22 +41,38 @@ const SearchScreen = () =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     const [ searchList, setSearchList ] = useState([]);
-    const [ searchInput, setSearchInput ] = useState('sss');
-    const [ showLoading, setShowLoading ] = useState(false);
+    const [ searchInput, setSearchInput ] = useState('');
 
-    const handleChangeSearchInput = (text) => 
+    const handleChangeSearchInput = (searchTextInput) => 
     {
-        setShowLoading(true);
-        setSearchInput(text);
+        setSearchInput(searchTextInput);
         
-        if (!text) {
+        if (!searchTextInput) {
             setSearchList(searchListAPI);
         }
-        else {
-            setTimeout(() => {
-                setSearchList(searchListAPI.filter(({ title }) => title.toLowerCase().includes(text.toLowerCase())));
-                setShowLoading(false);
-            }, 100);
+        else {  
+            let filteredList = [];
+            const text_ = searchTextInput.toLowerCase();
+
+            const mapSearchList = searchListAPI.map(({ title, author, genre, ...props }) => ({ 
+                ...props, 
+                genre: genre.map(name => name.toLowerCase()),
+                title: title.toLowerCase(), 
+                author: author.toLowerCase() 
+            }));
+
+            for (let index = 0; index < mapSearchList.length; index++) 
+            {
+                const { title, author, genre } = mapSearchList[index];
+
+                const genreExists = genre.find(name => name.indexOf(text_) !== -1);
+                
+                if (title.indexOf(text_) !== -1 || author.indexOf(text_) !== -1 || genreExists) {
+                    filteredList.push(searchListAPI[index]);
+                }
+            }
+
+            setSearchList(filteredList);
         }
     }
 
@@ -95,7 +112,6 @@ const SearchScreen = () =>
                 searchInput={ searchInput } 
                 handleChangeSearchInput={ handleChangeSearchInput } 
                 handleOnCancel={ handleOnCancel }
-                showLoading={ showLoading }
             />
             <DisplaySearch searchList={ searchList } searchListLength={ searchList.length } />
         </View>

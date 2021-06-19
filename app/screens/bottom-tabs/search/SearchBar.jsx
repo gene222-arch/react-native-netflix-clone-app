@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Input } from 'react-native-elements'
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -7,11 +7,20 @@ import Colors from './../../../constants/Colors';
 const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel, showLoading = false }) => 
 {
     const inputRef = useRef('mic');
+    const [ loading, setLoading ] = useState(false);
 
-    const onChangeText = (text) => {
+    const onChangeText = (text) => 
+    {
+        setLoading(true);
         handleChangeSearchInput(text);
-        
+
         inputRef.current = !text.length ? 'mic' : 'x';
+        setTimeout(() => setLoading(false), 10);
+    }
+
+    const onCancel = () => {
+        handleOnCancel();
+        inputRef.current = 'mic';
     }
 
     return (
@@ -36,13 +45,13 @@ const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel, showL
                 />
             }
             rightIcon={ 
-                !showLoading 
+                !loading 
                     ? <TouchableOpacity>
                         <FeatherIcon 
                             name={ inputRef.current }
                             color='#fff'
                             size={ 24 }
-                            onPress={ () => inputRef.current === 'mic' ? console.log('Listening to voice') : handleOnCancel() }
+                            onPress={ () => inputRef.current === 'mic' ? console.log('Listening to voice') : onCancel() }
                         />
                     </TouchableOpacity>
                     : <ActivityIndicator color='#fff' />
