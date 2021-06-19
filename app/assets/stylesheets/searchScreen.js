@@ -29,23 +29,6 @@ const styles = StyleSheet.create({
     searchInput: {
         fontSize: 14
     },
-    searchContainer: {
-        borderColor: 'transparent',
-        borderWidth: 0,
-        marginBottom: 20,
-        backgroundColor: Colors.dark,
-        padding: 2,
-        paddingTop: 7,
-    },
-    searchHeaderTitle: {
-        marginBottom: 25,
-        paddingLeft: 10
-    },
-    searchInputContainer: {
-        borderWidth: 0,
-        borderBottomWidth: .5,
-        backgroundColor: Colors.dark,
-    }
 });
 
 export default styles;

@@ -14,10 +14,30 @@ import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
 import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
 import AppBar from './../screens/AppBar';
 import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menus/CategoriesScreen';
+import StackNavBackButton from './../components/stack-app-bar/StackNavBackButton';
+import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
+import StackNavTitle from './../components/stack-app-bar/StackNavTitle';
 
 
 const options = {
     headerShown: false
+};
+
+const searchOptions = { 
+    headerLeft: props => <StackNavBackButton />,
+    headerRight: props => <StackNavAvatar />,
+    headerRightContainerStyle: {
+        paddingRight: 9
+    },
+    headerStyle: {
+        backgroundColor: '#000'
+    },
+    headerTitle: ''
+};
+
+const moreHeaderOptions = { 
+    headerLeft: props => <StackNavBackButton />,
+    headerTitle: 'Profiles & More'
 };
 
 const HomeStack = createStackNavigator();
@@ -67,26 +87,6 @@ export const HomeTab = () =>
     );
 }
 
-const DownloadsStack = createStackNavigator();
-
-export const DownloadsTab = () => 
-{
-    return (
-        <DownloadsStack.Navigator initialRouteName='Home'>
-            <DownloadsStack.Screen 
-                name='Downloads' 
-                component={ DownloadsScreen } 
-                options={ options }
-            />
-            <DownloadsStack.Screen 
-                name='MoreDownloads' 
-                component={ MoreDownloadsScreen } 
-                options={({ route }) => ({ headerTitle: route.params.headerTitle })}
-            />
-        </DownloadsStack.Navigator>
-    );
-}
-
 const SearchStack = createStackNavigator();
 
 export const SearchTab = () => 
@@ -96,12 +96,11 @@ export const SearchTab = () =>
             <SearchStack.Screen 
                 name='SearchScreen' 
                 component={ SearchScreen } 
-                options={ options }
+                options={ searchOptions } 
             />
             <SearchStack.Screen 
                 name='SearchTabTwo' 
                 component={ SearchTabTwoScreen }
-                options={ options } 
             />
         </SearchStack.Navigator>
     );
@@ -127,6 +126,26 @@ export const ComingSoonTab = () =>
     );
 }
 
+const DownloadsStack = createStackNavigator();
+
+export const DownloadsTab = () => 
+{
+    return (
+        <DownloadsStack.Navigator initialRouteName='Home'>
+            <DownloadsStack.Screen 
+                name='Downloads' 
+                component={ DownloadsScreen } 
+                options={ options }
+            />
+            <DownloadsStack.Screen 
+                name='MoreDownloads' 
+                component={ MoreDownloadsScreen } 
+                options={({ route }) => ({ headerTitle: route.params.headerTitle })}
+            />
+        </DownloadsStack.Navigator>
+    );
+}
+
 const AccountSoonStack = createStackNavigator();
 
 export const MoreTab = () => 
@@ -136,7 +155,7 @@ export const MoreTab = () =>
             <AccountSoonStack.Screen 
                 name='More' 
                 component={ MoreScreen } 
-                options={ options }
+                options={ moreHeaderOptions }
             />
             <AccountSoonStack.Screen 
                 name='MoreTabTwo' 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import { InteractionManager } from 'react-native'
-import { SearchBar } from 'react-native-elements';
 import styles from './../../../assets/stylesheets/searchScreen';
 import { FlatList } from 'react-native-gesture-handler';
 import SearchItem from './../../../components/search-item/index';
@@ -10,6 +9,7 @@ import searchListAPI from './../../../services/data/searchList';
 import SearchNotFound from './../../errors/SearchNotFound';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import LoadingScreen from './../../../components/LoadingScreen';
+import SearchBar from './SearchBar';
 
 const DisplaySearch = ({ searchList, searchListLength }) => 
 {
@@ -40,14 +40,29 @@ const SearchScreen = () =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     const [ searchList, setSearchList ] = useState([]);
-    const [ searchInput, setSearchInput ] = useState('');
+    const [ searchInput, setSearchInput ] = useState('sss');
+    const [ showLoading, setShowLoading ] = useState(false);
 
-    const handleChangeSearchInput = (text) => {
+    const handleChangeSearchInput = (text) => 
+    {
+        setShowLoading(true);
         setSearchInput(text);
-        setSearchList(searchList.filter(({ title }) => (title.toLowerCase()).includes(text)));
+        
+        if (!text) {
+            setSearchList(searchListAPI);
+        }
+        else {
+            setTimeout(() => {
+                setSearchList(searchListAPI.filter(({ title }) => title.toLowerCase().includes(text.toLowerCase())));
+                setShowLoading(false);
+            }, 100);
+        }
     }
 
-    const handleOnCancel = () => setSearchList(searchListAPI);
+    const handleOnCancel = () => {
+        setSearchInput('');
+        setSearchList(searchListAPI);
+    }
 
     const runAfterInteractions = () => {
         searchListAPI.map(({ id, poster }) => cacheImage(poster, id, 'SearchList/'));
@@ -76,15 +91,11 @@ const SearchScreen = () =>
 
     return (
         <View style={ styles.container }>
-            <SearchBar
-                placeholder="Search for a show, movie, genre, etc.."
-                onChangeText={ handleChangeSearchInput }
-                value={ searchInput }
-                inputStyle={ styles.searchInput }
-                containerStyle={ styles.searchContainer }
-                inputContainerStyle={ styles.searchInputContainer }
-                onCancel={ handleOnCancel }
-                showLoading
+            <SearchBar 
+                searchInput={ searchInput } 
+                handleChangeSearchInput={ handleChangeSearchInput } 
+                handleOnCancel={ handleOnCancel }
+                showLoading={ showLoading }
             />
             <DisplaySearch searchList={ searchList } searchListLength={ searchList.length } />
         </View>

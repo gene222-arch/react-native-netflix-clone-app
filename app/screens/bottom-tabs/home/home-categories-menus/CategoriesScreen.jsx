@@ -204,6 +204,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                                         isVisible={ showMainCategories } 
                                         setIsVisible={ setShowMainCategories } 
                                         selectedMainCategory={ categoryName }
+                                        setMainCategory={ handlePressCategory }
                                     />
 
                                     {/* Category list */}

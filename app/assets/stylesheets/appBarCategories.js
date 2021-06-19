@@ -2,8 +2,17 @@ import { StyleSheet, Dimensions } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
-    bottomSheetContainer: {
-        backgroundColor: 'rgba(0, 0, 0, .8)'
+    categoriesTxt: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: Colors.grey,
+        paddingVertical: 20
+    },
+    container: {
+        flex: 1,
+        position: 'absolute',
+        width: '100%',
+        backgroundColor: 'transparent',
     },
     closeBtn: {
         backgroundColor: Colors.white,
@@ -11,30 +20,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         borderRadius: 30,
     },
-    closeBtnContainerPortrait: {
-        flex: 1,
-        justifyContent: 'flex-end'
-    },
-    closeBtnContainerLandscape: {
+    closeBtnContainer: {
         position: 'absolute',
-        top: '40%',
-        left: '45%'
+        bottom: 20
     },
     closeBtnTitle: {
         color: Colors.dark
     },
-    container: {
-
-    },  
-    listContainer: {
-        backgroundColor: 'transparent'
-    },
-    listItemContent: {
-        alignItems: 'center'
-    },
-    listTitle: {
-        color: Colors.grey,
-        fontSize: 16
+    modalContainer: {
+        backgroundColor: 'rgba(0, 0, 0, .8)',
+        padding: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
     },
     xIcon: {
         padding: 20

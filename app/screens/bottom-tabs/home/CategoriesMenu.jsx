@@ -1,23 +1,13 @@
 import React from 'react'
 import { BottomSheet, ListItem, Button } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, Modal } from 'react-native'
 import styles from './../../../assets/stylesheets/appBarCategories';
 import Colors from './../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import View from './../../../components/View';
 import Text from './../../../components/Text';
+import { FlatList } from 'react-native';
 
-const DisplayCategory = ({ category }) => {
-    return (
-        <TouchableOpacity onPress={ category.onPress }>
-            <ListItem containerStyle={[ styles.listContainer, category.containerStyle ]}>
-                <ListItem.Content style={ styles.listItemContent }>
-                    <ListItem.Title style={[ styles.listTitle, category.customStyle ]}>{ category.title }</ListItem.Title>
-                </ListItem.Content>
-            </ListItem>
-        </TouchableOpacity>
-    )
-}
 
 const headerTitle = 'Categories';
 
@@ -106,24 +96,32 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
 
     return (
         <View style={ styles.container }>
-            <BottomSheet
-                modalProps={{
-                    animationType: 'slide'
-                }}
-                isVisible={ isVisible }
-                containerStyle={ styles.bottomSheetContainer }
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isVisible}
             >
-                {
-                    categories.map((category, index) => <DisplayCategory key={ index } category={ category }/>)
-                }
-                <Button
-                    title='X'
-                    buttonStyle={ styles.closeBtn }
-                    containerStyle={ styles.closeBtnContainerPortrait }
-                    titleStyle={ styles.closeBtnTitle }
-                    onPress={ () => setIsVisible(false) }
-                />
-            </BottomSheet>
+                <View style={ styles.modalContainer }>
+                    <FlatList 
+                        keyExtractor={ ({ title }) => title }
+                        data={ categories }
+                        renderItem={ ({ item }) => (
+                            <TouchableOpacity onPress={ item.onPress }>
+                                <Text style={ styles.categoriesTxt }> { item.title }</Text>
+                            </TouchableOpacity>
+                        )}
+                        showsHorizontalScrollIndicator={ false }
+                        showsVerticalScrollIndicator={ false }
+                    />
+                    <Button
+                        title='X'
+                        buttonStyle={ styles.closeBtn }
+                        containerStyle={ styles.closeBtnContainer }
+                        titleStyle={ styles.closeBtnTitle }
+                        onPress={ () => setIsVisible(false) }
+                    />
+                </View>
+            </Modal>
         </View>
     )
 }

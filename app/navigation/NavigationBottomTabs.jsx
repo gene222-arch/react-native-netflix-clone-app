@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab } from './BottomTabStacks'
 import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
+import View from './../components/View';
 
 
 const Tab = createBottomTabNavigator();
@@ -25,16 +26,6 @@ const NavigationBottomTabs = () =>
         tabBarIcon: (({ color }) => (
             <MaterialIcons 
                 name='home' 
-                size={ 24 } 
-                color={ color }
-            />
-        ))
-    };
-
-    const SEARCH_TAB_OPTIONS = {
-        tabBarIcon: (({ color }) => (
-            <FeatherIcon 
-                name='search' 
                 size={ 24 } 
                 color={ color }
             />
@@ -61,14 +52,9 @@ const NavigationBottomTabs = () =>
         ))
     };
 
-    const MORE_OPTIONS = {
-        tabBarIcon: (({ color }) => (
-            <FeatherIcon 
-                name='align-justify' 
-                size={ 24 } 
-                color={ color }
-            />
-        ))
+    const hideTabScreen = {
+        tabBarButton: () => <View style={{ width:0, height:0 }}></View>,
+        tabBarVisible: false
     };
 
     return (
@@ -81,7 +67,7 @@ const NavigationBottomTabs = () =>
             <Tab.Screen 
                 name="Search" 
                 component={ SearchTab } 
-                options={ SEARCH_TAB_OPTIONS }
+                options={ hideTabScreen }
             />
             <Tab.Screen 
                 name="Coming soon" 
@@ -95,8 +81,8 @@ const NavigationBottomTabs = () =>
             />
             <Tab.Screen 
                 name="More" 
-                component={ MoreTab } 
-                options={ MORE_OPTIONS }
+                component={ MoreTab }
+                options={ hideTabScreen }
             />
         </Tab.Navigator>
     );
