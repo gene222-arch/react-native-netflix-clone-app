@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import { FlatList } from 'react-native';
-
+import categoriesConfig from './../../../config/home.menu.category.list'
 
 const headerTitle = 'Categories';
 
@@ -20,79 +20,11 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
         navigation.navigate('MyListScreen', { headerTitle });
     }
 
-    const categories = 
-    [
-        { 
-            title: 'Home',
-            customStyle: {
-                fontWeight: 'bold',
-                fontSize: 24,
-                color: Colors.white,
-                marginTop: 80,
-            },
-            onPress: () => console.log('Clicked')
-        },
-        { 
-            title: 'My List',
-            onPress: handlePressNavigateToMyList
-        },
-        { 
-            title: 'Available for Download',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Action',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Anime',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Children and Family',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Comedies',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Critically Acclaimed',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Documentaries',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Dramas',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Fantasy',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Horror',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Trending',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Kids',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Science Fiction',
-            onPress: () => console.log('Clicked') 
-        },
-        { 
-            title: 'Detective',
-            onPress: () => console.log('Clicked') 
-        }
-    ];
+    const categories = categoriesConfig({
+        homeOnPress: () => console.log('Home Menu Clicked'),
+        myListOnPress: handlePressNavigateToMyList,
+        categoryOnPress: () => console.log(`Other Categories Clicked!`)
+    });
 
     return (
         <View style={ styles.container }>

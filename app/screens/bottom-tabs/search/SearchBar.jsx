@@ -4,7 +4,7 @@ import { Input } from 'react-native-elements'
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Colors from './../../../constants/Colors';
 
-const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel, showLoading = false }) => 
+const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel }) => 
 {
     const inputRef = useRef('mic');
     const [ loading, setLoading ] = useState(false);

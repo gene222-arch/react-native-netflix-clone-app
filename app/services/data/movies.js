@@ -3,7 +3,7 @@ const movies = [{
     title: 'Suits',
     year: 2019,
     numberOfSeasons: 9,
-
+    poster: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/netflix/ep0.jpg',
     plot: 'When he impresses a big lawyer with his razor-sharp mind, a college droput scores a coveted associate job, even though he has no legal credentials.',
     cast: 'Gabriel Macht, Patrick J. Adams, Rick Hoggman',
     creator: 'Aaron Korsh',

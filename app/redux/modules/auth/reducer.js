@@ -13,7 +13,10 @@ const {
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
-    TOGGLE_ADD_TO_MY_LIST_FAILED
+    TOGGLE_ADD_TO_MY_LIST_FAILED,
+    TOGGLE_LIKE_SHOW_START,
+    TOGGLE_LIKE_SHOW_SUCCESS,
+    TOGGLE_LIKE_SHOW_FAILED
 } = ACTION_TYPES;
 
 const CREDENTIALS_DEFAULT_PROPS = {
@@ -29,11 +32,20 @@ const USER_DEFAULT_PROPS = {
     password: ''
 };
 
+const LIKED_SHOWS_DEFAULT_PROPS = [
+    {
+        id: '',
+        title: '',
+        poster: ''
+    }
+]
+
 const initialState = {
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
     user: USER_DEFAULT_PROPS,
     myList,
+    likedShows: LIKED_SHOWS_DEFAULT_PROPS,
     remindedComingSoonShows: [],
     isLoading: false,
     errors: []
@@ -44,6 +56,7 @@ export default (state = initialState, { type, payload }) =>
     const {
         myList,
         remindedComingSoonShows,
+        likedShows,
     } = state;
 
     const isLoading = true;
@@ -55,6 +68,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGOUT_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
+        case TOGGLE_LIKE_SHOW_START:
             return { 
                 ...state, 
                 isLoading
@@ -96,16 +110,9 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
             let newMyList = [];
-            const { show } = payload;
 
-            const isAlreadyInList = myList.find(list => list.id === show.id); 
-
-            if (!isAlreadyInList) {
-                newMyList = [ ...myList, show ];
-            }
-            else {
-                newMyList = myList.filter(({ id }) => id !== show.id);
-            }
+            const isAlreadyInList = myList.findIndex(({ id }) => id === payload.show.id); 
+            newMyList = isAlreadyInList === -1 ? [ ...myList, payload.show ] : myList.filter(({ id }) => id !== payload.show.id);
 
             return {
                 ...state,
@@ -133,6 +140,26 @@ export default (state = initialState, { type, payload }) =>
                 remindedComingSoonShows: remindedComingSoonShows_,
                 isLoading: false,
                 errors
+            }
+
+        case TOGGLE_LIKE_SHOW_SUCCESS:
+            let newLikedShows = [];
+
+            const showExists = likedShows.findIndex(({id }) => id === payload.show.id); 
+            newLikedShows = showExists === -1 ? [ ...likedShows, payload.show ] : likedShows.filter(({ id }) => id !== payload.show.id);
+
+            return {
+                ...state,
+                likedShows: newLikedShows,
+                isLoading: false,
+                errors
+            }
+
+        case TOGGLE_LIKE_SHOW_FAILED: 
+            return {
+                ...state,
+                isLoading: false,
+                errors: payload.message
             }
 
         case TOGGLE_ADD_TO_MY_LIST_FAILED:

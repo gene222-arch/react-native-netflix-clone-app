@@ -10,6 +10,8 @@ import {
     toggleAddToMyListFailed,
     toggleRemindMeOfComingShowSuccess, 
     toggleRemindMeOfComingShowFailed,
+    toggleLikeShowSuccess,
+    toggleLikeShowFailed
 } from './actions'
 import * as AsyncStorage from './../../../utils/asyncStorage'
 
@@ -17,7 +19,8 @@ const {
     LOGIN_START,
     LOGOUT_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
-    TOGGLE_ADD_TO_MY_LIST_START
+    TOGGLE_ADD_TO_MY_LIST_START,
+    TOGGLE_LIKE_SHOW_START
 } = ACTION_TYPES;
 
 
@@ -26,9 +29,7 @@ const {
 function* loginSaga(payload)  
 {
     try {
-        // const data = yield call(API.index);   
         yield put(loginSuccess({ credentials: payload }));
-
         yield call(AsyncStorage.setItem, '@access_token', 'token');
     } catch ({ message }) {
         yield put(loginFailed({ message }));
@@ -38,9 +39,7 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
-        // const data = yield call(API.index);
         yield put(logoutSuccess());
-
     } catch ({ message }) {
         yield put(logoutFailed({ message }));
     }
@@ -62,6 +61,16 @@ function* toggleRemindMeOfComingShowSaga({ comingSoonShowID })
 
     } catch ({ message }) {
         yield put(toggleRemindMeOfComingShowFailed({ message }));
+    }
+}
+
+function* toggleLikeShowSaga(payload)
+{
+    try {
+        yield put(toggleLikeShowSuccess({ show: payload }));
+
+    } catch ({ message }) {
+        yield put(toggleLikeShowFailed({ message }));
     }
 }
 
@@ -99,13 +108,22 @@ function* toggleRemindMeOfComingShowWatcher()
     }
 }
 
+function* toggleLikeShowWatcher()
+{
+    while (true) {
+        const { payload } = yield take(TOGGLE_LIKE_SHOW_START);
+        yield call(toggleLikeShowSaga, payload);
+    }
+}
+
 export default function* ()
 {
     yield all([
         loginWatcher(),
         logoutWatcher(),
         toggleAddToMyListWatcher(),
-        toggleRemindMeOfComingShowWatcher()
+        toggleRemindMeOfComingShowWatcher(),
+        toggleLikeShowWatcher()
     ]);
 }
 

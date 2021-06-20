@@ -10,7 +10,6 @@ import SearchNotFound from './../../errors/SearchNotFound';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import LoadingScreen from './../../../components/LoadingScreen';
 import SearchBar from './SearchBar';
-import { INTERRUPTION_MODE_IOS_DO_NOT_MIX } from 'expo-av/build/Audio';
 
 const DisplaySearch = ({ searchList, searchListLength }) => 
 {
