@@ -5,7 +5,6 @@ import { FlatList } from 'react-native-gesture-handler';
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import Image from './../Image';
-import * as FileSystem from 'expo-file-system'
 import { getCachedFile } from './../../utils/cacheImage';
 
 
@@ -13,9 +12,9 @@ const HomeCategory = ({ title, categories }) =>
 {
     const navigation = useNavigation();
 
-    const handlePressMovieImage = ({ id }) => navigation.navigate('MovieDetailScreen', { id });
+    const handlePressMovieImage = (show) => navigation.navigate('MovieDetailScreen', { id: show.id, headerTitle: show.title });
 
-    return (
+    return categories.length > 0 && (
         <>
             <Text h4>{ title }</Text>
             <FlatList 

@@ -51,6 +51,36 @@ const frontPageShows =
         ],
         isAddedToMyList: false
     },
+    {
+        id: 4,
+        category: 'Anime',
+        title: 'Assassination Classroom',
+        backgroundImage: 'https://i.pinimg.com/736x/8b/54/65/8b546552a4555d5b900dc32222e1fc8c.jpg',
+        poster: 'https://occ-0-1722-1723.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABZ8JxMUkGsHfkjOcCUduxWxBo6DntFqNwBZQmhxni0RWxztr8YovFKZCVJ11iUtHdZg0xN7nXkA392KGsc3v_Xxsc0Sy-HDfnBT2.png?r=258',
+        tags: [
+            'Action',
+            'Adventure',
+            'Superhero',
+            'Science Fiction',
+            'Fantasy'
+        ],
+        isAddedToMyList: false
+    },
+    {
+        id: 5,
+        category: 'Available For Download',
+        title: 'Assassination Classroom',
+        backgroundImage: 'https://www.dreadcentral.com/wp-content/uploads/2018/03/godzillaplanetofthemonsters2poster.jpg',
+        poster: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABdb7k40AQja45fP9GriFoHEkRqTIGiVgnifc15HjJDlXOva7IJPdgrFjiRqRHMY7SYvQGseWfdC3g17ViD9ux9blKFNqKHiPnr4P.png?r=6f7',
+        tags: [
+            'Action',
+            'Adventure',
+            'Superhero',
+            'Science Fiction',
+            'Fantasy'
+        ],
+        isAddedToMyList: false
+    },
 ];
 
 export default frontPageShows

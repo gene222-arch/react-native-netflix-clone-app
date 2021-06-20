@@ -59,7 +59,7 @@ export const HomeTab = () =>
             <HomeStack.Screen 
                 name='MovieDetailScreen' 
                 component={ MovieDetailsScreen } 
-                options={{ ...options, headerShown: true, headerTitle: '' }}
+                options={({ route }) => ({ headerTitle: route.params.headerTitle })}
             />
             <HomeStack.Screen 
                 name='MyListScreen'

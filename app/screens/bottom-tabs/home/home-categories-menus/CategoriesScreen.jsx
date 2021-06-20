@@ -84,7 +84,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
-    const handlePressCategory = (CATEGORY) => 
+    const handlePressChangeMainCategory = (CATEGORY) => 
     {
         setFrontPage(frontPageShows.find(({ category }) => category === CATEGORY));
 
@@ -152,7 +152,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
     const runAfterInteractions = () => 
     {
         cacheImages();
-        handlePressCategory(categoryName);
+        handlePressChangeMainCategory(categoryName);
         setRecommendations(recommendations_);
         setIsInteractionsComplete(true);
     }
@@ -204,13 +204,15 @@ const CategoriesScreen = ({ AUTH, route }) =>
                                         isVisible={ showMainCategories } 
                                         setIsVisible={ setShowMainCategories } 
                                         selectedMainCategory={ categoryName }
-                                        setMainCategory={ handlePressCategory }
+                                        setMainCategory={ handlePressChangeMainCategory }
                                     />
 
                                     {/* Category list */}
                                     <CategoriesMenu 
                                         isVisible={ showCategories } 
                                         setIsVisible={ setShowCategories }
+                                        selectedMainCategory={ categoryName }
+                                        handlePressChangeMainCategory={ handlePressChangeMainCategory }
                                     />
                                     <TouchableOpacity onPress={ handleToggleMainCategories }>
                                         <View style={ styles.categoriesContainer }>
@@ -239,59 +241,59 @@ const CategoriesScreen = ({ AUTH, route }) =>
                             
                             {/* Front Page Options/Action Buttons */}
                             <View style={ styles.frontPageOptions }>
-                                    <Image 
-                                        source={{ 
-                                            uri: getCachedFile('HomeCategoriesFrontPages/Poster/', frontPage.id, frontPage.poster) 
-                                        }}
-                                        style={ styles.homeFrontPageShowLogo }
-                                    />
-                                    <View style={ styles.tagsContainer }>
-                                    {
-                                        frontPage.tags.map((name, index) => (
-                                            <Text 
-                                                key={ index }
-                                                style={ styles.tagItem }
-                                            >
-                                                { (frontPage.tags.length - 1) !== index ? `${ name }  · ` : name }
-                                            </Text>
-                                        ))
-                                    }
-                                    </View>
-                                    <View style={ styles.actionBtnsContainer }>
-                                        <TouchableOpacity onPress={ handleToggleAddToMyList }>
-                                            <View style={ styles.myListInfoActionContainer }>
-                                                <FeatherIcon 
-                                                    name={ !AUTH.myList.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
-                                                    size={ 24 }
-                                                    color='#fff'
-                                                />
-                                                <Text style={ styles.myListInfoActionText }>My List</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                        <Button 
-                                            title='   Play'
-                                            icon={
-                                                <FontAwesome5 
-                                                    name='play'
-                                                    size={ 16 }
-                                                    color='#000'
-                                                />
-                                            }
-                                            iconPosition='left'
-                                            onPress={ () => console.log('Dr. Stone is Playing...') }
-                                            buttonStyle={ styles.playBtn }
-                                            titleStyle={ styles.playBtnTitle }
-                                        />
+                                <Image 
+                                    source={{ 
+                                        uri: getCachedFile('HomeCategoriesFrontPages/Poster/', frontPage.id, frontPage.poster) 
+                                    }}
+                                    style={ styles.homeFrontPageShowLogo }
+                                />
+                                <View style={ styles.tagsContainer }>
+                                {
+                                    frontPage.tags.map((name, index) => (
+                                        <Text 
+                                            key={ index }
+                                            style={ styles.tagItem }
+                                        >
+                                            { (frontPage.tags.length - 1) !== index ? `${ name }  · ` : name }
+                                        </Text>
+                                    ))
+                                }
+                                </View>
+                                <View style={ styles.actionBtnsContainer }>
+                                    <TouchableOpacity onPress={ handleToggleAddToMyList }>
                                         <View style={ styles.myListInfoActionContainer }>
                                             <FeatherIcon 
-                                                name='info'
+                                                name={ !AUTH.myList.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
                                                 size={ 24 }
                                                 color='#fff'
                                             />
-                                            <Text style={ styles.myListInfoActionText }>Info</Text>
+                                            <Text style={ styles.myListInfoActionText }>My List</Text>
                                         </View>
+                                    </TouchableOpacity>
+                                    <Button 
+                                        title='   Play'
+                                        icon={
+                                            <FontAwesome5 
+                                                name='play'
+                                                size={ 16 }
+                                                color='#000'
+                                            />
+                                        }
+                                        iconPosition='left'
+                                        onPress={ () => console.log('Dr. Stone is Playing...') }
+                                        buttonStyle={ styles.playBtn }
+                                        titleStyle={ styles.playBtnTitle }
+                                    />
+                                    <View style={ styles.myListInfoActionContainer }>
+                                        <FeatherIcon 
+                                            name='info'
+                                            size={ 24 }
+                                            color='#fff'
+                                        />
+                                        <Text style={ styles.myListInfoActionText }>Info</Text>
                                     </View>
                                 </View>
+                            </View>
                         </ImageBackground>   
 
                         {/* Continue Watching For */}

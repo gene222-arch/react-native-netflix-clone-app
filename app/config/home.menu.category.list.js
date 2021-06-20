@@ -1,10 +1,39 @@
 import Colors from './../constants/Colors';
 
-export default ({ homeOnPress, myListOnPress, categoryOnPress }) => 
+export const CATEGORY_NAMES = 
+{
+    HOME: 'Home',
+    MY_LIST: 'My List',
+    AVAILABLE_FOR_DOWNLOAD: 'Available For Download',
+    ACTION: 'Action',
+    ANIME: 'Anime',
+    CHILDREN_AND_FAMILY: 'Children and Family',
+    COMEDIES: 'Comedies',
+    CRITICALLY_ACCLAIMED: 'Critically Acclaimed',
+    DOCUMENTARIES: 'Documentaries',
+    DRAMAS: 'Dramas',
+    FANTASY: 'Fantasy',
+    HORROR: 'Horror'
+};
+
+export default ({ 
+    homeOnPress, 
+    myListOnPress, 
+    availableForDownloadOnPress,
+    animeOnPress,
+    actionOnPress,
+    childrenAndFamilyOnPress,
+    comediesOnPress,
+    criticallyAcclaimedOnPress,
+    documentariesOnPress,
+    dramaOnPress,
+    fantasyOnPress,
+    horrorOnPress
+}) => 
 {
     return [
         { 
-            title: 'Home',
+            title: CATEGORY_NAMES.HOME,
             customStyle: {
                 fontWeight: 'bold',
                 fontSize: 24,
@@ -14,64 +43,48 @@ export default ({ homeOnPress, myListOnPress, categoryOnPress }) =>
             onPress: homeOnPress
         },
         { 
-            title: 'My List',
+            title: CATEGORY_NAMES.MY_LIST,
             onPress: myListOnPress
         },
         { 
-            title: 'Available for Download',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.AVAILABLE_FOR_DOWNLOAD,
+            onPress: availableForDownloadOnPress 
         },
         { 
-            title: 'Action',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.ACTION,
+            onPress: actionOnPress 
         },
         { 
-            title: 'Anime',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.ANIME,
+            onPress: animeOnPress 
         },
         { 
-            title: 'Children and Family',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.CHILDREN_AND_FAMILY,
+            onPress: childrenAndFamilyOnPress 
         },
         { 
-            title: 'Comedies',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.COMEDIES,
+            onPress: comediesOnPress 
         },
         { 
-            title: 'Critically Acclaimed',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.CRITICALLY_ACCLAIMED,
+            onPress: criticallyAcclaimedOnPress 
         },
         { 
-            title: 'Documentaries',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.DOCUMENTARIES,
+            onPress: documentariesOnPress 
         },
         { 
-            title: 'Dramas',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.DRAMAS,
+            onPress: dramaOnPress 
         },
         { 
-            title: 'Fantasy',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.FANTASY,
+            onPress: fantasyOnPress 
         },
         { 
-            title: 'Horror',
-            onPress: categoryOnPress 
-        },
-        { 
-            title: 'Trending',
-            onPress: categoryOnPress 
-        },
-        { 
-            title: 'Kids',
-            onPress: categoryOnPress 
-        },
-        { 
-            title: 'Science Fiction',
-            onPress: categoryOnPress 
-        },
-        { 
-            title: 'Detective',
-            onPress: categoryOnPress 
+            title: CATEGORY_NAMES.HORROR,
+            onPress: horrorOnPress 
         }
     ];
 }

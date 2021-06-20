@@ -4,12 +4,11 @@ import { TouchableOpacity } from 'react-native'
 import styles from './../../assets/stylesheets/continueWatchingForItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import View from './../View';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoreActionList from './MoreActionList';
 import Info from './Info';
-import * as FileSystem from 'expo-file-system'
-import { getExtension } from './../../utils/file';
+import { getCachedFile } from './../../utils/cacheImage';
+
 
 const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, handleToggleUnLikeRecommendation, handlePressRemoveRecommendation }) => 
 {
@@ -50,10 +49,10 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: `${ FileSystem.cacheDirectory }Recommendations/${ episode.id }.${ getExtension(episode.video) }`
+                    uri: getCachedFile('Recommendations/', episode.id, episode.video)
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: `${ FileSystem.cacheDirectory }Recommendations/${ episode.id }.${ getExtension(episode.poster) }` }}
+                posterSource={{ uri: getCachedFile('Recommendations/', episode.id, episode.poster) }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />
