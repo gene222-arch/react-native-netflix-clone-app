@@ -8,6 +8,9 @@ const {
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
+    DOWNLOAD_VIDEO_START,
+    DOWNLOAD_VIDEO_SUCCESS,
+    DOWNLOAD_VIDEO_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -45,6 +48,7 @@ const initialState = {
     credentials: CREDENTIALS_DEFAULT_PROPS,
     user: USER_DEFAULT_PROPS,
     myList,
+    downloads: [],
     likedShows: LIKED_SHOWS_DEFAULT_PROPS,
     remindedComingSoonShows: [],
     isLoading: false,
@@ -57,6 +61,7 @@ export default (state = initialState, { type, payload }) =>
         myList,
         remindedComingSoonShows,
         likedShows,
+        downloads,
     } = state;
 
     const isLoading = true;
@@ -64,6 +69,7 @@ export default (state = initialState, { type, payload }) =>
 
     switch (type) 
     {
+        case DOWNLOAD_VIDEO_START:
         case LOGIN_START:
         case LOGOUT_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
@@ -103,6 +109,21 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: true,
+                isLoading: false,
+                errors: payload.message
+            }
+
+        case DOWNLOAD_VIDEO_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                downloads: [ ...downloads, payload.show ],
+                errors
+            }
+
+        case DOWNLOAD_VIDEO_FAILED:
+            return {
+                ...state,
                 isLoading: false,
                 errors: payload.message
             }

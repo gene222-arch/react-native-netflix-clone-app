@@ -15,18 +15,18 @@ export default ({
 {
     return [
         {
-            title: MAIN_CATEGORY_TYPES.HOME,
-            isSelected: MAIN_CATEGORY_TYPES.HOME === currentSelectedCategory,
+            title: CATEGORY_NAMES.HOME,
+            isSelected: CATEGORY_NAMES.HOME === currentSelectedCategory,
             onPress: homeOnPress
         },
         {
-            title: MAIN_CATEGORY_TYPES.TV_SHOWS,
-            isSelected: MAIN_CATEGORY_TYPES.TV_SHOWS === currentSelectedCategory,
+            title: CATEGORY_NAMES.TV_SHOWS,
+            isSelected: CATEGORY_NAMES.TV_SHOWS === currentSelectedCategory,
             onPress: tvShowsOnPress
         },
         {
-            title: MAIN_CATEGORY_TYPES.MOVIES,
-            isSelected: MAIN_CATEGORY_TYPES.MOVIES === currentSelectedCategory,
+            title: CATEGORY_NAMES.MOVIES,
+            isSelected: CATEGORY_NAMES.MOVIES === currentSelectedCategory,
             onPress: moviesOnPress
         }
     ];

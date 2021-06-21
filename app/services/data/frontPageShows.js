@@ -1,9 +1,3 @@
-import DR_STONE_BG from './../../assets/images/front-page/dr-stone.jpg'
-import DR_STONE_TITLE from './../../assets/images/front-page/dr-stone-title.png'
-import THE_WITCHER_BG from './../../assets/images/front-page/the-witcher.jpg'
-import THE_WITCHER_TITLE from './../../assets/images/front-page/the-witcher-title.png'
-import END_GAME_BG from './../../assets/images/front-page/end-game.jpg'
-import END_GAME_TITLE from './../../assets/images/front-page/end-game-title.png'
 
 const frontPageShows = 
 [

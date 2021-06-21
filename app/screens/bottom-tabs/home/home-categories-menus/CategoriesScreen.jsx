@@ -47,7 +47,6 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-
 const DisplayContinueWatchingFor = ({ recommendations, handleToggleLikeRecommendation, handleToggleUnLikeRecommendation, handlePressRemoveRecommendation }) => {
     return (
         <View style={ styles.continueWatchingForContainer }>
