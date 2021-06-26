@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, Platform, StatusBar } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
 import { TouchableOpacity, ImageBackground, InteractionManager } from 'react-native'
@@ -171,12 +171,12 @@ const HomeScreen = ({ AUTH }) =>
                     <>
                         {/* Front page */}
                         <ImageBackground
-                                source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
-                                style={ styles.homeFrontPage }
-                            >
+                            source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
+                            style={ styles.homeFrontPage }
+                        >
                             {/* Nav Bar */}
                             <View style={ styles.topMenuContainer }>
-                                <AppBar />
+                                <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
                                 <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
                                 <View style={ styles.tabContainer }>
                                     <Text 
@@ -267,7 +267,7 @@ const HomeScreen = ({ AUTH }) =>
 
                         {/* Continue Watching For */}
                         <View style={ styles.continueWatchingForContainer }>
-                            <Text h4>Continue Watching For KNSM</Text>
+                            <Text h4 style={ styles.continueWatchingForTitle }>Continue Watching For KNSM</Text>
                             <FlatList
                                 keyExtractor={ item => item.id.toString() }
                                 data={ recommendations }

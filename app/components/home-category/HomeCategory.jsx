@@ -16,7 +16,7 @@ const HomeCategory = ({ title, categories }) =>
 
     return categories.length > 0 && (
         <>
-            <Text h4>{ title }</Text>
+            <Text h4 style={ styles.categoryTitle }>{ title }</Text>
             <FlatList 
                 keyExtractor={({ id }) => id}
                 data={ categories }

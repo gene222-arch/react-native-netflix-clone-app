@@ -20,7 +20,7 @@ import StackNavTitle from './../components/stack-app-bar/StackNavTitle';
 
 
 const options = {
-    headerShown: false
+    headerShown: false,
 };
 
 const searchOptions = { 

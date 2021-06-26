@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
     continueWatchingForContainer: {
         marginVertical: 30,
     },
+    continueWatchingForTitle: {
+        paddingLeft: 10
+    },
     frontPageOptions: {
         alignItems: 'center',
         backgroundColor: 'transparent'
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     topMenuContainer: {
-        backgroundColor: 'transparent',
+        backgroundColor: 'rgba(0, 0, 0, .5)',
         justifyContent: 'space-between'
     },
     tabTitle: {

@@ -58,11 +58,18 @@ const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
         padding: 30,
+        paddingLeft: 5,
         paddingTop: 10,
         backgroundColor: 'transparent'
     },
-    tabItem: {
-        fontSize: 16,
+    tabItemAllCategories: {
+        fontSize: 18,
+        color: Colors.white
+    }, 
+    tabItemMainCategories: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: Colors.white
     },  
     tagsContainer: {
         flexDirection: 'row',

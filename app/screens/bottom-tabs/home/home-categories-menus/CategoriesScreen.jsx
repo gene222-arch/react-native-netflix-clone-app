@@ -36,6 +36,7 @@ import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import MainCategoriesMenu from './../MainCategoriesMenu';
 import Info from './../../../../components/continue-watching-for-item/Info';
+import { CATEGORY_NAMES } from '../../../../config/home.menu.main.category.list';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -74,10 +75,10 @@ const CategoriesScreen = ({ AUTH, route }) =>
     const dispatch = useDispatch();
     const { categoryName } = route.params;
 
-
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ showFrontPageInfo, setShowFrontPageInfo ] =  useState(false);
+    const [ selectedMainCategory, setSelectedMainCategory ] = useState(categoryName);
     const [ categoryItems, setCategoryItems ] = useState([]);
     const [ recommendations, setRecommendations ] = useState([]);
     const [ showCategories, setShowCategories ] = useState(false);
@@ -85,13 +86,14 @@ const CategoriesScreen = ({ AUTH, route }) =>
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
-    const handlePressChangeMainCategory = (CATEGORY) => 
+    const handlePressChangeMainCategory = (selectedCategory) => 
     {
-        setFrontPage(frontPageShows.find(({ category }) => category === CATEGORY));
+        setSelectedMainCategory(selectedCategory);
+        setFrontPage(frontPageShows.find(({ category }) => category === selectedCategory));
 
         const newCategories = categories_.items.map(category => {
 
-            const filterMovies = category.movies.filter(({ show_type }) => show_type === CATEGORY);
+            const filterMovies = category.movies.filter(({ show_type }) => show_type === selectedCategory);
 
             return { ...category, movies: filterMovies };
         });
@@ -166,6 +168,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
         setIsInteractionsComplete(false);
         setShowCategories(false);
         setShowMainCategories(false);
+        setSelectedMainCategory('');
     }
 
     useEffect(() => {
@@ -206,7 +209,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                                     <MainCategoriesMenu 
                                         isVisible={ showMainCategories } 
                                         setIsVisible={ setShowMainCategories } 
-                                        selectedMainCategory={ categoryName }
+                                        selectedMainCategory={ selectedMainCategory }
                                         setMainCategory={ handlePressChangeMainCategory }
                                     />
 
@@ -219,7 +222,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                                     />
                                     <TouchableOpacity onPress={ handleToggleMainCategories }>
                                         <View style={ styles.categoriesContainer }>
-                                            <Text style={ styles.tabItem }>TV Shows</Text>
+                                            <Text style={styles.tabItemMainCategories}>{ selectedMainCategory }</Text>
                                             <FontAwesome5 
                                                 name='sort-down'
                                                 size={ 12 }
@@ -230,7 +233,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={ handleToggleCategories }>
                                         <View style={ styles.categoriesContainer }>
-                                            <Text style={ styles.tabItem }>All Categories</Text>
+                                            <Text style={ styles.tabItemAllCategories }>All Categories</Text>
                                             <FontAwesome5 
                                                 name='sort-down'
                                                 size={ 12 }

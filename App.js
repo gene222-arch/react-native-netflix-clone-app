@@ -1,5 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, Platform, StatusBar } from 'react-native';
+import { ActivityIndicator, Platform } from 'react-native';
+import { StatusBar } from 'expo-status-bar'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './app/redux/store';
@@ -11,7 +12,7 @@ const { persistor, store } = configureStore();
 
 const App = () => 
 {
-	const style = Platform.OS === 'android' ? { marginTop: StatusBar.currentHeight } : {};
+
 
 	return (
 		<Provider store={ store }>
@@ -19,8 +20,9 @@ const App = () =>
 				loading={ <ActivityIndicator /> } 
 				persistor={ persistor }
 			>
-				<SafeAreaProvider style={ style }>
+				<SafeAreaProvider>
 					<Navigation />
+					<StatusBar style='light'/>
 				</SafeAreaProvider>
 			</PersistGate>
 		</Provider>

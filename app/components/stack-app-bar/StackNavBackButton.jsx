@@ -1,13 +1,19 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { HeaderBackButton } from '@react-navigation/stack'
+import { Keyboard } from 'react-native';
 
 
 const StackNavBackButton = () => 
 {
     const navigation = useNavigation();
 
-    return <HeaderBackButton onPress={ () => navigation.goBack() }/>
+    const navigateBack = () => {
+        Keyboard.dismiss();
+        navigation.goBack();
+    }
+
+    return <HeaderBackButton onPress={ navigateBack }/>
 }
 
 

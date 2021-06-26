@@ -8,7 +8,7 @@ import Image from './../components/Image';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native'
 
-const AppBar = ({ showLogo = true, headerTitle = '' }) => 
+const AppBar = ({ showLogo = true, headerTitle = '', marginTop = 0 }) => 
 {
     const navigation = useNavigation();
     const offsetY = useRef(0);
@@ -17,9 +17,14 @@ const AppBar = ({ showLogo = true, headerTitle = '' }) =>
 
     const navigateToAccountScreen = () => navigation.navigate('More');
 
+    const appBarStyles = {
+        ...styles.appBarContainer,
+        marginTop
+    };
+
     return (
         <View
-            style={ styles.appBarContainer } 
+            style={appBarStyles} 
             onLayout={({ nativeEvent }) => offsetY.current = nativeEvent.layout.y }
         >
             { !showLogo && <Text h4>{ headerTitle }</Text> }

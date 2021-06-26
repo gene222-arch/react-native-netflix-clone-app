@@ -6,11 +6,11 @@ import View from './../../../components/View';
 import Text from './../../../components/Text';
 import { useNavigation } from '@react-navigation/native'
 import mainCategoriesConfig, { CATEGORY_NAMES } from './../../../config/home.menu.main.category.list'
+import AppBar from './../../AppBar';
 
 
 const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = '', setMainCategory }) =>
 {
-    const modalRef = useRef(selectedMainCategory);
     const navigation = useNavigation();
 
     const handleChangeMainCategory = (category) => 
@@ -18,20 +18,19 @@ const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = ''
         setMainCategory(category);
         setIsVisible(false);
 
-        modalRef.current = category;
+        navigation.setOptions({ headerTitle: props => <AppBar showLogo={ false } headerTitle={ category }/> });
     }
 
     const mainCategories = mainCategoriesConfig({
         currentSelectedCategory: selectedMainCategory,
         homeOnPress: () => navigation.goBack(),
         tvShowsOnPress: () => handleChangeMainCategory(CATEGORY_NAMES.TV_SHOWS),
-        moviesOnPress: () => handleChangeMainCategory(CATEGORY_NAMES.TV_SHOWS)
+        moviesOnPress: () => handleChangeMainCategory(CATEGORY_NAMES.MOVIES)
     });
 
     return (
         <View style={styles.centeredView}>
             <Modal
-                ref={ modalRef }
                 animationType="slide"
                 transparent={true}
                 visible={isVisible}
