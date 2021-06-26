@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import View from './../components/View';
 import Text from './../components/Text';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -11,24 +11,26 @@ import { TouchableOpacity } from 'react-native'
 const AppBar = ({ showLogo = true, headerTitle = '' }) => 
 {
     const navigation = useNavigation();
+    const offsetY = useRef(0);
 
     const navigatoToSearchScreen = () => navigation.navigate('Search');
 
     const navigateToAccountScreen = () => navigation.navigate('More');
 
     return (
-        <View style={ styles.searchContainer }>
-            {
-                !showLogo && <Text h4>{ headerTitle }</Text>
-            }
+        <View
+            style={ styles.appBarContainer } 
+            onLayout={({ nativeEvent }) => offsetY.current = nativeEvent.layout.y }
+        >
+            { !showLogo && <Text h4>{ headerTitle }</Text> }
             {
                 showLogo && (
                     <Image 
-                            source={{
-                                uri: 'https://pngimg.com/uploads/netflix/netflix_PNG15.png'
-                            }}
-                            style={ styles.netflixLogo }
-                        />
+                        source={{
+                            uri: 'https://pngimg.com/uploads/netflix/netflix_PNG15.png'
+                        }}
+                        style={ styles.netflixLogo }
+                    />
                 )
             }
             <View style={ styles.searchIconContainer }>

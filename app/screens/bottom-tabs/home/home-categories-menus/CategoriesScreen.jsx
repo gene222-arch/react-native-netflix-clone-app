@@ -35,6 +35,7 @@ import CategoriesMenu from './../CategoriesMenu';
 import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import MainCategoriesMenu from './../MainCategoriesMenu';
+import Info from './../../../../components/continue-watching-for-item/Info';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -76,6 +77,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
+    const [ showFrontPageInfo, setShowFrontPageInfo ] =  useState(false);
     const [ categoryItems, setCategoryItems ] = useState([]);
     const [ recommendations, setRecommendations ] = useState([]);
     const [ showCategories, setShowCategories ] = useState(false);
@@ -155,11 +157,11 @@ const CategoriesScreen = ({ AUTH, route }) =>
         setRecommendations(recommendations_);
         setIsInteractionsComplete(true);
     }
-
     
     const cleanUp = () => {
         setCategoryItems([]);
         setFrontPage(DEFAULT_FRONT_PAGE);
+        setShowFrontPageInfo(false);
         setRecommendations([]);
         setIsInteractionsComplete(false);
         setShowCategories(false);
@@ -180,6 +182,8 @@ const CategoriesScreen = ({ AUTH, route }) =>
     
     return (
         <View style={ styles.container }>
+            {/* Display front page info */}
+            <Info selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
             <FlatList 
                 data={ categoryItems }
                 renderItem={({ item }) => (
@@ -284,12 +288,14 @@ const CategoriesScreen = ({ AUTH, route }) =>
                                         titleStyle={ styles.playBtnTitle }
                                     />
                                     <View style={ styles.myListInfoActionContainer }>
-                                        <FeatherIcon 
-                                            name='info'
-                                            size={ 24 }
-                                            color='#fff'
-                                        />
-                                        <Text style={ styles.myListInfoActionText }>Info</Text>
+                                        <TouchableOpacity onPress={ () => setShowFrontPageInfo(true) }>
+                                            <FeatherIcon 
+                                                name='info'
+                                                size={ 24 }
+                                                color='#fff'
+                                            />
+                                            <Text style={ styles.myListInfoActionText }>Info</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>

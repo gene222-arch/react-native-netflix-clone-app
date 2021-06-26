@@ -15,13 +15,13 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 /** Components */
 import View from './../../../components/View';
 import Text from './../../../components/Text';
-import PlayDownloadScreen from './PlayDownloadScreen';
+import VideoPlayerFullScreen from '../../../components/VideoPlayerFullScreen';
 import DownloadItem from '../../../components/download-item/DownloadItem';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/downloads';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
-import * as FileSystem from 'expo-file-system'
+
 
 const DownloadsScreen = () => 
 {
@@ -91,7 +91,7 @@ const DownloadsScreen = () =>
     if (showVideo) {
         return (
             <View>
-                <PlayDownloadScreen 
+                <VideoPlayerFullScreen 
                     uri={ getCachedFile('Downloads/Videos/', download.id, download.video) } 
                     setShowVideo={ setShowVideo }
                 />

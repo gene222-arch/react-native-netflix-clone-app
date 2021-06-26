@@ -4,7 +4,7 @@ import styles from './../../../assets/stylesheets/moreDownloads';
 import downloadsWithSeries from './../../../services/data/downloadsWithSeries';
 import { FlatList } from 'react-native-gesture-handler';
 import MoreDownloadsSeason from './../../../components/more-downloads-season/MoreDownloadsSeason';
-import PlayDownloadScreen from './PlayDownloadScreen';
+import VideoPlayerFullScreen from './../../../components/VideoPlayerFullScreen';
 
 const VIDEO_TO_PLAY_DEFAULT_PROPS = {
     id: '', 
@@ -49,7 +49,7 @@ const MoreDownloadsScreen = ({ route }) =>
     },[]);
 
     if (showVideo) {
-        return <PlayDownloadScreen uri={ videoToPlay.video } setShowVideo={ setShowVideo }/>
+        return <VideoPlayerFullScreen uri={ videoToPlay.video } setShowVideo={ setShowVideo }/>
     }
 
     return (

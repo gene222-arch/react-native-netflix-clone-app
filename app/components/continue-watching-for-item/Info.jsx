@@ -25,7 +25,7 @@ const Info = ({ selectedShow , isVisible, setIsVisible }) =>
                     <ListItem.Content>
                         <View style={ styles.posterDetails }>
                             <View style={ styles.titleCloseBtnContainer }>
-                                <Text h4 style={ styles.title }>Title</Text>
+                                <Text h4 style={ styles.title }>{  selectedShow.title }</Text>
                                 <TouchableOpacity onPress={ () => setIsVisible(false) }>
                                     <FeatherIcon 
                                         name='x-circle'
@@ -40,9 +40,7 @@ const Info = ({ selectedShow , isVisible, setIsVisible }) =>
                                 <Text style={ styles.yearAgeSeason }>15+</Text>
                                 <Text style={ styles.yearAgeSeason }>15 Seasons</Text>
                             </View>
-                            <Text style={ styles.plot }>
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa id eius natus quod excepturi vero a? Fuga earum, debitis vel architecto, nostrum magnam, nemo exercitationem facere velit quaerat hic atque.
-                            </Text>
+                            <Text style={ styles.plot }>{ selectedShow.plot }</Text>
                         </View>
                     </ListItem.Content>
                 </ListItem>

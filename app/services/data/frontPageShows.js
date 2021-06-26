@@ -13,6 +13,7 @@ const frontPageShows =
             'Wilderness Survival',
             'Japanese'
         ],
+        plot: "he game takes place in a land known simply as the continent and tells the story of Geralt of Rivia, a witcher – a genetically enhanced human with special powers trained to slay monsters. The Witcher contains three different paths, which affect the game's storyline.",
         isAddedToMyList: false
     },
     {
@@ -28,6 +29,7 @@ const frontPageShows =
             'High fantasy',
             'Comics'
         ],
+        plot: "The game takes place in a land known simply as the continent and tells the story of Geralt of Rivia, a witcher – a genetically enhanced human with special powers trained to slay monsters. The Witcher contains three different paths, which affect the game's storyline.",
         isAddedToMyList: false
     },
     {
@@ -36,6 +38,7 @@ const frontPageShows =
         title: 'The Avengers: End Game',
         backgroundImage: 'https://i.insider.com/5ca3bed692c88634ca2ee223?width=750&format=jpeg&auto=webp',
         poster: 'https://image.pngaaa.com/783/1006783-middle.png',
+        plot: "The game takes place in a land known simply as the continent and tells the story of Geralt of Rivia, a witcher – a genetically enhanced human with special powers trained to slay monsters. The Witcher contains three different paths, which affect the game's storyline.",
         tags: [
             'Action',
             'Adventure',

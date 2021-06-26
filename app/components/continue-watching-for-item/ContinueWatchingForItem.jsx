@@ -8,14 +8,23 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import MoreActionList from './MoreActionList';
 import Info from './Info';
 import { getCachedFile } from './../../utils/cacheImage';
+import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 
 
-const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, handleToggleUnLikeRecommendation, handlePressRemoveRecommendation }) => 
+const ContinueWatchingForItem = ({ 
+    episode, 
+    handleToggleLikeRecommendation, 
+    handleToggleUnLikeRecommendation, 
+    handlePressRemoveRecommendation 
+}) => 
 {
-    const video = useRef(null)
+    const videoRef = useRef(null)
+    const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ usePoster, setUsePoster ] = useState(true);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
+
+    const handlePressPlayVideo = () => setShouldPlayVideo(!shouldPlayVideo);
 
     const handlePressShowInfo = () => setShowInfo(!showInfo);
 
@@ -25,7 +34,8 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
         setUsePoster(true);
         setShowInfo(false);
         setShowMoreOptions(false);
-        video.current = null;
+        setShouldPlayVideo(false);
+        videoRef.current = null;
     }
 
     useEffect(() => {
@@ -33,6 +43,15 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
             cleanUp();
         }
     }, []);
+
+    if (shouldPlayVideo) {
+        return (
+            <VideoPlayerFullScreen  
+                uri={ getCachedFile('Recommendations/', episode.id, episode.video) }
+                setShowVideo={ setShouldPlayVideo }
+            />
+        )
+    }
 
     return (
         <View style={ styles.container }>
@@ -46,7 +65,7 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
             />
             <Info selectedShow={ episode } isVisible={ showInfo } setIsVisible={ setShowInfo } />
             <Video 
-                ref={ video }
+                ref={ videoRef }
                 style={ styles.video }
                 source={{
                     uri: getCachedFile('Recommendations/', episode.id, episode.video)
@@ -61,6 +80,7 @@ const ContinueWatchingForItem = ({ episode, handleToggleLikeRecommendation, hand
                 size={ 50 }
                 color='#fff'
                 style={ styles.playIcon }
+                onPress={ handlePressPlayVideo }
             />
             <View style={ styles.infoMoreContainer }>
                 <TouchableOpacity onPress={ handlePressShowInfo }>

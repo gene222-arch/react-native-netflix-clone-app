@@ -3,6 +3,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
 import { TouchableOpacity, ImageBackground, InteractionManager } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
 /** Selectors */
 import { authSelector } from './../../../redux/modules/auth/selectors';
@@ -12,7 +13,8 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 
 /** API */
 import categories_ from './../../../services/data/categories';
-import downloads from './../../../services/data/downloads';
+import recommendations_ from './../../../services/data/recommendations';
+import frontPageShows from './../../../services/data/frontPageShows';
 
 /** RNE Components */
 import { Tab, Button } from 'react-native-elements';
@@ -25,6 +27,8 @@ import ContinueWatchingForItem from './../../../components/continue-watching-for
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import HomeCategory from '../../../components/home-category/HomeCategory';
+import LoadingScreen from './../../../components/LoadingScreen';
+import Info from './../../../components/continue-watching-for-item/Info';
 
 /** Icons */
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -32,14 +36,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/homeScreen';
-import recommendations_ from './../../../services/data/recommendations';
-import frontPageShows from './../../../services/data/frontPageShows';
-import { useNavigation } from '@react-navigation/native';
-import Info from './../../../components/continue-watching-for-item/Info';
+
+/** Utils */
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
-import * as FileSystem from 'expo-file-system';
-import { getExtension } from './../../../utils/file';
-import LoadingScreen from './../../../components/LoadingScreen';
+
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -157,7 +157,6 @@ const HomeScreen = ({ AUTH }) =>
         <View style={ styles.container }>
             {/* Display front page info */}
             <Info selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
-
             {/* Display Categories */}
             <FlatList 
                 data={ categories.items }

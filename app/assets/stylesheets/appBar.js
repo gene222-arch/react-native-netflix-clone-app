@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         width: 45,
         resizeMode: 'contain'
     },
-    searchContainer: {
+    appBarContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         marginBottom: 5,
         height: 55
+    },
+    appBarSticky: {
     },
     searchIcon: {
         marginRight: 30
