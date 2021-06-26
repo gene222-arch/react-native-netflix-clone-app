@@ -10,6 +10,9 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
+    SELECT_PROFILE_START,
+    SELECT_PROFILE_SUCCESS,
+    SELECT_PROFILE_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -70,6 +73,21 @@ export const downloadVideoFailed = (payload) => ({
     payload
 });
 
+/** Select profile */
+export const selectProfileStart = (payload) => ({
+    type: SELECT_PROFILE_START,
+    payload
+});
+
+export const selectProfileSuccess = (payload) => ({
+    type: SELECT_PROFILE_SUCCESS,
+    payload
+});
+
+export const selectProfileFailed = (payload) => ({
+    type: SELECT_PROFILE_FAILED,
+    payload
+});
 
 /** Remind me of coming soon show */
 export const toggleRemindMeOfComingShowStart = (payload) => ({

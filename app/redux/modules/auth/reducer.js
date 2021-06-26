@@ -1,5 +1,6 @@
 import ACTION_TYPES from './action.types';
 import myList from './../../../services/data/myList';
+import accountProfiles from './../../../services/data/accountProfiles';
 
 const {
     LOGIN_START,
@@ -11,6 +12,9 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
+    SELECT_PROFILE_START,
+    SELECT_PROFILE_SUCCESS,
+    SELECT_PROFILE_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -28,11 +32,8 @@ const CREDENTIALS_DEFAULT_PROPS = {
     remember_me: false
 };
 
-const USER_DEFAULT_PROPS = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: ''
+const PROFILE_DEFAULT_PROPS = {
+    name: ''
 };
 
 const LIKED_SHOWS_DEFAULT_PROPS = [
@@ -46,10 +47,11 @@ const LIKED_SHOWS_DEFAULT_PROPS = [
 const initialState = {
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    user: USER_DEFAULT_PROPS,
-    myList,
     downloads: [],
     likedShows: LIKED_SHOWS_DEFAULT_PROPS,
+    myList,
+    profiles: accountProfiles,
+    profile: PROFILE_DEFAULT_PROPS,
     remindedComingSoonShows: [],
     isLoading: false,
     errors: []
@@ -62,6 +64,7 @@ export default (state = initialState, { type, payload }) =>
         remindedComingSoonShows,
         likedShows,
         downloads,
+        profiles,
     } = state;
 
     const isLoading = true;
@@ -69,9 +72,10 @@ export default (state = initialState, { type, payload }) =>
 
     switch (type) 
     {
-        case DOWNLOAD_VIDEO_START:
         case LOGIN_START:
         case LOGOUT_START:
+        case DOWNLOAD_VIDEO_START:
+        case SELECT_PROFILE_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
         case TOGGLE_LIKE_SHOW_START:
@@ -127,6 +131,22 @@ export default (state = initialState, { type, payload }) =>
                 isLoading: false,
                 errors: payload.message
             }
+
+        case SELECT_PROFILE_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                profile: profiles.find(({ id }) => id === payload.id),
+                errors
+            }
+
+        case SELECT_PROFILE_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                errors: payload.message
+            }
+      
 
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 

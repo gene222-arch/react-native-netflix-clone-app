@@ -1,6 +1,7 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import * as API from './../../../services/User'
 import ACTION_TYPES from './action.types'
+import * as RootNavigation from './../../../navigation/RootNavigation'
 import { 
     loginSuccess, 
     loginFailed, 
@@ -8,6 +9,8 @@ import {
     logoutFailed, 
     downloadVideoSuccess,
     downloadVideoFailed,
+    selectProfileFailed,
+    selectProfileSuccess,
     toggleAddToMyListSuccess,
     toggleAddToMyListFailed,
     toggleRemindMeOfComingShowSuccess, 
@@ -21,6 +24,7 @@ const {
     LOGIN_START,
     LOGOUT_START,
     DOWNLOAD_VIDEO_START,
+    SELECT_PROFILE_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_LIKE_SHOW_START
@@ -51,10 +55,19 @@ function* logoutSaga()
 function* downloadVideoSaga(payload)  
 {
     try {
-        // yield put(downloadVideoSuccess({ show: { ...payload, progress, status  } }));
     } catch ({ message }) {
         yield put(downloadVideoFailed({ message }));
         console.log(message);
+    }
+}
+
+function* selectProfileSaga(payload)  
+{
+    try {
+        yield put(selectProfileSuccess(payload));
+        RootNavigation.navigate('Home');
+    } catch ({ message }) {
+        yield put(selectProfileFailed({ message }));
     }
 }
 
@@ -113,6 +126,14 @@ function* downloadVideoWatcher()
     }
 }
 
+function* selectProfileWatcher()
+{
+    while (true) {
+        const { payload } = yield take(SELECT_PROFILE_START);
+        yield call(selectProfileSaga, payload);
+    }
+}
+
 function* toggleAddToMyListWatcher()
 {
     while (true) {
@@ -143,6 +164,7 @@ export default function* ()
         loginWatcher(),
         logoutWatcher(),
         downloadVideoWatcher(),
+        selectProfileWatcher(),
         toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher(),
         toggleLikeShowWatcher()

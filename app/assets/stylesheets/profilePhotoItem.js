@@ -5,12 +5,12 @@ const styles = StyleSheet.create({
         marginHorizontal: 10
     },
     selectedImg: {
-        width: 120,
-        height: 120
+        width: 70,
+        height: 70
     },
     defaultImg: {
-        width: 80,
-        height: 80
+        width: 60,
+        height: 60
     },
     img: {
         borderRadius: 2.5

@@ -19,9 +19,7 @@ const Navigation = ({ AUTH }) =>
 
     return (
         <NavigationContainer ref={ navigationRef } theme={ DarkTheme }>
-        {
-            !AUTH.isAuthenticated ? <AuthenticationStack /> : <NavigationBottomTabs />
-        }
+            { !AUTH.isAuthenticated ? <AuthenticationStack /> : <NavigationBottomTabs /> }
         </NavigationContainer>  
     )
 }

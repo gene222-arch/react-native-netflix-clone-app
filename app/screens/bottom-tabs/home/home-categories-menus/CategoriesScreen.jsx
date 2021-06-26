@@ -92,9 +92,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
         setFrontPage(frontPageShows.find(({ category }) => category === selectedCategory));
 
         const newCategories = categories_.items.map(category => {
-
             const filterMovies = category.movies.filter(({ show_type }) => show_type === selectedCategory);
-
             return { ...category, movies: filterMovies };
         });
 

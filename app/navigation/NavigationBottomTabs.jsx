@@ -4,7 +4,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 /** Screens */
-import { HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab } from './BottomTabStacks'
+import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab } from './BottomTabStacks'
 import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 const NavigationBottomTabs = () => 
 {
     const TAB_BAR_OPTIONS = {
-        initialRouteName: 'Home',
+        initialRouteName: 'SelectProfile',
         activeTintColor: Colors.white,
         keyboardHidesTabBar: true,
         lazy: true,
@@ -59,6 +59,11 @@ const NavigationBottomTabs = () =>
 
     return (
         <Tab.Navigator tabBarOptions={ TAB_BAR_OPTIONS }>
+            <Tab.Screen 
+                name="SelectProfile" 
+                component={ SelectProfileTab } 
+                options={ hideTabScreen }
+            />
             <Tab.Screen 
                 name="Home" 
                 component={ HomeTab } 

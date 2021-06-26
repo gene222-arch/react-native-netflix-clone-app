@@ -174,7 +174,7 @@ const HomeScreen = ({ AUTH }) =>
                             source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
                             style={ styles.homeFrontPage }
                         >
-                            {/* Nav Bar */}
+                            {/* <Nav></Nav> Bar */}
                             <View style={ styles.topMenuContainer }>
                                 <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
                                 <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>

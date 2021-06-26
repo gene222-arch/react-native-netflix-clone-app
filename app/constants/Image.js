@@ -1,0 +1,5 @@
+const DEFAULT_IMG_STYLE = {
+    DEFAULT_BORDER_RADIUS: 5
+}
+
+export default DEFAULT_IMG_STYLE

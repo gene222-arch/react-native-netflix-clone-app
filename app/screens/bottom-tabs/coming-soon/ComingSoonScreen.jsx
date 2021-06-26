@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { InteractionManager } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, Platform, StatusBar } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import { useDispatch, connect } from 'react-redux';
 
@@ -97,7 +97,11 @@ const ComingSoonScreen = ({ AUTH }) =>
                 ListHeaderComponent={
                     <>
                         {/* Search icon container */}
-                        <AppBar showLogo={ false } headerTitle='Coming Soon'/>
+                        <AppBar 
+                            marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } 
+                            showLogo={ false } 
+                            headerTitle='Coming Soon'
+                        />
                         {/* Notifications Container */}
                         <View style={ styles.notificationsContainer }>
                             <View style={ styles.iconContainer }>

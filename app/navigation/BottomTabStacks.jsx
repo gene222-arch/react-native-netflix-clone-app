@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, useHeaderHeight } from '@react-navigation/stack'
 import HomeScreen from '../screens/bottom-tabs/home';
 import MovieDetailsScreen from './../screens/bottom-tabs/home/movie-details-screen/index';
 import TabTwoScreen from '../screens/bottom-tabs/home/TabTwoScreen';
@@ -16,8 +16,7 @@ import AppBar from './../screens/AppBar';
 import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menus/CategoriesScreen';
 import StackNavBackButton from './../components/stack-app-bar/StackNavBackButton';
 import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
-import StackNavTitle from './../components/stack-app-bar/StackNavTitle';
-
+import SelectProfileScreen from './../screens/bottom-tabs/select-profile/SelectProfileScreen';
 
 const options = {
     headerShown: false,
@@ -39,6 +38,23 @@ const moreHeaderOptions = {
     headerLeft: props => <StackNavBackButton />,
     headerTitle: 'Profiles & More'
 };
+
+
+const SelectProfileStack = createStackNavigator();
+
+export const SelectProfileTab = () => 
+{
+    return (
+        <SelectProfileStack.Navigator initialRouteName='SelectProfile'>
+            <SelectProfileStack.Screen 
+                name='SelectProfile' 
+                component={ SelectProfileScreen } 
+                options={ options } 
+            />
+        </SelectProfileStack.Navigator>
+    );
+}
+
 
 const HomeStack = createStackNavigator();
 
@@ -75,7 +91,7 @@ export const HomeTab = () =>
             <HomeStack.Screen 
                 name='CategoriesScreen'
                 component={ CategoriesScreen }
-                options={({ route }) => ({ 
+                options={({ route, navigation }) => ({ 
                     headerTitle: props => <AppBar showLogo={ false } headerTitle={ route.params.headerTitle }/>,
                     headerStyle: {
                         backgroundColor: '#000',

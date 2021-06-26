@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { InteractionManager } from 'react-native'
+import { useDispatch, connect } from 'react-redux'
+import { InteractionManager, FlatList } from 'react-native'
 import * as AUTH_ACTION from '../../../redux/modules/auth/actions'
 import styles from './../../../assets/stylesheets/moreScreen';
-import accountsAPI from './../../../services/data/accounts';
+import accountProfilesAPI from './../../../services/data/accountProfiles';
 import ProfilePhotoItem from '../../../components/profile-photo-item/ProfilePhotoItem';
 import View from './../../../components/View';
 import { Avatar, Button, ListItem } from 'react-native-elements';
@@ -11,19 +11,14 @@ import Text from './../../../components/Text';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import LoadingScreen from './../../../components/LoadingScreen';
+import { createStructuredSelector } from 'reselect';
+import { authSelector } from './../../../redux/modules/auth/selectors';
 
 const moreOptions = (logoutHandler) =>
 [
     {
         id: 1,
-        name: 'Notifications',
-        Icon: <FontAwesome5 name='bell' size={ 15 } color={ styles.manageProfilesBtnIcon.color }/>,
-        bottomDivider: true,
-        onPress: () => console.log('Clicked')
-    },
-    {
-        id: 2,
-        name: 'Notifications',
+        name: 'My List',
         Icon: <FontAwesome5 name='check' size={ 15 } color={ styles.manageProfilesBtnIcon.color }/>,
         bottomDivider: true,
         onPress: () => console.log('Clicked')
@@ -76,30 +71,37 @@ const DisplayOption = ({ onPress, bottomDivider, Icon, name }) =>
     )
 }
 
-const MoreScreen = () => 
+const MoreScreen = ({ AUTH }) => 
 {
     const dispatch = useDispatch();
     
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ accounts, setAccounts ] = useState([]);
     const [ selectedImg, setSelectedImg ] = useState(1);
+    const [ sortedProfiles, setSortedProfiles ] = useState([]);
+
+    const sortProfile = () => {
+        const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH.profile.id);
+        const middleArrValIndex = Math.floor(AUTH.profiles.length / 2);
+        const profiles = AUTH.profiles;
+        [ profiles[selectedProfileIndex] ] = [ profiles[middleArrValIndex] ];
+
+        setSortedProfiles(profiles);
+    }
 
     const logout = () => dispatch(AUTH_ACTION.logoutStart());
 
     const runAfterInteractions = () => {
-        setAccounts(accountsAPI);
         setIsInteractionsComplete(true);
     }
 
     const cleanUp = () => {
         setIsInteractionsComplete(false);
-        setAccounts([]);
         setSelectedImg(1);
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-
+        sortProfile();
         return () => {
             cleanUp();
         }
@@ -113,27 +115,20 @@ const MoreScreen = () =>
         <View style={ styles.container }>
             {/* Profiles */}
             <View style={ styles.profileContainer }>
-            {
-                accounts.map(({ id, name, profile_photo }) => (
-                    <ProfilePhotoItem 
-                        key={ id }
-                        name={ name } 
-                        uri={ profile_photo }
-                        isSelected={ selectedImg === id }
-                        onPress={ () => setSelectedImg(id) }
-                    />
-                ))
-            }
-                <TouchableOpacity>
-                    <Avatar
-                        size='large'
-                        title='+'
-                        onPress={() => console.log('Works!')}
-                        activeOpacity={0.7}
-                        avatarStyle={ styles.addMoreProfile }
-                    />
-                    <Text style={ styles.addProfileText }>Add Profile</Text>
-                </TouchableOpacity>
+                <FlatList 
+                    keyExtractor={ ({ id }) => id.toString() }
+                    data={ sortedProfiles }
+                    renderItem={ ({ item }) => (
+                        <ProfilePhotoItem 
+                            key={ item.id }
+                            name={ item.name } 
+                            uri={ item.profile_photo }
+                            isSelected={ AUTH.profile.id === item.id }
+                            onPress={ () => setSelectedImg(item.id) }
+                        />
+                    )}
+                    horizontal
+                />
             </View>
             
             {/* Manage Profiles Btn */}
@@ -168,4 +163,8 @@ const MoreScreen = () =>
     )
 }
 
-export default MoreScreen
+const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector
+});
+
+export default connect(mapStateToProps)(MoreScreen)
