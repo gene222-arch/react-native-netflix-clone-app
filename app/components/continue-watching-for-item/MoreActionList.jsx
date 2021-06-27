@@ -26,9 +26,9 @@ import VIDEO_STATUSES from './../../config/video.statuses';
 const MoreActionList = ({
     AUTH,
     selectedVideo,
-    handlePressRemoveRecommendation,
-    handleToggleLikeRecommendation,
-    handleToggleUnLikeRecommendation,
+    handlePressRemoveRecentlyWatchedShow,
+    handleToggleRecentlyWatchedShow,
+    handleToggleUnRecentlyWatchedShow,
     isVisible,
     setIsVisible
 }) => 
@@ -75,7 +75,7 @@ const MoreActionList = ({
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
             isSolid: selectedVideo.rate === 'like',
-            onPress: handleToggleLikeRecommendation,
+            onPress: handleToggleRecentlyWatchedShow,
             show: !selectedVideo.rate || selectedVideo.rate === 'like',
         },
         { 
@@ -83,14 +83,14 @@ const MoreActionList = ({
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
             isSolid: selectedVideo.rate === 'not for me',
-            onPress: handleToggleUnLikeRecommendation,
+            onPress: handleToggleUnRecentlyWatchedShow,
             show: !selectedVideo.rate || selectedVideo.rate === 'not for me',
         },
         {
             title: 'Remove From Row',
             iconType: 'font-awesome-5',
             iconName: 'ban',
-            onPress: handlePressRemoveRecommendation,
+            onPress: handlePressRemoveRecentlyWatchedShow,
             show: true,
         },
     ];

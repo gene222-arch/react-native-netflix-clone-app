@@ -1,8 +1,12 @@
 import ACTION_TYPES from './action.types';
 import myList from './../../../services/data/myList';
 import accountProfiles from './../../../services/data/accountProfiles';
+import recentlyWatchedShows_ from './../../../services/data/recentlyWatchedShows';
 
 const {
+    ADD_TO_RECENT_WATCHES_START,
+    ADD_TO_RECENT_WATCHES_SUCCESS,
+    ADD_TO_RECENT_WATCHES_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
@@ -15,6 +19,9 @@ const {
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
+    REMOVE_TO_RECENT_WATCHES_START,
+    REMOVE_TO_RECENT_WATCHES_SUCCESS,
+    REMOVE_TO_RECENT_WATCHES_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -52,6 +59,7 @@ const initialState = {
     myList,
     profiles: accountProfiles,
     profile: PROFILE_DEFAULT_PROPS,
+    recentlyWatchedShows: recentlyWatchedShows_,
     remindedComingSoonShows: [],
     isLoading: false,
     errors: []
@@ -65,6 +73,7 @@ export default (state = initialState, { type, payload }) =>
         likedShows,
         downloads,
         profiles,
+        recentlyWatchedShows
     } = state;
 
     const isLoading = true;
@@ -72,9 +81,11 @@ export default (state = initialState, { type, payload }) =>
 
     switch (type) 
     {
+        case ADD_TO_RECENT_WATCHES_START:
         case LOGIN_START:
         case LOGOUT_START:
         case DOWNLOAD_VIDEO_START:
+        case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
@@ -82,6 +93,21 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isLoading
+            }
+
+        case ADD_TO_RECENT_WATCHES_SUCCESS:
+            return { 
+                ...state,
+                recentlyWatchedShows: [ ...recentlyWatchedShows, payload.show ],
+                isLoading: false,
+                errors
+            }
+
+        case ADD_TO_RECENT_WATCHES_FAILED:
+            return { 
+                ...state, 
+                isLoading: false,
+                errors: payload.message
             }
 
         case LOGIN_SUCCESS:
@@ -128,6 +154,21 @@ export default (state = initialState, { type, payload }) =>
         case DOWNLOAD_VIDEO_FAILED:
             return {
                 ...state,
+                isLoading: false,
+                errors: payload.message
+            }
+
+        case REMOVE_TO_RECENT_WATCHES_SUCCESS:
+            return { 
+                ...state,
+                recentlyWatchedShows: recentlyWatchedShows.filter(({ id }) => id !== payload.showID),
+                isLoading: false,
+                errors
+            }
+
+        case REMOVE_TO_RECENT_WATCHES_FAILED:
+            return { 
+                ...state, 
                 isLoading: false,
                 errors: payload.message
             }

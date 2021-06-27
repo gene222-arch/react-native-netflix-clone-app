@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, Platform, StatusBar } from 'react-native';
+import { FlatList } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
-import { TouchableOpacity, ImageBackground, InteractionManager } from 'react-native'
+import { ImageBackground, InteractionManager } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 /** Selectors */
@@ -13,33 +13,22 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 
 /** API */
 import categories_ from './../../../services/data/categories';
-import recommendations_ from './../../../services/data/recommendations';
 import frontPageShows from './../../../services/data/frontPageShows';
 
-/** RNE Components */
-import { Tab, Button } from 'react-native-elements';
-
 /** Components */
-import AppBar from './../../AppBar';
-import CategoriesMenu from './CategoriesMenu';
-import Image from './../../../components/Image';
 import ContinueWatchingForItem from './../../../components/continue-watching-for-item/ContinueWatchingForItem';
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import HomeCategory from '../../../components/home-category/HomeCategory';
 import LoadingScreen from './../../../components/LoadingScreen';
-import Info from './../../../components/continue-watching-for-item/Info';
-
-/** Icons */
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/homeScreen';
 
 /** Utils */
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
-
+import NavBar from './home-components/NavBar';
+import FrontPageOptions from './home-components/FrontPageOptions';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -58,25 +47,18 @@ const HomeScreen = ({ AUTH }) =>
     const navigation = useNavigation();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-
-    const [ showFrontPageInfo, setShowFrontPageInfo ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ categories, setCategories ] = useState([]);
-    const [ recommendations, setRecommendations ] = useState([]);
-    const [ showCategories, setShowCategories ] = useState(false);
-
-    const handleClickShowInfo = () => setShowFrontPageInfo(!showFrontPageInfo);
 
     const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
     const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
 
-    const handleToggleCategories = () => setShowCategories(!showCategories);
+    const handleToggleRateRecentlyWatchedShow = (recentlyWatchedShowID, rate) => 
+    {
+        const newRecentlyWatchedShows = AUTH.recentlyWatchedShows.map((rec) => {
 
-    const handleToggleLikeRecommendation = (recommendationID, rate) => {
-        const newRecommendations = recommendations.map((rec) => {
-
-            if (rec.id === recommendationID) 
+            if (rec.id === recentlyWatchedShowID) 
             {
                 if (!rec.isRated) {
                     return { ...rec, isRated: true, rate };
@@ -92,14 +74,10 @@ const HomeScreen = ({ AUTH }) =>
 
             return rec;
         });
-
-        setRecommendations(newRecommendations);
     }
 
-    const handlePressRemoveRecommendation = (recommendationID) => {
-        const newRecommendations = recommendations.filter(rec => rec.id !== recommendationID);
-
-        setRecommendations(newRecommendations);
+    const handlePressRemoveRecentlyWatchedShow = (recentlyWatchedShowID) => {
+        dispatch(AUTH_ACTION.removeToRecentWatchesStart(recentlyWatchedShowID));
     }
 
     const cacheImages = () => 
@@ -116,7 +94,7 @@ const HomeScreen = ({ AUTH }) =>
         });
 
         /** Cache Recommendations */
-        recommendations_.map(({ id, poster, video }) => {
+        AUTH.recentlyWatchedShows.map(({ id, poster, video }) => {
             cacheImage(poster, id, 'Recommendations/');
             cacheImage(video, id, 'Recommendations/');
         });
@@ -127,17 +105,13 @@ const HomeScreen = ({ AUTH }) =>
         cacheImages();
         setCategories(categories_);
         setFrontPage(frontPageShows[0]);
-        setRecommendations(recommendations_);
         setIsInteractionsComplete(true);
     }
 
     const cleanUp = () => {
         setCategories([]);
         setFrontPage(DEFAULT_FRONT_PAGE);
-        setRecommendations([]);
         setIsInteractionsComplete(false);
-        setShowFrontPageInfo(false);
-        setShowCategories(false);
     }
 
     useEffect(() => {
@@ -155,9 +129,6 @@ const HomeScreen = ({ AUTH }) =>
 
     return (
         <View style={ styles.container }>
-            {/* Display front page info */}
-            <Info selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
-            {/* Display Categories */}
             <FlatList 
                 data={ categories.items }
                 renderItem={({ item }) => (
@@ -174,114 +145,36 @@ const HomeScreen = ({ AUTH }) =>
                             source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
                             style={ styles.homeFrontPage }
                         >
-                            {/* <Nav></Nav> Bar */}
-                            <View style={ styles.topMenuContainer }>
-                                <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
-                                <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
-                                <View style={ styles.tabContainer }>
-                                    <Text 
-                                        touchableOpacity={ true } 
-                                        style={ styles.tabItem }
-                                        onPress={ () => handlePressCategory('TV Shows') }
-                                    >
-                                        TV Shows
-                                    </Text>
-                                    <Text 
-                                        touchableOpacity={ true } 
-                                        style={ styles.tabItem }
-                                        onPress={ () => handlePressCategory('Movies') }
-                                    >
-                                        Movies
-                                    </Text>
-                                    <TouchableOpacity onPress={ handleToggleCategories }>
-                                        <View style={ styles.categoriesContainer }>
-                                            <Text style={ styles.tabItem }>Categories</Text>
-                                            <FontAwesome5 
-                                                name='sort-down'
-                                                size={ 12 }
-                                                color='#fff'
-                                                style={ styles.categoriesIcon }
-                                            />
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            
-                            {/* Front Page Options/Action Buttons */}
-                            <View style={ styles.frontPageOptions }>
-                                <Image 
-                                    source={{ 
-                                        uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster) }}
-                                    style={ styles.homeFrontPageShowLogo }
-                                />
-                                <View style={ styles.tagsContainer }>
-                                {
-                                    frontPage.tags.map((name, index) => (
-                                        <Text 
-                                            key={ index }
-                                            style={ styles.tagItem }
-                                        >
-                                            { (frontPage.tags.length - 1) !== index ? `${ name }  · ` : name }
-                                        </Text>
-                                    ))
-                                }
-                                </View>
-                                <View style={ styles.actionBtnsContainer }>
-                                    <TouchableOpacity onPress={ handleToggleAddToMyList }>
-                                        <View style={ styles.myListInfoActionContainer }>
-                                            <FeatherIcon 
-                                                name={ !AUTH.myList.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
-                                                size={ 24 }
-                                                color='#fff'
-                                            />
-                                            <Text style={ styles.myListInfoActionText }>My List</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <Button 
-                                        title='   Play'
-                                        icon={
-                                            <FontAwesome5 
-                                                name='play'
-                                                size={ 16 }
-                                                color='#000'
-                                            />
-                                        }
-                                        iconPosition='left'
-                                        onPress={ () => console.log('Dr. Stone is Playing...') }
-                                        buttonStyle={ styles.playBtn }
-                                        titleStyle={ styles.playBtnTitle }
-                                    />
-                                    <View style={ styles.myListInfoActionContainer }>
-                                        <TouchableOpacity onPress={ handleClickShowInfo }>
-                                            <FeatherIcon 
-                                                name='info'
-                                                size={ 24 }
-                                                color='#fff'
-                                            />
-                                            <Text style={ styles.myListInfoActionText }>Info</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
+                            <NavBar handlePressCategory={ handlePressCategory } />
+                            <FrontPageOptions 
+                                frontPage={ frontPage } 
+                                handleToggleAddToMyList={ handleToggleAddToMyList }
+                                authUserMyList={ AUTH.myList }
+                                frontPageCacheDirectory={ 'FrontPages/' }
+                            />
                         </ImageBackground>   
 
                         {/* Continue Watching For */}
-                        <View style={ styles.continueWatchingForContainer }>
-                            <Text h4 style={ styles.continueWatchingForTitle }>Continue Watching For KNSM</Text>
-                            <FlatList
-                                keyExtractor={ item => item.id.toString() }
-                                data={ recommendations }
-                                renderItem={({ item }) =>  (
-                                    <ContinueWatchingForItem 
-                                        episode={ item } 
-                                        handleToggleLikeRecommendation={ () => handleToggleLikeRecommendation(item.id, 'like') }
-                                        handleToggleUnLikeRecommendation={ () => handleToggleLikeRecommendation(item.id, 'not for me') }
-                                        handlePressRemoveRecommendation={ () => handlePressRemoveRecommendation(item.id) }
-                                    />
-                                )}
-                                horizontal
-                            />    
-                        </View>   
+                        {
+                            AUTH.recentlyWatchedShows.length > 0 && (
+                                <View style={ styles.continueWatchingForContainer }>
+                                    <Text h4 style={ styles.continueWatchingForTitle }>Continue Watching For { AUTH.profile.name }</Text>
+                                    <FlatList
+                                        keyExtractor={ ({ id }) => id.toString() }
+                                        data={ AUTH.recentlyWatchedShows }
+                                        renderItem={({ item }) =>  (
+                                            <ContinueWatchingForItem 
+                                                episode={ item } 
+                                                handleToggleLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item.id, 'like') }
+                                                handleToggleUnLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item.id, 'not for me') }
+                                                handlePressRemoveRecentlyWatchedShow={ () => handlePressRemoveRecentlyWatchedShow(item.id) }
+                                            />
+                                        )}
+                                        horizontal
+                                    />    
+                                </View> 
+                            )
+                        }  
                     </>             
                 }
             />

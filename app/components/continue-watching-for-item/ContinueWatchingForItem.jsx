@@ -10,12 +10,11 @@ import Info from './Info';
 import { getCachedFile } from './../../utils/cacheImage';
 import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 
-
 const ContinueWatchingForItem = ({ 
     episode, 
-    handleToggleLikeRecommendation, 
-    handleToggleUnLikeRecommendation, 
-    handlePressRemoveRecommendation 
+    handleToggleLikeRecentlyWatchedShow, 
+    handleToggleUnLikeRecentlyWatchedShow, 
+    handlePressRemoveRecentlyWatchedShow 
 }) => 
 {
     const videoRef = useRef(null)
@@ -47,7 +46,7 @@ const ContinueWatchingForItem = ({
     if (shouldPlayVideo) {
         return (
             <VideoPlayerFullScreen  
-                uri={ getCachedFile('Recommendations/', episode.id, episode.video) }
+                uri={ getCachedFile('RecentlyWatchedShows/', episode.id, episode.video) }
                 setShowVideo={ setShouldPlayVideo }
             />
         )
@@ -59,9 +58,9 @@ const ContinueWatchingForItem = ({
                 selectedVideo={ episode } 
                 isVisible={ showMoreOptions } 
                 setIsVisible={ setShowMoreOptions } 
-                handleToggleLikeRecommendation={ handleToggleLikeRecommendation }
-                handleToggleUnLikeRecommendation={ handleToggleUnLikeRecommendation }
-                handlePressRemoveRecommendation={ handlePressRemoveRecommendation }
+                handleToggleLikeRecentlyWatchedShow={ handleToggleLikeRecentlyWatchedShow }
+                handleToggleUnLikeRecentlyWatchedShow={ handleToggleUnLikeRecentlyWatchedShow }
+                handlePressRemoveRecentlyWatchedShow={ handlePressRemoveRecentlyWatchedShow }
             />
             <Info selectedShow={ episode } isVisible={ showInfo } setIsVisible={ setShowInfo } />
             <Video 

@@ -3,12 +3,16 @@ import * as API from './../../../services/User'
 import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import { 
+    addToRecentWatchesSuccess,
+    addToRecentWatchesFailed,
     loginSuccess, 
     loginFailed, 
     logoutSuccess, 
     logoutFailed, 
     downloadVideoSuccess,
     downloadVideoFailed,
+    removeToRecentWatchesSuccess,
+    removeToRecentWatchesFailed,
     selectProfileFailed,
     selectProfileSuccess,
     toggleAddToMyListSuccess,
@@ -21,9 +25,11 @@ import {
 import * as AsyncStorage from './../../../utils/asyncStorage'
 import { getDownloadedVideo, getExtension, getDownloadedVideoFileInfo } from './../../../utils/file';
 const {
+    ADD_TO_RECENT_WATCHES_START,
     LOGIN_START,
     LOGOUT_START,
     DOWNLOAD_VIDEO_START,
+    REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_ADD_TO_MY_LIST_START,
@@ -32,6 +38,14 @@ const {
 
 
 /** Sagas */
+function* addToRecentWatchesSaga(payload)  
+{
+    try {
+        yield put(addToRecentWatchesSuccess({ show: payload }));
+    } catch ({ message }) {
+        yield put(addToRecentWatchesFailed({ message }));
+    }
+}
 
 function* loginSaga(payload)  
 {
@@ -58,6 +72,15 @@ function* downloadVideoSaga(payload)
     } catch ({ message }) {
         yield put(downloadVideoFailed({ message }));
         console.log(message);
+    }
+}
+
+function* removeToRecentWatchesSaga(payload)  
+{
+    try {
+        yield put(removeToRecentWatchesSuccess({ showID: payload }));
+    } catch ({ message }) {
+        yield put(removeToRecentWatchesFailed({ message }));
     }
 }
 
@@ -101,6 +124,13 @@ function* toggleLikeShowSaga(payload)
 }
 
 /** Watchers or Observers */
+function* addToRecentWatchesWatcher()
+{
+    while (true) {
+        const { payload } = yield take(ADD_TO_RECENT_WATCHES_START);
+        yield call(addToRecentWatchesSaga, payload);
+    }
+}
 
 function* loginWatcher()
 {
@@ -123,6 +153,14 @@ function* downloadVideoWatcher()
     while (true) {
         const { payload } = yield take(DOWNLOAD_VIDEO_START);
         yield call(downloadVideoSaga, payload);
+    }
+}
+
+function* removeToRecentWatchesWatcher()
+{
+    while (true) {
+        const { payload } = yield take(REMOVE_TO_RECENT_WATCHES_START);
+        yield call(removeToRecentWatchesSaga, payload);
     }
 }
 
@@ -161,9 +199,11 @@ function* toggleLikeShowWatcher()
 export default function* ()
 {
     yield all([
+        addToRecentWatchesWatcher(),
         loginWatcher(),
         logoutWatcher(),
         downloadVideoWatcher(),
+        removeToRecentWatchesWatcher(),
         selectProfileWatcher(),
         toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher(),

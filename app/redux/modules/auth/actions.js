@@ -1,6 +1,9 @@
 import ACTION_TYPES from './action.types';
 
 const {
+    ADD_TO_RECENT_WATCHES_START,
+    ADD_TO_RECENT_WATCHES_SUCCESS,
+    ADD_TO_RECENT_WATCHES_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
@@ -10,6 +13,9 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
+    REMOVE_TO_RECENT_WATCHES_START,
+    REMOVE_TO_RECENT_WATCHES_SUCCESS,
+    REMOVE_TO_RECENT_WATCHES_FAILED,
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
@@ -24,12 +30,29 @@ const {
     TOGGLE_LIKE_SHOW_FAILED
 } = ACTION_TYPES;
 
+
+/** Add to recent watches */
+export const addToRecentWatchesStart = (payload) => ({
+    type: ADD_TO_RECENT_WATCHES_START,
+    payload
+});
+
+export const addToRecentWatchesSuccess = (payload) => ({
+    type: ADD_TO_RECENT_WATCHES_SUCCESS,
+    payload
+});
+
+export const addToRecentWatchesFailed = (payload) => ({
+    type: ADD_TO_RECENT_WATCHES_FAILED,
+    payload
+});
+
+/** Login */
 export const loginStart = (payload) => ({
     type: LOGIN_START,
     payload
 });
 
-/** Login */
 export const loginSuccess = (payload) => ({
     type: LOGIN_SUCCESS,
     payload
@@ -70,6 +93,22 @@ export const downloadVideoSuccess = (payload) => ({
 
 export const downloadVideoFailed = (payload) => ({
     type: DOWNLOAD_VIDEO_FAILED,
+    payload
+});
+
+/** Remove to recent watches */
+export const removeToRecentWatchesStart = (payload) => ({
+    type: REMOVE_TO_RECENT_WATCHES_START,
+    payload
+});
+
+export const removeToRecentWatchesSuccess = (payload) => ({
+    type: REMOVE_TO_RECENT_WATCHES_SUCCESS,
+    payload
+});
+
+export const removeToRecentWatchesFailed = (payload) => ({
+    type: REMOVE_TO_RECENT_WATCHES_FAILED,
     payload
 });
 

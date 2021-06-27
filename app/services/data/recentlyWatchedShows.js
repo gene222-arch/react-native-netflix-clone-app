@@ -1,4 +1,4 @@
-const recommendations = 
+const recentlyWatchedShows = 
 [
     {
         id: 1,
@@ -30,7 +30,7 @@ const recommendations =
         id: 3,
         title: 'Errors and Omissions',
         show_type: 'movie',
-        episode: 4,
+        episode: 5,
         season: 1,
         isRated: true,
         rate: '',
@@ -42,4 +42,4 @@ const recommendations =
     }
 ];
 
-export default recommendations
+export default recentlyWatchedShows
