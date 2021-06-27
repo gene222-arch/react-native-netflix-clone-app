@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import * as FileSystem from 'expo-file-system'
 import { connect } from 'react-redux';
@@ -23,6 +23,7 @@ import { BottomSheet } from 'react-native-elements';
 import * as asyncStorage from './../../utils/asyncStorage'
 import VIDEO_STATUSES from './../../config/video.statuses';
 import { ensureFileExists } from './../../utils/cacheImage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const MoreActionList = ({
@@ -38,6 +39,7 @@ const MoreActionList = ({
     const FILE_URI = `${ FileSystem.documentDirectory }${ selectedVideo.title }${ selectedVideo.id }.mp4`;
     const [ status, setStatus ] = useState('');
     const [ progress, setProgress ] = useState(0);
+    const [downloadResumable, setDownloadResumable] = useState(null);
 
     const findShowInUserRatedShows = AUTH.ratedShows.find(({ id }) => id === selectedVideo.id);
 
@@ -68,7 +70,7 @@ const MoreActionList = ({
                     : (status !== 'Paused' ? 'pause' : 'play')
             ),
             status,
-            iconNameOnEnd: status === 'Downloaded' ? 'trash' : null,
+            iconNameOnEnd: status === 'Downloaded' ? 'trash' : ( status === 'Downloading' ? 'pause' : null ),
             circularProgress: (
                 <AnimatedCircularProgress
                     size={ 25 }
@@ -78,8 +80,8 @@ const MoreActionList = ({
                     backgroundColor='#3d5875' 
                 />
             ),
-            onPress: () => status === 'Downloading' ? pauseDownload() : (status === 'Paused' ? resumeDownload() : downloadVideo()),
-            onPressEndIcon: () => deleteDownload(),
+            onPress: async () => status === 'Downloading' ? await pauseDownload() : (status === 'Paused' ? await resumeDownload() : await downloadVideo()),
+            onPressEndIcon: async () => status === 'Downloading' ? await pauseDownload() : await deleteDownload(),
             show: true,
         },
         { 
@@ -108,22 +110,13 @@ const MoreActionList = ({
     ];
 
 
-    /** Download  */
     const downloadProgressCallback = (downloadProgress) => {
         const progress = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
         setProgress(progress);
         console.log(progress)
     };
 
-    const downloadResumable = FileSystem.createDownloadResumable(
-        selectedVideo.video,
-        FILE_URI,
-        {
-            sessionType: FileSystem.FileSystemSessionType.BACKGROUND
-        },
-        downloadProgressCallback
-    );
-
+    /** Working */
     const downloadVideo = async () => 
     {
         try {
@@ -131,10 +124,12 @@ const MoreActionList = ({
             await downloadResumable.downloadAsync();
             setStatus(VIDEO_STATUSES.DOWNLOADED);
         } catch ({ message }) {
-            setStatus(VIDEO_STATUSES.DOWNLOAD_FAILED);
+            setStatus(VIDEO_STATUSES.PAUSED);
+            console.log(message);
         }
     }
 
+    /** Working */
     const deleteDownload = async () => 
     {
         try {
@@ -145,30 +140,32 @@ const MoreActionList = ({
         }
     }
 
+    /** Not Working */
     const pauseDownload = async () => 
     {
         try {
-            console.log(`Paused ${ progress } %`)
-            setStatus(VIDEO_STATUSES.PAUSED);
-
+            console.log(`Paused at: ${ progress }%`)
             await downloadResumable.pauseAsync();
-            asyncStorage.setItem(selectedVideo.video, JSON.stringify(downloadResumable.savable()));
+            AsyncStorage.setItem(selectedVideo.video, JSON.stringify(downloadResumable.savable()));
+            setStatus(VIDEO_STATUSES.PAUSED);
         } catch ({ message }) {
             setStatus(VIDEO_STATUSES.PAUSED_FAILED);
             console.error(message);
         }
     }
 
+    /** Not Working */
     const resumeDownload = async () => 
     {
         /** Extract */
-        const downloadSnapshotJson = await asyncStorage.getItem(selectedVideo.video);
+        const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
         const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
-        const downloadResumable = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
+        const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
 
         try {
             setStatus(VIDEO_STATUSES.RESUMING_DOWNLOAD);
-            await downloadResumable.resumeAsync();
+            await previousDownloadedFile.resumeAsync();
+            setStatus(VIDEO_STATUSES.DOWNLOADED);
         } catch ({ message }) {
             console.error({ message });
         }
@@ -180,7 +177,6 @@ const MoreActionList = ({
             const fileExists = await ensureFileExists(FILE_URI);
 
             if (fileExists.exists) {
-                console.log(`${ FILE_URI } exists`);
                 setStatus('Downloaded');
             }
         } catch ({ message }) {
@@ -190,6 +186,9 @@ const MoreActionList = ({
 
     useEffect(() => {
         checkIfFileExists();
+        if (!downloadResumable) {
+            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
+        }
     }, []);
 
     return (
