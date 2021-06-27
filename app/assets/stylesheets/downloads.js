@@ -1,12 +1,12 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, StatusBar, Platform } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 5,
-        paddingHorizontal: 5,
-        marginTop: 15,
+    },
+    headerContainer: {
+        // Style here
     },
     lastUpdateContainer: {
         flexDirection: 'row',

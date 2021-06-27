@@ -17,6 +17,8 @@ import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menu
 import StackNavBackButton from './../components/stack-app-bar/StackNavBackButton';
 import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
 import SelectProfileScreen from './../screens/bottom-tabs/select-profile/SelectProfileScreen';
+import StackNavTitle from './../components/stack-app-bar/StackNavTitle';
+import Text from './../components/Text';
 
 const options = {
     headerShown: false,
@@ -39,7 +41,6 @@ const moreHeaderOptions = {
     headerTitle: 'Profiles & More'
 };
 
-
 const SelectProfileStack = createStackNavigator();
 
 export const SelectProfileTab = () => 
@@ -54,7 +55,6 @@ export const SelectProfileTab = () =>
         </SelectProfileStack.Navigator>
     );
 }
-
 
 const HomeStack = createStackNavigator();
 
@@ -91,7 +91,7 @@ export const HomeTab = () =>
             <HomeStack.Screen 
                 name='CategoriesScreen'
                 component={ CategoriesScreen }
-                options={({ route, navigation }) => ({ 
+                options={({ route }) => ({ 
                     headerTitle: props => <AppBar showLogo={ false } headerTitle={ route.params.headerTitle }/>,
                     headerStyle: {
                         backgroundColor: '#000',
@@ -108,9 +108,9 @@ const SearchStack = createStackNavigator();
 export const SearchTab = () => 
 {
     return (
-        <SearchStack.Navigator initialRouteName='SearchScreen'>
+        <SearchStack.Navigator initialRouteName='Search'>
             <SearchStack.Screen 
-                name='SearchScreen' 
+                name='Search' 
                 component={ SearchScreen } 
                 options={ searchOptions } 
             />
@@ -147,7 +147,7 @@ const DownloadsStack = createStackNavigator();
 export const DownloadsTab = () => 
 {
     return (
-        <DownloadsStack.Navigator initialRouteName='Home'>
+        <DownloadsStack.Navigator initialRouteName='Downloads'>
             <DownloadsStack.Screen 
                 name='Downloads' 
                 component={ DownloadsScreen } 

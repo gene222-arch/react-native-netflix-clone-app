@@ -4,15 +4,18 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     ADD_TO_RECENT_WATCHES_SUCCESS,
     ADD_TO_RECENT_WATCHES_FAILED,
+    DOWNLOAD_VIDEO_START,
+    DOWNLOAD_VIDEO_SUCCESS,
+    DOWNLOAD_VIDEO_FAILED,
+    RATE_SHOW_START,
+    RATE_SHOW_SUCCESS,
+    RATE_SHOW_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
-    DOWNLOAD_VIDEO_START,
-    DOWNLOAD_VIDEO_SUCCESS,
-    DOWNLOAD_VIDEO_FAILED,
     REMOVE_TO_RECENT_WATCHES_START,
     REMOVE_TO_RECENT_WATCHES_SUCCESS,
     REMOVE_TO_RECENT_WATCHES_FAILED,
@@ -25,9 +28,6 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
-    TOGGLE_LIKE_SHOW_START,
-    TOGGLE_LIKE_SHOW_SUCCESS,
-    TOGGLE_LIKE_SHOW_FAILED
 } = ACTION_TYPES;
 
 
@@ -44,6 +44,22 @@ export const addToRecentWatchesSuccess = (payload) => ({
 
 export const addToRecentWatchesFailed = (payload) => ({
     type: ADD_TO_RECENT_WATCHES_FAILED,
+    payload
+});
+
+/** Rate show */
+export const rateShowStart = (payload) => ({
+    type: RATE_SHOW_START,
+    payload
+});
+
+export const rateShowSuccess = (payload) => ({
+    type: RATE_SHOW_SUCCESS,
+    payload
+});
+
+export const rateShowFailed = (payload) => ({
+    type: RATE_SHOW_FAILED,
     payload
 });
 
@@ -157,22 +173,5 @@ export const toggleAddToMyListSuccess = (payload) => ({
 
 export const toggleAddToMyListFailed = (payload) => ({
     type: TOGGLE_ADD_TO_MY_LIST_FAILED,
-    payload
-});
-
-
-/** Toggle Like */
-export const toggleLikeShowStart = (payload) => ({
-    type: TOGGLE_LIKE_SHOW_START,
-    payload
-});
-
-export const toggleLikeShowSuccess = (payload) => ({
-    type: TOGGLE_LIKE_SHOW_SUCCESS,
-    payload
-});
-
-export const toggleLikeShowFailed = (payload) => ({
-    type: TOGGLE_LIKE_SHOW_FAILED,
     payload
 });

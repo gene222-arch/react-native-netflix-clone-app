@@ -53,27 +53,7 @@ const HomeScreen = ({ AUTH }) =>
 
     const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
 
-    const handleToggleRateRecentlyWatchedShow = (recentlyWatchedShowID, rate) => 
-    {
-        const newRecentlyWatchedShows = AUTH.recentlyWatchedShows.map((rec) => {
-
-            if (rec.id === recentlyWatchedShowID) 
-            {
-                if (!rec.isRated) {
-                    return { ...rec, isRated: true, rate };
-                }
-
-                if (rec.isRated && rec.rate !== rate) {
-                    return { ...rec, isRated: true, rate };
-                }
-                else {
-                    return { ...rec, isRated: false, rate: '' };
-                }
-            }
-
-            return rec;
-        });
-    }
+    const handleToggleRateRecentlyWatchedShow = (show, rate) => dispatch(AUTH_ACTION.rateShowStart({ show, rate }));
 
     const handlePressRemoveRecentlyWatchedShow = (recentlyWatchedShowID) => {
         dispatch(AUTH_ACTION.removeToRecentWatchesStart(recentlyWatchedShowID));

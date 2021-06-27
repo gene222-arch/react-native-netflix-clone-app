@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { Easing } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 import { useDispatch, connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -27,28 +29,28 @@ const MoreActionList = ({
     AUTH,
     selectedVideo,
     handlePressRemoveRecentlyWatchedShow,
-    handleToggleRecentlyWatchedShow,
-    handleToggleUnRecentlyWatchedShow,
+    handleToggleLikeRecentlyWatchedShow,
+    handleToggleUnLikeRecentlyWatchedShow,
     isVisible,
     setIsVisible
 }) => 
 {
     const FILE_URI = `${ FileSystem.documentDirectory }${ selectedVideo.title }${ selectedVideo.id }.mp4`;
-
-    const [ status, setStatus ] = useState('');
+    const [ status, setStatus ] = useState(FILE_URI ? 'Downloaded' : '');
     const [ progress, setProgress ] = useState(0);
 
+    const findShowInUserRatedShows = AUTH.ratedShows.find(({ id }) => id === selectedVideo.id);
 
     const actionList = 
     [
         {
             title: selectedVideo.title,
             iconType: 'feather',
-            titleStyle: styles.moreActionHeader,
             iconNameOnEnd: 'x-circle',
-            containerStyle: styles.moreActionHeaderContainer,
-            onPressEndIcon: () => setIsVisible(false),
             show: true,
+            onPressEndIcon: () => setIsVisible(false),
+            titleStyle: styles.moreActionHeader,
+            containerStyle: styles.moreActionHeaderContainer,
         },
         { 
             title: 'Episodes and Info', 
@@ -65,26 +67,36 @@ const MoreActionList = ({
                     ? (status !== 'Downloaded' ? 'download' : 'check' ) 
                     : (status !== 'Paused' ? 'pause' : 'play')
             ),
+            status,
             iconNameOnEnd: status === 'Downloaded' ? 'trash' : null,
+            circularProgress: (
+                <AnimatedCircularProgress
+                    size={ 25 }
+                    width={ 3 }
+                    fill={ progress }
+                    tintColor='#00e0ff'
+                    backgroundColor='#3d5875' 
+                />
+            ),
             onPress: () => status === 'Downloading' ? pauseDownload() : (status === 'Paused' ? resumeDownload() : downloadVideo()),
             onPressEndIcon: () => deleteDownload(),
             show: true,
         },
         { 
-            title: !selectedVideo.rate ? 'Like' : 'Rated', 
+            title: !findShowInUserRatedShows?.rate ? 'Like' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
-            isSolid: selectedVideo.rate === 'like',
-            onPress: handleToggleRecentlyWatchedShow,
-            show: !selectedVideo.rate || selectedVideo.rate === 'like',
+            isSolid: findShowInUserRatedShows?.rate === 'like',
+            onPress: handleToggleLikeRecentlyWatchedShow,
+            show: !findShowInUserRatedShows?.rate || findShowInUserRatedShows?.rate === 'like',
         },
         { 
-            title: !selectedVideo.rate ? 'Not For Me' : 'Rated', 
+            title: !findShowInUserRatedShows?.rate ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
-            isSolid: selectedVideo.rate === 'not for me',
-            onPress: handleToggleUnRecentlyWatchedShow,
-            show: !selectedVideo.rate || selectedVideo.rate === 'not for me',
+            isSolid: findShowInUserRatedShows?.rate === 'not for me',
+            onPress: handleToggleUnLikeRecentlyWatchedShow,
+            show: !findShowInUserRatedShows?.rate || findShowInUserRatedShows?.rate === 'not for me',
         },
         {
             title: 'Remove From Row',
@@ -100,6 +112,7 @@ const MoreActionList = ({
     const downloadProgressCallback = (downloadProgress) => {
         const progress = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
         setProgress(progress);
+        console.log(progress)
     };
 
     const downloadResumable = FileSystem.createDownloadResumable(

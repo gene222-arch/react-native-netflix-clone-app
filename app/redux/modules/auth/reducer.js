@@ -7,6 +7,9 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     ADD_TO_RECENT_WATCHES_SUCCESS,
     ADD_TO_RECENT_WATCHES_FAILED,
+    RATE_SHOW_START,
+    RATE_SHOW_SUCCESS,
+    RATE_SHOW_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
@@ -28,10 +31,8 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
-    TOGGLE_LIKE_SHOW_START,
-    TOGGLE_LIKE_SHOW_SUCCESS,
-    TOGGLE_LIKE_SHOW_FAILED
 } = ACTION_TYPES;
+
 
 const CREDENTIALS_DEFAULT_PROPS = {
     email: '',
@@ -43,11 +44,13 @@ const PROFILE_DEFAULT_PROPS = {
     name: ''
 };
 
-const LIKED_SHOWS_DEFAULT_PROPS = [
+const RATED_SHOWS_DEFAULT_PROPS = [
     {
         id: '',
         title: '',
-        poster: ''
+        poster: '',
+        rate: '',
+        isRated: false
     }
 ]
 
@@ -55,7 +58,7 @@ const initialState = {
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
     downloads: [],
-    likedShows: LIKED_SHOWS_DEFAULT_PROPS,
+    ratedShows: RATED_SHOWS_DEFAULT_PROPS,
     myList,
     profiles: accountProfiles,
     profile: PROFILE_DEFAULT_PROPS,
@@ -70,7 +73,7 @@ export default (state = initialState, { type, payload }) =>
     const {
         myList,
         remindedComingSoonShows,
-        likedShows,
+        ratedShows,
         downloads,
         profiles,
         recentlyWatchedShows
@@ -82,6 +85,7 @@ export default (state = initialState, { type, payload }) =>
     switch (type) 
     {
         case ADD_TO_RECENT_WATCHES_START:
+        case RATE_SHOW_START:
         case LOGIN_START:
         case LOGOUT_START:
         case DOWNLOAD_VIDEO_START:
@@ -89,7 +93,6 @@ export default (state = initialState, { type, payload }) =>
         case SELECT_PROFILE_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
-        case TOGGLE_LIKE_SHOW_START:
             return { 
                 ...state, 
                 isLoading
@@ -106,6 +109,50 @@ export default (state = initialState, { type, payload }) =>
         case ADD_TO_RECENT_WATCHES_FAILED:
             return { 
                 ...state, 
+                isLoading: false,
+                errors: payload.message
+            }
+
+        case RATE_SHOW_SUCCESS:
+            let newRatedShows = [];
+
+            const ratedShowExists = ratedShows.findIndex(({ id }) => id === payload.show.id);
+
+            if (ratedShowExists !== -1) 
+            {
+                newRatedShows = ratedShows.map((show) => {
+                    if (show.id === payload.show.id) 
+                    {
+                        if (!show.isRated) {
+                            return { ...show, isRated: true, rate: payload.rate };
+                        }
+        
+                        if (show.isRated && show.rate !== payload.rate) {
+                            return { ...show, rate: payload.rate };
+                        }
+                        else {
+                            return { ...show, isRated: false, rate: '' };
+                        }
+                    }
+    
+                    return show;
+                });
+            }
+            
+            if (ratedShowExists === -1) {
+                newRatedShows.push({ ...payload.show, isRated: true, rate: payload.rate });
+            }
+
+            return { 
+                ...state,
+                ratedShows: newRatedShows,
+                isLoading: false,
+                errors
+            }
+
+        case RATE_SHOW_FAILED:
+            return { 
+                ...state,
                 isLoading: false,
                 errors: payload.message
             }
@@ -187,7 +234,6 @@ export default (state = initialState, { type, payload }) =>
                 isLoading: false,
                 errors: payload.message
             }
-      
 
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
@@ -222,26 +268,6 @@ export default (state = initialState, { type, payload }) =>
                 remindedComingSoonShows: remindedComingSoonShows_,
                 isLoading: false,
                 errors
-            }
-
-        case TOGGLE_LIKE_SHOW_SUCCESS:
-            let newLikedShows = [];
-
-            const showExists = likedShows.findIndex(({id }) => id === payload.show.id); 
-            newLikedShows = showExists === -1 ? [ ...likedShows, payload.show ] : likedShows.filter(({ id }) => id !== payload.show.id);
-
-            return {
-                ...state,
-                likedShows: newLikedShows,
-                isLoading: false,
-                errors
-            }
-
-        case TOGGLE_LIKE_SHOW_FAILED: 
-            return {
-                ...state,
-                isLoading: false,
-                errors: payload.message
             }
 
         case TOGGLE_ADD_TO_MY_LIST_FAILED:

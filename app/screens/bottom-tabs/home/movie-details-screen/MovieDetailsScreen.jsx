@@ -78,7 +78,7 @@ const MovieDetailsScreen = ({ route }) =>
         setIsLoadingLikedShows(true);
         setSelectedTab(1);
 
-        dispatch(AUTH_ACTION.toggleLikeShowStart(showToLike));
+        dispatch(AUTH_ACTION.rateShowStart({ showToLike, rate: 'like' }));
         setTimeout(() => setIsLoadingLikedShows(false), 1);
     }
 

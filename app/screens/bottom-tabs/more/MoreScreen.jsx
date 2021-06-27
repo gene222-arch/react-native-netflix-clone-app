@@ -24,28 +24,28 @@ const moreOptions = (logoutHandler) =>
         onPress: () => console.log('Clicked')
     },
     {
-        id: 3,
+        id: 2,
         name: 'App Settings',
         Icon: null,
         bottomDivider: false,
         onPress: () => console.log('Clicked')
     },
     {
-        id: 4,
+        id: 3,
         name: 'Account',
         Icon: null,
         bottomDivider: false,
         onPress: () => console.log('Clicked')
     },
     {
-        id: 5,
+        id: 4,
         name: 'Help',
         Icon: null,
         bottomDivider: false,
         onPress: () => console.log('Clicked')
     },
     {
-        id: 6,
+        id: 5,
         name: 'Sign Out',
         Icon: null,
         bottomDivider: false,
@@ -96,6 +96,7 @@ const MoreScreen = ({ AUTH }) =>
 
     const cleanUp = () => {
         setIsInteractionsComplete(false);
+        setSortedProfiles([]);
         setSelectedImg(1);
     }
 
@@ -118,9 +119,9 @@ const MoreScreen = ({ AUTH }) =>
                 <FlatList 
                     keyExtractor={ ({ id }) => id.toString() }
                     data={ sortedProfiles }
-                    renderItem={ ({ item }) => (
+                    renderItem={ ({ item, index }) => (
                         <ProfilePhotoItem 
-                            key={ item.id }
+                            key={ index }
                             name={ item.name } 
                             uri={ item.profile_photo }
                             isSelected={ AUTH.profile.id === item.id }

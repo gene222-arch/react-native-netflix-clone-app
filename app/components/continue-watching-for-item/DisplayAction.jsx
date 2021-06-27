@@ -9,7 +9,7 @@ const DisplayAction = ({ actionType }) =>
         <TouchableOpacity onPress={ actionType.onPress }>
             <ListItem containerStyle={[ styles.listItemContainer, actionType.containerStyle ]} onPress={ actionType.onPress }>
             {
-                actionType.iconName && (
+                (actionType.iconName && actionType.status !== 'Downloading') && (
                     <Icon 
                         name={ actionType.iconName }
                         type={ actionType.iconType }
@@ -18,6 +18,9 @@ const DisplayAction = ({ actionType }) =>
                         solid={ actionType.isSolid }
                     />
                 )
+            }
+            {
+                actionType.status === 'Downloading' && actionType.circularProgress
             }
             <ListItem.Content>
                     <ListItem.Title style={ [styles.listItemTitle, actionType.titleStyle] }>{ actionType.title }</ListItem.Title>

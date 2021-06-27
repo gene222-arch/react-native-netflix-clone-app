@@ -9,7 +9,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 const { persistor, store } = configureStore();
 
 
-
 const App = () => 
 {
 

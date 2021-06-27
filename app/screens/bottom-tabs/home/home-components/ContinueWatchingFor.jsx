@@ -23,8 +23,8 @@ const ContinueWatchingFor = ({
                 renderItem={({ item }) =>  (
                     <ContinueWatchingForItem 
                         episode={ item } 
-                        handleToggleLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item.id, 'like') }
-                        handleToggleUnLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item.id, 'unlike') }
+                        handleToggleLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item, 'like') }
+                        handleToggleUnLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item, 'not for me') }
                         handlePressRemoveRecentlyWatchedShow={ () => handlePressRemoveRecentlyWatchedShow(item.id) }
                     />
                 )}

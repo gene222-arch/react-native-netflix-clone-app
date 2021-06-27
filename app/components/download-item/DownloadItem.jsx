@@ -9,7 +9,7 @@ import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import { getCachedFile } from './../../utils/cacheImage';
 
 
-const DownloadItem = ({ downloadedVideo, onLongPress, showType, handlePressNonSeries, handlePressSeries }) => 
+const DownloadItem = ({ downloadedVideo, onLongPress, handlePressNonSeries, handlePressSeries }) => 
 {
     return (
         <TouchableOpacity onLongPress={ onLongPress }>
@@ -20,12 +20,6 @@ const DownloadItem = ({ downloadedVideo, onLongPress, showType, handlePressNonSe
                             source={{ uri: getCachedFile('Downloads/Posters/', downloadedVideo.id, downloadedVideo.poster) }}
                             style={ styles.posterImg }
                         />
-                        <FeatherIcon 
-                            name='play-circle' 
-                            size={ 20 } 
-                            color='#fff' 
-                            style={ styles.imagePosterIcon }
-                        />
                     </View>
                     <View style={ styles.titleContainer }>
                         <Text style={ styles.title }>{ downloadedVideo.title }</Text>
@@ -34,7 +28,7 @@ const DownloadItem = ({ downloadedVideo, onLongPress, showType, handlePressNonSe
                         </Text>
                     </View>
                     {
-                        showType !== 'series'
+                        (downloadedVideo.total_number_of_episodes === 1)
                             ? (
                                 <TouchableNativeFeedback onPress={ handlePressNonSeries }>
                                     <FeatherIcon

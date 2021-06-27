@@ -12,7 +12,7 @@ import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 
 const ContinueWatchingForItem = ({ 
     episode, 
-    handleToggleLikeRecentlyWatchedShow, 
+    handleToggleLikeRecentlyWatchedShow,
     handleToggleUnLikeRecentlyWatchedShow, 
     handlePressRemoveRecentlyWatchedShow 
 }) => 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { InteractionManager } from 'react-native'
+import { InteractionManager, Platform, StatusBar } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 
 /** API */
@@ -21,6 +21,7 @@ import DownloadItem from '../../../components/download-item/DownloadItem';
 /** Styles */
 import styles from './../../../assets/stylesheets/downloads';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
+import AppBar from '../../AppBar';
 
 
 const DownloadsScreen = () => 
@@ -34,46 +35,49 @@ const DownloadsScreen = () =>
     const [ showVideo, setShowVideo ] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    const toggleOverlay = (downloadData) => {
+    const toggleOverlay = (downloadData) => 
+    {
         setVisible(!visible);
         setDownload(downloadData);
     }
 
-    const handlePressDeleteDownload = () => {
+    const handlePressDeleteDownload = () => 
+    {
         setDownloads(downloads.filter(({ id }) => id !== download.id));
         setVisible(false);
     }
 
-    const handlePressNonSeries = (downloadData) => {
+    const handlePressNonSeries = (downloadData) => 
+    {
         setShowVideo(true);
         setDownload(downloadData);
     }
 
-    const handlePressSeries = (downloadData) => {
+    const handlePressSeries = (downloadData) => 
+    {
         navigation.navigate('MoreDownloads', {
             id: downloadData.id, 
             headerTitle:  downloadData.title
         });
     }
 
-
-    const runAfterInteractions = () => {
-
+    const runAfterInteractions = () => 
+    {
         downloadsAPI.map(({ id, poster, video }) => {
             cacheImage(poster, id, 'Downloads/Posters/');
             cacheImage(video, id, 'Downloads/Videos/');
         });
-
         setDownloads(downloadsAPI);
         setIsInteractionsComplete(true);
     }
 
-    const cleanUp = () => {
-        setIsInteractionsComplete(false);
+    const cleanUp = () => 
+    {
         setDownload(null);
         setDownloads([]);
         setShowVideo(false);
         setVisible(false);
+        setIsInteractionsComplete(false);
     }
 
     useEffect(() => {
@@ -88,14 +92,14 @@ const DownloadsScreen = () =>
         return <Text>Loading ...</Text>
     }
 
-    if (showVideo) {
+    /** Play Video in Full Screen */
+    if (showVideo) 
+    {
         return (
-            <View>
-                <VideoPlayerFullScreen 
-                    uri={ getCachedFile('Downloads/Videos/', download.id, download.video) } 
-                    setShowVideo={ setShowVideo }
-                />
-            </View>
+            <VideoPlayerFullScreen 
+                uri={ getCachedFile('Downloads/Videos/', download.id, download.video) } 
+                setShowVideo={ setShowVideo }
+            />
         )
     }
 
@@ -117,7 +121,15 @@ const DownloadsScreen = () =>
                     Delete Download
                 </Text>
             </Overlay>
-            <View>
+
+            <AppBar 
+                marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } 
+                showLogo={ false } 
+                headerTitle='Downloads'
+            />
+
+            {/* Header */}
+            <View style={ styles.headerContainer }>
                 <Text h4>Download's for you</Text>
                 <View style={ styles.lastUpdateContainer }>
                     <FeatherIcon 
@@ -129,6 +141,8 @@ const DownloadsScreen = () =>
                     <Text style={ styles.lastUpdateText }>Updated 7 hours ago</Text>
                 </View>
             </View>
+
+            {/* Downloads */}
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ downloads }
@@ -136,11 +150,12 @@ const DownloadsScreen = () =>
                     <DownloadItem 
                         downloadedVideo={ item } 
                         onLongPress={ () => toggleOverlay(item) }
-                        showType={ item.show_type }
                         handlePressNonSeries={ () => handlePressNonSeries(item) }
                         handlePressSeries={ () => handlePressSeries(item) }
                     />
                 )}
+                showsHorizontalScrollIndicator={ false }
+                showsVerticalScrollIndicator={ false }
             />
             <View style={ styles.queryContainer }>
                 <Button 

@@ -5,6 +5,8 @@ import * as RootNavigation from './../../../navigation/RootNavigation'
 import { 
     addToRecentWatchesSuccess,
     addToRecentWatchesFailed,
+    rateShowSuccess,
+    rateShowFailed,
     loginSuccess, 
     loginFailed, 
     logoutSuccess, 
@@ -18,22 +20,20 @@ import {
     toggleAddToMyListSuccess,
     toggleAddToMyListFailed,
     toggleRemindMeOfComingShowSuccess, 
-    toggleRemindMeOfComingShowFailed,
-    toggleLikeShowSuccess,
-    toggleLikeShowFailed
+    toggleRemindMeOfComingShowFailed
 } from './actions'
 import * as AsyncStorage from './../../../utils/asyncStorage'
 import { getDownloadedVideo, getExtension, getDownloadedVideoFileInfo } from './../../../utils/file';
 const {
     ADD_TO_RECENT_WATCHES_START,
+    RATE_SHOW_START,
     LOGIN_START,
     LOGOUT_START,
     DOWNLOAD_VIDEO_START,
     REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
-    TOGGLE_ADD_TO_MY_LIST_START,
-    TOGGLE_LIKE_SHOW_START
+    TOGGLE_ADD_TO_MY_LIST_START
 } = ACTION_TYPES;
 
 
@@ -44,6 +44,15 @@ function* addToRecentWatchesSaga(payload)
         yield put(addToRecentWatchesSuccess({ show: payload }));
     } catch ({ message }) {
         yield put(addToRecentWatchesFailed({ message }));
+    }
+}
+
+function* rateShowSaga(payload)  
+{
+    try {
+        yield put(rateShowSuccess(payload));
+    } catch ({ message }) {
+        yield put(rateShowFailed({ message }));
     }
 }
 
@@ -113,22 +122,20 @@ function* toggleRemindMeOfComingShowSaga({ comingSoonShowID })
     }
 }
 
-function* toggleLikeShowSaga(payload)
-{
-    try {
-        yield put(toggleLikeShowSuccess({ show: payload }));
-
-    } catch ({ message }) {
-        yield put(toggleLikeShowFailed({ message }));
-    }
-}
-
 /** Watchers or Observers */
 function* addToRecentWatchesWatcher()
 {
     while (true) {
         const { payload } = yield take(ADD_TO_RECENT_WATCHES_START);
         yield call(addToRecentWatchesSaga, payload);
+    }
+}
+
+function* rateShowWatcher()
+{
+    while (true) {
+        const { payload } = yield take(RATE_SHOW_START);
+        yield call(rateShowSaga, payload);
     }
 }
 
@@ -188,26 +195,18 @@ function* toggleRemindMeOfComingShowWatcher()
     }
 }
 
-function* toggleLikeShowWatcher()
-{
-    while (true) {
-        const { payload } = yield take(TOGGLE_LIKE_SHOW_START);
-        yield call(toggleLikeShowSaga, payload);
-    }
-}
-
 export default function* ()
 {
     yield all([
         addToRecentWatchesWatcher(),
+        rateShowWatcher(),
         loginWatcher(),
         logoutWatcher(),
         downloadVideoWatcher(),
         removeToRecentWatchesWatcher(),
         selectProfileWatcher(),
         toggleAddToMyListWatcher(),
-        toggleRemindMeOfComingShowWatcher(),
-        toggleLikeShowWatcher()
+        toggleRemindMeOfComingShowWatcher()
     ]);
 }
 
