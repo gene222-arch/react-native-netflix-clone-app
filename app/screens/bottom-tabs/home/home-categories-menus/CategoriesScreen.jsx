@@ -102,12 +102,6 @@ const CategoriesScreen = ({ AUTH, route }) =>
             cacheImage(poster, id, 'HomeCategoriesFrontPages/Poster/');
             cacheImage(backgroundImage, id, 'HomeCategoriesFrontPages/BackgroundImage/');
         });
-
-        /** Cache RecentlyWatchedShowss */
-        AUTH.recentlyWatchedShows.map(({ id, poster, video }) => {
-            cacheImage(poster, id, 'RecentlyWatchedShowss/');
-            cacheImage(video, id, 'RecentlyWatchedShowss/');
-        });
     }
 
     const runAfterInteractions = () => 

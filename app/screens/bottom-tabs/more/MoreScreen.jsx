@@ -116,8 +116,7 @@ const MoreScreen = ({ AUTH }) =>
         <View style={ styles.container }>
             {/* Profiles */}
             <View style={ styles.profileContainer }>
-                <FlatList 
-                    keyExtractor={ ({ id }) => id.toString() }
+                <FlatList
                     data={ sortedProfiles }
                     renderItem={ ({ item, index }) => (
                         <ProfilePhotoItem 
@@ -129,6 +128,7 @@ const MoreScreen = ({ AUTH }) =>
                         />
                     )}
                     horizontal
+                    contentContainerStyle={ styles.profileContainerContent }
                 />
             </View>
             

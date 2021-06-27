@@ -1,10 +1,7 @@
-import 'react-native-get-random-values'
-import { v4 as uuidv4 } from 'uuid';
-
 const recentlyWatchedShows = 
 [
     {
-        id: uuidv4(),
+        id: '100',
         title: 'Pilot Part 1 & 2',
         show_type: 'series',
         episode: 3,
@@ -17,7 +14,7 @@ const recentlyWatchedShows =
         video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     }, 
     {
-        id: uuidv4(),
+        id: '101',
         title: 'Another Movie',
         show_type: 'movie',
         episode: 4,
@@ -30,7 +27,7 @@ const recentlyWatchedShows =
         video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     }, 
     {
-        id: uuidv4(),
+        id: '102',
         title: 'Errors and Omissions',
         show_type: 'movie',
         episode: 5,

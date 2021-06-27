@@ -21,7 +21,7 @@ const App = () =>
 			>
 				<SafeAreaProvider>
 					<Navigation />
-					<StatusBar style='light'/>
+					<StatusBar style='light' backgroundColor='transparent'/>
 				</SafeAreaProvider>
 			</PersistGate>
 		</Provider>

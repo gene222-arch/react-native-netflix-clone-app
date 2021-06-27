@@ -72,10 +72,10 @@ const HomeScreen = ({ AUTH }) =>
             cacheImage(backgroundImage, id, 'FrontPages/');
         });
 
-        /** Cache Recommendations */
+        /** Cache RecentlyWatchedShowss */
         AUTH.recentlyWatchedShows.map(({ id, poster, video }) => {
-            cacheImage(poster, id, 'Recommendations/');
-            cacheImage(video, id, 'Recommendations/');
+            cacheImage(poster, id, 'RecentlyWatchedShows/');
+            cacheImage(video, id, 'RecentlyWatchedShows/');
         });
     }
 

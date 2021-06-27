@@ -117,7 +117,7 @@ export default (state = initialState, { type, payload }) =>
             let newRatedShows = [];
 
             const ratedShowExists = ratedShows.findIndex(({ id }) => id === payload.show.id);
-
+            
             if (ratedShowExists !== -1) 
             {
                 newRatedShows = ratedShows.map((show) => {

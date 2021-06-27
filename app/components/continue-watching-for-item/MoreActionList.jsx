@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { Easing } from 'react-native'
 import * as FileSystem from 'expo-file-system'
-import { useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 /** Dispatch Actions */
@@ -23,6 +22,7 @@ import { BottomSheet } from 'react-native-elements';
 /** Utils/Configs */
 import * as asyncStorage from './../../utils/asyncStorage'
 import VIDEO_STATUSES from './../../config/video.statuses';
+import { ensureFileExists } from './../../utils/cacheImage';
 
 
 const MoreActionList = ({
@@ -36,7 +36,7 @@ const MoreActionList = ({
 }) => 
 {
     const FILE_URI = `${ FileSystem.documentDirectory }${ selectedVideo.title }${ selectedVideo.id }.mp4`;
-    const [ status, setStatus ] = useState(FILE_URI ? 'Downloaded' : '');
+    const [ status, setStatus ] = useState('');
     const [ progress, setProgress ] = useState(0);
 
     const findShowInUserRatedShows = AUTH.ratedShows.find(({ id }) => id === selectedVideo.id);
@@ -174,6 +174,23 @@ const MoreActionList = ({
         }
     }
 
+    const checkIfFileExists = async () => 
+    {
+        try {
+            const fileExists = await ensureFileExists(FILE_URI);
+
+            if (fileExists.exists) {
+                console.log(`${ FILE_URI } exists`);
+                setStatus('Downloaded');
+            }
+        } catch ({ message }) {
+            
+        }
+    }
+
+    useEffect(() => {
+        checkIfFileExists();
+    }, []);
 
     return (
         <BottomSheet isVisible={ isVisible } containerStyle={ styles.container }>

@@ -8,7 +8,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { createStructuredSelector } from 'reselect';
-import { likedShowsSelector, myListSelector } from './../../../../redux/modules/auth/selectors';
+import { ratedShowsSelector, myListSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
 const ACTION_TYPES = {
@@ -46,7 +46,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
                     name='thumbs-up'
                     size={ 24 }
                     color='white'
-                    solid={ Boolean(data.find(({ id }) => id === showID)) }
+                    solid={ data.find(({ id }) => id === showID)?.isRated }
                 />
             )
 
@@ -134,7 +134,7 @@ const ActionButton = ({
 
 const mapStateToProps = createStructuredSelector({
     MY_LIST: myListSelector,
-    LIKED_SHOWS: likedShowsSelector
+    LIKED_SHOWS: ratedShowsSelector
 });
 
 export default connect(mapStateToProps)(ActionButton)

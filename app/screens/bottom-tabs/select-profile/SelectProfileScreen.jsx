@@ -35,7 +35,6 @@ const SelectProfileScreen = ({ AUTH }) =>
             <View style={ styles.profilesContainer }>
                 <Text h4 style={ styles.whosWatchingText }>Who's Watching?</Text>
                 <FlatList 
-                    keyExtractor={ ({ id }) => id.toString() }
                     data={ AUTH.profiles }
                     numColumns={ 2 }
                     renderItem={ ({ item }) => (

@@ -67,10 +67,10 @@ const ContinueWatchingForItem = ({
                 ref={ videoRef }
                 style={ styles.video }
                 source={{
-                    uri: getCachedFile('Recommendations/', episode.id, episode.video)
+                    uri: getCachedFile('RecentlyWatchedShows/', episode.id, episode.video)
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: getCachedFile('Recommendations/', episode.id, episode.poster) }}
+                posterSource={{ uri: getCachedFile('RecentlyWatchedShows/', episode.id, episode.poster) }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />

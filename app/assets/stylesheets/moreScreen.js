@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    profileContainerContent: {
+        flex: 1,
+        justifyContent: 'center'
     }
 });
 

@@ -8,10 +8,6 @@ import { connect, useDispatch } from 'react-redux';
 /** Actions */
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
 
-/** Selectors */
-import { movieSelector } from './../../../../redux/modules/movie/selectors'
-import { likedShowsSelector, myListSelector, authSelector } from './../../../../redux/modules/auth/selectors';
-
 /** RNE Components */
 import { Button, Badge } from 'react-native-elements'
 
@@ -43,7 +39,6 @@ const MovieDetailsScreen = ({ route }) =>
 {   
     const dispatch = useDispatch();
     const { id: selectedShowID } = route.params;
-    const show = showsAPI.find(({ id }) => id === selectedShowID);
 
     const [ currentSeasons, setCurrentSeasons ] = useState([]);
     const [ currentSeasonEpisodes, setCurrentSeasonEpisodes ] = useState([]);
@@ -53,6 +48,7 @@ const MovieDetailsScreen = ({ route }) =>
     const [ isLoadingLikedShows, setIsLoadingLikedShows ] = useState(false);
     const [ selectedSeason, setSelectedSeason ] = useState('');
     const [ selectedTab, setSelectedTab ] = useState(0);
+    const [ show, setShow ] = useState(null);
     const [ toggleVideo, setToggleVideo ] = useState(false);
 
     const handlePressToggleVideo = () => setToggleVideo(!toggleVideo);
@@ -78,7 +74,7 @@ const MovieDetailsScreen = ({ route }) =>
         setIsLoadingLikedShows(true);
         setSelectedTab(1);
 
-        dispatch(AUTH_ACTION.rateShowStart({ showToLike, rate: 'like' }));
+        dispatch(AUTH_ACTION.rateShowStart({ show: showToLike, rate: 'like' }));
         setTimeout(() => setIsLoadingLikedShows(false), 1);
     }
 
@@ -89,11 +85,14 @@ const MovieDetailsScreen = ({ route }) =>
 
     const runAfterInteractions = () => 
     {
-        const seasons = show.seasons.items.map(({ name }) => name);
-        const firstSeason = show.seasons.items[0];
+        const findShowByID = showsAPI.find(({ id }) => id === selectedShowID);
+        
+        const seasons = findShowByID.seasons.items.map(({ name }) => name);
+        const firstSeason = findShowByID.seasons.items[0];
         const episodeList = firstSeason.episodes.items;
         const episode = firstSeason.episodes.items[0];
 
+        setShow(findShowByID);
         setCurrentSeasons(seasons);
         setCurrentSeasonEpisodes(episodeList);
         setCurrentSeasonEpisode(episode);
@@ -109,6 +108,7 @@ const MovieDetailsScreen = ({ route }) =>
         setCurrentSeasonEpisodes([]);
         setSelectedSeason('');
         setSelectedTab(0);
+        setShow(null);
         setIsLoadingAddToMyList(false);
         setIsLoadingLikedShows(false);
     }

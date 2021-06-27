@@ -4,6 +4,7 @@ import Colors from './../../constants/Colors';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginVertical: 10,
     },
     video: {
         width: 125,
