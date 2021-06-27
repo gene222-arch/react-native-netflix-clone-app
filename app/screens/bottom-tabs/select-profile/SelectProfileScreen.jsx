@@ -7,8 +7,6 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
-import ProfilePhotoItem from './../../../components/profile-photo-item/ProfilePhotoItem';
-
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 
 

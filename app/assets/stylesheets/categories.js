@@ -2,6 +2,9 @@ import { StyleSheet, Dimensions } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
+    container: {
+        marginVertical: 30
+    },
     actionBtnsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -21,9 +24,6 @@ const styles = StyleSheet.create({
     },  
     container: {
         flex: 1
-    },
-    continueWatchingForContainer: {
-        marginVertical: 30,
     },
     frontPageOptions: {
         alignItems: 'center',

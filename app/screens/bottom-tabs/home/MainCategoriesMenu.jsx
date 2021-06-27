@@ -1,24 +1,24 @@
-import React, { useState, useRef } from 'react';
-import { Alert, Modal, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Modal, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 import { FAB } from 'react-native-elements'
 import styles from './../../../assets/stylesheets/mainCategoriesMenu';
 import View from './../../../components/View';
 import Text from './../../../components/Text';
-import { useNavigation } from '@react-navigation/native'
-import mainCategoriesConfig, { CATEGORY_NAMES } from './../../../config/home.menu.main.category.list'
 import AppBar from './../../AppBar';
+import mainCategoriesConfig, { CATEGORY_NAMES } from './../../../config/home.menu.main.category.list'
 
 
-const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = '', setMainCategory }) =>
+const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = '', handlePressChangeMainCategory }) =>
 {
     const navigation = useNavigation();
 
     const handleChangeMainCategory = (category) => 
     {
-        setMainCategory(category);
+        handlePressChangeMainCategory(category);
         setIsVisible(false);
 
-        navigation.setOptions({ headerTitle: props => <AppBar showLogo={ false } headerTitle={ category }/> });
+        navigation.setOptions({ headerTitle: props => <AppBar showLogo={ false } headerTitle={ category } /> });
     }
 
     const mainCategories = mainCategoriesConfig({

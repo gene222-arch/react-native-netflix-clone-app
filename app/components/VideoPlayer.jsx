@@ -2,13 +2,22 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Video } from 'expo-av'
 import styles from './../assets/stylesheets/videoPlayer';
 
-const VideoPlayer = ({ episode, shouldPlay }) => 
+const VideoPlayer = ({ episode, shouldPlay, setToggleVideo }) => 
 {
     const video = useRef(null)
-    const [ usePoster, setUsePoster ] = useState(true);
     const [ status, setStatus ] = useState({});
     
-    const handleUpdateStatus = (status) => setStatus(() => status);
+    const handleUpdateStatus = (status) => 
+    {
+        setStatus(() => status);
+
+        if (!status.isPlaying) {
+            setToggleVideo(false);
+        }
+        else {
+            setToggleVideo(true);
+        }
+    }
 
     useEffect(() => {
         if (!video) {
@@ -32,9 +41,6 @@ const VideoPlayer = ({ episode, shouldPlay }) =>
             source={{
                 uri: episode.video
             }}
-            onLoad={ () => setUsePoster(false) }
-            usePoster={ usePoster }
-            posterSource={{ uri: episode.poster }}
             posterStyle={ styles.poster }
             useNativeControls
             resizeMode='contain'

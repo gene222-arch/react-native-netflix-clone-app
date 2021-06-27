@@ -16,9 +16,7 @@ import categories_ from './../../../services/data/categories';
 import frontPageShows from './../../../services/data/frontPageShows';
 
 /** Components */
-import ContinueWatchingForItem from './../../../components/continue-watching-for-item/ContinueWatchingForItem';
 import View from './../../../components/View';
-import Text from './../../../components/Text';
 import HomeCategory from '../../../components/home-category/HomeCategory';
 import LoadingScreen from './../../../components/LoadingScreen';
 
@@ -29,6 +27,7 @@ import styles from './../../../assets/stylesheets/homeScreen';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import NavBar from './home-components/NavBar';
 import FrontPageOptions from './home-components/FrontPageOptions';
+import ContinueWatchingFor from './home-components/ContinueWatchingFor';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -131,21 +130,17 @@ const HomeScreen = ({ AUTH }) =>
         <View style={ styles.container }>
             <FlatList 
                 data={ categories.items }
-                renderItem={({ item }) => (
-                    <HomeCategory 
-                        title={ item.title }
-                        categories={ item.movies }
-                    />
-                )}
-                ListHeaderComponent=
-                {
+                renderItem={({ item }) => <HomeCategory title={ item.title } categories={ item.movies } />}
+                ListHeaderComponent={
                     <>
-                        {/* Front page */}
                         <ImageBackground
                             source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
                             style={ styles.homeFrontPage }
                         >
+                            {/* NavBar */}
                             <NavBar handlePressCategory={ handlePressCategory } />
+
+                            {/* Front Page Options */}
                             <FrontPageOptions 
                                 frontPage={ frontPage } 
                                 handleToggleAddToMyList={ handleToggleAddToMyList }
@@ -155,26 +150,10 @@ const HomeScreen = ({ AUTH }) =>
                         </ImageBackground>   
 
                         {/* Continue Watching For */}
-                        {
-                            AUTH.recentlyWatchedShows.length > 0 && (
-                                <View style={ styles.continueWatchingForContainer }>
-                                    <Text h4 style={ styles.continueWatchingForTitle }>Continue Watching For { AUTH.profile.name }</Text>
-                                    <FlatList
-                                        keyExtractor={ ({ id }) => id.toString() }
-                                        data={ AUTH.recentlyWatchedShows }
-                                        renderItem={({ item }) =>  (
-                                            <ContinueWatchingForItem 
-                                                episode={ item } 
-                                                handleToggleLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item.id, 'like') }
-                                                handleToggleUnLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item.id, 'not for me') }
-                                                handlePressRemoveRecentlyWatchedShow={ () => handlePressRemoveRecentlyWatchedShow(item.id) }
-                                            />
-                                        )}
-                                        horizontal
-                                    />    
-                                </View> 
-                            )
-                        }  
+                        <ContinueWatchingFor 
+                            handleToggleRateRecentlyWatchedShow={ handleToggleRateRecentlyWatchedShow }
+                            handlePressRemoveRecentlyWatchedShow={ handlePressRemoveRecentlyWatchedShow }
+                        />
                     </>             
                 }
             />

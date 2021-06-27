@@ -2,7 +2,7 @@ import React,{ useState, useEffect } from 'react'
 import { createStructuredSelector } from 'reselect';
 import { Picker } from '@react-native-picker/picker'
 import { FlatList } from 'react-native-gesture-handler';
-import { InteractionManager, ActivityIndicator } from 'react-native'
+import { InteractionManager } from 'react-native'
 import { connect, useDispatch } from 'react-redux';
 
 /** Actions */
@@ -13,7 +13,7 @@ import { movieSelector } from './../../../../redux/modules/movie/selectors'
 import { likedShowsSelector, myListSelector, authSelector } from './../../../../redux/modules/auth/selectors';
 
 /** RNE Components */
-import { Button, Badge, Tab } from 'react-native-elements'
+import { Button, Badge } from 'react-native-elements'
 
 /** Components */
 import View from '../../../../components/View';
@@ -28,7 +28,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import showsAPI from './../../../../services/data/movies';
 import VideoPlayer from './../../../../components/VideoPlayer';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import ActionButton from './ActionButton';
 
 const DEFAULT_EPISODE = {
     id: '',
@@ -39,81 +39,23 @@ const DEFAULT_EPISODE = {
     video: '',
 };
 
-const ACTION_TYPES = {
-    ADD_TO_MY_LIST: 'ADD TO MY LIST',
-    ADD_TO_LIKED_SHOWS: 'ADD TO LIKED SHOWS',
-    SHARE_SHOW: 'SHARE SHOW'
-}
-
-const TabIcon = ({ actionName, data, movieID, isLoading }) => 
-{
-    switch (actionName) 
-    {
-        case ACTION_TYPES.ADD_TO_MY_LIST:
-
-            if (isLoading) {
-                return <ActivityIndicator color='#fff' />
-            } 
-        
-            return (
-                <MaterialCommunityIcon 
-                    name={ !data.find(({ id }) => id === movieID) ? 'plus' : 'check' }
-                    size={ 24 }
-                    color="white"
-                />
-            )
-
-        case ACTION_TYPES.ADD_TO_LIKED_SHOWS:
-
-            if (isLoading) {
-                return <ActivityIndicator color='#fff' />
-            } 
-
-            return (
-                <FontAwesome5 
-                    name="thumbs-up"
-                    size={ 24 }
-                    color="white"
-                    solid={ Boolean(data.find(({ id }) => id === movieID)) }
-                />
-            )
-
-        case ACTION_TYPES.SHARE_SHOW:
-
-            if (isLoading) {
-                return <ActivityIndicator color='#fff' />
-            } 
-
-            return (
-                <FeatherIcon 
-                    name="share-2"
-                    size={ 24 }
-                    color="white"
-                />
-            )
-    }
-}
-
-const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) => 
+const MovieDetailsScreen = ({ route }) => 
 {   
     const dispatch = useDispatch();
     const { id: selectedShowID } = route.params;
     const show = showsAPI.find(({ id }) => id === selectedShowID);
 
     const [ currentSeasons, setCurrentSeasons ] = useState([]);
-    const [ currentSeasonEpisode, setCurrentSeasonEpisode ] = useState(DEFAULT_EPISODE);
     const [ currentSeasonEpisodes, setCurrentSeasonEpisodes ] = useState([]);
+    const [ currentSeasonEpisode, setCurrentSeasonEpisode ] = useState(DEFAULT_EPISODE);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ toggleVideo, setToggleVideo ] = useState(false);
-    const [ selectedSeason, setSelectedSeason ] = useState('');
-    const [ selectedTab, setSelectedTab ] = useState(0);
-
     const [ isLoadingAddToMyList, setIsLoadingAddToMyList ] = useState(false);
     const [ isLoadingLikedShows, setIsLoadingLikedShows ] = useState(false);
+    const [ selectedSeason, setSelectedSeason ] = useState('');
+    const [ selectedTab, setSelectedTab ] = useState(0);
+    const [ toggleVideo, setToggleVideo ] = useState(false);
 
     const handlePressToggleVideo = () => setToggleVideo(!toggleVideo);
-
-    const handlePressEpisode = (episode) => setCurrentSeasonEpisode(episode);
 
     const handleChangeSeason = (name, index) => {
         setSelectedSeason(name);
@@ -179,7 +121,6 @@ const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) =>
         }
     }, []);
 
-
     if (!isInteractionsComplete) {
         return <Text h4>Loading ...</Text>
     }
@@ -190,13 +131,13 @@ const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) =>
                 <VideoPlayer 
                     episode={ currentSeasonEpisode } 
                     shouldPlay={ toggleVideo } 
-                    handlePressToggleVideo={ handlePressToggleVideo }
+                    setToggleVideo={ setToggleVideo }
                 />
             </View>
             <FlatList 
                 data={ currentSeasonEpisodes }
                 renderItem={ ({ item }) => (
-                    <EpisodeItem episode={ item } onPress={ () => handlePressEpisode(item) }/>
+                    <EpisodeItem episode={ item } onPress={ () => setCurrentSeasonEpisode(item) }/>
                 )}
                 ListHeaderComponent={(
                     <View>
@@ -219,7 +160,7 @@ const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) =>
                                     <MaterialCommunityIcon
                                         name={ toggleVideo ? 'pause' : 'play' }
                                         size={ 24 }
-                                        color="black"
+                                        color='black'
                                     />
                                 }
                                 title={ toggleVideo ? 'Pause' : 'Play' }
@@ -230,9 +171,9 @@ const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) =>
                             <Button 
                                 icon={
                                     <FeatherIcon
-                                        name="download"
+                                        name='download'
                                         size={ 24 }
-                                        color="white"
+                                        color='white'
                                     />
                                 }
                                 title=' Download'
@@ -249,67 +190,30 @@ const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) =>
                             </View>
                         </View>
 
-                        {/* Tabs */}
-                        <View style={ styles.tabsContainer }>
-                            <Tab value={ selectedTab } indicatorStyle={ styles.tabIndicator }>
-                                <Tab.Item 
-                                    title="My List" 
-                                    icon={
-                                        isLoadingAddToMyList 
-                                            ? <ActivityIndicator color='#fff' />
-                                            : (
-                                                <TabIcon 
-                                                    actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
-                                                    data={ MY_LIST } 
-                                                    movieID={ selectedShowID }
-                                                />
-                                            )
-                                    }
-                                    titleStyle={ styles.tabItemTitle  }
-                                    containerStyle={ styles.tabItemContainer }
-                                    onPressIn={ handlePressTabAddToLIst }
-                                />
-                                <Tab.Item 
-                                    title="Like" 
-                                    icon={ 
-                                        isLoadingLikedShows 
-                                            ? <ActivityIndicator color='#fff' />
-                                            : (
-                                                <TabIcon 
-                                                    actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
-                                                    data={ LIKED_SHOWS } 
-                                                    movieID={ selectedShowID }
-                                                /> 
-                                            )
-                                    }
-                                    titleStyle={ styles.tabItemTitle }
-                                    containerStyle={ styles.tabItemContainer }
-                                    onPressIn={ handlePressTabLikeShow }
-                                />
-                                <Tab.Item 
-                                    title="Share" 
-                                    icon={ 
-                                        <TabIcon 
-                                            actionName={ ACTION_TYPES.SHARE_SHOW }
-                                            movieID={ selectedShowID }
-                                        /> 
-                                    }
-                                    titleStyle={ styles.tabItemTitle }
-                                    containerStyle={ styles.tabItemContainer }
-                                    onPressIn={ handlePressTabShare }
-                                />
-                            </Tab>
-                        </View>
-                                    
+                        {/* Action Buttons */}
+                        <ActionButton 
+                            selectedTab={ selectedTab }
+                            selectedShowID={ selectedShowID }
+                            isLoadingAddToMyList={ isLoadingAddToMyList }
+                            isLoadingLikedShows={ isLoadingLikedShows }
+                            handlePressTabLikeShow={ handlePressTabLikeShow }
+                            handlePressTabAddToLIst={ handlePressTabAddToLIst }
+                            handlePressTabShare={ handlePressTabShare }
+                        />
+
                         <Picker
                             selectedValue={ selectedSeason }
                             onValueChange={ handleChangeSeason }
                             style={ styles.seasonPicker }
                             dropdownIconColor='white'
                         >
-                        {
-                            currentSeasons.map((season, index) => <Picker.Item key={ index } label={ season } value={ season } />)
-                        }
+                        {currentSeasons.map((season, index) => (
+                            <Picker.Item 
+                                key={ index } 
+                                label={ season } 
+                                value={ season } 
+                            />
+                        ))}
                         </Picker>
                         <Text style={ styles.episodeHeader } h4>Episodes</Text>
                     </View>
@@ -321,10 +225,6 @@ const MovieDetailsScreen = ({ route, AUTH, LIKED_SHOWS, MY_LIST }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    Movie: movieSelector,
-    AUTH: authSelector,
-    LIKED_SHOWS: likedShowsSelector,
-    MY_LIST: myListSelector
-})
+});
 
 export default connect(mapStateToProps)(MovieDetailsScreen)
