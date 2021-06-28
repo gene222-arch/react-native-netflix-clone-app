@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     },
     tabsContainer: {
         width: '80%',
-        marginTop: 10
+        marginTop: 10,
+        paddingHorizontal: 10,
     },
     tabIndicator: {
         backgroundColor: Colors.error

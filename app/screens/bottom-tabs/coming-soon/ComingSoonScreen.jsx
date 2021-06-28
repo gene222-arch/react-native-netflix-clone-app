@@ -6,6 +6,7 @@ import { useDispatch, connect } from 'react-redux';
 
 /** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
+import * as COMING_SOON_ACTION from './../../../redux/modules/coming-soon/actions'
 
 /** API */
 import notifications from './../../../services/data/notifications';
@@ -15,6 +16,7 @@ import styles from './../../../assets/stylesheets/comingSoon';
 
 /** Selectors */
 import { authSelector } from './../../../redux/modules/auth/selectors'
+import { comingSoonSelector } from './../../../redux/modules/coming-soon/selectors';
 
 /** Components */
 import View from './../../../components/View';
@@ -26,42 +28,45 @@ import AppBar from './../../AppBar';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { cacheImage } from './../../../utils/cacheImage';
+import LoadingScreen from './../../../components/LoadingScreen';
+import { useNavigation } from '@react-navigation/native';
 
 
-const ITEM_HEIGHT = 500;
-
-const ComingSoonScreen = ({ AUTH }) => 
+const ComingSoonScreen = ({ AUTH, COMING_SOON }) => 
 {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
-    const [ comingSoonShows, setComingSoonShows ] = useState([]);
+
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ focusedIndex, setFocusedIndex ] = useState(0);
 
-    const handleScroll = useCallback(e => 
-    {
-        const offset = Math.round(e.nativeEvent.contentOffset.y / ITEM_HEIGHT);
+    const handleOnScroll = useCallback((e) => {
+        const offset = Math.round(e.nativeEvent.contentOffset.y / 500);
         setFocusedIndex(offset);
-
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (comingSoonShowID) => dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ comingSoonShowID }));
+    const handlePressToggleRemindMe = (comingSoonShowID) => {
+        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ comingSoonShowID }));
+    }
 
-    
+    const handlePressInfo = (comingSoonShow) => {
+        navigation.navigate('TrailerInfo', { comingSoonShow });
+    }
+
     const runAfterInteractions = () => {
+        dispatch(COMING_SOON_ACTION.getComingSoonShowsStart(notifications));
 
-        notifications.map(({ id, video, poster, title_logo }) => {
+        COMING_SOON.comingSoonShows.map(({ id, video, poster, title_logo }) => {
             cacheImage(video, id, 'ComingSoon/Videos/');
             cacheImage(poster, id, 'ComingSoon/Posters/');
             cacheImage(title_logo, id, 'ComingSoon/TitleLogos/');
         });
 
-        setComingSoonShows(notifications);
         setIsInteractionsComplete(true);
     }
 
     const cleanUp = () => {
-        setComingSoonShows([]);
         setIsInteractionsComplete(false);
         setFocusedIndex(0);
     }
@@ -75,15 +80,16 @@ const ComingSoonScreen = ({ AUTH }) =>
     }, []);
 
     if (!isInteractionsComplete) {
-        return <Text>Loading ...</Text>
+        return <LoadingScreen />
     }
 
     return (
         <View style={ styles.container }>
             {/* Coming Soon Videos */}
             <FlatList 
-                onScroll={handleScroll}
-                data={ comingSoonShows }
+                keyExtractor={ ({ id }) => id.toString() }
+                onScroll={ handleOnScroll }
+                data={ COMING_SOON.comingSoonShows }
                 renderItem={ ({ item, index }) => (
                     <NotificationsVideoItem 
                         comingSoon={ item } 
@@ -91,6 +97,7 @@ const ComingSoonScreen = ({ AUTH }) =>
                         shouldShowPoster={ focusedIndex !== index }
                         shouldFocus={ focusedIndex === index }
                         handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id) }
+                        handlePressInfo={ () => handlePressInfo(item) }
                         isReminded={ AUTH.remindedComingSoonShows.includes(item.id) }
                     />
                 )}
@@ -126,7 +133,8 @@ const ComingSoonScreen = ({ AUTH }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    COMING_SOON: comingSoonSelector
 });
 
 export default connect(mapStateToProps)(ComingSoonScreen)

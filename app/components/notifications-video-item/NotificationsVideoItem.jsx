@@ -20,7 +20,7 @@ const DisplayTags = ({ tagsLength, tagName, index}) => {
 }
 
 
-const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shouldFocus, handlePressToggleRemindMe, isReminded }) => 
+const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shouldFocus, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
 {
     const video = useRef(null);
 
@@ -76,7 +76,7 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
                             <Text style={ styles.remindMeInfoText }>Remind Me</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={ handlePressInfo }>
                         <View style={ styles.infoContainer }>
                             <FeatherIcon 
                                 name='info'

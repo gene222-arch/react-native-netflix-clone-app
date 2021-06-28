@@ -1,10 +1,14 @@
 const notifications = 
 [
     {
-        id: 'episode1',
+        id: 199,
         title: 'Lupin',
         additional_trailer: 'Part 2 Coming Friday',
         duration: '1h 21m',
+        age_restriction: 18,
+        year: 2020,
+        director: 'Marcela Said, Ludovic Bernard, Louis Leterrier, Hugo Gelin',
+        starred_artists: 'Omar Sy, Etan, Simon, Shirine Boutella',
         plot: 'When Harvey\'s promotion requires him to recruit and hire a graduate of Harvard Law, he chooses Mike Ross. But Mike doesn\'t actualy have a law degree',
         video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         tags: [ 'Witty', 'Exciting', 'Mystery', 'Action', 'Comedy', 'Drama', 'TV'],
@@ -12,10 +16,14 @@ const notifications =
         poster: 'https://wallpapercave.com/wp/wp8345840.jpg'
     }, 
     {
-        id: 'episode2',
+        id: 200,
         title: 'Rotten',
         additional_trailer: 'Part 3 Coming Thursday',
         duration: '43m',
+        age_restriction: 29,
+        year: 2021,
+        director: 'David Mettler',
+        starred_artists: ' Latif Nasser, Casey Cox, Stanley Crawford, Leslie Lopatofsky',
         plot: "Rotten is an investigative documentary series produced by Zero Point Zero, focusing on corruption in the global food supply chain. The show's first season was released on Netflix in January 2018, and the second season in October 2019. ... The series uncovers wrongdoing by corporations who control the food that we eat.",
         video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         tags: [ 'Witty', 'Exciting', 'Mystery', 'Action', 'Comedy', 'Drama', 'TV'],

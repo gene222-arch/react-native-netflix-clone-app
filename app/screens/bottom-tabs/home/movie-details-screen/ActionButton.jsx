@@ -30,7 +30,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
             return (
                 <MaterialCommunityIcon 
                     name={ !data.find(({ id }) => id === showID) ? 'plus' : 'check' }
-                    size={ 24 }
+                    size={ 30 }
                     color='white'
                 />
             )
@@ -44,7 +44,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
             return (
                 <FontAwesome5 
                     name='thumbs-up'
-                    size={ 24 }
+                    size={ 30 }
                     color='white'
                     solid={ data.find(({ id }) => id === showID)?.isRated }
                 />
@@ -59,7 +59,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
             return (
                 <FeatherIcon 
                     name='share-2'
-                    size={ 24 }
+                    size={ 30 }
                     color='white'
                 />
             )
@@ -75,12 +75,13 @@ const ActionButton = ({
     handlePressTabAddToLIst, 
     isLoadingLikedShows, 
     handlePressTabLikeShow, 
-    handlePressTabShare 
+    handlePressTabShare,
+    disableIndicator = false 
 }) => 
 {
     return (
         <View style={ styles.tabsContainer }>
-            <Tab value={ selectedTab } indicatorStyle={ styles.tabIndicator }>
+            <Tab value={ selectedTab } indicatorStyle={ styles.tabIndicator } disableIndicator={ disableIndicator }>
                 <Tab.Item 
                     title='My List' 
                     icon={

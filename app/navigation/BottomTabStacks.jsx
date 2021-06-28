@@ -17,8 +17,7 @@ import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menu
 import StackNavBackButton from './../components/stack-app-bar/StackNavBackButton';
 import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
 import SelectProfileScreen from './../screens/bottom-tabs/select-profile/SelectProfileScreen';
-import StackNavTitle from './../components/stack-app-bar/StackNavTitle';
-import Text from './../components/Text';
+import TrailerInfo from './../screens/bottom-tabs/coming-soon/TrailerInfo';
 
 const options = {
     headerShown: false,
@@ -126,12 +125,24 @@ const ComingSoonStack = createStackNavigator();
 
 export const ComingSoonTab = () => 
 {
+    const comingSoonOptions = {
+        headerTitle: '',
+        headerStyle: {
+            backgroundColor: '#000'
+        }
+    };
+
     return (
         <ComingSoonStack.Navigator initialRouteName='ComingSoon'>
             <ComingSoonStack.Screen 
                 name='ComingSoon' 
                 component={ ComingSoonScreen } 
                 options={ options }
+            />
+            <ComingSoonStack.Screen 
+                name='TrailerInfo'
+                component={ TrailerInfo }
+                options={ comingSoonOptions }
             />
             <ComingSoonStack.Screen 
                 name='ComingSoonTabTwo' 

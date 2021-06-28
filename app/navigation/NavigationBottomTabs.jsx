@@ -8,6 +8,7 @@ import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, More
 import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 
 
 const Tab = createBottomTabNavigator();
@@ -32,15 +33,16 @@ const NavigationBottomTabs = () =>
         ))
     };
 
-    const COMING_SOON_OPTIONS = {
+    const COMING_SOON_OPTIONS = ({ route }) => ({
         tabBarIcon: (({ color }) => (
             <MaterialIcons 
                 name='video-library' 
                 size={ 24 } 
                 color={ color }
             />
-        ))
-    };
+        )),
+        tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
+    })
 
     const DOWNLOAD_OPTIONS = {
         tabBarIcon: (({ color }) => (
