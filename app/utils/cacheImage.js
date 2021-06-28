@@ -16,14 +16,10 @@ export const cacheImage = async (uri, uniqueDocID, directory = '') =>
     const isFileCached = await ensureFileExists(fileToCache);
 
     if (!isFileCached.exists) {
-        /** Download file */
-        return await FileSystem
+        await FileSystem
             .downloadAsync(uri, fileToCache)
             .then(({ uri }) => console.log(`${uri} Cached Successfully`))
             .then(err => console.log(err));
-    }
-    else {
-        /** File already exists */
     }
 }
 

@@ -4,7 +4,6 @@ import { InteractionManager, Platform, StatusBar } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 
 /** API */
-import downloadsAPI from './../../../services/data/downloads';
 
 /** RNE Components */
 import { Button, Overlay  } from 'react-native-elements';
@@ -22,62 +21,54 @@ import DownloadItem from '../../../components/download-item/DownloadItem';
 import styles from './../../../assets/stylesheets/downloads';
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import AppBar from '../../AppBar';
+import { createStructuredSelector } from 'reselect';
+import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
+import LoadingScreen from './../../../components/LoadingScreen';
 
 
-const DownloadsScreen = () => 
+const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
+    console.log(AUTH_PROFILE);
     const navigation = useNavigation();
 
-    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-
     const [ download, setDownload ] = useState(null);
-    const [ downloads, setDownloads ] = useState([]);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ showVideo, setShowVideo ] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    const toggleOverlay = (downloadData) => 
-    {
+    const toggleOverlay = (downloadedShow) => {
         setVisible(!visible);
-        setDownload(downloadData);
+        setDownload(downloadedShow);
     }
 
-    const handlePressDeleteDownload = () => 
-    {
-        setDownloads(downloads.filter(({ id }) => id !== download.id));
+    const handlePressDeleteDownload = () => {
         setVisible(false);
     }
 
-    const handlePressNonSeries = (downloadData) => 
-    {
+    const handlePressNonSeries = (downloadedShow) => {
         setShowVideo(true);
-        setDownload(downloadData);
+        setDownload(downloadedShow);
     }
 
-    const handlePressSeries = (downloadData) => 
-    {
-        navigation.navigate('MoreDownloads', {
-            id: downloadData.id, 
-            headerTitle:  downloadData.title
-        });
+    const handlePressSeries = (downloadedShow) => {
+        const { id, title: headerTitle } = downloadedShow;
+        navigation.navigate('MoreDownloads', { id, headerTitle });
     }
 
-    const runAfterInteractions = () => 
-    {
-        downloadsAPI.map(({ id, poster, video }) => {
+    const runAfterInteractions = () => {
+        AUTH_PROFILE.my_downloads.map(({ id, poster, video }) => {
             cacheImage(poster, id, 'Downloads/Posters/');
             cacheImage(video, id, 'Downloads/Videos/');
         });
-        setDownloads(downloadsAPI);
         setIsInteractionsComplete(true);
     }
 
-    const cleanUp = () => 
-    {
+    const cleanUp = () => {
         setDownload(null);
-        setDownloads([]);
+        setIsInteractionsComplete(false);
         setShowVideo(false);
         setVisible(false);
-        setIsInteractionsComplete(false);
     }
 
     useEffect(() => {
@@ -88,8 +79,14 @@ const DownloadsScreen = () =>
         }
     }, []);
 
+
+    /** Show Loading */
     if (!isInteractionsComplete) {
-        return <Text>Loading ...</Text>
+        return <LoadingScreen />
+    }
+
+    if (!AUTH_PROFILE.my_downloads.length) {
+        return <Text>Start downloading amazing movies or shows</Text>
     }
 
     /** Play Video in Full Screen */
@@ -122,6 +119,7 @@ const DownloadsScreen = () =>
                 </Text>
             </Overlay>
 
+            {/* App bar */}
             <AppBar 
                 marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } 
                 showLogo={ false } 
@@ -145,7 +143,7 @@ const DownloadsScreen = () =>
             {/* Downloads */}
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ downloads }
+                data={ AUTH_PROFILE.my_downloads }
                 renderItem={ ({ item }) => (
                     <DownloadItem 
                         downloadedVideo={ item } 
@@ -168,4 +166,9 @@ const DownloadsScreen = () =>
     )
 }
 
-export default DownloadsScreen
+const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(DownloadsScreen)

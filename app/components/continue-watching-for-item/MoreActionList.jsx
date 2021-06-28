@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import * as FileSystem from 'expo-file-system'
-import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { StatusBar, TouchableOpacity } from 'react-native'
 
 /** Dispatch Actions */
 import * as AUTH_ACTION from './../../redux/modules/auth/actions'
@@ -17,13 +19,14 @@ import styles from './../../assets/stylesheets/moreActionList';
 import DisplayAction from './DisplayAction';
 
 /** RNE Components */
-import { BottomSheet } from 'react-native-elements';
+import { BottomSheet, Overlay, Button } from 'react-native-elements';
 
 /** Utils/Configs */
-import * as asyncStorage from './../../utils/asyncStorage'
 import VIDEO_STATUSES from './../../config/video.statuses';
-import { ensureFileExists } from './../../utils/cacheImage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ensureDirExists, ensureFileExists } from './../../utils/cacheImage';
+import View from './../View';
+import Text from './../Text';
+import { useNavigation } from '@react-navigation/native';
 
 
 const MoreActionList = ({
@@ -36,12 +39,16 @@ const MoreActionList = ({
     setIsVisible
 }) => 
 {
-    const FILE_URI = `${ FileSystem.documentDirectory }${ selectedVideo.title }${ selectedVideo.id }.mp4`;
-    const [ status, setStatus ] = useState('');
-    const [ progress, setProgress ] = useState(0);
-    const [downloadResumable, setDownloadResumable] = useState(null);
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
 
-    const findShowInUserRatedShows = AUTH.ratedShows.find(({ id }) => id === selectedVideo.id);
+    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH.profile.id }${ selectedVideo.id }.mp4`;
+    const [downloadResumable, setDownloadResumable] = useState(null);
+    const [ progress, setProgress ] = useState(0);
+    const [ status, setStatus ] = useState('');
+    const [ ratedShow, setRatedShow ] = useState(null);
+    const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
+
 
     const actionList = 
     [
@@ -65,12 +72,21 @@ const MoreActionList = ({
             title: !status ? 'Download Episode' : status, 
             iconType: 'feather',
             iconName: (
-                status !== 'Downloading' 
-                    ? (status !== 'Downloaded' ? 'download' : 'check' ) 
-                    : (status !== 'Paused' ? 'pause' : 'play')
+                status === VIDEO_STATUSES.PAUSED // download is paused show PLAY button
+                    ? 'play'
+                    : (
+                        status === VIDEO_STATUSES.DOWNLOADING // downloading show progress 
+                            ? null
+                            : (
+                                status !== VIDEO_STATUSES.DOWNLOADED // not yet downloaded
+                                    ? ( status === VIDEO_STATUSES.RESUMING_DOWNLOAD ? null : 'download' ) 
+                                    : 'check' 
+                            )
+                    ) 
+                    
             ),
             status,
-            iconNameOnEnd: status === 'Downloaded' ? 'trash' : ( status === 'Downloading' ? 'pause' : null ),
+            iconNameOnEnd: status === 'Downloading' ? 'pause' : null,
             circularProgress: (
                 <AnimatedCircularProgress
                     size={ 25 }
@@ -80,25 +96,29 @@ const MoreActionList = ({
                     backgroundColor='#3d5875' 
                 />
             ),
-            onPress: async () => status === 'Downloading' ? await pauseDownload() : (status === 'Paused' ? await resumeDownload() : await downloadVideo()),
-            onPressEndIcon: async () => status === 'Downloading' ? await pauseDownload() : await deleteDownload(),
+            onPress: () => (
+                status !== VIDEO_STATUSES.DOWNLOADED 
+                    ? status === 'Downloading' ? pauseDownload() : (status === 'Paused' ? resumeDownload() : downloadVideo())
+                    : toggleOverlay()
+            ),
+            onPressEndIcon: () => status === 'Downloading' && pauseDownload(),
             show: true,
         },
         { 
-            title: !findShowInUserRatedShows?.rate ? 'Like' : 'Rated', 
+            title: !ratedShow?.rate ? 'Like' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
-            isSolid: findShowInUserRatedShows?.rate === 'like',
+            isSolid: ratedShow?.rate === 'like',
             onPress: handleToggleLikeRecentlyWatchedShow,
-            show: !findShowInUserRatedShows?.rate || findShowInUserRatedShows?.rate === 'like',
+            show: !ratedShow?.rate || ratedShow?.rate === 'like',
         },
         { 
-            title: !findShowInUserRatedShows?.rate ? 'Not For Me' : 'Rated', 
+            title: !ratedShow?.rate ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
-            isSolid: findShowInUserRatedShows?.rate === 'not for me',
+            isSolid: ratedShow?.rate === 'not for me',
             onPress: handleToggleUnLikeRecentlyWatchedShow,
-            show: !findShowInUserRatedShows?.rate || findShowInUserRatedShows?.rate === 'not for me',
+            show: !ratedShow?.rate || ratedShow?.rate === 'not for me',
         },
         {
             title: 'Remove From Row',
@@ -109,6 +129,7 @@ const MoreActionList = ({
         },
     ];
 
+    const toggleOverlay = () => setShowDownloadedMenu(!showDownloadedMenu);
 
     const downloadProgressCallback = (downloadProgress) => {
         const progress = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
@@ -116,50 +137,56 @@ const MoreActionList = ({
         console.log(progress)
     };
 
-    /** Working */
     const downloadVideo = async () => 
     {
         try {
             setStatus(VIDEO_STATUSES.DOWNLOADING);
             await downloadResumable.downloadAsync();
             setStatus(VIDEO_STATUSES.DOWNLOADED);
+
+            dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH.profile }));
         } catch ({ message }) {
             setStatus(VIDEO_STATUSES.PAUSED);
             console.log(message);
         }
     }
 
-    /** Working */
     const deleteDownload = async () => 
     {
         try {
             setStatus('');
+            toggleOverlay();
             await FileSystem.deleteAsync(FILE_URI);
         } catch ({ message }) {
-            console.log(message);
+            // Do something
         }
     }
 
-    /** Not Working */
     const pauseDownload = async () => 
     {
         try {
-            console.log(`Paused at: ${ progress }%`)
+            console.log(`Paused at: ${ progress }%`);
+
+            setStatus(VIDEO_STATUSES.PAUSED);
             await downloadResumable.pauseAsync();
             AsyncStorage.setItem(selectedVideo.video, JSON.stringify(downloadResumable.savable()));
-            setStatus(VIDEO_STATUSES.PAUSED);
         } catch ({ message }) {
             setStatus(VIDEO_STATUSES.PAUSED_FAILED);
-            console.error(message);
         }
     }
 
-    /** Not Working */
+    const navigateToMyDownloads = () => {
+        toggleOverlay();
+        setIsVisible(false);
+        navigation.navigate('Downloads');
+    }
+
     const resumeDownload = async () => 
     {
         /** Extract */
         const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
         const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
+
         const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
 
         try {
@@ -176,29 +203,65 @@ const MoreActionList = ({
         try {
             const fileExists = await ensureFileExists(FILE_URI);
 
-            if (fileExists.exists) {
-                setStatus('Downloaded');
+            console.log(`${ FILE_URI } exists? ${ fileExists.exists }`);
+            if (fileExists.exists) 
+            {
+                const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
+                const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
+                const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
+                
+                setDownloadResumable(previousDownloadedFile);
+                setStatus(VIDEO_STATUSES.DOWNLOADED);
             }
         } catch ({ message }) {
-            
+            // Do something
+        }
+    }
+
+    const onLoad = () => {
+        if (status !== VIDEO_STATUSES.DOWNLOADED) {
+            checkIfFileExists();
+        }
+
+        if (!downloadResumable) {
+            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
+        }
+
+        if (!ratedShow) {
+            setRatedShow(AUTH.ratedShows.find(({ id }) => id === selectedVideo.id));
         }
     }
 
     useEffect(() => {
-        checkIfFileExists();
-        if (!downloadResumable) {
-            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
+        
+        onLoad();
+
+        return () => {
+            setDownloadResumable(null);
+            setProgress(0);
+            setRatedShow(null);
+            setShowDownloadedMenu(false);
+            setStatus('');
         }
     }, []);
 
     return (
-        <BottomSheet isVisible={ isVisible } containerStyle={ styles.container }>
-        {
-            actionList.map((action, index) => action.show && (
+        <View style={ styles.container }>
+            <Overlay isVisible={ showDownloadedMenu } onBackdropPress={ toggleOverlay } overlayStyle={ styles.downloadedMenu }>
+                <TouchableOpacity onPress={ deleteDownload }>
+                    <Text style={ styles.deleteDownloadTitle }>Delete Download</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={ navigateToMyDownloads }>
+                    <Text style={ styles.viewMyDownloadsTitle }>View My Downloads</Text>
+                </TouchableOpacity>
+            </Overlay>
+            { isVisible && <StatusBar backgroundColor='rgba(0, 0, 0, .7)' /> }
+            <BottomSheet isVisible={ isVisible } containerStyle={ styles.bottomSheetContainer }>
+            {actionList.map((action, index) => action.show && (
                 <DisplayAction key={ index } actionType={ action }/>
-            ))
-        }
-        </BottomSheet>
+            ))}
+            </BottomSheet>
+        </View>
     )
 }
 

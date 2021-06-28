@@ -2,8 +2,21 @@ import { StyleSheet } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
-    container: {
+    bottomSheetContainer: {
         backgroundColor: 'rgba(0, 0, 0, .7)'
+    },
+    container: {
+    },
+    deleteDownloadTitle: {
+        color: Colors.white,
+        textAlign: 'left',
+        fontSize: 16,
+        marginVertical: 10,
+        marginHorizontal: 15,
+    },
+    downloadedMenu: {
+        zIndex: 999,
+        backgroundColor: Colors.darkGrey
     },
     listItemContainer: {
         backgroundColor: Colors.darkGrey
@@ -18,6 +31,13 @@ const styles = StyleSheet.create({
     moreActionHeaderContainer: {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10
+    },
+    viewMyDownloadsTitle: {
+         color: Colors.white,
+         textAlign: 'left',
+         fontSize: 16,
+         marginVertical: 10,
+         marginHorizontal: 15,   
     }
 });
 

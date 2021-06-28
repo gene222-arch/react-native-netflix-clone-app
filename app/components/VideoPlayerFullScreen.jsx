@@ -47,6 +47,7 @@ const VideoPlayerFullScreen = ({ uri, setShowVideo }) =>
         onEnterFullScreen();
         return () => {
             video.current = null;
+            setInFullscreen(false);
         }
     }, []);
 

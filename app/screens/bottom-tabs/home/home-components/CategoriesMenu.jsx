@@ -1,8 +1,7 @@
 import React from 'react'
-import { BottomSheet, ListItem, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { TouchableOpacity, Modal } from 'react-native'
 import styles from './../../../../assets/stylesheets/appBarCategories';
-import Colors from './../../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';

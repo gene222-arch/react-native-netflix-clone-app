@@ -83,7 +83,8 @@ const MoreScreen = ({ AUTH }) =>
         const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH.profile.id);
         const middleArrValIndex = Math.floor(AUTH.profiles.length / 2);
         const profiles = AUTH.profiles;
-        [ profiles[selectedProfileIndex] ] = [ profiles[middleArrValIndex] ];
+
+        [ profiles[selectedProfileIndex], profiles[middleArrValIndex] ] = [ profiles[middleArrValIndex], profiles[selectedProfileIndex] ];
 
         setSortedProfiles(profiles);
     }

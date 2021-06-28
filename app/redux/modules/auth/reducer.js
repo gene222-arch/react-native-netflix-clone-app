@@ -2,6 +2,7 @@ import ACTION_TYPES from './action.types';
 import myList from './../../../services/data/myList';
 import accountProfiles from './../../../services/data/accountProfiles';
 import recentlyWatchedShows_ from './../../../services/data/recentlyWatchedShows';
+import downloadsAPI from './../../../services/data/downloads';
 
 const {
     ADD_TO_RECENT_WATCHES_START,
@@ -34,17 +35,17 @@ const {
 } = ACTION_TYPES;
 
 
-const CREDENTIALS_DEFAULT_PROPS = {
+const CREDENTIALS_DEFAULT_PROPS = 
+{
     email: '',
     password: '',
     remember_me: false
 };
 
-const PROFILE_DEFAULT_PROPS = {
-    name: ''
-};
+const PROFILE_DEFAULT_PROPS = { name: '' };
 
-const RATED_SHOWS_DEFAULT_PROPS = [
+const RATED_SHOWS_DEFAULT_PROPS = 
+[
     {
         id: '',
         title: '',
@@ -54,14 +55,15 @@ const RATED_SHOWS_DEFAULT_PROPS = [
     }
 ]
 
-const initialState = {
+const initialState = 
+{
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    downloads: [],
-    ratedShows: RATED_SHOWS_DEFAULT_PROPS,
+    downloads: downloadsAPI,
     myList,
     profiles: accountProfiles,
     profile: PROFILE_DEFAULT_PROPS,
+    ratedShows: RATED_SHOWS_DEFAULT_PROPS,
     recentlyWatchedShows: recentlyWatchedShows_,
     remindedComingSoonShows: [],
     isLoading: false,
@@ -191,10 +193,17 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case DOWNLOAD_VIDEO_SUCCESS:
+
+            const updateProfileDownloads = profiles.map(({ id, my_downloads, ...profileInfo }) => {
+                return (id === payload.profile.id)
+                    ? { id, my_downloads: [ ...my_downloads, payload.show ], ...profileInfo, }
+                    : { id, my_downloads, ...profileInfo }
+            });
+
             return {
                 ...state,
                 isLoading: false,
-                downloads: [ ...downloads, payload.show ],
+                profiles: updateProfileDownloads,
                 errors
             }
 

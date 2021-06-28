@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width / 2
     },
     overLayText: {
-        marginVertical: 10
+        marginVertical: 10,
+        marginHorizontal: 15,
     },
     queryBtn: {
         backgroundColor: Colors.darkGrey

@@ -5,6 +5,7 @@ import downloadsWithSeries from './../../../services/data/downloadsWithSeries';
 import { FlatList } from 'react-native-gesture-handler';
 import MoreDownloadsSeason from './../../../components/more-downloads-season/MoreDownloadsSeason';
 import VideoPlayerFullScreen from './../../../components/VideoPlayerFullScreen';
+import Text from './../../../components/Text';
 
 const VIDEO_TO_PLAY_DEFAULT_PROPS = {
     id: '', 
@@ -16,16 +17,19 @@ const MoreDownloadsScreen = ({ route }) =>
     const { id } = route.params;
 
     const [ videoToPlay, setVideoToPlay ] = useState(VIDEO_TO_PLAY_DEFAULT_PROPS);
-    const [ videos, setVideos ] = useState([]);
     const [ seasons, setSeasons ] = useState([]);
     const [ showVideo, setShowVideo ] = useState(false);
 
     const onLoadFetchDownloadsByID = () => {
-        const { videos: videos_, download_id } = downloadsWithSeries.find(({ download_id }) => download_id === id);
-        const seasons_ = videos_.map(video => video.seasons)[0];
+        const { videos: videos_ } = downloadsWithSeries.find(({ download_id }) => download_id === id);
 
-        setVideos(videos_);
-        setSeasons(seasons_);
+        if (!videos_.length) {
+            setSeasons([]);
+        }
+        else {
+            const seasons_ = videos_.map(video => video.seasons)[0];
+            setSeasons(seasons_);
+        }
     }
 
     const handlePressPlayVideo = (video) => {
@@ -35,7 +39,6 @@ const MoreDownloadsScreen = ({ route }) =>
 
     const cleanUp = () => {
         setVideoToPlay(VIDEO_TO_PLAY_DEFAULT_PROPS);
-        setVideos([]);
         setSeasons([]);
         setShowVideo(false);
     }
@@ -47,6 +50,10 @@ const MoreDownloadsScreen = ({ route }) =>
             cleanUp();
         }
     },[]);
+
+    if (!seasons.length) {
+        return <Text>Empty Videos</Text>
+    }
 
     if (showVideo) {
         return <VideoPlayerFullScreen uri={ videoToPlay.video } setShowVideo={ setShowVideo }/>
@@ -60,6 +67,9 @@ const MoreDownloadsScreen = ({ route }) =>
                 renderItem={ ({ item }) => (
                     <MoreDownloadsSeason season={ item } onPress={ handlePressPlayVideo }/>
                 )}
+                ListEmptyComponent={
+                    <Text>Empty List</Text>
+                }
             />
         </View>
     )

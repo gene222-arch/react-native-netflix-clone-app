@@ -1,10 +1,10 @@
 import React from 'react'
-import { ActivityIndicator } from 'react-native'
 import { Image as DefaultImage } from 'react-native-elements'
 
 const Image = (props) => (
     <DefaultImage 
         {...props}
+        loadingIndicatorSource={{ uri: 'https://i.stack.imgur.com/h6viz.gif' }}
     />
 )
 

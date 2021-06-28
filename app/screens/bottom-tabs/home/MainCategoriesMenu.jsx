@@ -31,7 +31,7 @@ const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = ''
     return (
         <View style={styles.centeredView}>
             <Modal
-                animationType="slide"
+                animationType='slide'
                 transparent={true}
                 visible={isVisible}
             >
@@ -50,7 +50,7 @@ const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = ''
                             ))
                         }
                         <FAB 
-                            title="X" 
+                            title='X' 
                             style={ styles.floatingCloseBtn } 
                             color='white' titleStyle={ styles.floatingCloseBtnTitle } 
                             onPress={ () => setIsVisible(false) }

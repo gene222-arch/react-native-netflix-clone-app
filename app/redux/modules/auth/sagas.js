@@ -78,6 +78,7 @@ function* logoutSaga()
 function* downloadVideoSaga(payload)  
 {
     try {
+        yield put(downloadVideoSuccess(payload));
     } catch ({ message }) {
         yield put(downloadVideoFailed({ message }));
         console.log(message);
