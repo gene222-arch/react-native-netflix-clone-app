@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from './../../constants/Colors';
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = StyleSheet.create({
     additionalTrailerText: {
@@ -14,18 +15,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.darkGrey,
         borderRadius: 2
     },
-    tabCategoryTitle: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        color: Colors.grey
-    },
-    tabCategoryTitleSelected: {
-        fontSize: 14.5,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        color: Colors.white
-    },
     directorDesc: {
         fontWeight: 'bold'
     },
@@ -34,7 +23,28 @@ const styles = StyleSheet.create({
     },
     divider: {
         marginTop: 30,
-        marginBottom: 10,
+    },
+    moreLikeThisContainer: {
+        marginVertical: 15,
+        paddingHorizontal: 5,
+    },
+    moreLikeThisEmptyMessageContainer: {
+        width: '100%',
+        height: 200,
+        padding: 20,
+    },
+    similarMoviesNotFoundCaption: {
+        color: Colors.grey,
+        fontSize: 18,
+    },
+    moreLikeThisImg: {
+        flex: 1,
+        width: 125,
+        height: 170,
+        resizeMode: 'contain',
+        borderRadius: 5,
+        marginRight: 10,
+        marginBottom: 10
     },
     plotText: {
         lineHeight: 20
@@ -49,27 +59,54 @@ const styles = StyleSheet.create({
     starringDirectorContainer: {
         marginVertical: 10
     },
+    tabCategoryTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: Colors.grey
+    },
+    tabCategoryTitleSelected: {
+        fontSize: 14.5,
+        fontWeight: 'bold',
+        color: Colors.white
+    },
     tabCategoryContainer: {
-        width: '80%'
+        width: '80%',
+        marginTop: 15,
     },
     tabItemContainer: {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
     },
     tabIndicator: {
-        backgroundColor: Colors.error
+        backgroundColor: Colors.error,
+        height: 5,
     },
     tabTitle: {
+        textAlign: 'left',
     },
     tabIsSelected: {
         color: Colors.white
     },
+    trailersAndMoreContainer: {
+        marginVertical: 15,
+        paddingHorizontal: 5,
+    },
+    trailersAndMoreEmptyMessage: {
+        marginTop: 15,
+        paddingLeft: 5
+    },
     trailerInfo: {
         paddingHorizontal: 10
     }, 
+    trailerTitle: {
+        fontSize: 16,
+        marginTop: 10
+    },
     trailerTitleLogo: {
-        width: '100%',
+        width: DEVICE_WIDTH,
         height: 100,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
     yearDuration: {
         width: '45%',

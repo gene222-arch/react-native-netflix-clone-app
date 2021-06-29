@@ -1,15 +1,15 @@
 import React from 'react'
-import { Image } from 'react-native-elements'
+import { Image as Image_ } from 'react-native-elements'
 
-const Image_ = (props) => {
+const Image = (props) => {
     return (
-        <Image 
+        <Image_
             loadingIndicatorSource={{ uri: 'https://i.stack.imgur.com/h6viz.gif' }}
             { ...props }
         />
     )
 }
 
-export default Image_
+export default Image
 
 

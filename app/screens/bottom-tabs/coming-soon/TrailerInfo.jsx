@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { InteractionManager, FlatList } from 'react-native'
-import { Tab, Divider } from 'react-native-elements'
+import { Divider } from 'react-native-elements'
 
 /** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
@@ -13,26 +13,29 @@ import { authSelector } from './../../../redux/modules/auth/selectors';
 
 /** Components */
 import View from './../../../components/View';
-import Text from './../../../components/Text';
 import VideoPlayer from '../../../components/VideoPlayer';
-import Image from './../../../components/Image';
 import ActionButton from './../home/movie-details-screen/ActionButton';
 import LoadingScreen from './../../../components/LoadingScreen';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/trailerInfo';
+import MoreLikeThis from './trailer-info-components/MoreLikeThis';
+import TrailersAndMore from './trailer-info-components/TrailersAndMore';
+import ShowInfo from './trailer-info-components/ShowInfo';
+import TrailerAndMoreLikeThisTab from './trailer-info-components/TrailerAndMoreLikeThisTab';
+import { useNavigation } from '@react-navigation/native';
 
 
-const TrailerInfo = ({ AUTH, COMING_SOON, route }) => 
+const TrailerInfo = ({ AUTH, COMING_SOON, route, navigation }) => 
 {
-    const { comingSoonShow } = route.params;
     const dispatch = useDispatch();
+    const { comingSoonShow } = route.params;
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isLoadingAddToMyList, setIsLoadingAddToMyList ] = useState(false);
     const [ isLoadingLikedShows, setIsLoadingLikedShows ] = useState(false);
     const [ selectedTab, setSelectedTab ] = useState(0);
-    const [ selectedTabCategory, setSelectedTabCategory ] = useState(0);
+    const [ selectedTabCategory, setSelectedTabCategory ] = useState(1);
 
     
     const handlePressTabAddToLIst = () => 
@@ -62,6 +65,10 @@ const TrailerInfo = ({ AUTH, COMING_SOON, route }) =>
         console.log('Shared');
     }
 
+    const handlePressSimilarShow = (recommendedSimilarShow) => {
+        navigation.push('TrailerInfo', { comingSoonShow: recommendedSimilarShow });
+    }
+
     const runAfterInteractions = () => {
         setIsInteractionsComplete(true);
     }
@@ -71,6 +78,7 @@ const TrailerInfo = ({ AUTH, COMING_SOON, route }) =>
         setIsLoadingAddToMyList(false);
         setIsLoadingLikedShows(false);
         setSelectedTab(0);
+        setSelectedTabCategory(1);
     }
 
     useEffect(() => {
@@ -99,30 +107,12 @@ const TrailerInfo = ({ AUTH, COMING_SOON, route }) =>
                         />
 
                         {/* Trailer Info */}
-                        <View style={ styles.trailerInfo }>
-                            <Image 
-                                source={{
-                                    uri: comingSoonShow.title_logo
-                                }}
-                                style={ styles.trailerTitleLogo }
-                            />
-                            <View style={ styles.yearDuration }>
-                                <Text style={ styles.yearDurationText }>{ comingSoonShow.year }</Text>
-                                <Text style={ styles.ageRestrictionText }>{ comingSoonShow.age_restriction }+</Text>
-                                <Text style={ styles.yearDurationText }>{ comingSoonShow.duration }</Text>
-                            </View>
-                            <Text h4 style={ styles.additionalTrailerText }>{ comingSoonShow.additional_trailer }</Text>
-                            <Text style={ styles.plotText }>{ comingSoonShow.plot }</Text>
-                            <View style={ styles.starringDirectorContainer }>
-                                <Text style={ styles.starredArtistsText }><Text style={ styles.starringDesc }>Starring:</Text> { comingSoonShow.starred_artists }</Text>
-                                <Text style={ styles.directorText }><Text style={ styles.directorDesc }>Director:</Text> { comingSoonShow.director }</Text>
-                            </View>
-                        </View>
+                        <ShowInfo comingSoonShow={ comingSoonShow } />
 
                         {/* Tab */}
                         <ActionButton 
                             selectedTab={ selectedTab }
-                            selectedShowID={ comingSoonShow }
+                            selectedShowID={ comingSoonShow.id }
                             isLoadingAddToMyList={ isLoadingAddToMyList }
                             isLoadingLikedShows={ isLoadingLikedShows }
                             handlePressTabLikeShow={ handlePressTabLikeShow }
@@ -130,23 +120,20 @@ const TrailerInfo = ({ AUTH, COMING_SOON, route }) =>
                             handlePressTabShare={ handlePressTabShare }
                             disableIndicator={ true }
                         />
+
                         <Divider style={ styles.divider } />
-                        <View style={ styles.tabCategoryContainer }>
-                            <Tab value={ selectedTabCategory } indicatorStyle={ styles.tabIndicator }>
-                                <Tab.Item 
-                                    title={ <Text style={ selectedTabCategory === 0 ? styles.tabCategoryTitleSelected : styles.tabCategoryTitle }>MORE LIKE THIS</Text> } 
-                                    onPressIn={ () => setSelectedTabCategory(0) } 
-                                    titleStyle={ styles.tabTitle }
-                                    containerStyle={ styles.tabItemContainer }
-                                />
-                                <Tab.Item 
-                                    title={ <Text style={ selectedTabCategory === 1 ? styles.tabCategoryTitleSelected : styles.tabCategoryTitle }>TRAILERS & MORE</Text> } 
-                                    onPressIn={ () => setSelectedTabCategory(1) } 
-                                    titleStyle={ styles.tabTitle }
-                                    containerStyle={ styles.tabItemContainer }
-                                />
-                            </Tab>
-                        </View>
+
+                        <TrailerAndMoreLikeThisTab selectedTabCategory={ selectedTabCategory } setSelectedTabCategory={ setSelectedTabCategory } />
+                        
+                        {selectedTabCategory === 0 && (
+                            <MoreLikeThis 
+                                currentComingSoonShow={ comingSoonShow }
+                                comingSoonShows={ COMING_SOON.comingSoonShows }
+                                handlePressSimilarShow={ handlePressSimilarShow }
+                            />
+                        )}
+
+                        { selectedTabCategory === 1 && <TrailersAndMore trailers={ comingSoonShow.coming_soon_shows_trailers } /> }
                     </>
                 }
             />

@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     posterStyle: {
         width: '100%',
         aspectRatio: 16/9,
-        resizeMode: 'cover'
+        resizeMode: 'cover',
+        opacity: 1
     },
     video: {
         width: '100%',

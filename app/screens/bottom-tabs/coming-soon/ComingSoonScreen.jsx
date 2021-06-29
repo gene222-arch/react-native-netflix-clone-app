@@ -57,9 +57,10 @@ const ComingSoonScreen = ({ AUTH, COMING_SOON }) =>
     const runAfterInteractions = () => {
         dispatch(COMING_SOON_ACTION.getComingSoonShowsStart(notifications));
 
-        COMING_SOON.comingSoonShows.map(({ id, video, poster, title_logo }) => {
+        COMING_SOON.comingSoonShows.map(({ id, video, video_poster, poster, title_logo }) => {
             cacheImage(video, id, 'ComingSoon/Videos/');
             cacheImage(poster, id, 'ComingSoon/Posters/');
+            cacheImage(video_poster, id, 'ComingSoon/VideoPosters/');
             cacheImage(title_logo, id, 'ComingSoon/TitleLogos/');
         });
 

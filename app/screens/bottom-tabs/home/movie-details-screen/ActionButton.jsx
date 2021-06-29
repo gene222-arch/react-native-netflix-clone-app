@@ -79,39 +79,48 @@ const ActionButton = ({
     disableIndicator = false 
 }) => 
 {
+
+    const myListIcon = () => {
+        return (
+            isLoadingAddToMyList 
+                ? <ActivityIndicator color='#fff' />
+                : (
+                    <TabIcon 
+                        actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
+                        data={ MY_LIST } 
+                        showID={ selectedShowID }
+                    />
+                )
+        )
+    }
+
+    const likeShowIcon = () => {
+        return (
+            isLoadingLikedShows 
+                ? <ActivityIndicator color='#fff' />
+                : (
+                    <TabIcon 
+                        actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
+                        data={ LIKED_SHOWS } 
+                        showID={ selectedShowID }
+                    /> 
+                )
+        )
+    }
+
     return (
         <View style={ styles.tabsContainer }>
             <Tab value={ selectedTab } indicatorStyle={ styles.tabIndicator } disableIndicator={ disableIndicator }>
                 <Tab.Item 
                     title='My List' 
-                    icon={
-                        isLoadingAddToMyList 
-                            ? <ActivityIndicator color='#fff' />
-                            : (
-                                <TabIcon 
-                                    actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
-                                    data={ MY_LIST } 
-                                    showID={ selectedShowID }
-                                />
-                            )
-                    }
+                    icon={ myListIcon() }
                     titleStyle={ styles.tabItemTitle  }
                     containerStyle={ styles.tabItemContainer }
                     onPressIn={ handlePressTabAddToLIst }
                 />
                 <Tab.Item 
                     title='Like' 
-                    icon={ 
-                        isLoadingLikedShows 
-                            ? <ActivityIndicator color='#fff' />
-                            : (
-                                <TabIcon 
-                                    actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
-                                    data={ LIKED_SHOWS } 
-                                    showID={ selectedShowID }
-                                /> 
-                            )
-                    }
+                    icon={ likeShowIcon() }
                     titleStyle={ styles.tabItemTitle }
                     containerStyle={ styles.tabItemContainer }
                     onPressIn={ handlePressTabLikeShow }

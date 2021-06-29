@@ -11,10 +11,10 @@ import * as FileSystem from 'expo-file-system'
 import { getExtension } from './../../utils/file';
 import { getCachedFile } from './../../utils/cacheImage';
 
-const DisplayTags = ({ tagsLength, tagName, index}) => {
+const DisplayGenres = ({ genreLength, genreName, index}) => {
     return (
         <Text style={ styles.tags }>
-            { (tagsLength - 1) === index ? tagName : `${ tagName }  ·  ` }
+            { (genreLength - 1) === index ? genreName : `${ genreName }  ·  ` }
         </Text>
     )
 }
@@ -28,15 +28,15 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
     {
         return !isReminded 
         ? (
-            <FeatherIcon 
-                name='check'
+            <MaterialCommunityIcon 
+                name='bell'
                 size={ 28 }
                 color='#fff'
             />
         )
         : (
             <MaterialCommunityIcon 
-                name='bell'
+                name='bell-outline'
                 size={ 28 }
                 color='#fff'
             />
@@ -55,7 +55,7 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
                 ref={ video }
                 style={ styles.video }
                 source={{ uri: getCachedFile('ComingSoon/Videos/', comingSoon.id, comingSoon.video) }}
-                posterSource={{ uri: getCachedFile('ComingSoon/Posters/', comingSoon.id, comingSoon.poster) }}
+                posterSource={{ uri: getCachedFile('ComingSoon/VideoPosters/', comingSoon.id, comingSoon.video_poster) }}
                 posterStyle={ styles.posterStyle}
                 usePoster={ shouldShowPoster }
                 shouldPlay={ shouldPlay }
@@ -94,11 +94,11 @@ const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shou
                 <Text style={ styles.plot }>{ comingSoon.plot }</Text>
                 <View style={ styles.tagsContainer }>
                 {
-                    comingSoon.tags.map((tag, index) => (
-                        <DisplayTags 
+                    comingSoon.genres.map((genre, index) => (
+                        <DisplayGenres 
                             key={ index } 
-                            tagsLength={ comingSoon.tags.length }
-                            tagName={ tag }
+                            genreLength={ comingSoon.genres.length }
+                            genreName={ genre }
                             index={ index }
                         />
                     ))

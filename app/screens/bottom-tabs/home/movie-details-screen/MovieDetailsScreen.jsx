@@ -154,7 +154,7 @@ const MovieDetailsScreen = ({ route }) =>
                         </View>
 
                         {/* Play and Download Buttons */}
-                        <View style={ styles.playDownloadBtnContainer }>
+                        <View style={ styles.playDownloadBtnContainer }> 
                             <Button
                                 icon={
                                     <MaterialCommunityIcon
