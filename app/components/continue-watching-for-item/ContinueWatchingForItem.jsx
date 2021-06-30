@@ -9,9 +9,13 @@ import MoreActionList from './MoreActionList';
 import Info from './Info';
 import { getCachedFile } from './../../utils/cacheImage';
 import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
 const ContinueWatchingForItem = ({ 
-    episode, 
+    AUTH_PROFILE,
+    episode,
     handleToggleLikeRecentlyWatchedShow,
     handleToggleUnLikeRecentlyWatchedShow, 
     handlePressRemoveRecentlyWatchedShow 
@@ -46,7 +50,7 @@ const ContinueWatchingForItem = ({
     if (shouldPlayVideo) {
         return (
             <VideoPlayerFullScreen  
-                uri={ getCachedFile('RecentlyWatchedShows/', episode.id, episode.video) }
+                uri={ getCachedFile(`RecentlyWatchedShows/${ AUTH_PROFILE.name }/`, episode.id, episode.video) }
                 setShowVideo={ setShouldPlayVideo }
             />
         )
@@ -67,10 +71,10 @@ const ContinueWatchingForItem = ({
                 ref={ videoRef }
                 style={ styles.video }
                 source={{
-                    uri: getCachedFile('RecentlyWatchedShows/', episode.id, episode.video)
+                    uri: getCachedFile(`RecentlyWatchedShows/${ AUTH_PROFILE.name }/`, episode.id, episode.video)
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: getCachedFile('RecentlyWatchedShows/', episode.id, episode.poster) }}
+                posterSource={{ uri: getCachedFile(`RecentlyWatchedShows/${ AUTH_PROFILE.name }/`, episode.id, episode.poster) }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />
@@ -101,4 +105,8 @@ const ContinueWatchingForItem = ({
     )
 }
 
-export default ContinueWatchingForItem
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(ContinueWatchingForItem)

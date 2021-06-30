@@ -5,8 +5,14 @@ import { FlatList } from 'react-native-gesture-handler';
 import { InteractionManager } from 'react-native'
 import { connect, useDispatch } from 'react-redux';
 
+/** API */
+import showsAPI from './../../../../services/data/movies';
+
 /** Actions */
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
+
+/** Selectors */
+import { authSelector } from '../../../../redux/modules/auth/selectors';
 
 /** RNE Components */
 import { Button, Badge } from 'react-native-elements'
@@ -15,6 +21,9 @@ import { Button, Badge } from 'react-native-elements'
 import View from '../../../../components/View';
 import Text from '../../../../components/Text';
 import EpisodeItem from '../../../../components/episode-item/EpisodeItem';
+import VideoPlayer from './../../../../components/VideoPlayer';
+import ActionButton from './ActionButton';
+import LoadingScreen from './../../../../components/LoadingScreen';
 
 /** Styles */
 import styles from '../../../../assets/stylesheets/movieDetail';
@@ -22,9 +31,7 @@ import styles from '../../../../assets/stylesheets/movieDetail';
 /** Icons */
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import showsAPI from './../../../../services/data/movies';
-import VideoPlayer from './../../../../components/VideoPlayer';
-import ActionButton from './ActionButton';
+
 
 const DEFAULT_EPISODE = {
     id: '',
@@ -35,7 +42,7 @@ const DEFAULT_EPISODE = {
     video: '',
 };
 
-const MovieDetailsScreen = ({ route }) => 
+const MovieDetailsScreen = ({ AUTH, route }) => 
 {   
     const dispatch = useDispatch();
     const { id: selectedShowID } = route.params;
@@ -51,7 +58,15 @@ const MovieDetailsScreen = ({ route }) =>
     const [ show, setShow ] = useState(null);
     const [ toggleVideo, setToggleVideo ] = useState(false);
 
-    const handlePressToggleVideo = () => setToggleVideo(!toggleVideo);
+    const handlePressToggleVideo = () => {
+        setToggleVideo(!toggleVideo);
+
+        // is playing
+        if (toggleVideo) { 
+            console.log('ADDED TO RECENT WATCHES');
+            dispatch(AUTH_ACTION.addToRecentWatchesStart(currentSeasonEpisode));
+        }
+    }
 
     const handleChangeSeason = (name, index) => {
         setSelectedSeason(name);
@@ -122,7 +137,7 @@ const MovieDetailsScreen = ({ route }) =>
     }, []);
 
     if (!isInteractionsComplete) {
-        return <Text h4>Loading ...</Text>
+        return <LoadingScreen />
     }
 
     return (
@@ -134,6 +149,7 @@ const MovieDetailsScreen = ({ route }) =>
                     setToggleVideo={ setToggleVideo }
                 />
             </View>
+
             <FlatList 
                 data={ currentSeasonEpisodes }
                 renderItem={ ({ item }) => (
@@ -225,6 +241,7 @@ const MovieDetailsScreen = ({ route }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector
 });
 
 export default connect(mapStateToProps)(MovieDetailsScreen)

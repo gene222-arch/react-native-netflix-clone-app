@@ -8,10 +8,10 @@ import rootReducers from './root.reducers'; // where reducers is a object of red
 import rootSagas from './root.sagas';
 
 const config = {
-  key: 'root',
-  storage: AsyncStorage,
-  blacklist: [''],
-  debug: true, //to get useful logging
+    key: 'root',
+    storage: AsyncStorage,
+    blacklist: ['auth'],
+    debug: true, //to get useful logging
 };
 
 const middleware = [];

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { FlatList } from 'react-native';
+import { StatusBar } from 'expo-status-bar'
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
 import { ImageBackground, InteractionManager } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 /** Selectors */
-import { authSelector } from './../../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 /** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
@@ -40,8 +41,9 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-const HomeScreen = ({ AUTH }) => 
+const HomeScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
+    console.log(AUTH_PROFILE)
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -72,10 +74,10 @@ const HomeScreen = ({ AUTH }) =>
             cacheImage(backgroundImage, id, 'FrontPages/');
         });
 
-        /** Cache RecentlyWatchedShowss */
-        AUTH.recentlyWatchedShows.map(({ id, poster, video }) => {
-            cacheImage(poster, id, 'RecentlyWatchedShows/');
-            cacheImage(video, id, 'RecentlyWatchedShows/');
+        /** Cache Recently Watched Shows */
+        AUTH_PROFILE.recently_watched_shows.map(({ id, poster, video }) => {
+            cacheImage(poster, id, `RecentlyWatchedShows/${ AUTH_PROFILE.name }/`);
+            cacheImage(video, id, `RecentlyWatchedShows/${ AUTH_PROFILE.name }/`);
         });
     }
 
@@ -108,6 +110,7 @@ const HomeScreen = ({ AUTH }) =>
 
     return (
         <View style={ styles.container }>
+            <StatusBar style='light' backgroundColor='transparent' />
             <FlatList 
                 data={ categories.items }
                 renderItem={({ item }) => <HomeCategory title={ item.title } categories={ item.movies } />}
@@ -124,7 +127,7 @@ const HomeScreen = ({ AUTH }) =>
                             <FrontPageOptions 
                                 frontPage={ frontPage } 
                                 handleToggleAddToMyList={ handleToggleAddToMyList }
-                                authUserMyList={ AUTH.myList }
+                                authUserMyList={ AUTH_PROFILE.my_list }
                                 frontPageCacheDirectory={ 'FrontPages/' }
                             />
                         </ImageBackground>   
@@ -142,7 +145,8 @@ const HomeScreen = ({ AUTH }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(HomeScreen)

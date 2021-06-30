@@ -3,7 +3,6 @@ import { DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = StyleSheet.create({
     video: {
-        flex: 1,
         width: '100%',
         aspectRatio: 16/9
     },

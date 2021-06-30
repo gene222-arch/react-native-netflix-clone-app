@@ -1,16 +1,12 @@
 import React from 'react'
-import { createStackNavigator, useHeaderHeight } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import HomeScreen from '../screens/bottom-tabs/home';
 import MovieDetailsScreen from './../screens/bottom-tabs/home/movie-details-screen/index';
-import TabTwoScreen from '../screens/bottom-tabs/home/TabTwoScreen';
 import DownloadsScreen from '../screens/bottom-tabs/downloads';
 import MoreDownloadsScreen from '../screens/bottom-tabs/downloads/MoreDownloadsScreen';
 import SearchScreen from '../screens/bottom-tabs/search';
-import SearchTabTwoScreen from '../screens/bottom-tabs/search/SearchTabTwoScreen';
 import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
-import TabTwoScreenCS from '../screens/bottom-tabs/coming-soon/TabTwoScreenCS';
 import MoreScreen from '../screens/bottom-tabs/more'
-import MoreTabTwoScreen from '../screens/bottom-tabs/more/MoreTabTwoScreen'
 import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
 import AppBar from './../screens/AppBar';
 import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menus/CategoriesScreen';
@@ -67,11 +63,6 @@ export const HomeTab = () =>
                 options={{ ...options, headerShown: false }}
             />
             <HomeStack.Screen 
-                name='TabTwo' 
-                component={ TabTwoScreen } 
-                options={ options }
-            />
-            <HomeStack.Screen 
                 name='MovieDetailScreen' 
                 component={ MovieDetailsScreen } 
                 options={({ route }) => ({ headerTitle: route.params.headerTitle })}
@@ -113,10 +104,6 @@ export const SearchTab = () =>
                 component={ SearchScreen } 
                 options={ searchOptions } 
             />
-            <SearchStack.Screen 
-                name='SearchTabTwo' 
-                component={ SearchTabTwoScreen }
-            />
         </SearchStack.Navigator>
     );
 }
@@ -143,11 +130,6 @@ export const ComingSoonTab = () =>
                 name='TrailerInfo'
                 component={ TrailerInfo }
                 options={ comingSoonOptions }
-            />
-            <ComingSoonStack.Screen 
-                name='ComingSoonTabTwo' 
-                component={ TabTwoScreenCS } 
-                options={ options } 
             />
         </ComingSoonStack.Navigator>
     );
@@ -183,11 +165,6 @@ export const MoreTab = () =>
                 name='More' 
                 component={ MoreScreen } 
                 options={ moreHeaderOptions }
-            />
-            <AccountSoonStack.Screen 
-                name='MoreTabTwo' 
-                component={ MoreTabTwoScreen } 
-                options={ options } 
             />
         </AccountSoonStack.Navigator>
     );

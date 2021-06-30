@@ -2,11 +2,11 @@ import React from 'react';
 import { Modal, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
 import { FAB } from 'react-native-elements'
-import styles from './../../../assets/stylesheets/mainCategoriesMenu';
-import View from './../../../components/View';
-import Text from './../../../components/Text';
-import AppBar from './../../AppBar';
-import mainCategoriesConfig, { CATEGORY_NAMES } from './../../../config/home.menu.main.category.list'
+import styles from './../../../../assets/stylesheets/mainCategoriesMenu';
+import View from './../../../../components/View';
+import Text from './../../../../components/Text';
+import AppBar from './../../../AppBar';
+import mainCategoriesConfig, { CATEGORY_NAMES } from './../../../../config/home.menu.main.category.list'
 
 
 const MainCategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory = '', handlePressChangeMainCategory }) =>

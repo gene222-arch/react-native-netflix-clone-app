@@ -8,7 +8,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { createStructuredSelector } from 'reselect';
-import { ratedShowsSelector, myListSelector } from './../../../../redux/modules/auth/selectors';
+import { ratedShowsSelector, myListSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
 const ACTION_TYPES = {
@@ -67,7 +67,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
 }
 
 const ActionButton = ({ 
-    MY_LIST, 
+    AUTH_PROFILE, 
     LIKED_SHOWS, 
     selectedTab, 
     selectedShowID, 
@@ -87,7 +87,7 @@ const ActionButton = ({
                 : (
                     <TabIcon 
                         actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
-                        data={ MY_LIST } 
+                        data={ AUTH_PROFILE.my_list } 
                         showID={ selectedShowID }
                     />
                 )
@@ -101,7 +101,7 @@ const ActionButton = ({
                 : (
                     <TabIcon 
                         actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
-                        data={ LIKED_SHOWS } 
+                        data={ AUTH_PROFILE.liked_shows } 
                         showID={ selectedShowID }
                     /> 
                 )
@@ -143,6 +143,7 @@ const ActionButton = ({
 }
 
 const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector,
     MY_LIST: myListSelector,
     LIKED_SHOWS: ratedShowsSelector
 });

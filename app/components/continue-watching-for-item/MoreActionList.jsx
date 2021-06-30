@@ -10,7 +10,7 @@ import { StatusBar, TouchableOpacity } from 'react-native'
 import * as AUTH_ACTION from './../../redux/modules/auth/actions'
 
 /** Selectors */
-import { authSelector } from './../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector } from './../../redux/modules/auth/selectors';
 
 /** Styles */
 import styles from './../../assets/stylesheets/moreActionList';
@@ -31,6 +31,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const MoreActionList = ({
     AUTH,
+    AUTH_PROFILE,
     selectedVideo,
     handlePressRemoveRecentlyWatchedShow,
     handleToggleLikeRecentlyWatchedShow,
@@ -46,8 +47,8 @@ const MoreActionList = ({
     const [downloadResumable, setDownloadResumable] = useState(null);
     const [ progress, setProgress ] = useState(0);
     const [ status, setStatus ] = useState('');
-    const [ ratedShow, setRatedShow ] = useState(null);
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
+    const ratedShow = AUTH_PROFILE.recently_watched_shows.find(({ id }) => id === selectedVideo.id);
 
 
     const actionList = 
@@ -226,10 +227,6 @@ const MoreActionList = ({
         if (!downloadResumable) {
             setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
         }
-
-        if (!ratedShow) {
-            setRatedShow(AUTH.ratedShows.find(({ id }) => id === selectedVideo.id));
-        }
     }
 
     useEffect(() => {
@@ -239,7 +236,6 @@ const MoreActionList = ({
         return () => {
             setDownloadResumable(null);
             setProgress(0);
-            setRatedShow(null);
             setShowDownloadedMenu(false);
             setStatus('');
         }
@@ -267,7 +263,8 @@ const MoreActionList = ({
 
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(MoreActionList)

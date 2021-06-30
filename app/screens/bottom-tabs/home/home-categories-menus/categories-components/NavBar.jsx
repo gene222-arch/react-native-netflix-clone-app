@@ -4,8 +4,9 @@ import View from './../../../../../components/View';
 import Text from './../../../../../components/Text';
 import styles from './../../../../../assets/stylesheets/categories';
 import CategoriesMenu from './../../home-components/CategoriesMenu';
-import MainCategoriesMenu from './../../MainCategoriesMenu';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MainCategoriesMenu from './../../home-components/MainCategoriesMenu';
+
 
 const NavBar = ({ selectedMainCategory, handlePressChangeMainCategory }) => 
 {

@@ -20,7 +20,15 @@ const DisplayGenres = ({ genreLength, genreName, index}) => {
 }
 
 
-const NotificationsVideoItem = ({ comingSoon, shouldPlay, shouldShowPoster, shouldFocus, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
+const NotificationsVideoItem = ({ 
+    comingSoon, 
+    shouldPlay, 
+    shouldShowPoster, 
+    shouldFocus, 
+    handlePressToggleRemindMe, 
+    handlePressInfo, 
+    isReminded
+}) => 
 {
     const video = useRef(null);
 

@@ -63,10 +63,10 @@ const VideoPlayer = ({ episode, shouldPlay, shouldShowPoster = false, shouldTogg
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: episode?.video
+                    uri: episode.video
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: episode?.poster }}
+                posterSource={{ uri: episode.poster }}
                 posterStyle={ styles.poster }
                 useNativeControls
                 resizeMode='contain'

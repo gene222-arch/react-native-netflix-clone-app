@@ -15,7 +15,7 @@ import notifications from './../../../services/data/notifications';
 import styles from './../../../assets/stylesheets/comingSoon';
 
 /** Selectors */
-import { authSelector } from './../../../redux/modules/auth/selectors'
+import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors'
 import { comingSoonSelector } from './../../../redux/modules/coming-soon/selectors';
 
 /** Components */
@@ -32,7 +32,7 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import { useNavigation } from '@react-navigation/native';
 
 
-const ComingSoonScreen = ({ AUTH, COMING_SOON }) => 
+const ComingSoonScreen = ({ AUTH, AUTH_PROFILE, COMING_SOON }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -99,7 +99,7 @@ const ComingSoonScreen = ({ AUTH, COMING_SOON }) =>
                         shouldFocus={ focusedIndex === index }
                         handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id) }
                         handlePressInfo={ () => handlePressInfo(item) }
-                        isReminded={ AUTH.remindedComingSoonShows.includes(item.id) }
+                        isReminded={ AUTH_PROFILE.reminded_coming_soon_shows.includes(item.id) }
                     />
                 )}
                 ListHeaderComponent={
@@ -135,6 +135,7 @@ const ComingSoonScreen = ({ AUTH, COMING_SOON }) =>
 
 const mapStateToProps = createStructuredSelector({
     AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector,
     COMING_SOON: comingSoonSelector
 });
 
