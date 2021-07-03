@@ -17,6 +17,12 @@ const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, 
 
     const handleClickShowInfo = () => setShowFrontPageInfo(!showFrontPageInfo);
 
+    const handleToggleAddToMyList_ = () => {
+        const hasAddedToList = authUserMyList.findIndex(({ id }) => id === frontPage.id) !== -1;
+        const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
+        handleToggleAddToMyList(message);
+    }
+
     useEffect(() => {
         return () => {
             setShowFrontPageInfo(false);
@@ -44,10 +50,10 @@ const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, 
             }
             </View>
             <View style={ styles.actionBtnsContainer }>
-                <TouchableOpacity onPress={ handleToggleAddToMyList }>
+                <TouchableOpacity onPress={ handleToggleAddToMyList_ }>
                     <View style={ styles.myListInfoActionContainer }>
                         <FeatherIcon 
-                            name={ !authUserMyList.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
+                            name={ authUserMyList.findIndex(({ id }) => id === frontPage.id) !== -1 ? 'check' : 'plus' }
                             size={ 24 }
                             color='#fff'
                         />

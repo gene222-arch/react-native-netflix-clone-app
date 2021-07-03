@@ -5,7 +5,7 @@ import { connect, useDispatch } from 'react-redux';
 import { ImageBackground, InteractionManager } from 'react-native'
 
 /** Selectors */
-import { authSelector } from './../../../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
 
 /** Actions */
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
@@ -37,7 +37,7 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-const CategoriesScreen = ({ AUTH, route }) => 
+const CategoriesScreen = ({ AUTH, AUTH_PROFILE, route }) => 
 {
     const dispatch = useDispatch();
     const { categoryName } = route.params;
@@ -152,7 +152,7 @@ const CategoriesScreen = ({ AUTH, route }) =>
                             <FrontPageOptions 
                                 frontPage={ frontPage } 
                                 handleToggleAddToMyList={ handleToggleAddToMyList }
-                                authUserMyList={ AUTH.myList }
+                                authUserMyList={ AUTH_PROFILE.my_list }
                                 frontPageCacheDirectory={ 'HomeCategoriesFrontPages/Poster/' }
                             />
                         </ImageBackground>   
@@ -170,7 +170,8 @@ const CategoriesScreen = ({ AUTH, route }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(CategoriesScreen)

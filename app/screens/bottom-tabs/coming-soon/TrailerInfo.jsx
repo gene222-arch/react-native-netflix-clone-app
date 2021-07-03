@@ -9,7 +9,6 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
 
 /** Selectors */
 import { comingSoonSelector } from './../../../redux/modules/coming-soon/selectors';
-import { authSelector } from './../../../redux/modules/auth/selectors';
 
 /** Components */
 import View from './../../../components/View';
@@ -23,10 +22,9 @@ import MoreLikeThis from './trailer-info-components/MoreLikeThis';
 import TrailersAndMore from './trailer-info-components/TrailersAndMore';
 import ShowInfo from './trailer-info-components/ShowInfo';
 import TrailerAndMoreLikeThisTab from './trailer-info-components/TrailerAndMoreLikeThisTab';
-import { useNavigation } from '@react-navigation/native';
 
 
-const TrailerInfo = ({ AUTH, COMING_SOON, route, navigation }) => 
+const TrailerInfo = ({ COMING_SOON, route, navigation }) => 
 {
     const dispatch = useDispatch();
     const { comingSoonShow } = route.params;
@@ -142,7 +140,6 @@ const TrailerInfo = ({ AUTH, COMING_SOON, route, navigation }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     COMING_SOON: comingSoonSelector
 });
 

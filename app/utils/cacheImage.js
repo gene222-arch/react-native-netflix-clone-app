@@ -6,12 +6,12 @@ export const getCachedFile = (directory, fileName, URI) => {
     return `${ FileSystem.cacheDirectory }${ directory }${ fileName }.${ getExtension( URI ) }`;
 }
 
-export const cacheImage = async (uri, uniqueDocID, directory = '') => 
+export const cacheImage = async (uri, id, directory = '') => 
 {
     const DIRECTORY = `${ FileSystem.cacheDirectory }${ directory }`;
     await ensureDirExists(DIRECTORY);
 
-    const fileURI = `${ uniqueDocID.toString() }.${ getExtension(uri) }`;
+    const fileURI = `${ id.toString() }.${ getExtension(uri) }`;
     const fileToCache = DIRECTORY + fileURI;
     const isFileCached = await ensureFileExists(fileToCache);
 

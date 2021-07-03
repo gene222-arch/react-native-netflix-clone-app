@@ -1,6 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Platform } from 'react-native';
-import { StatusBar } from 'expo-status-bar'
+import { ActivityIndicator } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './app/redux/store';
@@ -21,7 +20,6 @@ const App = () =>
 			>
 				<SafeAreaProvider>
 					<Navigation />
-					<StatusBar style='light' backgroundColor='transparent'/>
 				</SafeAreaProvider>
 			</PersistGate>
 		</Provider>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import * as FileSystem from 'expo-file-system'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { StatusBar, TouchableOpacity } from 'react-native'
+import { TouchableOpacity, ToastAndroid } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 
 /** Dispatch Actions */
 import * as AUTH_ACTION from './../../redux/modules/auth/actions'
@@ -19,11 +20,11 @@ import styles from './../../assets/stylesheets/moreActionList';
 import DisplayAction from './DisplayAction';
 
 /** RNE Components */
-import { BottomSheet, Overlay, Button } from 'react-native-elements';
+import { BottomSheet, Overlay } from 'react-native-elements';
 
 /** Utils/Configs */
 import VIDEO_STATUSES from './../../config/video.statuses';
-import { ensureDirExists, ensureFileExists } from './../../utils/cacheImage';
+import { ensureFileExists } from './../../utils/cacheImage';
 import View from './../View';
 import Text from './../Text';
 import { useNavigation } from '@react-navigation/native';
@@ -43,11 +44,12 @@ const MoreActionList = ({
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH.profile.id }${ selectedVideo.id }.mp4`;
-    const [downloadResumable, setDownloadResumable] = useState(null);
+    const [ downloadResumable, setDownloadResumable ] = useState(null);
     const [ progress, setProgress ] = useState(0);
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
+
+    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH.profile.id }${ selectedVideo.id }.mp4`;
     const ratedShow = AUTH_PROFILE.recently_watched_shows.find(({ id }) => id === selectedVideo.id);
 
 
@@ -135,7 +137,6 @@ const MoreActionList = ({
     const downloadProgressCallback = (downloadProgress) => {
         const progress = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
         setProgress(progress);
-        console.log(progress)
     };
 
     const downloadVideo = async () => 
@@ -145,6 +146,7 @@ const MoreActionList = ({
             await downloadResumable.downloadAsync();
             setStatus(VIDEO_STATUSES.DOWNLOADED);
 
+            ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
             dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH.profile }));
         } catch ({ message }) {
             setStatus(VIDEO_STATUSES.PAUSED);
@@ -158,6 +160,8 @@ const MoreActionList = ({
             setStatus('');
             toggleOverlay();
             await FileSystem.deleteAsync(FILE_URI);
+            dispatch(AUTH_ACTION.removeToMyDownloadsStart(selectedVideo.id));
+            ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
         } catch ({ message }) {
             // Do something
         }
@@ -166,11 +170,10 @@ const MoreActionList = ({
     const pauseDownload = async () => 
     {
         try {
-            console.log(`Paused at: ${ progress }%`);
-
-            setStatus(VIDEO_STATUSES.PAUSED);
             await downloadResumable.pauseAsync();
             AsyncStorage.setItem(selectedVideo.video, JSON.stringify(downloadResumable.savable()));
+            setStatus(VIDEO_STATUSES.PAUSED);
+            ToastAndroid.show('Download Paused', ToastAndroid.SHORT);
         } catch ({ message }) {
             setStatus(VIDEO_STATUSES.PAUSED_FAILED);
         }
@@ -191,9 +194,11 @@ const MoreActionList = ({
         const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
 
         try {
-            setStatus(VIDEO_STATUSES.RESUMING_DOWNLOAD);
+            setStatus(VIDEO_STATUSES.DOWNLOADING);
             await previousDownloadedFile.resumeAsync();
             setStatus(VIDEO_STATUSES.DOWNLOADED);
+            dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH.profile }));
+            ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
         } catch ({ message }) {
             console.error({ message });
         }
@@ -204,7 +209,6 @@ const MoreActionList = ({
         try {
             const fileExists = await ensureFileExists(FILE_URI);
 
-            console.log(`${ FILE_URI } exists? ${ fileExists.exists }`);
             if (fileExists.exists) 
             {
                 const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
@@ -243,6 +247,8 @@ const MoreActionList = ({
 
     return (
         <View style={ styles.container }>
+            
+            { isVisible && <StatusBar backgroundColor='rgba(0, 0, 0, .7)' /> }
             <Overlay isVisible={ showDownloadedMenu } onBackdropPress={ toggleOverlay } overlayStyle={ styles.downloadedMenu }>
                 <TouchableOpacity onPress={ deleteDownload }>
                     <Text style={ styles.deleteDownloadTitle }>Delete Download</Text>
@@ -251,7 +257,6 @@ const MoreActionList = ({
                     <Text style={ styles.viewMyDownloadsTitle }>View My Downloads</Text>
                 </TouchableOpacity>
             </Overlay>
-            { isVisible && <StatusBar backgroundColor='rgba(0, 0, 0, .7)' /> }
             <BottomSheet isVisible={ isVisible } containerStyle={ styles.bottomSheetContainer }>
             {actionList.map((action, index) => action.show && (
                 <DisplayAction key={ index } actionType={ action }/>

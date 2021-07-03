@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList } from 'react-native';
+import { FlatList, ToastAndroid } from 'react-native';
 import { StatusBar } from 'expo-status-bar'
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
@@ -7,7 +7,7 @@ import { ImageBackground, InteractionManager } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 /** Selectors */
-import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 /** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
@@ -41,9 +41,8 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-const HomeScreen = ({ AUTH, AUTH_PROFILE }) => 
+const HomeScreen = ({ AUTH_PROFILE }) => 
 {
-    console.log(AUTH_PROFILE)
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -51,7 +50,10 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE }) =>
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ categories, setCategories ] = useState([]);
 
-    const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
+    const handleToggleAddToMyList = (message) => {
+        dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+    }
 
     const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
 
@@ -76,8 +78,8 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE }) =>
 
         /** Cache Recently Watched Shows */
         AUTH_PROFILE.recently_watched_shows.map(({ id, poster, video }) => {
-            cacheImage(poster, id, `RecentlyWatchedShows/${ AUTH_PROFILE.name }/`);
-            cacheImage(video, id, `RecentlyWatchedShows/${ AUTH_PROFILE.name }/`);
+            cacheImage(poster, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`);
+            cacheImage(video, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`);
         });
     }
 
@@ -101,7 +103,7 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE }) =>
         return () => {
             cleanUp();
         }
-    }, []);
+    }, [AUTH_PROFILE.recently_watched_shows]);
 
 
     if (!isInteractionsComplete) {
@@ -110,7 +112,6 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE }) =>
 
     return (
         <View style={ styles.container }>
-            <StatusBar style='light' backgroundColor='transparent' />
             <FlatList 
                 data={ categories.items }
                 renderItem={({ item }) => <HomeCategory title={ item.title } categories={ item.movies } />}
@@ -145,7 +146,6 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 });
 

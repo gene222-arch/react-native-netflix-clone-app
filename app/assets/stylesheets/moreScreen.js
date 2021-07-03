@@ -1,7 +1,12 @@
 import { StyleSheet } from 'react-native';
 import Colors from './../../constants/Colors';
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = StyleSheet.create({
+    cancelSignOut: {
+        fontSize: 16,
+        color: Colors.grey
+    },
     container: {
         flex: 1,
         padding: 0,
@@ -33,7 +38,28 @@ const styles = StyleSheet.create({
     profileContainerContent: {
         flex: 1,
         justifyContent: 'center'
-    }
+    },
+    signOutDialog: {
+        backgroundColor: Colors.darkGrey,
+        width: DEVICE_WIDTH / 1.15,
+        padding: 20
+    },
+    signOutDialogActionBtns: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginLeft: 'auto',
+        marginTop: 25,
+        width: DEVICE_WIDTH / 2.5,
+        backgroundColor: 'transparent'
+    },
+    signOut: {
+        fontSize: 16,
+        color: Colors.grey
+    },
+    signOutQuery: {
+        fontSize: 16,
+        color: Colors.grey
+    },
 });
 
 export default styles;

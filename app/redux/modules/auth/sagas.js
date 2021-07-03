@@ -1,5 +1,4 @@
 import { all, take, put, call } from 'redux-saga/effects'
-import * as API from './../../../services/User'
 import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import { 
@@ -13,6 +12,8 @@ import {
     logoutFailed, 
     downloadVideoSuccess,
     downloadVideoFailed,
+    removeToMyDownloadsSuccess,
+    removeToMyDownloadsFailed,
     removeToRecentWatchesSuccess,
     removeToRecentWatchesFailed,
     selectProfileFailed,
@@ -30,6 +31,7 @@ const {
     LOGIN_START,
     LOGOUT_START,
     DOWNLOAD_VIDEO_START,
+    REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
@@ -85,6 +87,15 @@ function* downloadVideoSaga(payload)
     }
 }
 
+function* removeToMyDownloadsSaga(payload)  
+{
+    try {
+        yield put(removeToMyDownloadsSuccess({ showID: payload }));
+    } catch ({ message }) {
+        yield put(removeToMyDownloadsFailed({ message }));
+    }
+}
+
 function* removeToRecentWatchesSaga(payload)  
 {
     try {
@@ -113,10 +124,10 @@ function* toggleAddToMyListSaga(payload)
     }
 }
 
-function* toggleRemindMeOfComingShowSaga({ comingSoonShowID })
+function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {
-        yield put(toggleRemindMeOfComingShowSuccess({ comingSoonShowID }));
+        yield put(toggleRemindMeOfComingShowSuccess({ show: payload }));
 
     } catch ({ message }) {
         yield put(toggleRemindMeOfComingShowFailed({ message }));
@@ -164,6 +175,15 @@ function* downloadVideoWatcher()
     }
 }
 
+function* removeToMyDownloadsWatcher()
+{
+    while (true) {
+        const { payload } = yield take(REMOVE_TO_MY_DOWNLOADS_START);
+        yield call(removeToMyDownloadsSaga, payload);
+    }
+}
+
+
 function* removeToRecentWatchesWatcher()
 {
     while (true) {
@@ -204,6 +224,7 @@ export default function* ()
         loginWatcher(),
         logoutWatcher(),
         downloadVideoWatcher(),
+        removeToMyDownloadsWatcher(),
         removeToRecentWatchesWatcher(),
         selectProfileWatcher(),
         toggleAddToMyListWatcher(),

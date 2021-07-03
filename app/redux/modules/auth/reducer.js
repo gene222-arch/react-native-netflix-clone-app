@@ -19,12 +19,15 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
-    SELECT_PROFILE_START,
-    SELECT_PROFILE_SUCCESS,
-    SELECT_PROFILE_FAILED,
+    REMOVE_TO_MY_DOWNLOADS_START,
+    REMOVE_TO_MY_DOWNLOADS_SUCCESS,
+    REMOVE_TO_MY_DOWNLOADS_FAILED,
     REMOVE_TO_RECENT_WATCHES_START,
     REMOVE_TO_RECENT_WATCHES_SUCCESS,
     REMOVE_TO_RECENT_WATCHES_FAILED,
+    SELECT_PROFILE_START,
+    SELECT_PROFILE_SUCCESS,
+    SELECT_PROFILE_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -98,6 +101,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGIN_START:
         case LOGOUT_START:
         case DOWNLOAD_VIDEO_START:
+        case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
@@ -225,6 +229,25 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case REMOVE_TO_MY_DOWNLOADS_SUCCESS: 
+            let filteredMyDownloads = SELECT_AUTHENTICATED_PROFILE
+                .my_downloads
+                .filter(({ id }) => id !== payload.showID);
+
+            /** Update profiles */
+            NEW_PROFILES = profiles.map((prof) => {
+                return (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
+                    ? { ...prof, my_downloads: filteredMyDownloads } 
+                    : prof;
+            });
+
+            return {
+                ...state,
+                isLoading: false,
+                profiles: NEW_PROFILES,
+                errors
+            }
+
         case REMOVE_TO_RECENT_WATCHES_SUCCESS:
 
             let filteredRecentlyWatchedShows = SELECT_AUTHENTICATED_PROFILE
@@ -232,7 +255,7 @@ export default (state = initialState, { type, payload }) =>
                 .filter(({ id }) => id !== payload.showID);
 
             /** Update profiles */
-            let newProfiles_ = profiles.map((prof) => {
+            NEW_PROFILES = profiles.map((prof) => {
                 return (prof.id === profile.id) 
                     ? { ...prof, recently_watched_shows: filteredRecentlyWatchedShows } 
                     : prof;
@@ -240,7 +263,7 @@ export default (state = initialState, { type, payload }) =>
 
             return { 
                 ...state,
-                profiles: newProfiles_,
+                profiles: NEW_PROFILES,
                 isLoading: false,
                 errors
             }
@@ -275,14 +298,21 @@ export default (state = initialState, { type, payload }) =>
             }            
 
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
-
-            const isAlreadyReminded = SELECT_AUTHENTICATED_PROFILE
-                .reminded_coming_soon_shows
-                .findIndex(({ id }) => id === payload.comingSoonShowID); 
             
-            let newRemindedShows = (isAlreadyReminded === -1) 
-                ? [ ...SELECT_AUTHENTICATED_PROFILE.reminded_coming_soon_shows, payload.show ] 
-                : SELECT_AUTHENTICATED_PROFILE.reminded_coming_soon_shows.filter(({ id }) => id !== payload.comingSoonShowID);
+            let newRemindedShows = [];
+            const authProfileRemindedShows = SELECT_AUTHENTICATED_PROFILE.reminded_coming_soon_shows;
+
+            if (authProfileRemindedShows.length) 
+            {
+                const hasReminded = authProfileRemindedShows.findIndex(({ id }) => id === payload.show.id) !== -1; 
+            
+                newRemindedShows = hasReminded
+                    ? authProfileRemindedShows.filter(({ id }) => id !== payload.show.id)
+                    : [ ...authProfileRemindedShows, payload.show ];
+            }
+            else {
+                newRemindedShows.push(payload.show);
+            }
 
             NEW_PROFILES = profiles.map((prof) => {
                 return (prof.id === profile.id) 
@@ -301,6 +331,7 @@ export default (state = initialState, { type, payload }) =>
         case DOWNLOAD_VIDEO_FAILED:
         case SELECT_PROFILE_FAILED:
         case RATE_SHOW_FAILED:
+        case REMOVE_TO_MY_DOWNLOADS_FAILED:
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:

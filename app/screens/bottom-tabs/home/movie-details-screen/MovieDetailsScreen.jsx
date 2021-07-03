@@ -63,8 +63,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
 
         // is playing
         if (toggleVideo) { 
-            console.log('ADDED TO RECENT WATCHES');
-            dispatch(AUTH_ACTION.addToRecentWatchesStart(currentSeasonEpisode));
+            setTimeout(() => dispatch(AUTH_ACTION.addToRecentWatchesStart(currentSeasonEpisode)), 100);
         }
     }
 

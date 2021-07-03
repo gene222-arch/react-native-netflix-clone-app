@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { InteractionManager } from 'react-native'
+import { InteractionManager, ToastAndroid } from 'react-native'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import { useDispatch, connect } from 'react-redux';
@@ -46,8 +46,10 @@ const ComingSoonScreen = ({ AUTH, AUTH_PROFILE, COMING_SOON }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (comingSoonShowID) => {
-        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ comingSoonShowID }));
+    const handlePressToggleRemindMe = (show, message) => {
+        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart(show));
+        
+        message.length && setTimeout(() => ToastAndroid.show(message, ToastAndroid.SHORT), 100);
     }
 
     const handlePressInfo = (comingSoonShow) => {
@@ -91,17 +93,22 @@ const ComingSoonScreen = ({ AUTH, AUTH_PROFILE, COMING_SOON }) =>
                 keyExtractor={ ({ id }) => id.toString() }
                 onScroll={ handleOnScroll }
                 data={ COMING_SOON.comingSoonShows }
-                renderItem={ ({ item, index }) => (
-                    <NotificationsVideoItem 
-                        comingSoon={ item } 
-                        shouldPlay={ false } 
-                        shouldShowPoster={ focusedIndex !== index }
-                        shouldFocus={ focusedIndex === index }
-                        handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id) }
-                        handlePressInfo={ () => handlePressInfo(item) }
-                        isReminded={ AUTH_PROFILE.reminded_coming_soon_shows.includes(item.id) }
-                    />
-                )}
+                renderItem={ ({ item, index }) => {
+
+                    const isReminded = AUTH_PROFILE.reminded_coming_soon_shows.findIndex(({ id }) => id === item.id) !== -1;
+
+                    return (
+                        <NotificationsVideoItem 
+                            comingSoon={ item } 
+                            shouldPlay={ false } 
+                            shouldShowPoster={ focusedIndex !== index }
+                            shouldFocus={ focusedIndex === index }
+                            handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item, !isReminded ? 'Reminded' : '') }
+                            handlePressInfo={ () => handlePressInfo(item) }
+                            isReminded={ isReminded }
+                        />
+                    )
+                }}
                 ListHeaderComponent={
                     <>
                         {/* Search icon container */}

@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import Colors from './../../constants/Colors';
 import * as ScreenOrientation from './../../utils/screenOrientation'
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = StyleSheet.create({
     actionBtns: {
@@ -65,10 +66,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     title: {
+        width: DEVICE_WIDTH / 2
     },
     titleCloseBtnContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'space-between',
         backgroundColor: Colors.darkGrey,
         paddingBottom: 10

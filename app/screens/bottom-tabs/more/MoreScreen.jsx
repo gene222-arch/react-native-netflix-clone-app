@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, connect } from 'react-redux'
-import { InteractionManager, FlatList } from 'react-native'
+import { InteractionManager, FlatList, TouchableOpacity, ToastAndroid } from 'react-native'
 import * as AUTH_ACTION from '../../../redux/modules/auth/actions'
 import styles from './../../../assets/stylesheets/moreScreen';
-import accountProfilesAPI from './../../../services/data/accountProfiles';
 import ProfilePhotoItem from '../../../components/profile-photo-item/ProfilePhotoItem';
 import View from './../../../components/View';
-import { Avatar, Button, ListItem } from 'react-native-elements';
+import { Overlay, Button, ListItem } from 'react-native-elements';
 import Text from './../../../components/Text';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import LoadingScreen from './../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
-import { authSelector } from './../../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
 
-const moreOptions = (logoutHandler) =>
+
+const moreOptions = ({ onPressSignOut }) =>
 [
     {
         id: 1,
@@ -49,7 +48,7 @@ const moreOptions = (logoutHandler) =>
         name: 'Sign Out',
         Icon: null,
         bottomDivider: false,
-        onPress: () => logoutHandler()
+        onPress: () => onPressSignOut()
     }
 ];
 
@@ -71,43 +70,48 @@ const DisplayOption = ({ onPress, bottomDivider, Icon, name }) =>
     )
 }
 
-const MoreScreen = ({ AUTH }) => 
+const MoreScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
     const dispatch = useDispatch();
     
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ selectedImg, setSelectedImg ] = useState(1);
     const [ sortedProfiles, setSortedProfiles ] = useState([]);
+    const [ showSignOutDialog, setShowSignOutDialog ] = useState(false);
 
-    const sortProfile = () => {
-        const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH.profile.id);
+    const handlePressSelectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }))
+
+    const toggleSignOutDialog = () => setShowSignOutDialog(!showSignOutDialog);
+
+    const handlePressSignOut = () => {
+        ToastAndroid.show('Signed Out', ToastAndroid.LONG);
+        dispatch(AUTH_ACTION.logoutStart());
+    }
+
+    const runAfterInteractions = () => {
+        const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH_PROFILE.id);
         const middleArrValIndex = Math.floor(AUTH.profiles.length / 2);
         const profiles = AUTH.profiles;
 
         [ profiles[selectedProfileIndex], profiles[middleArrValIndex] ] = [ profiles[middleArrValIndex], profiles[selectedProfileIndex] ];
 
         setSortedProfiles(profiles);
-    }
 
-    const logout = () => dispatch(AUTH_ACTION.logoutStart());
-
-    const runAfterInteractions = () => {
         setIsInteractionsComplete(true);
     }
 
     const cleanUp = () => {
         setIsInteractionsComplete(false);
         setSortedProfiles([]);
-        setSelectedImg(1);
+        setShowSignOutDialog(false);
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-        sortProfile();
+
         return () => {
             cleanUp();
         }
-    }, []); 
+    }, [AUTH_PROFILE]); 
 
     if (!isInteractionsComplete) {
         return <LoadingScreen />
@@ -115,6 +119,20 @@ const MoreScreen = ({ AUTH }) =>
 
     return (
         <View style={ styles.container }>
+            {/* Sign out Dialog */}
+            <Overlay isVisible={ showSignOutDialog } onBackdropPress={ toggleSignOutDialog } overlayStyle={ styles.signOutDialog }>
+                <Text style={ styles.signOutQuery }>Sign out from this account?</Text>
+                <View style={ styles.signOutDialogActionBtns }>
+                    <TouchableOpacity onPress={ toggleSignOutDialog }>
+                        <Text style={ styles.cancelSignOut }>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={ handlePressSignOut }>
+                        <Text style={ styles.signOut }>Sign Out</Text>
+                    </TouchableOpacity>
+                </View>
+            </Overlay>
+            
             {/* Profiles */}
             <View style={ styles.profileContainer }>
                 <FlatList
@@ -125,7 +143,7 @@ const MoreScreen = ({ AUTH }) =>
                             name={ item.name } 
                             uri={ item.profile_photo }
                             isSelected={ AUTH.profile.id === item.id }
-                            onPress={ () => setSelectedImg(item.id) }
+                            onPress={ () => handlePressSelectProfile(item.id) }
                         />
                     )}
                     horizontal
@@ -150,7 +168,7 @@ const MoreScreen = ({ AUTH }) =>
             </View>
             <View style={ styles.lists }>
                 {
-                    moreOptions(logout).map(({ id, name, Icon, bottomDivider, onPress }) => (
+                    moreOptions({ onPressSignOut: toggleSignOutDialog }).map(({ id, name, Icon, bottomDivider, onPress }) => (
                         <DisplayOption 
                             key={ id }
                             onPress={ onPress }
@@ -166,7 +184,8 @@ const MoreScreen = ({ AUTH }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(MoreScreen)

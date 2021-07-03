@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { ActivityIndicator } from 'react-native'
+import React from 'react'
+import { ActivityIndicator, ToastAndroid } from 'react-native'
 import View from './../../../../components/View';
-import Text from './../../../../components/Text';
 import { Tab } from 'react-native-elements';
 import styles from './../../../../assets/stylesheets/movieDetail';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,7 +28,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
         
             return (
                 <MaterialCommunityIcon 
-                    name={ !data.find(({ id }) => id === showID) ? 'plus' : 'check' }
+                    name={ data.findIndex(({ id }) => id === showID) !== -1 ? 'check' : 'plus' }
                     size={ 30 }
                     color='white'
                 />
@@ -46,7 +45,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
                     name='thumbs-up'
                     size={ 30 }
                     color='white'
-                    solid={ data.find(({ id }) => id === showID)?.isRated }
+                    solid={ data.findIndex(({ id }) => id === showID) !== -1 }
                 />
             )
 
@@ -108,6 +107,15 @@ const ActionButton = ({
         )
     }
 
+    const handlePressTabAddToLIst_ = () => {
+        const hasAddedToList = AUTH_PROFILE.my_list.findIndex(({ id }) => id === selectedShowID) !== -1;
+        const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
+        handlePressTabAddToLIst();
+        setTimeout(() => {
+            ToastAndroid.show(message, ToastAndroid.SHORT);
+        }, 100);
+    }
+
     return (
         <View style={ styles.tabsContainer }>
             <Tab value={ selectedTab } indicatorStyle={ styles.tabIndicator } disableIndicator={ disableIndicator }>
@@ -116,7 +124,7 @@ const ActionButton = ({
                     icon={ myListIcon() }
                     titleStyle={ styles.tabItemTitle  }
                     containerStyle={ styles.tabItemContainer }
-                    onPressIn={ handlePressTabAddToLIst }
+                    onPressIn={ handlePressTabAddToLIst_ }
                 />
                 <Tab.Item 
                     title='Like' 

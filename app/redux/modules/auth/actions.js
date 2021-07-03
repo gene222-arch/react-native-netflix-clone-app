@@ -16,6 +16,9 @@ const {
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
+    REMOVE_TO_MY_DOWNLOADS_START,
+    REMOVE_TO_MY_DOWNLOADS_SUCCESS,
+    REMOVE_TO_MY_DOWNLOADS_FAILED,
     REMOVE_TO_RECENT_WATCHES_START,
     REMOVE_TO_RECENT_WATCHES_SUCCESS,
     REMOVE_TO_RECENT_WATCHES_FAILED,
@@ -111,6 +114,23 @@ export const downloadVideoFailed = (payload) => ({
     type: DOWNLOAD_VIDEO_FAILED,
     payload
 });
+
+/** Remove to my downloads */
+export const removeToMyDownloadsStart = (payload) => ({
+    type: REMOVE_TO_MY_DOWNLOADS_START,
+    payload
+});
+
+export const removeToMyDownloadsSuccess = (payload) => ({
+    type: REMOVE_TO_MY_DOWNLOADS_SUCCESS,
+    payload
+});
+
+export const removeToMyDownloadsFailed = (payload) => ({
+    type: REMOVE_TO_MY_DOWNLOADS_FAILED,
+    payload
+});
+
 
 /** Remove to recent watches */
 export const removeToRecentWatchesStart = (payload) => ({

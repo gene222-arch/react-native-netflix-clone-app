@@ -58,8 +58,8 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
 
     const runAfterInteractions = () => {
         AUTH_PROFILE.my_downloads.map(({ id, poster, video }) => {
-            cacheImage(poster, id, 'Downloads/Posters/');
-            cacheImage(video, id, 'Downloads/Videos/');
+            cacheImage(poster, id, `${ AUTH_PROFILE.name }/Downloads/Posters/`);
+            cacheImage(video, id, `${ AUTH_PROFILE.name }/Downloads/Videos/`);
         });
         setIsInteractionsComplete(true);
     }

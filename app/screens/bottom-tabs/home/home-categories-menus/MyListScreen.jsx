@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import View from '../../../../components/View';
-import Text from '../../../../components/Text';
 import { Picker } from '@react-native-picker/picker';
 import styles from './../../../../assets/stylesheets/myList';
 import { FlatList } from 'react-native-gesture-handler';
 import MyListItem from './../../../../components/my-list-item/MyListItem';
 import { createStructuredSelector } from 'reselect';
-import { authSelector } from './../../../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { InteractionManager } from 'react-native'
 import LoadingScreen from './../../../../components/LoadingScreen';
 import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
-import * as FileSystem from 'expo-file-system';
-import { getExtension } from './../../../../utils/file';
-
 
 
 const DEFAULT_PICKER_LIST = [
@@ -22,24 +18,20 @@ const DEFAULT_PICKER_LIST = [
     'Pick 3'
 ];
 
-const MyListScreen = ({ AUTH }) => 
+const MyListScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ myList, setMyList ] = useState([]);
     const [ selectedPicker, setSelectedPicker ] = useState('My List')
 
     const handleChangePicker = (value, index) => setSelectedPicker(value);
 
     const runAfterInteractions = () => {
-        AUTH.myList.map(({ id, poster }) => cacheImage(poster, id, 'Users/Gene/MyList/Posters/'))
-
-        setMyList(AUTH.myList);
+        AUTH_PROFILE.my_list.map(({ id, poster }) => cacheImage(poster, id, `Users/${ AUTH_PROFILE.name }/MyList/Posters/`))
         setIsInteractionsComplete(true);
     }
 
     const cleanUp = () => {
         setIsInteractionsComplete(false);
-        setMyList([]);
         setSelectedPicker('My List');
     }
 
@@ -75,18 +67,21 @@ const MyListScreen = ({ AUTH }) =>
             </Picker>
             <FlatList
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ myList }
+                data={ AUTH_PROFILE.my_list }
                 renderItem={ ({ item }) => (
-                    <MyListItem uri={ getCachedFile('Users/Gene/MyList/Posters/', item.id, item.poster) }/>
+                    <MyListItem uri={ getCachedFile(`Users/${ AUTH_PROFILE.name }/MyList/Posters/`, item.id, item.poster) }/>
                 )}
                 numColumns={ 3 }
+                showsHorizontalScrollIndicator={ false }
+                showsVerticalScrollIndicator={ false }
             />
         </View>
     )
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(MyListScreen)

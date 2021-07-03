@@ -36,15 +36,15 @@ const NotificationsVideoItem = ({
     {
         return !isReminded 
         ? (
-            <MaterialCommunityIcon 
-                name='bell'
+            <FeatherIcon 
+                name='check'
                 size={ 28 }
                 color='#fff'
             />
         )
         : (
             <MaterialCommunityIcon 
-                name='bell-outline'
+                name='bell'
                 size={ 28 }
                 color='#fff'
             />
