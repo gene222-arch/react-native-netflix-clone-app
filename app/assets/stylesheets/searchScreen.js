@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
     searchInput: {
         fontSize: 14
     },
+    searchHeaderTitle: {
+        marginBottom: 20,
+        paddingLeft: 15
+    }
 });
 
 export default styles;

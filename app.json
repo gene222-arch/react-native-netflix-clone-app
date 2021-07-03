@@ -4,7 +4,7 @@
     "slug": "netflix-clone-app",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./app/assets/netflix-icon.png",
+    "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./app/assets/splash.png",
@@ -23,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/netflix-icon.png",
+        "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       }
     },

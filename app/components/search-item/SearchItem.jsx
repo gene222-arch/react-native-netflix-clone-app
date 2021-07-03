@@ -3,8 +3,8 @@ import View from './../View';
 import Text from './../Text';
 import Image from './../Image';
 import styles from '../../assets/stylesheets/searchItem';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const SearchItem = ({ uri, title, onPress }) => 
 {
@@ -17,9 +17,9 @@ const SearchItem = ({ uri, title, onPress }) =>
                 />
                 <View style={ styles.titlePlayIconContainer }>
                     <Text style={ styles.title }>{ title }</Text>
-                    <FeatherIcon 
-                        name='play-circle'
-                        size={ 24 }
+                    <Ionicon 
+                        name='play-circle-outline'
+                        size={ 35 }
                         color='#fff'
                     />
                 </View>

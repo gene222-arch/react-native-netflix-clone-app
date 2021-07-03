@@ -69,9 +69,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         borderBottomWidth: 0,
         backgroundColor: Colors.darkGrey,
-        padding: 5,
-        marginVertical: 5,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
     },
     input: {
         fontSize: 16,

@@ -1,39 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import View from './../../../components/View';
-import Text from './../../../components/Text';
 import { InteractionManager } from 'react-native'
 import styles from './../../../assets/stylesheets/searchScreen';
-import { FlatList } from 'react-native-gesture-handler';
-import SearchItem from './../../../components/search-item/index';
 import searchListAPI from './../../../services/data/searchList';
-import SearchNotFound from './../../errors/SearchNotFound';
-import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
+import { cacheImage } from './../../../utils/cacheImage';
 import LoadingScreen from './../../../components/LoadingScreen';
 import SearchBar from './SearchBar';
+import DefaultSearchList from './DefaultSearchList';
+import OnSearchList from './OnSearchList';
+import Info from './../../../components/continue-watching-for-item/Info';
 
-const DisplaySearch = ({ searchList, searchListLength }) => 
-{
-    if (!searchListLength) {
-        return <SearchNotFound styles={ styles } />
-    }
-
-    return (
-        <View>
-            <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
-            <FlatList 
-                keyExtractor={ ({ id }) => id.toString() }
-                data={ searchList }
-                renderItem={ ({ item }) => (
-                    <SearchItem
-                        uri={ getCachedFile('SearchList/', item.id, item.poster) } 
-                        title={ item.title }
-                        onPress={ () => console.log(`${ item.title } is now Playing`) }
-                    />
-                )}
-            />
-        </View>
-    )
-}
 
 const SearchScreen = () => 
 {
@@ -41,6 +17,15 @@ const SearchScreen = () =>
 
     const [ searchList, setSearchList ] = useState([]);
     const [ searchInput, setSearchInput ] = useState('');
+    const [ show, setShow ] = useState(null);
+    const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
+
+    const handlePressDisplayShowInfo = (show) => {
+        setTimeout(() => {
+            setShow(show);
+            setShouldDisplayShowInfo(true);
+        }, 1);
+    }
 
     const handleChangeSearchInput = (searchTextInput) => 
     {
@@ -81,7 +66,10 @@ const SearchScreen = () =>
     }
 
     const runAfterInteractions = () => {
-        searchListAPI.map(({ id, poster }) => cacheImage(poster, id, 'SearchList/'));
+        searchListAPI.map(({ id, poster, wallpaper }) => {
+            cacheImage(poster, id, 'SearchList/Posters/');
+            cacheImage(wallpaper, id, 'SearchList/Wallpapers/');
+        });
         
         setSearchList(searchListAPI)
         setIsInteractionsComplete(true);
@@ -91,6 +79,8 @@ const SearchScreen = () =>
         setIsInteractionsComplete(false);
         setSearchList([]);
         setSearchInput('');
+        setShow(null);
+        setShouldDisplayShowInfo(false);
     }   
 
     useEffect(() => {
@@ -107,12 +97,21 @@ const SearchScreen = () =>
 
     return (
         <View style={ styles.container }>
+            <Info  
+                selectedShow={ show }
+                isVisible={ shouldDisplayShowInfo }
+                setIsVisible={ setShouldDisplayShowInfo }
+            />
             <SearchBar 
                 searchInput={ searchInput } 
                 handleChangeSearchInput={ handleChangeSearchInput } 
                 handleOnCancel={ handleOnCancel }
             />
-            <DisplaySearch searchList={ searchList } searchListLength={ searchList.length } />
+            {
+                !searchInput.length  
+                    ? <DefaultSearchList searchList={ searchList } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+                    : <OnSearchList searchList={ searchList } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+            }
         </View>
     )
 }

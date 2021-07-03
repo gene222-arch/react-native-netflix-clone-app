@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { TouchableOpacity } from 'react-native'
-import { BottomSheet, ListItem, Icon, Divider, Button } from 'react-native-elements';
+import { BottomSheet, ListItem, Divider, Button } from 'react-native-elements';
 import styles from './../../assets/stylesheets/info';
 import Text from './../Text';
 import View from './../View';
@@ -8,9 +8,25 @@ import Image from './../Image';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
+const DEFAULT_SHOW = {
+    id: '',
+    title: '',
+    genre: [],
+    author: '',
+    plot: '',
+    wallpaper: '',
+    duration: '',
+    age_restriction: '',
+    year: '',
+    total_number_of_episodes: '',
+    total_number_of_seasons: '',
+    poster: ''
+};
 
 const Info = ({ selectedShow , isVisible, setIsVisible }) => 
-{
+{   
+    selectedShow = selectedShow || DEFAULT_SHOW;
+
     return (
         <BottomSheet
             isVisible={ isVisible }
@@ -19,13 +35,13 @@ const Info = ({ selectedShow , isVisible, setIsVisible }) =>
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
-                        source={ typeof selectedShow.poster === 'string' ? { uri: selectedShow.poster } : selectedShow.poster}
+                        source={ typeof selectedShow?.poster === 'string' ? { uri: selectedShow?.poster } : selectedShow?.poster}
                         style={ styles.poster }
                     />
                     <ListItem.Content>
                         <View style={ styles.posterDetails }>
                             <View style={ styles.titleCloseBtnContainer }>
-                                <Text h4 style={ styles.title }>{  selectedShow.title }</Text>
+                                <Text h4 style={ styles.title }>{  selectedShow?.title }</Text>
                                 <TouchableOpacity onPress={ () => setIsVisible(false) }>
                                     <FeatherIcon 
                                         name='x-circle'
@@ -40,7 +56,7 @@ const Info = ({ selectedShow , isVisible, setIsVisible }) =>
                                 <Text style={ styles.yearAgeSeason }>15+</Text>
                                 <Text style={ styles.yearAgeSeason }>15 Seasons</Text>
                             </View>
-                            <Text style={ styles.plot }>{ selectedShow.plot }</Text>
+                            <Text style={ styles.plot }>{ selectedShow?.plot }</Text>
                         </View>
                     </ListItem.Content>
                 </ListItem>
