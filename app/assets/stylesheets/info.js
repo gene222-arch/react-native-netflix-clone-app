@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     posterContainer: {
-        flex: 1,
         backgroundColor: Colors.darkGrey,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10

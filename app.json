@@ -4,12 +4,12 @@
     "slug": "netflix-clone-app",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./app/assets/icon.png",
+    "icon": "./app/assets/netflix-icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./app/assets/splash.png",
+      "image": "./app/assets/netflix-splash-screen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "foregroundImage": "./app/assets/netflix-icon.png",
         "backgroundColor": "#000000"
       }
     },

@@ -66,16 +66,13 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
 }
 
 const ActionButton = ({ 
-    AUTH_PROFILE, 
-    LIKED_SHOWS, 
-    selectedTab, 
+    AUTH_PROFILE,
     selectedShowID, 
     isLoadingAddToMyList, 
     handlePressTabAddToLIst, 
     isLoadingLikedShows, 
     handlePressTabLikeShow, 
-    handlePressTabShare,
-    disableIndicator = false 
+    handlePressTabShare
 }) => 
 {
 
@@ -107,10 +104,12 @@ const ActionButton = ({
         )
     }
 
-    const handlePressTabAddToLIst_ = () => {
+    const handlePressTabAddToLIst_ = () => 
+    {
+        handlePressTabAddToLIst();
+
         const hasAddedToList = AUTH_PROFILE.my_list.findIndex(({ id }) => id === selectedShowID) !== -1;
         const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
-        handlePressTabAddToLIst();
         setTimeout(() => {
             ToastAndroid.show(message, ToastAndroid.SHORT);
         }, 100);
@@ -118,7 +117,7 @@ const ActionButton = ({
 
     return (
         <View style={ styles.tabsContainer }>
-            <Tab value={ selectedTab } indicatorStyle={ styles.tabIndicator } disableIndicator={ disableIndicator }>
+            <Tab value={ 0 } indicatorStyle={ styles.tabIndicator } disableIndicator={ true }>
                 <Tab.Item 
                     title='My List' 
                     icon={ myListIcon() }

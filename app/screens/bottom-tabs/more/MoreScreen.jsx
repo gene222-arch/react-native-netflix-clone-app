@@ -11,16 +11,17 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import LoadingScreen from './../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
 import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { useNavigation } from '@react-navigation/native';
 
 
-const moreOptions = ({ onPressSignOut }) =>
+const moreOptions = ({ onPressSignOut, onPressMyList }) =>
 [
     {
         id: 1,
         name: 'My List',
         Icon: <FontAwesome5 name='check' size={ 15 } color={ styles.manageProfilesBtnIcon.color }/>,
         bottomDivider: true,
-        onPress: () => console.log('Clicked')
+        onPress: () => onPressMyList()
     },
     {
         id: 2,
@@ -72,6 +73,7 @@ const DisplayOption = ({ onPress, bottomDivider, Icon, name }) =>
 
 const MoreScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
@@ -87,6 +89,14 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
         dispatch(AUTH_ACTION.logoutStart());
     }
 
+    const handlePressMyList = () => navigation.navigate('MyListScreen', { headerTitle: 'My List' });
+
+    const moreOptions_ = { 
+        onPressSignOut: toggleSignOutDialog, 
+        onPressMyList: handlePressMyList 
+    };
+
+    /** Run after interactions */
     const runAfterInteractions = () => {
         const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH_PROFILE.id);
         const middleArrValIndex = Math.floor(AUTH.profiles.length / 2);
@@ -168,7 +178,7 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
             </View>
             <View style={ styles.lists }>
                 {
-                    moreOptions({ onPressSignOut: toggleSignOutDialog }).map(({ id, name, Icon, bottomDivider, onPress }) => (
+                    moreOptions(moreOptions_).map(({ id, name, Icon, bottomDivider, onPress }) => (
                         <DisplayOption 
                             key={ id }
                             onPress={ onPress }

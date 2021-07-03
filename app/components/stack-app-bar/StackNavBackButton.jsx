@@ -4,7 +4,7 @@ import { HeaderBackButton } from '@react-navigation/stack'
 import { Keyboard } from 'react-native';
 
 
-const StackNavBackButton = () => 
+const StackNavBackButton = (props) => 
 {
     const navigation = useNavigation();
 
@@ -13,7 +13,7 @@ const StackNavBackButton = () =>
         navigation.goBack();
     }
 
-    return <HeaderBackButton onPress={ navigateBack }/>
+    return <HeaderBackButton { ...props } onPress={ navigateBack }/>
 }
 
 

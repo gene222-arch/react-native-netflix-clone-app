@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList } from 'react-native-gesture-handler';
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
-import { ImageBackground, InteractionManager } from 'react-native'
+import { ImageBackground, InteractionManager, ToastAndroid, FlatList } from 'react-native'
 
 /** Selectors */
 import { authSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
@@ -47,7 +46,10 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, route }) =>
     const [ selectedMainCategory, setSelectedMainCategory ] = useState(categoryName);
     const [ categoryItems, setCategoryItems ] = useState([]);
 
-    const handleToggleAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
+    const handleToggleAddToMyList = (message) => {
+        dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+    }
 
     const handlePressChangeMainCategory = (selectedCategory) => 
     {

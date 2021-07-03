@@ -56,7 +56,7 @@ const Info = ({ selectedShow , isVisible, setIsVisible }) =>
                                 <Text style={ styles.yearAgeSeason }>15+</Text>
                                 <Text style={ styles.yearAgeSeason }>15 Seasons</Text>
                             </View>
-                            <Text style={ styles.plot }>{ selectedShow?.plot }</Text>
+                            <Text style={ styles.plot }>{ selectedShow?.plot.slice(0, 250).concat('...') }</Text>
                         </View>
                     </ListItem.Content>
                 </ListItem>

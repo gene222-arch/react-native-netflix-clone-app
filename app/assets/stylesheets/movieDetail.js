@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from './../../constants/Colors';
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = StyleSheet.create({
     ageContainerText: {
@@ -15,20 +16,30 @@ const styles = StyleSheet.create({
     creator: {
         color: Colors.grey
     },
+    divider: {
+        marginVertical: 20,
+        height: 2
+    },
     downloadBtn: {
         marginTop: 10,
         backgroundColor: Colors.darkGrey,
         color: Colors.white
     },
+    episodesAndMoreLikeThisContainer: {
+        paddingHorizontal: 5,
+    },
     container: {
         flex: 1
     },
     episodeHeader: {
-        marginTop: 12
+        fontSize: 14
     },  
     listHeaderComponent: {
-        marginBottom: 10
+        marginBottom: 10,
+        paddingHorizontal: 5
     },  
+    movieContainer: {
+    },
     moviePoster: {
         width: '100%',
         aspectRatio: 16/9,
@@ -42,11 +53,14 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     movieTitleInfo: {
-        width: '60%',
+        width: DEVICE_WIDTH / 1.5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 10,
+    },
+    pickerItem: {
+        color: Colors.darkMode
     },
     playBtn: {
         backgroundColor: Colors.white
@@ -62,7 +76,9 @@ const styles = StyleSheet.create({
     },
     seasonPicker: {
         width: 150,
-        color: Colors.white
+        color: Colors.white,
+        backgroundColor: Colors.darkGrey,
+        marginTop: 20
     },
     tabsContainer: {
         width: '80%',
@@ -82,8 +98,6 @@ const styles = StyleSheet.create({
     tabItem: {
 
     },
-    videoPlayerContainer: {
-    },  
     year: {
         color: Colors.grey
     }

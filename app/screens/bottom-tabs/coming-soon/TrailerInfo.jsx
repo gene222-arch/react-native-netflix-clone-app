@@ -108,15 +108,13 @@ const TrailerInfo = ({ COMING_SOON, route, navigation }) =>
                         <ShowInfo comingSoonShow={ comingSoonShow } />
 
                         {/* Tab */}
-                        <ActionButton 
-                            selectedTab={ selectedTab }
+                        <ActionButton
                             selectedShowID={ comingSoonShow.id }
                             isLoadingAddToMyList={ isLoadingAddToMyList }
                             isLoadingLikedShows={ isLoadingLikedShows }
                             handlePressTabLikeShow={ handlePressTabLikeShow }
                             handlePressTabAddToLIst={ handlePressTabAddToLIst }
                             handlePressTabShare={ handlePressTabShare }
-                            disableIndicator={ true }
                         />
 
                         <Divider style={ styles.divider } />
@@ -131,7 +129,7 @@ const TrailerInfo = ({ COMING_SOON, route, navigation }) =>
                             />
                         )}
 
-                        { selectedTabCategory === 1 && <TrailersAndMore trailers={ comingSoonShow.coming_soon_shows_trailers } /> }
+                        { selectedTabCategory === 1 && <TrailersAndMore trailers={ comingSoonShow.coming_soon_show_trailers } /> }
                     </>
                 }
             />

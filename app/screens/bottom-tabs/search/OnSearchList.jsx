@@ -9,7 +9,7 @@ import OnSearchItem from './../../../components/search-item/OnSearchItem';
 
 const OnSearchList = ({ searchList = [], handlePressDisplayShowInfo }) => {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Text h4 style={ styles.searchHeaderTitle }>TV Shows and Movies</Text>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }

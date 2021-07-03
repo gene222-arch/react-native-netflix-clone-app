@@ -1,13 +1,17 @@
 import React from 'react'
+import { TouchableOpacity } from 'react-native'
 import Image from '../Image';
 import styles from './../../assets/stylesheets/myListItem';
 
-const MyListItem = ({ uri }) => {
+const MyListItem = ({ uri, handlePressDisplayShowInfo }) => 
+{
     return (
-        <Image 
-            source={{ uri }}
-            style={ styles.image }
-        />
+        <TouchableOpacity onPress={ handlePressDisplayShowInfo }>
+            <Image 
+                source={{ uri }}
+                style={ styles.image }
+            />
+        </TouchableOpacity>
     )
 }
 

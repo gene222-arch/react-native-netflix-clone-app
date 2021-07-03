@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack'
 import HomeScreen from '../screens/bottom-tabs/home';
 import MovieDetailsScreen from './../screens/bottom-tabs/home/movie-details-screen/index';
 import DownloadsScreen from '../screens/bottom-tabs/downloads';
@@ -14,13 +14,14 @@ import StackNavBackButton from './../components/stack-app-bar/StackNavBackButton
 import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
 import SelectProfileScreen from './../screens/bottom-tabs/select-profile/SelectProfileScreen';
 import TrailerInfo from './../screens/bottom-tabs/coming-soon/TrailerInfo';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const options = {
     headerShown: false,
 };
 
 const searchOptions = { 
-    headerLeft: props => <StackNavBackButton />,
+    headerLeft: props => <StackNavBackButton { ...props } />,
     headerRight: props => <StackNavAvatar />,
     headerRightContainerStyle: {
         paddingRight: 9
@@ -31,10 +32,10 @@ const searchOptions = {
     headerTitle: ''
 };
 
-const moreHeaderOptions = { 
-    headerLeft: props => <StackNavBackButton />,
+const moreHeaderOptions = ({ route }) => ({
+    headerLeft: props => <StackNavBackButton { ...props } />,
     headerTitle: 'Profiles & More'
-};
+});
 
 const SelectProfileStack = createStackNavigator();
 
@@ -53,7 +54,7 @@ export const SelectProfileTab = () =>
 
 const HomeStack = createStackNavigator();
 
-export const HomeTab = () => 
+export const HomeTab = ({ navigation }) => 
 {
     return (
         <HomeStack.Navigator initialRouteName='Home'>
@@ -70,13 +71,12 @@ export const HomeTab = () =>
             <HomeStack.Screen 
                 name='MyListScreen'
                 component={ MyListScreen }
-                options={{ 
-                    headerTitle: props => <AppBar showLogo={ false } headerTitle='Categories'/>,
+                options={({ route }) => ({
+                    headerTitle: props => <AppBar showAvatar={ false } showLogo={ false } headerTitle={ route.params.headerTitle } />,
                     headerStyle: {
-                        backgroundColor: '#000',
-                        
+                        backgroundColor: '#000'
                     },
-                }}
+                })}
             />
             <HomeStack.Screen 
                 name='CategoriesScreen'
@@ -85,7 +85,6 @@ export const HomeTab = () =>
                     headerTitle: props => <AppBar showLogo={ false } headerTitle={ route.params.headerTitle }/>,
                     headerStyle: {
                         backgroundColor: '#000',
-                        
                     },
                 })}
             />

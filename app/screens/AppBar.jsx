@@ -11,7 +11,7 @@ import { TouchableOpacity } from 'react-native'
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../redux/modules/auth/selectors';
 
-const AppBar = ({ AUTH, showLogo = true, headerTitle = '', marginTop = 0 }) => 
+const AppBar = ({ AUTH, showAvatar = true, showLogo = true, headerTitle = '', marginTop = 0 }) => 
 {
     const navigation = useNavigation();
     const offsetY = useRef(0);
@@ -47,17 +47,23 @@ const AppBar = ({ AUTH, showLogo = true, headerTitle = '', marginTop = 0 }) =>
                         name='search'
                         size={ 34 }
                         color='#fff'
-                        style={ styles.searchIcon }
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={ navigateToAccountScreen }>
-                    <Avatar
-                        source={{
-                            uri: AUTH.profile.profile_photo,
+                        style={{
+                            marginRight: showAvatar ? 30 : 0
                         }}
-                        avatarStyle={ styles.avatarIcon }
                     />
                 </TouchableOpacity>
+                {
+                    showAvatar && (
+                        <TouchableOpacity onPress={ navigateToAccountScreen }>
+                            <Avatar
+                                source={{
+                                    uri: AUTH.profile.profile_photo,
+                                }}
+                                avatarStyle={ styles.avatarIcon }
+                            />
+                        </TouchableOpacity>
+                    )
+                }
             </View>
         </View>     
     )

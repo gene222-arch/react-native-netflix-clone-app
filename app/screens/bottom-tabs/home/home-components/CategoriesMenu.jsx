@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from 'react-native-elements';
+import { StatusBar } from 'expo-status-bar'
 import { TouchableOpacity, Modal } from 'react-native'
 import styles from './../../../../assets/stylesheets/appBarCategories';
 import { useNavigation } from '@react-navigation/native';
@@ -15,7 +16,7 @@ const CategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory, handleP
 
     const handlePressNavigateToMyList = () => {
         setIsVisible(false);
-        navigation.navigate('MyListScreen', { headerTitle: selectedMainCategory });
+        navigation.navigate('MyListScreen', { headerTitle: 'Categories' });
     }
 
     const handlePressCategoryOnChange = (category) => {
@@ -39,6 +40,7 @@ const CategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory, handleP
 
     return (
         <View style={ styles.container }>
+            { isVisible && <StatusBar backgroundColor='rgba(0, 0, 0, .8)' />}
             <Modal
                 animationType='slide'
                 transparent={true}

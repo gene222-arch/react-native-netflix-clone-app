@@ -8,7 +8,7 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import SearchBar from './SearchBar';
 import DefaultSearchList from './DefaultSearchList';
 import OnSearchList from './OnSearchList';
-import Info from './../../../components/continue-watching-for-item/Info';
+import ShowInfo from './../../../components/continue-watching-for-item/Info';
 
 
 const SearchScreen = () => 
@@ -97,7 +97,7 @@ const SearchScreen = () =>
 
     return (
         <View style={ styles.container }>
-            <Info  
+            <ShowInfo  
                 selectedShow={ show }
                 isVisible={ shouldDisplayShowInfo }
                 setIsVisible={ setShouldDisplayShowInfo }

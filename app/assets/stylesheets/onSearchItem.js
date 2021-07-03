@@ -3,6 +3,7 @@ import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
     image: {
+        flex: 1,
         width: 125,
         height: 170,
         resizeMode: 'cover',

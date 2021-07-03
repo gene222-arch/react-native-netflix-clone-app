@@ -8,15 +8,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 2,
-        
         backgroundColor: Colors.darkGrey
     },
     image: {
+        flex: 1,
         height: 75,
         aspectRatio: 16/9,
         resizeMode: 'cover',
         borderTopRightRadius: 8,
-        borderBottomRightRadius: 8
+        borderBottomRightRadius: 8,
     },
     titlePlayIconContainer: {
         flex: 1,

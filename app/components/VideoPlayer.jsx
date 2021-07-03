@@ -5,7 +5,7 @@ import styles from './../assets/stylesheets/videoPlayer';
 import View from './View';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-const VideoPlayer = ({ episode, shouldPlay, shouldShowPoster = false, shouldToggleVideo = true, setToggleVideo}) => 
+const VideoPlayer = ({ episode, shouldPlay = true, shouldShowPoster = false, shouldToggleVideo = true, setToggleVideo}) => 
 {
     const video = useRef(null)
     const [ status, setStatus ] = useState({});
@@ -31,9 +31,10 @@ const VideoPlayer = ({ episode, shouldPlay, shouldShowPoster = false, shouldTogg
         }
     }
 
-    const handlePressPlayBtn = () => {
+    const handlePressPlayBtn = async () => {
         setUsePoster(false);
         setShouldPlayVideo(true);
+        await video.current.playAsync();
     }
 
     const onChangeSourceRestartVideo = async () => 
@@ -55,7 +56,6 @@ const VideoPlayer = ({ episode, shouldPlay, shouldShowPoster = false, shouldTogg
             setShouldPlayVideo(false);
         }
     }, [episode]);
-
 
     if (!shouldShowPoster) {
         return (

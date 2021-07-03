@@ -84,11 +84,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     if (!isInteractionsComplete) {
         return <LoadingScreen />
     }
-
-    if (!AUTH_PROFILE.my_downloads.length) {
-        return <Text>Start downloading amazing movies or shows</Text>
-    }
-
+    
     /** Play Video in Full Screen */
     if (showVideo) 
     {

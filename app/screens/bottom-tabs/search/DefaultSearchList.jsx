@@ -8,7 +8,7 @@ import { getCachedFile } from './../../../utils/cacheImage';
 
 const DefaultSearchList = ({ searchList = [], handlePressDisplayShowInfo }) => {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }

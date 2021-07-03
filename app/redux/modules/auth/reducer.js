@@ -1,7 +1,5 @@
 import ACTION_TYPES from './action.types';
-import myList from './../../../services/data/myList';
 import accountProfiles from './../../../services/data/accountProfiles';
-import downloadsAPI from './../../../services/data/downloads';
 
 const {
     ADD_TO_RECENT_WATCHES_START,
@@ -39,6 +37,7 @@ const {
 
 const CREDENTIALS_DEFAULT_PROPS = 
 {
+    id: 1,
     email: '',
     password: '',
     remember_me: false
@@ -69,12 +68,9 @@ const initialState =
 {
     isAuthenticated: false,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    downloads: downloadsAPI,
-    myList,
     profiles: accountProfiles,
     profile: PROFILE_DEFAULT_PROPS,
     ratedShows: RATED_SHOWS_DEFAULT_PROPS,
-    remindedComingSoonShows: [],
     isLoading: false,
     errors: []
 }
@@ -82,8 +78,6 @@ const initialState =
 export default (state = initialState, { type, payload }) => 
 {
     const {
-        myList,
-        remindedComingSoonShows,
         profiles,
         profile,
     } = state;

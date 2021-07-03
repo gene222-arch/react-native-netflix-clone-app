@@ -23,14 +23,27 @@ const NavigationBottomTabs = () =>
         lazyPlaceholder: LoadingScreen
     };
 
-    const HOME_TAB_OPTIONS = {
-        tabBarIcon: (({ color }) => (
-            <MaterialIcons 
-                name='home' 
-                size={ 24 } 
-                color={ color }
-            />
-        ))
+    const HOME_TAB_OPTIONS = ({ route }) => 
+    {
+        let tabBarVisible = true;
+        const currentRouteName = getFocusedRouteNameFromRoute(route);
+
+        tabBarVisible = currentRouteName === 'MyListScreen' ? false : true;
+        
+        if (tabBarVisible) {
+            tabBarVisible = currentRouteName === 'MovieDetailScreen' ? false : true;
+        }
+
+        return {
+            tabBarIcon: (({ color }) => (
+                <MaterialIcons 
+                    name='home' 
+                    size={ 24 } 
+                    color={ color }
+                />
+            )),
+            tabBarVisible
+        }
     };
 
     const COMING_SOON_OPTIONS = ({ route }) => ({

@@ -21,6 +21,9 @@ export const cacheImage = async (uri, id, directory = '') =>
             .then(({ uri }) => console.log(`${uri} Cached Successfully`))
             .then(err => console.log(err));
     }
+    else {
+        console.log(`${ fileToCache } already Cached.`);
+    }
 }
 
 export const ensureFileExists = async (fileURI) => await FileSystem.getInfoAsync(fileURI);

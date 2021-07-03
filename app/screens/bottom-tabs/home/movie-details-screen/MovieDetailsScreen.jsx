@@ -1,9 +1,10 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useState, useEffect, useRef } from 'react'
 import { createStructuredSelector } from 'reselect';
 import { Picker } from '@react-native-picker/picker'
-import { FlatList } from 'react-native-gesture-handler';
-import { InteractionManager } from 'react-native'
+import { InteractionManager, FlatList } from 'react-native'
+import { Divider } from 'react-native-elements'
 import { connect, useDispatch } from 'react-redux';
+import { Video } from 'expo-av'
 
 /** API */
 import showsAPI from './../../../../services/data/movies';
@@ -47,6 +48,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const dispatch = useDispatch();
     const { id: selectedShowID } = route.params;
 
+    const videoRef = useRef(null);
     const [ currentSeasons, setCurrentSeasons ] = useState([]);
     const [ currentSeasonEpisodes, setCurrentSeasonEpisodes ] = useState([]);
     const [ currentSeasonEpisode, setCurrentSeasonEpisode ] = useState(DEFAULT_EPISODE);
@@ -54,17 +56,20 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const [ isLoadingAddToMyList, setIsLoadingAddToMyList ] = useState(false);
     const [ isLoadingLikedShows, setIsLoadingLikedShows ] = useState(false);
     const [ selectedSeason, setSelectedSeason ] = useState('');
-    const [ selectedTab, setSelectedTab ] = useState(0);
     const [ show, setShow ] = useState(null);
-    const [ toggleVideo, setToggleVideo ] = useState(false);
+    const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
+    const [ videoStatus, setVideoStatus ] = useState({});
 
-    const handlePressToggleVideo = () => {
-        setToggleVideo(!toggleVideo);
+    const handlePressPauseVideo = () => {
+        videoRef.current.pauseAsync();
+        setShouldPlayVideo(false);
+    }
 
-        // is playing
-        if (toggleVideo) { 
-            setTimeout(() => dispatch(AUTH_ACTION.addToRecentWatchesStart(currentSeasonEpisode)), 100);
-        }
+    const handlePressPlayVideo = () => 
+    {
+        setShouldPlayVideo(true);
+        videoRef.current.playAsync();
+        setTimeout(() => dispatch(AUTH_ACTION.addToRecentWatchesStart(currentSeasonEpisode)), 100);
     }
 
     const handleChangeSeason = (name, index) => {
@@ -75,8 +80,6 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const handlePressTabAddToLIst = () => 
     {
         setIsLoadingAddToMyList(true);
-        setSelectedTab(0);
-        
         dispatch(AUTH_ACTION.toggleAddToMyListStart({ id: show.id, title: show.title, poster: show.poster }));
         setTimeout(() => setIsLoadingAddToMyList(false), 1);
     }
@@ -86,14 +89,11 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
         const { seasons, ...showToLike } = show;
 
         setIsLoadingLikedShows(true);
-        setSelectedTab(1);
-
         dispatch(AUTH_ACTION.rateShowStart({ show: showToLike, rate: 'like' }));
         setTimeout(() => setIsLoadingLikedShows(false), 1);
     }
 
     const handlePressTabShare = () => {
-        setSelectedTab(2);
         console.log('Shared');
     }
 
@@ -101,10 +101,10 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     {
         const findShowByID = showsAPI.find(({ id }) => id === selectedShowID);
         
-        const seasons = findShowByID.seasons.items.map(({ name }) => name);
-        const firstSeason = findShowByID.seasons.items[0];
-        const episodeList = firstSeason.episodes.items;
-        const episode = firstSeason.episodes.items[0];
+        const seasons = findShowByID.seasons.map(({ name }) => name);
+        const firstSeason = findShowByID.seasons[0];
+        const episodeList = firstSeason.episodes;
+        const episode = episodeList[0];
 
         setShow(findShowByID);
         setCurrentSeasons(seasons);
@@ -117,12 +117,11 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
 
     const cleanUp = () => {
         setIsInteractionsComplete(false);
-        setToggleVideo(false);
         setCurrentSeasonEpisode(DEFAULT_EPISODE);
         setCurrentSeasonEpisodes([]);
         setSelectedSeason('');
-        setSelectedTab(0);
         setShow(null);
+        setVideoStatus({});
         setIsLoadingAddToMyList(false);
         setIsLoadingLikedShows(false);
     }
@@ -141,13 +140,19 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
 
     return (
         <View style={ styles.container }>
-            <View style={ styles.videoPlayerContainer }>
-                <VideoPlayer 
-                    episode={ currentSeasonEpisode } 
-                    shouldPlay={ toggleVideo } 
-                    setToggleVideo={ setToggleVideo }
-                />
-            </View>
+            <Video 
+                ref={ videoRef }
+                style={{
+                    width: '100%',
+                    aspectRatio: 16/9
+                }}
+                source={{
+                    uri: currentSeasonEpisode.video
+                }}
+                useNativeControls
+                resizeMode='contain'
+                onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
+            />
 
             <FlatList 
                 data={ currentSeasonEpisodes }
@@ -155,15 +160,15 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                     <EpisodeItem episode={ item } onPress={ () => setCurrentSeasonEpisode(item) }/>
                 )}
                 ListHeaderComponent={(
-                    <View>
+                    <View style={ styles.movieContainer }>
                         {/* Movie Title */}
                         <View style={ styles.movieTitleContainer }>
                             <Text h3 style={ styles.title }>{ show.title }</Text>
                             <View style={ styles.movieTitleInfo }>
-                                <Text style={ styles.match }>{ '98%' }</Text>
+                                <Text style={ styles.match }>{ '98%' } Match </Text>
                                 <Text style={ styles.year }>{ show.year }</Text>
                                 <Badge status='warning' value='12+' textStyle={ styles.ageContainerText }/>
-                                <Text style={ styles.seasons }>{ '9 Seasons' }</Text>
+                                <Text style={ styles.seasons }>{ `${ show.total_number_of_seasons } Seasons` }</Text>
                                 <MaterialCommunityIcon name='high-definition-box' color='#fff' size={ 30 }/>
                             </View>
                         </View>
@@ -173,15 +178,15 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                             <Button
                                 icon={
                                     <MaterialCommunityIcon
-                                        name={ toggleVideo ? 'pause' : 'play' }
+                                        name={ shouldPlayVideo ? 'pause' : 'play' }
                                         size={ 24 }
                                         color='black'
                                     />
                                 }
-                                title={ toggleVideo ? 'Pause' : 'Play' }
+                                title={ shouldPlayVideo ? 'Pause' : 'Play' }
                                 buttonStyle={ styles.playBtn }
                                 titleStyle={ styles.playBtnTitle }
-                                onPress={ handlePressToggleVideo }
+                                onPress={ () => videoStatus?.isPlaying ? handlePressPauseVideo() : handlePressPlayVideo() }
                             />
                             <Button 
                                 icon={
@@ -206,8 +211,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                         </View>
 
                         {/* Action Buttons */}
-                        <ActionButton 
-                            selectedTab={ selectedTab }
+                        <ActionButton
                             selectedShowID={ selectedShowID }
                             isLoadingAddToMyList={ isLoadingAddToMyList }
                             isLoadingLikedShows={ isLoadingLikedShows }
@@ -216,21 +220,26 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                             handlePressTabShare={ handlePressTabShare }
                         />
 
-                        <Picker
-                            selectedValue={ selectedSeason }
-                            onValueChange={ handleChangeSeason }
-                            style={ styles.seasonPicker }
-                            dropdownIconColor='white'
-                        >
-                        {currentSeasons.map((season, index) => (
-                            <Picker.Item 
-                                key={ index } 
-                                label={ season } 
-                                value={ season } 
-                            />
-                        ))}
-                        </Picker>
-                        <Text style={ styles.episodeHeader } h4>Episodes</Text>
+                        <Divider style={ styles.divider } />
+
+                        <View style={ styles.episodesAndMoreLikeThisContainer }>
+                            <Text style={ styles.episodeHeader }>EPISODES</Text>
+                            
+                            <Picker
+                                selectedValue={ selectedSeason }
+                                onValueChange={ handleChangeSeason }
+                                style={ styles.seasonPicker }
+                            >
+                            {currentSeasons.map((season, index) => (
+                                <Picker.Item 
+                                    key={ index } 
+                                    label={ season } 
+                                    value={ season } 
+                                />
+                            ))}
+                            </Picker>
+                        </View>
+
                     </View>
                 )}
                 ListHeaderComponentStyle={ styles.listHeaderComponent }
