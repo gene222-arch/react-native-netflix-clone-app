@@ -11,7 +11,8 @@ const searchList = [
         total_number_of_episodes: 75,
         total_number_of_seasons: 3,
         wallpaper: 'https://i.pinimg.com/originals/55/39/54/553954c0f30a23848c5ba63ee45cdbd5.jpg',
-        poster: 'https://m.media-amazon.com/images/M/MV5BMTY5ODk1NzUyMl5BMl5BanBnXkFtZTgwMjUyNzEyMTE@._V1_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BMTY5ODk1NzUyMl5BMl5BanBnXkFtZTgwMjUyNzEyMTE@._V1_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },
     {
         id: 2,
@@ -25,7 +26,8 @@ const searchList = [
         year: 2021,
         total_number_of_episodes: 88,
         total_number_of_seasons: 5,
-        poster: 'https://posterspy.com/wp-content/uploads/2020/02/my-hero-acadamia-two-heroes-netflix-poster.jpg'
+        poster: 'https://posterspy.com/wp-content/uploads/2020/02/my-hero-acadamia-two-heroes-netflix-poster.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },
     {
         id: 3,
@@ -39,7 +41,8 @@ const searchList = [
         year: 2021,
         total_number_of_episodes: 500,
         total_number_of_seasons: 9,
-        poster: 'https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00MDdiLTg4YjktOGY5Yzc2MDUxMTE1XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00MDdiLTg4YjktOGY5Yzc2MDUxMTE1XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },
     {
         id: 4,
@@ -53,7 +56,8 @@ const searchList = [
         total_number_of_episodes: 24,
         total_number_of_seasons: 1,
         wallpaper: 'https://wallpaperaccess.com/full/5252278.jpg',
-        poster: 'https://m.media-amazon.com/images/M/MV5BNzQyYzU3Y2MtOWY2Yy00ZGM2LTg3ZTUtMDJkZTJiMmEzMjYxXkEyXkFqcGdeQXVyMTI2NTY3NDg5._V1_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BNzQyYzU3Y2MtOWY2Yy00ZGM2LTg3ZTUtMDJkZTJiMmEzMjYxXkEyXkFqcGdeQXVyMTI2NTY3NDg5._V1_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },        
     {
         id: 5,
@@ -67,7 +71,8 @@ const searchList = [
         total_number_of_episodes: 24,
         total_number_of_seasons: 2,
         wallpaper: 'https://wallpapercave.com/wp/wp4051792.jpg',
-        poster: 'https://m.media-amazon.com/images/M/MV5BOTkzZjZiOWItZGM5Ny00N2IxLTg4ZTQtYTBiODhlNmRlM2IxXkEyXkFqcGdeQXVyMzgxODM4NjM@._V1_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BOTkzZjZiOWItZGM5Ny00N2IxLTg4ZTQtYTBiODhlNmRlM2IxXkEyXkFqcGdeQXVyMzgxODM4NjM@._V1_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },
     {
         id: 6,
@@ -81,7 +86,8 @@ const searchList = [
         total_number_of_episodes: 145,
         total_number_of_seasons: 1,
         wallpaper: 'https://wallpaperaccess.com/full/2096531.jpg',
-        poster: 'https://m.media-amazon.com/images/M/MV5BMTBhZmE0ZjAtOWQxMy00NzI1LWFiYzctN2MwM2E3YmM2ZWU1XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_UY1200_CR106,0,630,1200_AL_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BMTBhZmE0ZjAtOWQxMy00NzI1LWFiYzctN2MwM2E3YmM2ZWU1XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_UY1200_CR106,0,630,1200_AL_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },   
     {
         id: 7,
@@ -95,7 +101,8 @@ const searchList = [
         year: 2021,
         total_number_of_episodes: 96,
         total_number_of_seasons: 4,
-        poster: 'https://m.media-amazon.com/images/M/MV5BMTQ0OTY3NjAxMF5BMl5BanBnXkFtZTgwMzE4NDAzNzE@._V1_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BMTQ0OTY3NjAxMF5BMl5BanBnXkFtZTgwMzE4NDAzNzE@._V1_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },   
     {
         id: 8,
@@ -109,7 +116,8 @@ const searchList = [
         year: 2021,
         total_number_of_episodes: 75,
         total_number_of_seasons: 3,
-        poster: 'https://i.pinimg.com/originals/8d/13/99/8d1399e34546624009f4b1ffe67f55e1.png'
+        poster: 'https://i.pinimg.com/originals/8d/13/99/8d1399e34546624009f4b1ffe67f55e1.png',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },   
     {
         id: 9,
@@ -123,7 +131,8 @@ const searchList = [
         year: 2021,
         total_number_of_episodes: 24,
         total_number_of_seasons: 2,
-        poster: 'https://m.media-amazon.com/images/M/MV5BMTYwYjYyZDgtMTQ3My00YTI4LThmZTUtZmU1MjllOWRlOTdhXkEyXkFqcGdeQXVyMzgxODM4NjM@._V1_UY1200_CR85,0,630,1200_AL_.jpg'
+        poster: 'https://m.media-amazon.com/images/M/MV5BMTYwYjYyZDgtMTQ3My00YTI4LThmZTUtZmU1MjllOWRlOTdhXkEyXkFqcGdeQXVyMzgxODM4NjM@._V1_UY1200_CR85,0,630,1200_AL_.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     }
 ];
 

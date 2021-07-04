@@ -29,6 +29,7 @@ import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import NavBar from './home-components/NavBar';
 import FrontPageOptions from './home-components/FrontPageOptions';
 import ContinueWatchingFor from './home-components/ContinueWatchingFor';
+import Info from './../../../components/continue-watching-for-item/Info';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -48,7 +49,10 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
-    const [ categories, setCategories ] = useState([]);
+    const [ categories, setCategories ] = useState([]);    
+    const [ showFrontPageInfo, setShowFrontPageInfo ] = useState(false);
+
+    const handleClickShowInfo = () => setShowFrontPageInfo(!showFrontPageInfo);
 
     const handleToggleAddToMyList = (message) => {
         dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
@@ -112,6 +116,7 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
 
     return (
         <View style={ styles.container }>
+            <Info selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
             <FlatList 
                 data={ categories.items }
                 renderItem={({ item }) => <HomeCategory title={ item.title } categories={ item.movies } />}
@@ -130,6 +135,7 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
                                 handleToggleAddToMyList={ handleToggleAddToMyList }
                                 authUserMyList={ AUTH_PROFILE.my_list }
                                 frontPageCacheDirectory={ 'FrontPages/' }
+                                handleClickShowInfo={ handleClickShowInfo }
                             />
                         </ImageBackground>   
 

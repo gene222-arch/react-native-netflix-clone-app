@@ -151,7 +151,10 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                 }}
                 useNativeControls
                 resizeMode='contain'
-                onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
+                onPlaybackStatusUpdate={status => {
+                    console.log(status)
+                    setVideoStatus(() => status)
+                }}
             />
 
             <FlatList 

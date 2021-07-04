@@ -8,7 +8,7 @@ import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, More
 import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
+import { getFocusedRouteNameFromRoute, getStateFromPath } from '@react-navigation/native'
 
 
 const Tab = createBottomTabNavigator();
@@ -57,15 +57,18 @@ const NavigationBottomTabs = () =>
         tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
     })
 
-    const DOWNLOAD_OPTIONS = {
-        tabBarIcon: (({ color }) => (
-            <FeatherIcon 
-                name='download' 
-                size={ 24 } 
-                color={ color }  
-            />
-        ))
-    };
+    const DOWNLOAD_OPTIONS = ({ route, navigation }) => {
+        return ({
+            tabBarIcon: (({ color }) => (
+                <FeatherIcon 
+                    name='download' 
+                    size={ 24 } 
+                    color={ color }  
+                />
+            )),
+            tabBarVisible: !(route?.state?.routes[0]?.params?.showSetInFullScreen)
+        });
+    }
 
     const hideTabScreen = {
         tabBarButton: () => <View style={{ width:0, height:0 }}></View>,

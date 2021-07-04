@@ -11,27 +11,16 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
 
 
-const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, frontPageCacheDirectory }) => 
+const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, frontPageCacheDirectory, handleClickShowInfo }) => 
 {
-    const [ showFrontPageInfo, setShowFrontPageInfo ] = useState(false);
-
-    const handleClickShowInfo = () => setShowFrontPageInfo(!showFrontPageInfo);
-
     const handleToggleAddToMyList_ = () => {
         const hasAddedToList = authUserMyList.findIndex(({ id }) => id === frontPage.id) !== -1;
         const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
         handleToggleAddToMyList(message);
     }
 
-    useEffect(() => {
-        return () => {
-            setShowFrontPageInfo(false);
-        }
-    }, []);
-
     return (
         <View style={ styles.frontPageOptions }>
-            <ShowInfo selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
             <Image 
                 source={{ 
                     uri: getCachedFile(frontPageCacheDirectory, frontPage.id, frontPage.poster) }}

@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import { createStructuredSelector } from 'reselect';
+import { connect, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { InteractionManager, Platform, StatusBar } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler';
+import { InteractionManager, Platform, StatusBar, TouchableOpacity, FlatList, ToastAndroid, ActivityIndicator } from 'react-native'
+import * as FileSystem from 'expo-file-system'
 
 /** API */
+
+/** Actions */
+import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
+
+/** Selectors */
+import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 /** RNE Components */
 import { Button, Overlay  } from 'react-native-elements';
@@ -14,22 +22,21 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 /** Components */
 import View from './../../../components/View';
 import Text from './../../../components/Text';
+import AppBar from '../../AppBar';
 import VideoPlayerFullScreen from '../../../components/VideoPlayerFullScreen';
 import DownloadItem from '../../../components/download-item/DownloadItem';
+import LoadingScreen from './../../../components/LoadingScreen';
 
 /** Styles */
 import styles from './../../../assets/stylesheets/downloads';
+
+/** Utils */
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
-import AppBar from '../../AppBar';
-import { createStructuredSelector } from 'reselect';
-import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
-import { connect } from 'react-redux';
-import LoadingScreen from './../../../components/LoadingScreen';
 
 
 const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
-    console.log(AUTH_PROFILE);
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     const [ download, setDownload ] = useState(null);
@@ -42,11 +49,23 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
         setDownload(downloadedShow);
     }
 
-    const handlePressDeleteDownload = () => {
-        setVisible(false);
+    const handlePressDeleteDownload = async () => 
+    {
+        try {
+            console.log('DELETING DOWNLOAD');
+            const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ download.id }.mp4`;
+
+            await FileSystem.deleteAsync(FILE_URI);
+            dispatch(AUTH_ACTION.removeToMyDownloadsStart(download.id));
+            ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
+            setVisible(false);
+        } catch ({ message }) {
+            // Do something
+        }
     }
 
     const handlePressNonSeries = (downloadedShow) => {
+        navigation.setParams({ showSetInFullScreen: true });
         setShowVideo(true);
         setDownload(downloadedShow);
     }
@@ -90,8 +109,8 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     {
         return (
             <VideoPlayerFullScreen 
-                uri={ getCachedFile('Downloads/Videos/', download.id, download.video) } 
-                setShowVideo={ setShowVideo }
+                uri={ getCachedFile('Downloads/Videos/', download.id, download.video) }
+                handleCloseVideo={ () => setShowVideo(false) }
             />
         )
     }
@@ -99,20 +118,20 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     return (
         <View style={ styles.container }>
             <Overlay isVisible={ visible } onBackdropPress={ toggleOverlay } overlayStyle={ styles.overlay }>
-                <Text 
-                    style={ styles.overLayText } 
-                    touchableFeedback={ true }
-                    onPress={ () => console.log('Play') }
-                >
-                    Play
-                </Text>
-                <Text 
-                    style={ styles.overLayText } 
-                    touchableFeedback={ true }
-                    onPress={ handlePressDeleteDownload }
-                >
-                    Delete Download
-                </Text>
+                {
+                    AUTH.isLoading 
+                        ? <ActivityIndicator color='#FFFFFF' />
+                        : (
+                            <>
+                                <TouchableOpacity onPress={ () => setShowVideo(true) }>
+                                    <Text style={ styles.overLayText }>Play</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={ handlePressDeleteDownload }>
+                                    <Text style={ styles.overLayText }>Delete Download</Text>
+                                </TouchableOpacity>
+                            </>
+                        )
+                }
             </Overlay>
 
             {/* App bar */}

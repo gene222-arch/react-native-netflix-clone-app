@@ -49,7 +49,7 @@ const MoreActionList = ({
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
 
-    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH.profile.id }${ selectedVideo.id }.mp4`;
+    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
     const ratedShow = AUTH_PROFILE.recently_watched_shows.find(({ id }) => id === selectedVideo.id);
 
 
@@ -149,7 +149,6 @@ const MoreActionList = ({
             ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
             dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH.profile }));
         } catch ({ message }) {
-            setStatus(VIDEO_STATUSES.PAUSED);
             console.log(message);
         }
     }
@@ -204,39 +203,15 @@ const MoreActionList = ({
         }
     }
 
-    const checkIfFileExists = async () => 
-    {
-        try {
-            const fileExists = await ensureFileExists(FILE_URI);
-
-            if (fileExists.exists) 
-            {
-                const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
-                const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
-                const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
-                
-                setDownloadResumable(previousDownloadedFile);
-                setStatus(VIDEO_STATUSES.DOWNLOADED);
-            }
-        } catch ({ message }) {
-            // Do something
-        }
-    }
-
-    const onLoad = () => {
-        if (status !== VIDEO_STATUSES.DOWNLOADED) {
-            checkIfFileExists();
-        }
-
-        if (!downloadResumable) {
-            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
-        }
+    const checkIfFileExists = () => {
+        const fileExists = AUTH_PROFILE.my_downloads.findIndex(({ id }) => id === selectedVideo.id) !== -1;
+        !fileExists ? setStatus('') : setStatus(VIDEO_STATUSES.DOWNLOADED);
     }
 
     useEffect(() => {
-        
-        onLoad();
-
+        if (!downloadResumable) {
+            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
+        }
         return () => {
             setDownloadResumable(null);
             setProgress(0);
@@ -244,6 +219,10 @@ const MoreActionList = ({
             setStatus('');
         }
     }, []);
+
+    useEffect(() => {
+        checkIfFileExists();
+    }, [AUTH_PROFILE.my_downloads])
 
     return (
         <View style={ styles.container }>

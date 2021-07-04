@@ -53,7 +53,7 @@ const ContinueWatchingForItem = ({
         return (
             <VideoPlayerFullScreen  
                 uri={ getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`, episode.id, episode.video) }
-                setShowVideo={ setShouldPlayVideo }
+                handleCloseVideo={ handlePressPlayVideo }
             />
         )
     }

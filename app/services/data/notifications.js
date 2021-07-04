@@ -15,6 +15,7 @@ const notifications =
         title_logo: 'https://occ-0-1722-92.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABQKqgOEWXarVL00qTGkgNeWtAf4Y7hv-BC5j665JCzs5fU1DPunEaqbcplfDFfZKMKrF8uN08lF8elW_cCWHBuiTL203YjdW71Lk8rZOdRqNHcIxX4kQske3V6xr2PhYFqIk1w8sxIlUDxhepHImxTY6enxBygFciupPPpC-XNS4FA.png?r=8af',
         poster: 'https://static.wikia.nocookie.net/netflix/images/3/30/Lupin_S1_Poster.jpg/revision/latest?cb=20210108012313',
         video_poster: 'https://wallpapercave.com/wp/wp8385444.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         coming_soon_show_trailers: [
             {
                 id: 1,
@@ -46,6 +47,7 @@ const notifications =
         genres: [ 'Witty', 'Exciting', 'Mystery', 'Action', 'Comedy', 'Drama', 'TV'],
         title_logo: 'https://occ-0-1068-92.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABd_RvzuLQYJ1nOXFznzHIzHkHwMcRl6SPPcJxF5hW1-HrzfSKckgX-YXATyrq1FXY6bmxPZ3_2dwn9x1yzIX3onWMcSQZdBwk61FIIPxMzOhhSslyfEMHfQjqaTLW5cQmNI03sMuNRDNqIqX_GK6e7wQb02k0GrHMzJ_tkWdbR6IsA.png?r=3dc',
         video_poster: 'https://i.ytimg.com/vi/_ot6W_7hvrM/maxresdefault.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         poster: 'https://media.netflixreleases.com/images/77b489acd75bbdd6ae51d4d29aa3ae52/thunderstruck-2012-poster.jpg',
         coming_soon_show_trailers: []
     },
@@ -64,6 +66,7 @@ const notifications =
         title_logo: 'https://occ-0-1723-92.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABZSGYtd90SaIJ2A2Ci-jwjO8pQtrqBh-uEKcz2pF7S-rare9rzOzZPn5sZSlEIqIJyG5OTPNGleTVseujXECxsNpJZx2ctf2_-ratjJLFmibwb6KGt5s3IKryI8B6mOq9l178EXqSGevMSZMiFd9Lwd3rP0rQacslqOANpfhRuE1fw.png?r=e4c',
         poster: 'https://m.media-amazon.com/images/M/MV5BN2JjZTdmMGQtOWU5NC00MTdjLTlkMjgtMzBjNDQ3MDFmZmE0XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
         video_poster: 'https://images7.alphacoders.com/450/thumb-1920-450363.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         coming_soon_show_trailers: []
     },
     {
@@ -81,6 +84,7 @@ const notifications =
         title_logo: 'https://occ-0-92-1722.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABW7JxBuPO6WHI7ihxJXqf1UWhms7XRT2VMHAb2HtMZqwNQ7_cua3r7plAJTXR1u5mqdqmZJ24M2LkJzS_QxhpdRoukilaQ5vEMIWN-ay-8MI-Tffh2JqJ0tDVaFXDFU4I1yD4tyjGQjm-kxcfr6kUeFOBcdBiZ5ykV0Mp_ZBcpwDzQ.png?r=c27',
         poster: 'https://m.media-amazon.com/images/M/MV5BZGEyMTExOTYtMDk2NS00MDZhLWE4N2UtNWI0MWQ2ZjRmYTkwXkEyXkFqcGdeQXVyNDY2MTk1ODk@._V1_UY1200_CR90,0,630,1200_AL_.jpg',
         video_poster: 'https://bingeddata.s3.amazonaws.com/uploads/2020/11/intuition-1.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         coming_soon_show_trailers: []
     },
     {
@@ -98,6 +102,7 @@ const notifications =
         title_logo: 'https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABRdjr7gT2NopKhLj2GkAKDbsb7H6FXEbTh6WiPUaTeTns_4kiOT9oJzu7EMqVJNUCreH_IYpmeXxHk_t1aBcrxXrPpWH6vwV0S1tqi265t8Crzm3o1O2mlFFROGNrVeJ1-IAFFkXgLMOBTwGCjat9iVKV4FWq-fHJgU7JV70R9q_Qw.png?r=251',
         poster: 'https://m.media-amazon.com/images/M/MV5BMmFlMDU3NTktOTZlNC00ZTcyLWJkNTYtODQwNjMyMzAxMGY3XkEyXkFqcGdeQXVyNjU0NTI0Nw@@._V1_.jpg',
         video_poster: 'https://www.pophorror.com/wp-content/uploads/2021/03/DawnoftheBeast_Keyart_16x9_3840x2160_alt-scaled.jpg',
+        trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
         coming_soon_show_trailers: []
     }
 ];

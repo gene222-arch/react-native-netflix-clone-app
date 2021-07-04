@@ -8,6 +8,7 @@ const shows = [{
     plot: 'When he impresses a big lawyer with his razor-sharp mind, a college droput scores a coveted associate job, even though he has no legal credentials.',
     cast: 'Gabriel Macht, Patrick J. Adams, Rick Hoggman',
     creator: 'Aaron Korsh',
+    trailer_video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     
     seasons: [
         {

@@ -6,10 +6,12 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
 import Text from './Text';
 import { Dimensions } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
 
-const VideoPlayerFullScreen = ({ uri, setShowVideo }) => 
+const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) => 
 {
+    const navigation = useNavigation();
     const video = useRef(null);
     const [inFullscreen, setInFullscreen] = useState(false);
 
@@ -26,15 +28,16 @@ const VideoPlayerFullScreen = ({ uri, setShowVideo }) =>
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
         video.current.setStatusAsync({
           shouldPlay: true,
-        })
+        });
     }
 
     const onExitFullScreen = async () => 
     {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        navigation.setParams({ showSetInFullScreen: false });
         setStatusBarHidden(false, 'fade');
         setInFullscreen(false);
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
-        setShowVideo(false);
+        handleCloseVideo();
     }
 
     const style = {
