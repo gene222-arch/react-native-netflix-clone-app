@@ -10,8 +10,6 @@ const { persistor, store } = configureStore();
 
 const App = () => 
 {
-
-
 	return (
 		<Provider store={ store }>
 			<PersistGate 

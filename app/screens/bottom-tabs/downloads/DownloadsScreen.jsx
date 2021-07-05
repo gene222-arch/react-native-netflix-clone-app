@@ -52,7 +52,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     const handlePressDeleteDownload = async () => 
     {
         try {
-            console.log('DELETING DOWNLOAD');
             const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ download.id }.mp4`;
 
             await FileSystem.deleteAsync(FILE_URI);
@@ -92,6 +91,10 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
+        if (AUTH_PROFILE.has_new_downloads) {
+            dispatch(AUTH_ACTION.viewDownloadsStart());
+        }
 
         return () => {
             cleanUp();

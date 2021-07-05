@@ -11,7 +11,8 @@ const accountProfiles =
         recently_watched_shows: [],
         my_list: [],
         reminded_coming_soon_shows: [],
-        liked_shows: []
+        liked_shows: [],
+        has_new_downloads: false
     },
     {
         id: 'acc-prof-2',
@@ -21,7 +22,8 @@ const accountProfiles =
         recently_watched_shows: [],
         my_list: [],
         reminded_coming_soon_shows: [],
-        liked_shows: []
+        liked_shows: [],
+        has_new_downloads: false
     },
     {
         id: 'acc-prof-3',
@@ -31,7 +33,8 @@ const accountProfiles =
         recently_watched_shows: [],
         my_list: [],
         reminded_coming_soon_shows: [],
-        liked_shows: []
+        liked_shows: [],
+        has_new_downloads: false
     }
 ];
 

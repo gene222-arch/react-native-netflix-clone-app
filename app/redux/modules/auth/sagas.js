@@ -21,7 +21,9 @@ import {
     toggleAddToMyListSuccess,
     toggleAddToMyListFailed,
     toggleRemindMeOfComingShowSuccess, 
-    toggleRemindMeOfComingShowFailed
+    toggleRemindMeOfComingShowFailed,
+    viewDownloadsSuccess,
+    viewDownloadsFailed
 } from './actions'
 import * as AsyncStorage from './../../../utils/asyncStorage'
 import { getDownloadedVideo, getExtension, getDownloadedVideoFileInfo } from './../../../utils/file';
@@ -35,7 +37,8 @@ const {
     REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
-    TOGGLE_ADD_TO_MY_LIST_START
+    TOGGLE_ADD_TO_MY_LIST_START,
+    VIEW_DOWNLOADS_START
 } = ACTION_TYPES;
 
 
@@ -134,6 +137,15 @@ function* toggleRemindMeOfComingShowSaga(payload)
     }
 }
 
+function* viewDownloadsSaga()
+{
+    try {
+        yield put(viewDownloadsSuccess());
+    } catch ({ message }) {
+        yield put(viewDownloadsFailed({ message }));
+    }
+}
+
 /** Watchers or Observers */
 function* addToRecentWatchesWatcher()
 {
@@ -216,6 +228,16 @@ function* toggleRemindMeOfComingShowWatcher()
     }
 }
 
+function* viewDownloadsWatcher()
+{
+    while (true) {
+        yield take(VIEW_DOWNLOADS_START);
+        yield call(viewDownloadsSaga);
+    }
+}
+
+
+
 export default function* ()
 {
     yield all([
@@ -228,7 +250,8 @@ export default function* ()
         removeToRecentWatchesWatcher(),
         selectProfileWatcher(),
         toggleAddToMyListWatcher(),
-        toggleRemindMeOfComingShowWatcher()
+        toggleRemindMeOfComingShowWatcher(),
+        viewDownloadsWatcher()
     ]);
 }
 

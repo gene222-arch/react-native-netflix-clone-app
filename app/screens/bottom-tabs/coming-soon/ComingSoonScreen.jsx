@@ -15,7 +15,7 @@ import notifications from './../../../services/data/notifications';
 import styles from './../../../assets/stylesheets/comingSoon';
 
 /** Selectors */
-import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors'
+import { authProfileSelector } from './../../../redux/modules/auth/selectors'
 import { comingSoonSelector } from './../../../redux/modules/coming-soon/selectors';
 
 /** Components */
@@ -32,7 +32,7 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import { useNavigation } from '@react-navigation/native';
 
 
-const ComingSoonScreen = ({ AUTH, AUTH_PROFILE, COMING_SOON }) => 
+const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -46,9 +46,9 @@ const ComingSoonScreen = ({ AUTH, AUTH_PROFILE, COMING_SOON }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (show, message) => {
+    const handlePressToggleRemindMe = (show, message) => 
+    {
         dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart(show));
-        
         message.length && setTimeout(() => ToastAndroid.show(message, ToastAndroid.SHORT), 100);
     }
 
@@ -141,7 +141,6 @@ const ComingSoonScreen = ({ AUTH, AUTH_PROFILE, COMING_SOON }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector,
     COMING_SOON: comingSoonSelector
 });

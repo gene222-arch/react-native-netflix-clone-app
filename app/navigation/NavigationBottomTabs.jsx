@@ -8,14 +8,15 @@ import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, More
 import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
-import { getFocusedRouteNameFromRoute, getStateFromPath } from '@react-navigation/native'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
+import DownloadsTabBarBadge from './../components/DownloadsTabBarBadge';
 
 
 const Tab = createBottomTabNavigator();
 
 const NavigationBottomTabs = () => 
 {
-    const TAB_BAR_OPTIONS = {
+    const TAB_NAVIGATOR_OPTIONS = {
         initialRouteName: 'SelectProfile',
         activeTintColor: Colors.white,
         keyboardHidesTabBar: true,
@@ -46,7 +47,8 @@ const NavigationBottomTabs = () =>
         }
     };
 
-    const COMING_SOON_OPTIONS = ({ route }) => ({
+    const COMING_SOON_OPTIONS = ({ route }) => 
+    ({
         tabBarIcon: (({ color }) => (
             <MaterialIcons 
                 name='video-library' 
@@ -54,10 +56,13 @@ const NavigationBottomTabs = () =>
                 color={ color }
             />
         )),
+        tabBarBadge: 1,
         tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
-    })
+    });
 
     const DOWNLOAD_OPTIONS = ({ route, navigation }) => {
+
+        console.log(route);
         return ({
             tabBarIcon: (({ color }) => (
                 <FeatherIcon 
@@ -66,7 +71,10 @@ const NavigationBottomTabs = () =>
                     color={ color }  
                 />
             )),
-            tabBarVisible: !(route?.state?.routes[0]?.params?.showSetInFullScreen)
+            tabBarBadge: <DownloadsTabBarBadge />,
+            tabBarBadgeStyle: {
+                backgroundColor: 'transparent'
+            }
         });
     }
 
@@ -76,37 +84,13 @@ const NavigationBottomTabs = () =>
     };
 
     return (
-        <Tab.Navigator tabBarOptions={ TAB_BAR_OPTIONS }>
-            <Tab.Screen 
-                name="SelectProfile" 
-                component={ SelectProfileTab } 
-                options={ hideTabScreen }
-            />
-            <Tab.Screen 
-                name="Home" 
-                component={ HomeTab } 
-                options={ HOME_TAB_OPTIONS }
-            />
-            <Tab.Screen 
-                name="Search" 
-                component={ SearchTab } 
-                options={ hideTabScreen }
-            />
-            <Tab.Screen 
-                name="Coming soon" 
-                component={ ComingSoonTab } 
-                options={ COMING_SOON_OPTIONS }
-            />
-            <Tab.Screen 
-                name="Downloads" 
-                component={ DownloadsTab } 
-                options={ DOWNLOAD_OPTIONS }
-            />
-            <Tab.Screen 
-                name="More" 
-                component={ MoreTab }
-                options={ hideTabScreen }
-            />
+        <Tab.Navigator tabBarOptions={ TAB_NAVIGATOR_OPTIONS }>
+            <Tab.Screen name='SelectProfile' component={ SelectProfileTab } options={ hideTabScreen } />
+            <Tab.Screen name='Home' component={ HomeTab } options={ HOME_TAB_OPTIONS } />
+            <Tab.Screen name='Search' component={ SearchTab } options={ hideTabScreen } />
+            <Tab.Screen name='Coming soon' component={ ComingSoonTab } options={ COMING_SOON_OPTIONS } />
+            <Tab.Screen name='Downloads' component={ DownloadsTab } options={ DOWNLOAD_OPTIONS } />
+            <Tab.Screen name='More' component={ MoreTab }options={ hideTabScreen }/>
         </Tab.Navigator>
     );
 }

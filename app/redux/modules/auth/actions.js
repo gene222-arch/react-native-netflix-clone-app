@@ -31,6 +31,9 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
+    VIEW_DOWNLOADS_START,
+    VIEW_DOWNLOADS_SUCCESS,
+    VIEW_DOWNLOADS_FAILED
 } = ACTION_TYPES;
 
 
@@ -193,5 +196,21 @@ export const toggleAddToMyListSuccess = (payload) => ({
 
 export const toggleAddToMyListFailed = (payload) => ({
     type: TOGGLE_ADD_TO_MY_LIST_FAILED,
+    payload
+});
+
+/** View downloads */
+export const viewDownloadsStart = (payload) => ({
+    type: VIEW_DOWNLOADS_START,
+    payload
+});
+
+export const viewDownloadsSuccess = (payload) => ({
+    type: VIEW_DOWNLOADS_SUCCESS,
+    payload
+});
+
+export const viewDownloadsFailed = (payload) => ({
+    type: VIEW_DOWNLOADS_FAILED,
     payload
 });

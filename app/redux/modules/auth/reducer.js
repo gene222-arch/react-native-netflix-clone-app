@@ -32,6 +32,9 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
+    VIEW_DOWNLOADS_START,
+    VIEW_DOWNLOADS_SUCCESS,
+    VIEW_DOWNLOADS_FAILED
 } = ACTION_TYPES;
 
 
@@ -100,6 +103,7 @@ export default (state = initialState, { type, payload }) =>
         case SELECT_PROFILE_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
+        case VIEW_DOWNLOADS_START:
             return { 
                 ...state, 
                 isLoading
@@ -212,7 +216,7 @@ export default (state = initialState, { type, payload }) =>
 
             const updateProfileDownloads = profiles.map(({ id, my_downloads, ...profileInfo }) => {
                 return (id === payload.profile.id)
-                    ? { id, my_downloads: [ ...my_downloads, payload.show ], ...profileInfo, }
+                    ? { id, my_downloads: [ ...my_downloads, payload.show ], has_new_downloads: true, ...profileInfo, }
                     : { id, my_downloads, ...profileInfo }
             });
 
@@ -293,24 +297,28 @@ export default (state = initialState, { type, payload }) =>
 
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
             
-            let newRemindedShows = [];
-            const authProfileRemindedShows = SELECT_AUTHENTICATED_PROFILE.reminded_coming_soon_shows;
+            let authProfileRemindedShows = SELECT_AUTHENTICATED_PROFILE.reminded_coming_soon_shows;
 
             if (authProfileRemindedShows.length) 
             {
-                const hasReminded = authProfileRemindedShows.findIndex(({ id }) => id === payload.show.id) !== -1; 
-            
-                newRemindedShows = hasReminded
-                    ? authProfileRemindedShows.filter(({ id }) => id !== payload.show.id)
-                    : [ ...authProfileRemindedShows, payload.show ];
+                const indexOfShow = authProfileRemindedShows.findIndex(({ id }) => id === payload.show.id); 
+                
+                for (let index = 0; index < authProfileRemindedShows.length; index++) 
+                {
+                    if (indexOfShow === -1) {
+                        authProfileRemindedShows.push(payload.show);
+                    } else {
+                        authProfileRemindedShows.splice(indexOfShow, 1);
+                    }
+                }
             }
             else {
-                newRemindedShows.push(payload.show);
+                authProfileRemindedShows.push(payload.show);
             }
 
             NEW_PROFILES = profiles.map((prof) => {
                 return (prof.id === profile.id) 
-                    ? { ...prof, reminded_coming_soon_shows: newRemindedShows } 
+                    ? { ...prof, reminded_coming_soon_shows: authProfileRemindedShows } 
                     : prof;
             });
 
@@ -321,6 +329,20 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case VIEW_DOWNLOADS_SUCCESS: 
+
+            NEW_PROFILES = profiles.map((prof) => {
+                return (prof.id === profile.id) 
+                    ? { ...prof, has_new_downloads: false } 
+                    : prof;
+            });
+
+            return {
+                ...state,
+                profiles: NEW_PROFILES,
+                isLoading: false
+            }
+
         case ADD_TO_RECENT_WATCHES_FAILED:
         case DOWNLOAD_VIDEO_FAILED:
         case SELECT_PROFILE_FAILED:
@@ -329,6 +351,7 @@ export default (state = initialState, { type, payload }) =>
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:
+        case VIEW_DOWNLOADS_FAILED:
             return {
                 ...state,
                 isLoading: false,
