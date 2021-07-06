@@ -1,26 +1,23 @@
 import { StyleSheet, StatusBar } from 'react-native';
 import DEFAULT_IMG_STYLE from './../../constants/Image';
+import Colors from './../../constants/Colors';
 
 
 const styles = StyleSheet.create({
-    appLogoImg: {
-        width: '30%',
-        height: 50
-    },
-    createProfileContainer: {
-        width: 120,
-        height: 120,
-        justifyContent: 'center',
-    },
-    createProfileIcon: {
-        textAlign: 'center'
-    },
-    createProfileText: {
-        textAlign: 'center',
-        marginTop: 30
-    },
     container: {
         marginTop: StatusBar.currentHeight + 10,
+    },
+    editIcon: {
+        borderWidth: 3,
+        width: 62,
+        borderColor: Colors.white,
+        borderRadius: 150,
+        padding: 15,
+        paddingLeft: 18,
+        paddingTop: 17,
+        position: 'absolute',
+        left: 28,
+        top: 28
     },
     header: {
         flexDirection: 'row',
@@ -29,7 +26,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     profile: {
-        marginBottom: 40
+        marginBottom: 40,
+        opacity: .3
+    },
+    profileContainer: {
     },
     profilesContainer: {
         marginTop: 70,
@@ -50,10 +50,6 @@ const styles = StyleSheet.create({
     profileName: {
         textAlign: 'center'
     },
-    whosWatchingText: {
-        textAlign: 'center',
-        marginBottom: 30,
-    }
 });
 
 export default styles;

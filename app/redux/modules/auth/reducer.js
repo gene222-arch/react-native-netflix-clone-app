@@ -5,9 +5,12 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     ADD_TO_RECENT_WATCHES_SUCCESS,
     ADD_TO_RECENT_WATCHES_FAILED,
-    RATE_SHOW_START,
-    RATE_SHOW_SUCCESS,
-    RATE_SHOW_FAILED,
+    CREATE_PROFILE_START,
+    CREATE_PROFILE_SUCCESS,
+    CREATE_PROFILE_FAILED,
+    DELETE_PROFILE_START,
+    DELETE_PROFILE_SUCCESS,
+    DELETE_PROFILE_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
@@ -17,6 +20,9 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
+    RATE_SHOW_START,
+    RATE_SHOW_SUCCESS,
+    RATE_SHOW_FAILED,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_MY_DOWNLOADS_SUCCESS,
     REMOVE_TO_MY_DOWNLOADS_FAILED,
@@ -32,6 +38,9 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
+    UPDATE_AUTHENTICATED_PROFILE_START,
+    UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
+    UPDATE_AUTHENTICATED_PROFILE_FAILED,
     VIEW_DOWNLOADS_START,
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED
@@ -86,27 +95,30 @@ export default (state = initialState, { type, payload }) =>
     } = state;
 
     const SELECT_AUTHENTICATED_PROFILE = profiles.find(({ id }) => id === profile.id);
-    let NEW_PROFILES = [];
-
-    const isLoading = true;
+    const isLoading = false;
     const errors = [];
+    let NEW_PROFILES = [];
 
     switch (type) 
     {
         case ADD_TO_RECENT_WATCHES_START:
-        case RATE_SHOW_START:
+        case CREATE_PROFILE_START:
+        case DELETE_PROFILE_START:
+        case DOWNLOAD_VIDEO_START:
         case LOGIN_START:
         case LOGOUT_START:
-        case DOWNLOAD_VIDEO_START:
+        case RATE_SHOW_START:
         case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
+        case UPDATE_AUTHENTICATED_PROFILE_START:
         case VIEW_DOWNLOADS_START:
             return { 
                 ...state, 
-                isLoading
+                isLoading: true,
+                errors
             }
 
         case ADD_TO_RECENT_WATCHES_SUCCESS:
@@ -128,8 +140,20 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state,
                 profiles: profiles_,
-                isLoading: false,
+                
                 errors
+            }
+
+        case CREATE_PROFILE_SUCCESS: 
+            return {
+                ...state,
+                profiles: [ ...profiles, payload.profile ],
+            }
+
+        case CREATE_PROFILE_SUCCESS: 
+            return {
+                ...state,
+                profiles: profiles.filter(({ id }) => id !== payload.profileID),
             }
 
         case RATE_SHOW_SUCCESS:
@@ -175,7 +199,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state,
                 profiles: newProfiles,
-                isLoading: false,
+                
                 errors
             }
 
@@ -184,7 +208,7 @@ export default (state = initialState, { type, payload }) =>
                 ...state, 
                 credentials: payload.credentials,
                 isAuthenticated: true,
-                isLoading: false,
+                
                 errors
             }
 
@@ -192,7 +216,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: false,
-                isLoading: false,
+                
                 errors: payload.message
             }
 
@@ -200,7 +224,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: false,
-                isLoading: false,
+                
                 errors
             }
 
@@ -208,7 +232,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: true,
-                isLoading: false,
+                
                 errors: payload.message
             }
 
@@ -222,7 +246,7 @@ export default (state = initialState, { type, payload }) =>
 
             return {
                 ...state,
-                isLoading: false,
+                
                 profiles: updateProfileDownloads,
                 errors
             }
@@ -241,7 +265,7 @@ export default (state = initialState, { type, payload }) =>
 
             return {
                 ...state,
-                isLoading: false,
+                
                 profiles: NEW_PROFILES,
                 errors
             }
@@ -262,14 +286,14 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state,
                 profiles: NEW_PROFILES,
-                isLoading: false,
+                
                 errors
             }
 
         case SELECT_PROFILE_SUCCESS:
             return {
                 ...state,
-                isLoading: false,
+                
                 profile: profiles.find(({ id }) => id === payload.id),
                 errors
             }
@@ -291,7 +315,7 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: NEW_PROFILES,
-                isLoading: false,
+                
                 errors
             }            
 
@@ -325,8 +349,22 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: NEW_PROFILES,
-                isLoading: false,
+                
                 errors
+            }
+
+        case UPDATE_AUTHENTICATED_PROFILE_SUCCESS: 
+
+            NEW_PROFILES = profiles.map(prevProfile => {
+                return prevProfile.id === payload.profile.id 
+                    ? { ...prevProfile, ...payload.profile }
+                    : prevProfile
+            });
+
+            return {
+                ...state,
+                profiles: NEW_PROFILES,
+                isLoading: false
             }
 
         case VIEW_DOWNLOADS_SUCCESS: 
@@ -344,6 +382,8 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case ADD_TO_RECENT_WATCHES_FAILED:
+        case CREATE_PROFILE_FAILED:
+        case DELETE_PROFILE_FAILED:
         case DOWNLOAD_VIDEO_FAILED:
         case SELECT_PROFILE_FAILED:
         case RATE_SHOW_FAILED:
@@ -351,10 +391,10 @@ export default (state = initialState, { type, payload }) =>
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:
+        case UPDATE_AUTHENTICATED_PROFILE_FAILED:
         case VIEW_DOWNLOADS_FAILED:
             return {
                 ...state,
-                isLoading: false,
                 errors: payload.message
             }
 

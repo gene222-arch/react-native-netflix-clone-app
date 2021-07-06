@@ -4,18 +4,24 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     ADD_TO_RECENT_WATCHES_SUCCESS,
     ADD_TO_RECENT_WATCHES_FAILED,
+    CREATE_PROFILE_START,
+    CREATE_PROFILE_SUCCESS,
+    CREATE_PROFILE_FAILED,
+    DELETE_PROFILE_START,
+    DELETE_PROFILE_SUCCESS,
+    DELETE_PROFILE_FAILED,
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
-    RATE_SHOW_START,
-    RATE_SHOW_SUCCESS,
-    RATE_SHOW_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
+    RATE_SHOW_START,
+    RATE_SHOW_SUCCESS,
+    RATE_SHOW_FAILED,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_MY_DOWNLOADS_SUCCESS,
     REMOVE_TO_MY_DOWNLOADS_FAILED,
@@ -31,6 +37,9 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
+    UPDATE_AUTHENTICATED_PROFILE_START,
+    UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
+    UPDATE_AUTHENTICATED_PROFILE_FAILED,
     VIEW_DOWNLOADS_START,
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED
@@ -53,19 +62,51 @@ export const addToRecentWatchesFailed = (payload) => ({
     payload
 });
 
-/** Rate show */
-export const rateShowStart = (payload) => ({
-    type: RATE_SHOW_START,
+/** Create Profile */
+export const createProfileStart = (payload) => ({
+    type: CREATE_PROFILE_START,
     payload
 });
 
-export const rateShowSuccess = (payload) => ({
-    type: RATE_SHOW_SUCCESS,
+export const createProfileSuccess = (payload) => ({
+    type: CREATE_PROFILE_SUCCESS,
     payload
 });
 
-export const rateShowFailed = (payload) => ({
-    type: RATE_SHOW_FAILED,
+export const createProfileFailed = (payload) => ({
+    type: CREATE_PROFILE_FAILED,
+    payload
+});
+
+/** Delete Profile */
+export const deleteProfileStart = (payload) => ({
+    type: DELETE_PROFILE_START,
+    payload
+});
+
+export const deleteProfileSuccess = (payload) => ({
+    type: DELETE_PROFILE_SUCCESS,
+    payload
+});
+
+export const deleteProfileFailed = (payload) => ({
+    type: DELETE_PROFILE_FAILED,
+    payload
+});
+
+/** Downloads */
+export const downloadVideoStart = (payload) => ({
+    type: DOWNLOAD_VIDEO_START,
+    payload
+});
+
+export const downloadVideoSuccess = (payload) => ({
+    type: DOWNLOAD_VIDEO_SUCCESS,
+    payload
+});
+
+export const downloadVideoFailed = (payload) => ({
+    type: DOWNLOAD_VIDEO_FAILED,
     payload
 });
 
@@ -98,23 +139,6 @@ export const logoutSuccess = (payload) => ({
 
 export const logoutFailed = (payload) => ({
     type: LOGOUT_FAILED,
-    payload
-});
-
-
-/** Downloads */
-export const downloadVideoStart = (payload) => ({
-    type: DOWNLOAD_VIDEO_START,
-    payload
-});
-
-export const downloadVideoSuccess = (payload) => ({
-    type: DOWNLOAD_VIDEO_SUCCESS,
-    payload
-});
-
-export const downloadVideoFailed = (payload) => ({
-    type: DOWNLOAD_VIDEO_FAILED,
     payload
 });
 
@@ -167,6 +191,23 @@ export const selectProfileFailed = (payload) => ({
     payload
 });
 
+/** Rate show */
+export const rateShowStart = (payload) => ({
+    type: RATE_SHOW_START,
+    payload
+});
+
+export const rateShowSuccess = (payload) => ({
+    type: RATE_SHOW_SUCCESS,
+    payload
+});
+
+export const rateShowFailed = (payload) => ({
+    type: RATE_SHOW_FAILED,
+    payload
+});
+
+
 /** Remind me of coming soon show */
 export const toggleRemindMeOfComingShowStart = (payload) => ({
     type: TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
@@ -198,6 +239,23 @@ export const toggleAddToMyListFailed = (payload) => ({
     type: TOGGLE_ADD_TO_MY_LIST_FAILED,
     payload
 });
+
+/** Update authenticated profile */
+export const updateAuthenticatedProfileStart = (payload) => ({
+    type: UPDATE_AUTHENTICATED_PROFILE_START,
+    payload
+});
+
+export const updateAuthenticatedProfileSuccess = (payload) => ({
+    type: UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
+    payload
+});
+
+export const updateAuthenticatedProfileFailed = (payload) => ({
+    type: UPDATE_AUTHENTICATED_PROFILE_FAILED,
+    payload
+});
+
 
 /** View downloads */
 export const viewDownloadsStart = (payload) => ({

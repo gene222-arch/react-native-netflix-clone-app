@@ -4,6 +4,10 @@ import * as RootNavigation from './../../../navigation/RootNavigation'
 import { 
     addToRecentWatchesSuccess,
     addToRecentWatchesFailed,
+    createProfileSuccess,
+    createProfileFailed,
+    deleteProfileSuccess,
+    deleteProfileFailed,
     rateShowSuccess,
     rateShowFailed,
     loginSuccess, 
@@ -22,6 +26,8 @@ import {
     toggleAddToMyListFailed,
     toggleRemindMeOfComingShowSuccess, 
     toggleRemindMeOfComingShowFailed,
+    updateAuthenticatedProfileSuccess,
+    updateAuthenticatedProfileFailed,
     viewDownloadsSuccess,
     viewDownloadsFailed
 } from './actions'
@@ -29,6 +35,8 @@ import * as AsyncStorage from './../../../utils/asyncStorage'
 import { getDownloadedVideo, getExtension, getDownloadedVideoFileInfo } from './../../../utils/file';
 const {
     ADD_TO_RECENT_WATCHES_START,
+    CREATE_PROFILE_START,
+    DELETE_PROFILE_START,
     RATE_SHOW_START,
     LOGIN_START,
     LOGOUT_START,
@@ -38,6 +46,7 @@ const {
     SELECT_PROFILE_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_ADD_TO_MY_LIST_START,
+    UPDATE_AUTHENTICATED_PROFILE_START,
     VIEW_DOWNLOADS_START
 } = ACTION_TYPES;
 
@@ -49,6 +58,26 @@ function* addToRecentWatchesSaga(payload)
         yield put(addToRecentWatchesSuccess({ show: payload }));
     } catch ({ message }) {
         yield put(addToRecentWatchesFailed({ message }));
+    }
+}
+
+function* createProfileSaga(payload)  
+{
+    try {
+        yield put(createProfileSuccess({ profile: payload }));
+        RootNavigation.navigate('SelectProfile');
+    } catch ({ message }) {
+        yield put(createProfileFailed({ message }));
+    }
+}
+
+function* deleteProfileSaga(payload)  
+{
+    try {
+        yield put(deleteProfileSuccess({ profileID: payload }));
+        RootNavigation.navigate('SelectProfile');
+    } catch ({ message }) {
+        yield put(deleteProfileFailed({ message }));
     }
 }
 
@@ -137,6 +166,16 @@ function* toggleRemindMeOfComingShowSaga(payload)
     }
 }
 
+function* updateAuthenticatedProfileSaga(payload)
+{
+    try {
+        yield put(updateAuthenticatedProfileSuccess({ profile: payload }));
+        RootNavigation.navigate('SelectProfile');
+    } catch ({ message }) {
+        yield put(updateAuthenticatedProfileFailed({ message }));
+    }
+}
+
 function* viewDownloadsSaga()
 {
     try {
@@ -152,6 +191,22 @@ function* addToRecentWatchesWatcher()
     while (true) {
         const { payload } = yield take(ADD_TO_RECENT_WATCHES_START);
         yield call(addToRecentWatchesSaga, payload);
+    }
+}
+
+function* createProfileWatcher()
+{
+    while (true) {
+        const { payload } = yield take(CREATE_PROFILE_START);
+        yield call(createProfileSaga, payload);
+    }
+}
+
+function* deleteProfileWatcher()
+{
+    while (true) {
+        const { payload } = yield take(DELETE_PROFILE_START);
+        yield call(deleteProfileSaga, payload);
     }
 }
 
@@ -195,7 +250,6 @@ function* removeToMyDownloadsWatcher()
     }
 }
 
-
 function* removeToRecentWatchesWatcher()
 {
     while (true) {
@@ -228,6 +282,14 @@ function* toggleRemindMeOfComingShowWatcher()
     }
 }
 
+function* updateAuthenticatedProfileWatcher()
+{
+    while (true) {
+        const { payload } = yield take(UPDATE_AUTHENTICATED_PROFILE_START);
+        yield call(updateAuthenticatedProfileSaga, payload);
+    }
+}
+
 function* viewDownloadsWatcher()
 {
     while (true) {
@@ -242,6 +304,8 @@ export default function* ()
 {
     yield all([
         addToRecentWatchesWatcher(),
+        createProfileWatcher(),
+        deleteProfileWatcher(),
         rateShowWatcher(),
         loginWatcher(),
         logoutWatcher(),
@@ -251,6 +315,7 @@ export default function* ()
         selectProfileWatcher(),
         toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher(),
+        updateAuthenticatedProfileWatcher(),
         viewDownloadsWatcher()
     ]);
 }

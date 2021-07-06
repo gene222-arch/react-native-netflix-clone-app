@@ -8,13 +8,20 @@ import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
+import { useNavigation } from '@react-navigation/native';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import SelectProfileItem from './../../../components/select-profile-item/SelectProfileItem';
 
 
 const SelectProfileScreen = ({ AUTH }) => 
 {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
-    const handlePressSelectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }))
+    const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
+    const handlePressCreateProfile = () => navigation.navigate('CreateProfile');
+
+    const handlePressSelectProfile = (profile) => dispatch(AUTH_ACTION.selectProfileStart({ id: profile.id }));
 
     return (
         <View style={ styles.container }>
@@ -26,29 +33,49 @@ const SelectProfileScreen = ({ AUTH }) =>
                     }}
                     style={ styles.appLogoImg }
                 />
-                <FontAwesome5 
-                    name='pen'
-                    size={ 24 }
-                    color='#FFF'
-                />
+                <TouchableOpacity onPress={ handlePressManageProfiles }>
+                    <FontAwesome5 
+                        name='pen'
+                        size={ 24 }
+                        color='#FFF'
+                    />
+                </TouchableOpacity>
             </View>
             <View style={ styles.profilesContainer }>
                 <Text h4 style={ styles.whosWatchingText }>Who's Watching?</Text>
                 <FlatList 
                     data={ AUTH.profiles }
                     numColumns={ 2 }
-                    renderItem={ ({ item }) => (
-                        <View style={ styles.profile }>
-                            <TouchableOpacity key={ item.id } onPress={ () => handlePressSelectProfile(item.id) }>
-                                <Image 
-                                    source={{
-                                        uri: item.profile_photo
-                                    }}
-                                    style={ styles.profileImg }
-                                />
-                                <Text h5 style={ styles.profileName }>{ item.name }</Text>
-                            </TouchableOpacity>
-                        </View>
+                    renderItem={ ({ item, index }) => (
+                        AUTH.profiles.length !== (index + 1)
+                            ? <SelectProfileItem 
+                                key={ item.id }
+                                styles={ styles } 
+                                item={ item } 
+                                handlePressSelectProfile={ handlePressSelectProfile } 
+                            />
+                            : (
+                                <>
+                                    <SelectProfileItem 
+                                        key={ item.id }
+                                        styles={ styles } 
+                                        item={ item } 
+                                        handlePressSelectProfile={ handlePressSelectProfile } 
+                                    />
+                                            
+                                    <View key={ index } style={ styles.createProfileContainer }>
+                                        <TouchableOpacity onPress={ handlePressCreateProfile }>
+                                            <FontAwesome5Icon 
+                                                name='plus-circle'
+                                                size={ 60 }
+                                                color='#FFFFFF'
+                                                style={ styles.createProfileIcon }
+                                            />
+                                            <Text h5 style={ styles.createProfileText }>Add Profile</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            )
                     )}
                     columnWrapperStyle={{
                         justifyContent: 'space-between'

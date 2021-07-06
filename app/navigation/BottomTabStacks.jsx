@@ -15,27 +15,13 @@ import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
 import SelectProfileScreen from './../screens/bottom-tabs/select-profile/SelectProfileScreen';
 import TrailerInfo from './../screens/bottom-tabs/coming-soon/TrailerInfo';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import CreateProfileScreen from './../screens/bottom-tabs/select-profile/CreateProfileScreen';
+import ManageProfilesScreen from './../screens/bottom-tabs/select-profile/ManageProfilesScreen';
+import EditProfileScreen from './../screens/bottom-tabs/select-profile/EditProfileScreen';
 
-const options = {
+const DEFAULT_OPTIONS = {
     headerShown: false,
 };
-
-const searchOptions = { 
-    headerLeft: props => <StackNavBackButton { ...props } />,
-    headerRight: props => <StackNavAvatar />,
-    headerRightContainerStyle: {
-        paddingRight: 9
-    },
-    headerStyle: {
-        backgroundColor: '#000'
-    },
-    headerTitle: ''
-};
-
-const moreHeaderOptions = ({ route }) => ({
-    headerLeft: props => <StackNavBackButton { ...props } />,
-    headerTitle: 'Profiles & More'
-});
 
 const SelectProfileStack = createStackNavigator();
 
@@ -46,7 +32,25 @@ export const SelectProfileTab = () =>
             <SelectProfileStack.Screen 
                 name='SelectProfile' 
                 component={ SelectProfileScreen } 
-                options={ options } 
+                options={ DEFAULT_OPTIONS } 
+            />
+            <SelectProfileStack.Screen 
+                name='CreateProfile' 
+                component={ CreateProfileScreen } 
+                options={ DEFAULT_OPTIONS } 
+            />
+            <SelectProfileStack.Screen 
+                name='EditProfile' 
+                component={ EditProfileScreen } 
+                options={ DEFAULT_OPTIONS } 
+            />
+            <SelectProfileStack.Screen 
+                name='ManageProfiles' 
+                component={ ManageProfilesScreen } 
+                options={{ 
+                    headerTitle: 'Manage Profiles', 
+                    headerStyle: { backgroundColor: '#000000' } 
+                }} 
             />
         </SelectProfileStack.Navigator>
     );
@@ -61,7 +65,7 @@ export const HomeTab = ({ navigation }) =>
             <HomeStack.Screen 
                 name='Home' 
                 component={ HomeScreen } 
-                options={{ ...options, headerShown: false }}
+                options={{ ...DEFAULT_OPTIONS, headerShown: false }}
             />
             <HomeStack.Screen 
                 name='MovieDetailScreen' 
@@ -96,12 +100,24 @@ const SearchStack = createStackNavigator();
 
 export const SearchTab = () => 
 {
+    const SEARCH_SCREEN_OPTIONS = { 
+        headerLeft: props => <StackNavBackButton { ...props } />,
+        headerRight: props => <StackNavAvatar />,
+        headerRightContainerStyle: {
+            paddingRight: 9
+        },
+        headerStyle: {
+            backgroundColor: '#000'
+        },
+        headerTitle: ''
+    };
+
     return (
         <SearchStack.Navigator initialRouteName='Search'>
             <SearchStack.Screen 
                 name='Search' 
                 component={ SearchScreen } 
-                options={ searchOptions } 
+                options={ SEARCH_SCREEN_OPTIONS } 
             />
         </SearchStack.Navigator>
     );
@@ -123,7 +139,7 @@ export const ComingSoonTab = () =>
             <ComingSoonStack.Screen 
                 name='ComingSoon' 
                 component={ ComingSoonScreen } 
-                options={ options }
+                options={ DEFAULT_OPTIONS }
             />
             <ComingSoonStack.Screen 
                 name='TrailerInfo'
@@ -143,7 +159,7 @@ export const DownloadsTab = () =>
             <DownloadsStack.Screen 
                 name='Downloads' 
                 component={ DownloadsScreen } 
-                options={ options }
+                options={ DEFAULT_OPTIONS }
             />
             <DownloadsStack.Screen 
                 name='MoreDownloads' 
@@ -158,12 +174,17 @@ const AccountSoonStack = createStackNavigator();
 
 export const MoreTab = () => 
 {
+    const MORE_SCREEN_OPTIONS = ({ route }) => ({
+        headerLeft: props => <StackNavBackButton { ...props } />,
+        headerTitle: 'Profiles & More'
+    });
+    
     return (
         <AccountSoonStack.Navigator initialRouteName='More'>
             <AccountSoonStack.Screen 
                 name='More' 
                 component={ MoreScreen } 
-                options={ moreHeaderOptions }
+                options={ MORE_SCREEN_OPTIONS }
             />
         </AccountSoonStack.Navigator>
     );
