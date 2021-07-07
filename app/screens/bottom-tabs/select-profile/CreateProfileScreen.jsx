@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextInput } from 'react-native'
+import { TextInput, Keyboard } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import Image from './../../../components/Image';
@@ -12,6 +12,7 @@ import { useDispatch, connect } from 'react-redux';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import { authSelector } from '../../../redux/modules/auth/selectors';
 import { createStructuredSelector } from 'reselect';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 
 const CreateProfileScreen = ({ AUTH }) => 
@@ -25,10 +26,14 @@ const CreateProfileScreen = ({ AUTH }) =>
             profile_photo: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
     });
 
-    const handlePressCreateProfile = () => dispatch(AUTH_ACTION.createProfileStart(profile));
+    const handlePressCreateProfile = () => {
+        Keyboard.dismiss();
+        dispatch(AUTH_ACTION.createProfileStart(profile));
+    }
     
     return (
         <>
+            <LoadingSpinner />
             <ProfileAppBar headerTitle='Create Profile' onPress={ handlePressCreateProfile } />
             <View style={ styles.container }>
                 <View style={ styles.imgContainer }>

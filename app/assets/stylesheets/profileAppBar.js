@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
+import { GLOBAL_MARGIN_TOP } from './../../constants/Platform';
 
 const styles = StyleSheet.create({
     backButtonContainer: {
@@ -13,7 +14,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         paddingRight: 10,
         marginBottom: 5,
-        height: 55
+        height: 55,
+        marginTop: GLOBAL_MARGIN_TOP
     },
     headerTitle: {
         paddingLeft: 20,

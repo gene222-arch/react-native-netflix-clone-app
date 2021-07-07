@@ -4,13 +4,13 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 250,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 30,
     },
     deleteProfileBtn: {
         backgroundColor: Colors.dark,
-        paddingTop: 330
     },
     deleteProfileDialog: {
         backgroundColor: Colors.darkGrey,

@@ -11,6 +11,7 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import SelectProfileItem from './../../../components/select-profile-item/SelectProfileItem';
+import LoadingSpinner from './../../../components/LoadingSpinner';
 
 const MAXIMUM_PROFILES = 5;
 
@@ -42,6 +43,8 @@ const DisplayProfiles = ({ profileID, profile, handlePressSelectProfile, handleP
                     </TouchableOpacity>
                 </View>
             );
+        } else {
+            return <Text></Text>
         }
     }
 }

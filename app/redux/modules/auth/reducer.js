@@ -140,7 +140,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state,
                 profiles: profiles_,
-                
+                isLoading,
                 errors
             }
 
@@ -159,12 +159,16 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: [ ...profiles, newProfile ],
+                isLoading,
+                errors
             }
 
-        case CREATE_PROFILE_SUCCESS: 
+        case DELETE_PROFILE_SUCCESS: 
             return {
                 ...state,
                 profiles: profiles.filter(({ id }) => id !== payload.profileID),
+                isLoading,
+                errors
             }
 
         case RATE_SHOW_SUCCESS:
@@ -210,7 +214,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state,
                 profiles: newProfiles,
-                
+                isLoading,
                 errors
             }
 
@@ -219,7 +223,7 @@ export default (state = initialState, { type, payload }) =>
                 ...state, 
                 credentials: payload.credentials,
                 isAuthenticated: true,
-                
+                isLoading,
                 errors
             }
 
@@ -227,7 +231,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: false,
-                
+                isLoading,
                 errors: payload.message
             }
 
@@ -235,7 +239,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: false,
-                
+                isLoading,
                 errors
             }
 
@@ -243,7 +247,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isAuthenticated: true,
-                
+                isLoading,
                 errors: payload.message
             }
 
@@ -251,14 +255,14 @@ export default (state = initialState, { type, payload }) =>
 
             const updateProfileDownloads = profiles.map(({ id, my_downloads, ...profileInfo }) => {
                 return (id === payload.profile.id)
-                    ? { id, my_downloads: [ ...my_downloads, payload.show ], has_new_downloads: true, ...profileInfo, }
+                    ? { id, ...profileInfo, my_downloads: [ ...my_downloads, payload.show ], has_new_downloads: true }
                     : { id, my_downloads, ...profileInfo }
             });
 
             return {
                 ...state,
-                
                 profiles: updateProfileDownloads,
+                isLoading,
                 errors
             }
 
@@ -276,8 +280,8 @@ export default (state = initialState, { type, payload }) =>
 
             return {
                 ...state,
-                
                 profiles: NEW_PROFILES,
+                isLoading,
                 errors
             }
 
@@ -297,15 +301,15 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state,
                 profiles: NEW_PROFILES,
-                
+                isLoading,
                 errors
             }
 
         case SELECT_PROFILE_SUCCESS:
             return {
                 ...state,
-                
                 profile: profiles.find(({ id }) => id === payload.id),
+                isLoading,
                 errors
             }
 
@@ -326,7 +330,7 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: NEW_PROFILES,
-                
+                isLoading,
                 errors
             }            
 
@@ -360,7 +364,7 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: NEW_PROFILES,
-                
+                isLoading,
                 errors
             }
 
@@ -375,7 +379,8 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: NEW_PROFILES,
-                isLoading: false
+                isLoading,
+                errors
             }
 
         case VIEW_DOWNLOADS_SUCCESS: 
@@ -389,7 +394,8 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: NEW_PROFILES,
-                isLoading: false
+                isLoading,
+                errors
             }
 
         case ADD_TO_RECENT_WATCHES_FAILED:
@@ -406,6 +412,7 @@ export default (state = initialState, { type, payload }) =>
         case VIEW_DOWNLOADS_FAILED:
             return {
                 ...state,
+                isLoading,
                 errors: payload.message
             }
 

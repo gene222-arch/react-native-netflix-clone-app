@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TextInput, ActivityIndicator } from 'react-native'
+import { TextInput, ScrollView } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import Image from '../../../components/Image';
@@ -12,10 +12,11 @@ import ProfileAppBar from './ProfileAppBar';
 import { useDispatch, connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from '../../../redux/modules/auth/selectors';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../../constants/Dimensions';
 import { Button } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import PopUpDialog from './../../../components/PopUpDialog';
+import Spinner from 'react-native-loading-spinner-overlay';
+import LoadingSpinner from './../../../components/LoadingSpinner';
 
 const DEFAULT_PROFILE = {
     id: '',
@@ -39,7 +40,10 @@ const EditProfileScreen = ({ AUTH, route }) =>
 
     const handlePressUpdateProfile = () => dispatch(AUTH_ACTION.updateAuthenticatedProfileStart(profile));
 
-    const handlePressDeleteProfile = () => dispatch(AUTH_ACTION.deleteProfileStart(routeProfile.id));
+    const handlePressDeleteProfile = () => {
+        toggleDeleteProfileDialog();
+        dispatch(AUTH_ACTION.deleteProfileStart(routeProfile.id));
+    }
 
     const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
 
@@ -51,7 +55,8 @@ const EditProfileScreen = ({ AUTH, route }) =>
     }, []);
 
     return (
-        <>
+        <ScrollView>
+            <LoadingSpinner />
             <PopUpDialog 
                 textQuery="Are you sure you want to delete this profile? This profile's history will be gone forever
                 and you won't be able  to access it again."
@@ -62,12 +67,6 @@ const EditProfileScreen = ({ AUTH, route }) =>
                 onPressCancel={ toggleDeleteProfileDialog }
                 onPressConfirm={ handlePressDeleteProfile }
             />
-            { AUTH.isLoading && <ActivityIndicator color='#FFF' style={{
-                position: 'absolute',
-                left: DEVICE_WIDTH / 2,
-                top: DEVICE_HEIGHT / 2,
-                width: 100
-            }} /> }
             <ProfileAppBar headerTitle='Edit Profile' onPress={ handlePressUpdateProfile } />
             <View style={ styles.inputContainer }>
                 <View style={ styles.container }>
@@ -116,7 +115,7 @@ const EditProfileScreen = ({ AUTH, route }) =>
                     titleStyle={ styles.deleteBtnTitle }
                 />
             </View>
-        </>
+        </ScrollView>
     )
 }
 
