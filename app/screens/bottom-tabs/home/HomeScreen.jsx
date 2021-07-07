@@ -107,7 +107,7 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
         return () => {
             cleanUp();
         }
-    }, [AUTH_PROFILE.recently_watched_shows]);
+    }, [AUTH_PROFILE?.recently_watched_shows]);
 
 
     if (!isInteractionsComplete) {

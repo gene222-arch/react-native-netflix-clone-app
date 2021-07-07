@@ -25,7 +25,7 @@ const ContinueWatchingFor = ({
         <View style={ styles.container }>
             <Text h4>Continue Watching For { AUTH_PROFILE.name }</Text>
             <FlatList 
-                keyExtractor={ ({ id }) => id.toString()}
+                keyExtractor={ ({ id }) => id.toString() }
                 data={ AUTH_PROFILE.recently_watched_shows }
                 renderItem={({ item }) =>  (
                     <ContinueWatchingForItem 

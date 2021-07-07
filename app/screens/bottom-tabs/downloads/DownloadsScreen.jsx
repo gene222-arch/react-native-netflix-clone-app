@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { InteractionManager, Platform, StatusBar, TouchableOpacity, FlatList, ToastAndroid, ActivityIndicator } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 
@@ -91,15 +91,20 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-
-        if (AUTH_PROFILE.has_new_downloads) {
-            dispatch(AUTH_ACTION.viewDownloadsStart());
-        }
-
         return () => {
             cleanUp();
         }
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            if (AUTH_PROFILE.has_new_downloads) {
+                dispatch(AUTH_ACTION.viewDownloadsStart());
+            }
+
+            return () => dispatch(AUTH_ACTION.viewDownloadsStart());
+        }, [AUTH_PROFILE.has_new_downloads])
+    );
 
 
     /** Show Loading */

@@ -84,13 +84,13 @@ const NavigationBottomTabs = () =>
     };
 
     return (
-        <Tab.Navigator tabBarOptions={ TAB_NAVIGATOR_OPTIONS }>
+        <Tab.Navigator tabBarOptions={ TAB_NAVIGATOR_OPTIONS } detachInactiveScreens>
             <Tab.Screen name='SelectProfile' component={ SelectProfileTab } options={ hideTabScreen } />
             <Tab.Screen name='Home' component={ HomeTab } options={ HOME_TAB_OPTIONS } />
             <Tab.Screen name='Search' component={ SearchTab } options={ hideTabScreen } />
             <Tab.Screen name='Coming soon' component={ ComingSoonTab } options={ COMING_SOON_OPTIONS } />
             <Tab.Screen name='Downloads' component={ DownloadsTab } options={ DOWNLOAD_OPTIONS } />
-            <Tab.Screen name='More' component={ MoreTab }options={ hideTabScreen }/>
+            <Tab.Screen name='More' component={ MoreTab } options={ hideTabScreen }/>
         </Tab.Navigator>
     );
 }

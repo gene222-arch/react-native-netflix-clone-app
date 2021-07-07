@@ -15,7 +15,7 @@ import AuthenticationStack from './AuthenticationStack';
 import { navigationRef } from './RootNavigation';
 
 
-enableScreens(false);
+enableScreens(true);
 const Navigation = ({ AUTH }) => 
 {
     return (

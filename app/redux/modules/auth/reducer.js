@@ -205,15 +205,15 @@ export default (state = initialState, { type, payload }) =>
                 });
 
             /** Update profiles */
-            let newProfiles = profiles.map((prof) => {
-                return (prof.id === profile.id) 
+            NEW_PROFILES = profiles.map((prof) => {
+                return (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
                     ? { ...prof, recently_watched_shows: recentlyWatchedShows_, liked_shows: newLikedShows } 
                     : prof;
             });
 
             return { 
                 ...state,
-                profiles: newProfiles,
+                profiles: NEW_PROFILES,
                 isLoading,
                 errors
             }
