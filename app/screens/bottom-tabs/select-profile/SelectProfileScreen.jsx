@@ -12,6 +12,39 @@ import { useNavigation } from '@react-navigation/native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import SelectProfileItem from './../../../components/select-profile-item/SelectProfileItem';
 
+const MAXIMUM_PROFILES = 5;
+
+const DisplayProfiles = ({ profileID, profile, handlePressSelectProfile, handlePressCreateProfile, numberOfProfiles, index }) => 
+{
+    const profileCountIsEqualToIndex = (numberOfProfiles + 1) !== (index + 1);
+
+    if (profileCountIsEqualToIndex) {
+        return (
+            <SelectProfileItem 
+                key={ profileID }
+                styles={ styles } 
+                item={ profile } 
+                handlePressSelectProfile={ handlePressSelectProfile } 
+            />
+        )
+    } else {
+        if (numberOfProfiles !== MAXIMUM_PROFILES) {
+            return (
+                <View style={ styles.createProfileContainer }>
+                    <TouchableOpacity onPress={ handlePressCreateProfile }>
+                        <FontAwesome5Icon 
+                            name='plus-circle'
+                            size={ 60 }
+                            color='#FFFFFF'
+                            style={ styles.createProfileIcon }
+                        />
+                        <Text h5 style={ styles.createProfileText }>Add Profile</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+    }
+}
 
 const SelectProfileScreen = ({ AUTH }) => 
 {
@@ -44,38 +77,17 @@ const SelectProfileScreen = ({ AUTH }) =>
             <View style={ styles.profilesContainer }>
                 <Text h4 style={ styles.whosWatchingText }>Who's Watching?</Text>
                 <FlatList 
-                    data={ AUTH.profiles }
+                    data={ [...AUTH.profiles, { id: '' }] }
                     numColumns={ 2 }
                     renderItem={ ({ item, index }) => (
-                        AUTH.profiles.length !== (index + 1)
-                            ? <SelectProfileItem 
-                                key={ item.id }
-                                styles={ styles } 
-                                item={ item } 
-                                handlePressSelectProfile={ handlePressSelectProfile } 
-                            />
-                            : (
-                                <>
-                                    <SelectProfileItem 
-                                        key={ item.id }
-                                        styles={ styles } 
-                                        item={ item } 
-                                        handlePressSelectProfile={ handlePressSelectProfile } 
-                                    />
-                                            
-                                    <View key={ index } style={ styles.createProfileContainer }>
-                                        <TouchableOpacity onPress={ handlePressCreateProfile }>
-                                            <FontAwesome5Icon 
-                                                name='plus-circle'
-                                                size={ 60 }
-                                                color='#FFFFFF'
-                                                style={ styles.createProfileIcon }
-                                            />
-                                            <Text h5 style={ styles.createProfileText }>Add Profile</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </>
-                            )
+                        <DisplayProfiles 
+                            profileID={ item.id }
+                            index={ index }
+                            numberOfProfiles={ AUTH.profiles.length }
+                            profile={ item }
+                            handlePressSelectProfile={ handlePressSelectProfile }
+                            handlePressCreateProfile={ handlePressCreateProfile }
+                        />
                     )}
                     columnWrapperStyle={{
                         justifyContent: 'space-between'

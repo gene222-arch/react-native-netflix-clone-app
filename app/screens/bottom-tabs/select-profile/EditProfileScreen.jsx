@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextInput, ActivityIndicator } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
@@ -15,7 +15,14 @@ import { authSelector } from '../../../redux/modules/auth/selectors';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../../constants/Dimensions';
 import { Button } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import PopUpDialog from './../../../components/PopUpDialog';
 
+const DEFAULT_PROFILE = {
+    id: '',
+    name: '',
+    is_for_kids: false,
+    profile_photo: ''
+}
 
 const EditProfileScreen = ({ AUTH, route }) => 
 {
@@ -25,15 +32,36 @@ const EditProfileScreen = ({ AUTH, route }) =>
     const [ profile, setProfile ] = useState({ 
         id: routeProfile.id,
         name: routeProfile.name, 
-        is_for_kids: routeProfile.is_for_kids 
+        is_for_kids: routeProfile.is_for_kids,
+        profile_photo: routeProfile.profile_photo
     });
+    const [ showDeleteProfileDialog, setShowDeleteProfileDialog ] = useState(false);
 
     const handlePressUpdateProfile = () => dispatch(AUTH_ACTION.updateAuthenticatedProfileStart(profile));
 
     const handlePressDeleteProfile = () => dispatch(AUTH_ACTION.deleteProfileStart(routeProfile.id));
 
+    const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
+
+    useEffect(() => {
+        return () => {
+            setProfile(DEFAULT_PROFILE);
+            setShowDeleteProfileDialog(false);
+        }
+    }, []);
+
     return (
         <>
+            <PopUpDialog 
+                textQuery="Are you sure you want to delete this profile? This profile's history will be gone forever
+                and you won't be able  to access it again."
+                textCancel="Cancel"
+                textConfirm="Delete Profile"
+                isVisible={ showDeleteProfileDialog }
+                onBackdropPress={ toggleDeleteProfileDialog }
+                onPressCancel={ toggleDeleteProfileDialog }
+                onPressConfirm={ handlePressDeleteProfile }
+            />
             { AUTH.isLoading && <ActivityIndicator color='#FFF' style={{
                 position: 'absolute',
                 left: DEVICE_WIDTH / 2,
@@ -84,7 +112,7 @@ const EditProfileScreen = ({ AUTH, route }) =>
                     }
                     iconPosition='left'
                     buttonStyle={ styles.deleteProfileBtn }
-                    onPress={ handlePressDeleteProfile }
+                    onPress={ toggleDeleteProfileDialog }
                     titleStyle={ styles.deleteBtnTitle }
                 />
             </View>

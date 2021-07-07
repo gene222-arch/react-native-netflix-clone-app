@@ -18,7 +18,12 @@ const CreateProfileScreen = ({ AUTH }) =>
 {
     const dispatch = useDispatch();
 
-    const [ profile, setProfile ] = useState({ id: (AUTH.profiles.length + 1), name: '', is_for_kids: false });
+    const [ profile, setProfile ] = useState({ 
+            id: (AUTH.profiles.length + 1), 
+            name: '', 
+            is_for_kids: false,
+            profile_photo: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
+    });
 
     const handlePressCreateProfile = () => dispatch(AUTH_ACTION.createProfileStart(profile));
     

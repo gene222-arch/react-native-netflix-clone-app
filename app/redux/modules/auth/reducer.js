@@ -145,9 +145,20 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case CREATE_PROFILE_SUCCESS: 
+
+            const newProfile = {
+                ...payload.profile,
+                my_downloads: [],
+                recently_watched_shows: [],
+                my_list: [],
+                reminded_coming_soon_shows: [],
+                liked_shows: [],
+                has_new_downloads: false,
+            }
+
             return {
                 ...state,
-                profiles: [ ...profiles, payload.profile ],
+                profiles: [ ...profiles, newProfile ],
             }
 
         case CREATE_PROFILE_SUCCESS: 

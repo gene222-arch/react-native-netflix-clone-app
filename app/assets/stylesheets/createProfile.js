@@ -10,7 +10,12 @@ const styles = StyleSheet.create({
     },
     deleteProfileBtn: {
         backgroundColor: Colors.dark,
-        marginTop: 330
+        paddingTop: 330
+    },
+    deleteProfileDialog: {
+        backgroundColor: Colors.darkGrey,
+        width: DEVICE_WIDTH / 1.15,
+        padding: 20
     },
     switchContainer: {
         flexDirection: 'row'
