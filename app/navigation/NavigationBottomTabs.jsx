@@ -10,12 +10,16 @@ import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import DownloadsTabBarBadge from './../components/DownloadsTabBarBadge';
+import { createStructuredSelector } from 'reselect';
+import { navigationSelector } from './../redux/modules/navigation/selectors';
+import { connect } from 'react-redux';
 
 
 const Tab = createBottomTabNavigator();
 
-const NavigationBottomTabs = () => 
+const NavigationBottomTabs = ({ NAVIGATION }) => 
 {
+    console.log(NAVIGATION);
     const TAB_NAVIGATOR_OPTIONS = {
         initialRouteName: 'SelectProfile',
         activeTintColor: Colors.white,
@@ -60,23 +64,20 @@ const NavigationBottomTabs = () =>
         tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
     });
 
-    const DOWNLOAD_OPTIONS = ({ route, navigation }) => {
-
-        console.log(route);
-        return ({
-            tabBarIcon: (({ color }) => (
-                <FeatherIcon 
-                    name='download' 
-                    size={ 24 } 
-                    color={ color }  
-                />
-            )),
-            tabBarBadge: <DownloadsTabBarBadge />,
-            tabBarBadgeStyle: {
-                backgroundColor: 'transparent'
-            }
-        });
-    }
+    const DOWNLOAD_OPTIONS = ({
+        tabBarIcon: (({ color }) => (
+            <FeatherIcon 
+                name='download' 
+                size={ 24 } 
+                color={ color }  
+            />
+        )),
+        tabBarBadge: <DownloadsTabBarBadge />,
+        tabBarBadgeStyle: {
+            backgroundColor: 'transparent'
+        },
+        tabBarVisible: NAVIGATION.tabBarVisible
+    });
 
     const hideTabScreen = {
         tabBarButton: () => <View style={{ width:0, height:0 }}></View>,
@@ -95,4 +96,8 @@ const NavigationBottomTabs = () =>
     );
 }
 
-export default NavigationBottomTabs
+const mapStateToProps = createStructuredSelector({
+    NAVIGATION: navigationSelector
+});
+
+export default connect(mapStateToProps)(NavigationBottomTabs)

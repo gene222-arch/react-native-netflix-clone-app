@@ -64,7 +64,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     }
 
     const handlePressNonSeries = (downloadedShow) => {
-        navigation.setParams({ showSetInFullScreen: true });
         setShowVideo(true);
         setDownload(downloadedShow);
     }
@@ -117,7 +116,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     {
         return (
             <VideoPlayerFullScreen 
-                uri={ getCachedFile('Downloads/Videos/', download.id, download.video) }
+                uri={ getCachedFile('', `Downloads-${ AUTH_PROFILE.id }${ download.id }`, download.video) }
                 handleCloseVideo={ () => setShowVideo(false) }
             />
         )

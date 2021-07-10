@@ -60,9 +60,10 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ videoStatus, setVideoStatus ] = useState({});
 
+    
     const handlePressPauseVideo = () => {
-        videoRef.current.pauseAsync();
         setShouldPlayVideo(false);
+        videoRef.current.pauseAsync();
     }
 
     const handlePressPlayVideo = () => 
@@ -74,7 +75,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
 
     const handleChangeSeason = (name, index) => {
         setSelectedSeason(name);
-        setCurrentSeasonEpisodes(show.seasons.items[index].episodes.items);
+        setCurrentSeasonEpisodes(show.seasons[index].episodes);
     }
 
     const handlePressTabAddToLIst = () => 

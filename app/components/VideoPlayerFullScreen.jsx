@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Video } from 'expo-av'
-import styles from './../assets/stylesheets/playDownload';
+import * as NAVIGATION_ACTION from './../redux/modules/navigation/actions'
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
 import Text from './Text';
-import { Dimensions } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
+import { useDispatch } from 'react-redux';
 
 
 const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) => 
 {
-    const navigation = useNavigation();
+    const dispatch = useDispatch();
     const video = useRef(null);
     const [inFullscreen, setInFullscreen] = useState(false);
 
@@ -23,6 +23,8 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
 
     const onEnterFullScreen = async () => 
     {
+        dispatch(NAVIGATION_ACTION.toggleTabBarStart());
+
         setStatusBarHidden(true, 'fade')
         setInFullscreen(!inFullscreen)
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
@@ -33,8 +35,9 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
 
     const onExitFullScreen = async () => 
     {
+        dispatch(NAVIGATION_ACTION.toggleTabBarStart());
+
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-        navigation.setParams({ showSetInFullScreen: false });
         setStatusBarHidden(false, 'fade');
         setInFullscreen(false);
         handleCloseVideo();
@@ -42,8 +45,8 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
 
     const style = {
         videoBackgroundColor: 'black',
-        height: inFullscreen ? Dimensions.get('window').width : 160,
-        width: inFullscreen ? Dimensions.get('window').height : 320,
+        height: inFullscreen ? DEVICE_WIDTH : 160,
+        width: inFullscreen ? DEVICE_HEIGHT : 320,
     };
 
     useEffect(() => {
