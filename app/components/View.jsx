@@ -10,7 +10,7 @@ const View = ({ row = false, style, ...props }) =>
         <DefaultView 
             style={ 
                 [
-                    { ...Colors.theme.container[theme] }, 
+                    { ...Colors.theme.container['dark'] }, 
                     { ...styles, flexDirection: !row ? styles.viewDefaultStyle.flexDirection : 'row' }, 
                     { ...style }
                 ] 

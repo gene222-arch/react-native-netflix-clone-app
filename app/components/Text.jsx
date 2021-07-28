@@ -11,12 +11,12 @@ const Text = ({ style, touchableOpacity = false, onPress, ...props }) =>
     if (touchableOpacity) {
         return (
             <TouchableOpacity onPress={ onPress }>
-                <DefaultText style={ [{ ...Colors.theme.typography[theme], lineHeight: 20 }, { ...style }] } {...props} />
+                <DefaultText style={ [{ ...Colors.theme.typography['dark'], lineHeight: 20 }, { ...style }] } {...props} />
             </TouchableOpacity>
         )
     }
 
-    return <DefaultText style={ [{ ...Colors.theme.typography[theme] }, { ...style }] } {...props} />
+    return <DefaultText style={ [{ ...Colors.theme.typography['dark'] }, { ...style }] } {...props} />
 }
 
 export default Text

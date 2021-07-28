@@ -116,7 +116,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     {
         return (
             <VideoPlayerFullScreen 
-                uri={ getCachedFile('', `Downloads-${ AUTH_PROFILE.id }${ download.id }`, download.video) }
+                uri={ download.downloaded_file_uri }
                 handleCloseVideo={ () => setShowVideo(false) }
             />
         )

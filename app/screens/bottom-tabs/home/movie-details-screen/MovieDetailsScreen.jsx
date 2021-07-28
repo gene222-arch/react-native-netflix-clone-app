@@ -31,8 +31,8 @@ import styles from '../../../../assets/stylesheets/movieDetail';
 
 /** Icons */
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 
 const DEFAULT_EPISODE = {
     id: '',
@@ -181,7 +181,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                         <View style={ styles.playDownloadBtnContainer }> 
                             <Button
                                 icon={
-                                    <MaterialCommunityIcon
+                                    <Ionicon
                                         name={ shouldPlayVideo ? 'pause' : 'play' }
                                         size={ 24 }
                                         color='black'

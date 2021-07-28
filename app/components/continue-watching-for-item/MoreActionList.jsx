@@ -147,7 +147,7 @@ const MoreActionList = ({
             setStatus(VIDEO_STATUSES.DOWNLOADED);
 
             ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
-            dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH.profile }));
+            dispatch(AUTH_ACTION.downloadVideoStart({ show: { ...selectedVideo, downloaded_file_uri: FILE_URI, }, profile: AUTH.profile }));
         } catch ({ message }) {
             console.log(message);
         }

@@ -44,7 +44,7 @@ const Info = ({ selectedShow, isVisible, setIsVisible }) =>
     }
 
     const handlePressNavigateToShowDetailScreen = () => {
-        navigation.navigate('MovieDetailScreen', { id: selectedShow.id });
+        navigation.navigate('MovieDetailScreen', { id: selectedShow?.id });
     }
 
     /** Play Video in Full Screen */
@@ -52,7 +52,7 @@ const Info = ({ selectedShow, isVisible, setIsVisible }) =>
     {
         return (
             <VideoPlayerFullScreen 
-                uri={ selectedShow.trailer_video }
+                uri={ selectedShow?.trailer_video }
                 handleCloseVideo={ handleCloseVideo }
             />
         )
@@ -66,13 +66,13 @@ const Info = ({ selectedShow, isVisible, setIsVisible }) =>
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
-                        source={ typeof selectedShow.poster === 'string' ? { uri: selectedShow.poster } : selectedShow.poster }
+                        source={ typeof selectedShow?.poster === 'string' ? { uri: selectedShow?.poster } : selectedShow?.poster }
                         style={ styles.poster }
                     />
                     <ListItem.Content>
                         <View style={ styles.posterDetails }>
                             <View style={ styles.titleCloseBtnContainer }>
-                                <Text h4 style={ styles.title }>{  selectedShow.title }</Text>
+                                <Text h4 style={ styles.title }>{  selectedShow?.title }</Text>
                                 <TouchableOpacity onPress={ () => setIsVisible(false) }>
                                     <FeatherIcon 
                                         name='x-circle'
@@ -83,11 +83,11 @@ const Info = ({ selectedShow, isVisible, setIsVisible }) =>
                                 </TouchableOpacity>
                             </View>
                             <View style={ styles.basicDetail }>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow.year }</Text>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow.age_restriction }+</Text>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow.total_number_of_seasons } Seasons</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.year }</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.age_restriction }+</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.total_number_of_seasons } Seasons</Text>
                             </View>
-                            <Text style={ styles.plot }>{ selectedShow?.plot || selectedShow.plot.slice(0, 250).concat('...') }</Text>
+                            <Text style={ styles.plot }>{ selectedShow?.plot || selectedShow?.plot.slice(0, 250).concat('...') }</Text>
                         </View>
                     </ListItem.Content>
                 </ListItem>

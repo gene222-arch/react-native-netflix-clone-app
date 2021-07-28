@@ -25,7 +25,6 @@ const ContinueWatchingForItem = ({
     const videoRef = useRef(null)
 
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
-    const [ usePoster, setUsePoster ] = useState(true);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
 
@@ -35,24 +34,20 @@ const ContinueWatchingForItem = ({
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(!showMoreOptions);
 
-    const cleanUp = () => {
-        setUsePoster(true);
-        setShowInfo(false);
-        setShowMoreOptions(false);
-        setShouldPlayVideo(false);
-        videoRef.current = null;
-    }
-
     useEffect(() => {
         return () => {
-            cleanUp();
+            setShowInfo(false);
+            setShowMoreOptions(false);
+            setShouldPlayVideo(false);
+    
+            videoRef.current = null;
         }
     }, []);
 
     if (shouldPlayVideo) {
         return (
             <VideoPlayerFullScreen  
-                uri={ getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`, episode.id, episode.video) }
+                uri={ getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, episode.id, episode.video) }
                 handleCloseVideo={ handlePressPlayVideo }
             />
         )
@@ -73,10 +68,10 @@ const ContinueWatchingForItem = ({
                 ref={ videoRef }
                 style={ styles.video }
                 source={{
-                    uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`, episode.id, episode.video)
+                    uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, episode.id, episode.video)
                 }}
-                usePoster={ usePoster }
-                posterSource={{ uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`, episode.id, episode.poster) }}
+                usePoster={ !shouldPlayVideo  }
+                posterSource={{ uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, episode.id, episode.poster) }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />

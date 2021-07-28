@@ -79,12 +79,6 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
             cacheImage(poster, id, 'FrontPages/');
             cacheImage(backgroundImage, id, 'FrontPages/');
         });
-
-        /** Cache Recently Watched Shows */
-        AUTH_PROFILE.recently_watched_shows.map(({ id, poster, video }) => {
-            cacheImage(poster, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`);
-            cacheImage(video, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/`);
-        });
     }
 
     const runAfterInteractions = () => 
@@ -99,6 +93,7 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
         setCategories([]);
         setFrontPage(DEFAULT_FRONT_PAGE);
         setIsInteractionsComplete(false);
+        setShowFrontPageInfo(false);
     }
 
     useEffect(() => {

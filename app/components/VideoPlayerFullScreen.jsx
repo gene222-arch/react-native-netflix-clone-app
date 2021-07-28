@@ -28,7 +28,7 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
         setStatusBarHidden(true, 'fade')
         setInFullscreen(!inFullscreen)
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-        video.current.setStatusAsync({
+        video?.current?.setStatusAsync({
           shouldPlay: true,
         });
     }
