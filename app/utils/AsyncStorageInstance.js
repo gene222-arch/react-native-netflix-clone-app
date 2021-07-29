@@ -9,10 +9,12 @@ export const setItem = async (key = '', value = '') =>
     }
 }
 
-export const getItem = async (key) => 
+export const getItem = (key) => 
 {
     try {
-        return await AsyncStorage.getItem(key);
+        const result = AsyncStorage.getItem(key);
+
+        return result;
     } catch ({ message }) {
         console.log(message);
     }

@@ -10,8 +10,8 @@ import rootSagas from './root.sagas';
 const config = {
     key: 'root',
     storage: AsyncStorage,
-    blacklist: [''],
-    debug: true, //to get useful logging
+    whitelist: [''],
+    debug: false, //to get useful logging
 };
 
 const middleware = [];
@@ -20,7 +20,7 @@ const sagaMiddleware = createSagaMiddleware();
 middleware.push(sagaMiddleware);
 
 if (__DEV__) {
-  middleware.push(createLogger());
+  // middleware.push(createLogger());
 }
 
 const reducers = persistCombineReducers(config, rootReducers);

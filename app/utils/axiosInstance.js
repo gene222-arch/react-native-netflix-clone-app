@@ -1,16 +1,26 @@
 import Axios from 'axios'
-import asyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ENV from './../../env';
 
-const axiosInstance = (contentType = null) => 
+const axiosInstance = () => 
 {
-    let headers = {};
+    let accessToken = null;
 
-    if (asyncStorage.getItem('@access_token')) {
-        headers.Authorization = `Bearer ${ asyncStorage.getItem('@access_token') }`
+    (async () => {
+        accessToken = await AsyncStorage.getItem('@access_token');
+    });
+
+    let headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json"
+    };
+
+    if (accessToken) {
+        headers.Authorization = `Bearer ${ accessToken }`
     }
 
     const axiosInstance = Axios.create({
-        baseURL: 'https://imdb8.p.rapidapi.com',
+        baseURL: ENV.DEVELOPMENT_MODE_API_URL,
         headers
     });
 

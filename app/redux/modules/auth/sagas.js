@@ -1,6 +1,8 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
+import ENV from './../../../../env';
 import * as RootNavigation from './../../../navigation/RootNavigation'
+import * as API from './../../../services/auth/login'
 import { 
     addToRecentWatchesSuccess,
     addToRecentWatchesFailed,
@@ -31,8 +33,6 @@ import {
     viewDownloadsSuccess,
     viewDownloadsFailed
 } from './actions'
-import * as AsyncStorage from './../../../utils/asyncStorage'
-import { getDownloadedVideo, getExtension, getDownloadedVideoFileInfo } from './../../../utils/file';
 const {
     ADD_TO_RECENT_WATCHES_START,
     CREATE_PROFILE_START,
@@ -93,10 +93,13 @@ function* rateShowSaga(payload)
 function* loginSaga(payload)  
 {
     try {
-        yield put(loginSuccess({ credentials: payload }));
-        yield call(AsyncStorage.setItem, '@access_token', 'token');
+        const result = yield call(API.loginAsync, payload);
+        console.log('LOGIN SAGA RESULT');
+        console.log(result);
+        // yield call(AsyncStorage.setItem, '@access_token', 'token');
     } catch ({ message }) {
-        yield put(loginFailed({ message }));
+        console.log('LOGIN ACTION FAILED', message);
+        yield put(loginFailed({ message }));    
     }
 }
 

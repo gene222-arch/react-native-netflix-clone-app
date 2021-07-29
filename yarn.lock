@@ -4317,6 +4317,11 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
+laravel-echo@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/laravel-echo/-/laravel-echo-1.11.0.tgz#3ca5160317cd7b1417256fdfb9ae9210d27369f4"
+  integrity sha512-0IThWqI+UNjrwIu/JI3/MGYXLT15LPrwNymP80cgZckYDyY57+Pf2WXKXa+ViX9qh+1WU34vBjMsJAj8wA5iVQ==
+
 leven@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"

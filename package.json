@@ -25,6 +25,7 @@
     "expo-screen-orientation": "~3.1.0",
     "expo-status-bar": "~1.0.4",
     "expo-video-player": "^2.0.0",
+    "laravel-echo": "^1.11.0",
     "pusher-js": "^7.0.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",

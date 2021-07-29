@@ -16,6 +16,7 @@ import { navigationRef } from './RootNavigation';
 
 
 enableScreens(true);
+
 const Navigation = ({ AUTH }) => 
 {
     return (

@@ -28,7 +28,7 @@ const ContinueWatchingFor = ({
             cacheImage(poster, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`);
             cacheImage(video, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`);
         });
-    }, []);
+    }, [AUTH_PROFILE.recently_watched_shows]);
 
     return (
         <View style={ styles.container }>
