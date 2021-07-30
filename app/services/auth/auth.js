@@ -55,6 +55,7 @@ export const toggleRemindMeAsync = async (payload) =>
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
+<<<<<<< HEAD
 
 
 export const rateMovieAsync = async (payload) => 
@@ -64,3 +65,5 @@ export const rateMovieAsync = async (payload) =>
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
+=======
+>>>>>>> 64ee380b9c106c23e5d93a6f46ee24664d984e51
