@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
 
-const getComingSoon = state => state.comingSoon; 
+const getComingSoonMovies = state => state.comingSoonMovies; 
 
-export const comingSoonSelector = createSelector(getComingSoon, comingSoon => comingSoon );
+export const comingSoonMoviesSelector = createSelector(getComingSoonMovies, comingSoonMovies => comingSoonMovies );

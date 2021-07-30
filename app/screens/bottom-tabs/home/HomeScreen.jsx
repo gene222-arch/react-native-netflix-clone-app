@@ -11,6 +11,7 @@ import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 /** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
+import * as MOVIE_ACTION from './../../../redux/modules/movie/actions'
 
 /** API */
 import categories_ from './../../../services/data/categories';
@@ -83,6 +84,8 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
 
     const runAfterInteractions = () => 
     {
+        dispatch(MOVIE_ACTION.getMoviesStart());
+
         cacheImages();
         setCategories(categories_);
         setFrontPage(frontPageShows[0]);

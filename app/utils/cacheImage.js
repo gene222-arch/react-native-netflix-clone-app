@@ -15,13 +15,9 @@ export const cacheImage = async (uri, id, directory = '') =>
         const fileURI = `${ id.toString() }.${ getExtension(uri) }`;
         const fileToCache = DIRECTORY + fileURI;
 
-        await FileSystem
-            .downloadAsync(uri, fileToCache)
-            .then(({ uri }) => console.log(`${uri} Cached Successfully`))
-            .then(err => console.log(err));
+        await FileSystem.downloadAsync(uri, fileToCache)
 
     } catch ({ message }) {
-        console.log(message);
     }
 }
 

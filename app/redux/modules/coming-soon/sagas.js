@@ -1,30 +1,31 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
-import { getComingSoonShowsSuccess, getComingSoonShowsFailed  } from './actions'
-import AsyncStorage  from '@react-native-async-storage/async-storage';
+import * as API from './../../../services/movie/coming.soon.movies'
+import { getComingSoonMoviesSuccess, getComingSoonMoviesFailed  } from './actions'
 
 const {
-    GET_COMING_SOON_SHOWS_START
+    GET_COMING_SOON_MOVIES_START
 } = ACTION_TYPES;
 
 
 /** Sagas */
-function* getComingSoonShowsSaga(payload)  
+function* getComingSoonMoviesSaga(payload)  
 {
     try {
-        yield put(getComingSoonShowsSuccess({ comingSoonShows: payload }));
+        const { data: comingSoonMovies } = yield call(API.fetchAllAsync);
+        yield put(getComingSoonMoviesSuccess({ comingSoonMovies }));
     } catch ({ message }) {
-        yield put(getComingSoonShowsFailed({ message }));
+        yield put(getComingSoonMoviesFailed({ message }));
     }
 }
 
 
 /** Watchers or Observers */
-function* getComingSoonShowsWatcher()
+function* getComingSoonMoviesWatcher()
 {
     while (true) {
-        const { payload } = yield take(GET_COMING_SOON_SHOWS_START);
-        yield call(getComingSoonShowsSaga, payload);
+        const { payload } = yield take(GET_COMING_SOON_MOVIES_START);
+        yield call(getComingSoonMoviesSaga, payload);
     }
 }
 
@@ -32,7 +33,7 @@ function* getComingSoonShowsWatcher()
 export default function* ()
 {
     yield all([
-        getComingSoonShowsWatcher(),
+        getComingSoonMoviesWatcher(),
     ]);
 }
 

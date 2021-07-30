@@ -4,10 +4,10 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { createStructuredSelector } from 'reselect';
-import { authSelector } from './../../redux/modules/auth/selectors';
+import {  authProfileSelector } from './../../redux/modules/auth/selectors';
 
 
-const StackNavAvatar = ({ AUTH }) => 
+const StackNavAvatar = ({ AUTH_PROFILE }) => 
 {
     const navigation = useNavigation();
 
@@ -16,7 +16,7 @@ const StackNavAvatar = ({ AUTH }) =>
     return (
         <TouchableOpacity onPress={ navigateToAccountScreen }>
             <Avatar
-                source={{ uri: AUTH.profile.profile_photo }}
+                source={{ uri: AUTH_PROFILE.avatar }}
                 avatarStyle={ styles.avatarIcon }
             />
         </TouchableOpacity>
@@ -24,7 +24,7 @@ const StackNavAvatar = ({ AUTH }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authProfileSelector
 });
 
 export default connect(mapStateToProps)(StackNavAvatar)

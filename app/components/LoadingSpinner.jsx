@@ -1,27 +1,23 @@
 import React from 'react'
 import Spinner from 'react-native-loading-spinner-overlay'
-import { createStructuredSelector } from 'reselect';
-import { authSelector } from '../redux/modules/auth/selectors';
-import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native'
 
-const LoadingSpinner = ({ AUTH }) => {
+const LoadingSpinner = ({ isLoading = true, message }) => {
     return (
         <Spinner 
-            visible={ AUTH.isLoading }
+            visible={ isLoading }
             textStyle={ styles.spinnerTextStyle }
+            size='large'
+            textContent={ message }
         />
     )
 }
 
-const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
-});
-
 const styles = StyleSheet.create({
     spinnerTextStyle: {
-        color: '#FFF'
+        color: '#FFF',
+        fontSize: 25
     }
 });
 
-export default connect(mapStateToProps)(LoadingSpinner)
+export default LoadingSpinner

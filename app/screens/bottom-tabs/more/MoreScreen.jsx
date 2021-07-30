@@ -12,7 +12,7 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
 import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
 import { useNavigation } from '@react-navigation/native';
-
+import * as AsyncStorageInstance from './../../../utils/AsyncStorageInstance'
 
 const moreOptions = ({ onPressSignOut, onPressMyList }) =>
 [
@@ -85,8 +85,8 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
     const toggleSignOutDialog = () => setShowSignOutDialog(!showSignOutDialog);
 
     const handlePressSignOut = () => {
-        ToastAndroid.show('Signed Out', ToastAndroid.LONG);
         dispatch(AUTH_ACTION.logoutStart());
+        setTimeout(() => ToastAndroid.show('Signed Out', ToastAndroid.SHORT), 500);
     }
 
     const handlePressMyList = () => navigation.navigate('MyListScreen', { headerTitle: 'My List' });
@@ -151,9 +151,8 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
                     renderItem={ ({ item, index }) => (
                         <ProfilePhotoItem 
                             key={ index }
-                            name={ item.name } 
-                            uri={ item.profile_photo }
-                            isSelected={ AUTH.profile.id === item.id }
+                            profile={ item }
+                            isSelected={ AUTH_PROFILE.id === item.id }
                             onPress={ () => handlePressSelectProfile(item.id) }
                         />
                     )}

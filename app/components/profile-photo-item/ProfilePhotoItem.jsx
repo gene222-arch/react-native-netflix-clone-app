@@ -6,13 +6,15 @@ import Image from './../Image';
 import Colors from './../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const ProfilePhotoItem = ({ name, uri, isSelected = false, onPress }) => 
+const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) => 
 {
+    const { name, avatar } = profile;
+
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
                 <Image 
-                    source={{ uri }}
+                    source={{ uri: avatar }}
                     style={ [isSelected ? styles.selectedImg : styles.defaultImg, styles.img] }
                 />
                 <Text style={{ 
@@ -21,7 +23,7 @@ const ProfilePhotoItem = ({ name, uri, isSelected = false, onPress }) =>
                     fontSize: isSelected ? 14 : 13,
                     marginTop: 5
                 }}>
-                    { name }
+                    { `${ name.slice(0, 6) }...` }
                 </Text>
             </View>
         </TouchableOpacity>

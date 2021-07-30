@@ -19,7 +19,6 @@ const Tab = createBottomTabNavigator();
 
 const NavigationBottomTabs = ({ NAVIGATION }) => 
 {
-    console.log(NAVIGATION);
     const TAB_NAVIGATOR_OPTIONS = {
         initialRouteName: 'SelectProfile',
         activeTintColor: Colors.white,

@@ -9,45 +9,8 @@ import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import { useNavigation } from '@react-navigation/native';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import SelectProfileItem from './../../../components/select-profile-item/SelectProfileItem';
-import LoadingSpinner from './../../../components/LoadingSpinner';
+import DisplayProfile from '../../../components/select-profile-item';
 
-const MAXIMUM_PROFILES = 5;
-
-const DisplayProfiles = ({ profileID, profile, handlePressSelectProfile, handlePressCreateProfile, numberOfProfiles, index }) => 
-{
-    const profileCountIsEqualToIndex = (numberOfProfiles + 1) !== (index + 1);
-
-    if (profileCountIsEqualToIndex) {
-        return (
-            <SelectProfileItem 
-                key={ profileID }
-                styles={ styles } 
-                item={ profile } 
-                handlePressSelectProfile={ handlePressSelectProfile } 
-            />
-        )
-    } else {
-        if (numberOfProfiles !== MAXIMUM_PROFILES) {
-            return (
-                <View style={ styles.createProfileContainer }>
-                    <TouchableOpacity onPress={ handlePressCreateProfile }>
-                        <FontAwesome5Icon 
-                            name='plus-circle'
-                            size={ 60 }
-                            color='#FFFFFF'
-                            style={ styles.createProfileIcon }
-                        />
-                        <Text h5 style={ styles.createProfileText }>Add Profile</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        } else {
-            return <Text></Text>
-        }
-    }
-}
 
 const SelectProfileScreen = ({ AUTH }) => 
 {
@@ -55,12 +18,13 @@ const SelectProfileScreen = ({ AUTH }) =>
     const navigation = useNavigation();
 
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
-    const handlePressCreateProfile = () => navigation.navigate('CreateProfile');
 
-    const handlePressSelectProfile = (profile) => dispatch(AUTH_ACTION.selectProfileStart({ id: profile.id }));
+    const handlePressSelectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
     return (
         <View style={ styles.container }>
+
+            {/* Header */}
             <View style={ styles.header }>
                 <Text></Text>
                 <Image 
@@ -77,24 +41,21 @@ const SelectProfileScreen = ({ AUTH }) =>
                     />
                 </TouchableOpacity>
             </View>
+            
+            {/* Profile List */}   
             <View style={ styles.profilesContainer }>
                 <Text h4 style={ styles.whosWatchingText }>Who's Watching?</Text>
                 <FlatList 
-                    data={ [...AUTH.profiles, { id: '' }] }
+                    data={[ ...AUTH.profiles, { id: '' } ]}
                     numColumns={ 2 }
                     renderItem={ ({ item, index }) => (
-                        <DisplayProfiles 
-                            profileID={ item.id }
-                            index={ index }
-                            numberOfProfiles={ AUTH.profiles.length }
+                        <DisplayProfile
                             profile={ item }
-                            handlePressSelectProfile={ handlePressSelectProfile }
-                            handlePressCreateProfile={ handlePressCreateProfile }
+                            handlePressSelectProfile={ () => handlePressSelectProfile(item.id) }
+                            index={ index }
                         />
                     )}
-                    columnWrapperStyle={{
-                        justifyContent: 'space-between'
-                    }}
+                    columnWrapperStyle={{ justifyContent: 'space-between' }}
                 />
             </View>
         </View>
