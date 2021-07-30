@@ -63,30 +63,43 @@ function* addToRecentWatchesSaga(payload)
     }
 }
 
+/**
+ * Todo: Test API
+ */
 function* createProfileSaga(payload)  
 {
     try {
         yield put(createProfileSuccess({ profile: payload }));
+        yield call(AUTH_API.createProfileAsync, payload);
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(createProfileFailed({ message }));
     }
 }
 
+/**
+ * Todo: Test API
+ */
 function* deleteProfileSaga(payload)  
 {
     try {
         yield put(deleteProfileSuccess({ profileID: payload }));
+        yield call(AUTH_API.deleteProfileByIdAsync, payload);
+
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(deleteProfileFailed({ message }));
     }
 }
 
+/**
+ * Todo: Test API
+ */
 function* rateShowSaga(payload)  
 {
     try {
         yield put(rateShowSuccess(payload));
+        yield put(AUTH_API.rateMovieAsync, payload);
     } catch ({ message }) {
         yield put(rateShowFailed({ message }));
     }
@@ -106,12 +119,19 @@ function* loginSaga(payload)
     }
 }
 
+/**
+ * Todo: Error still occurs
+ */
 function* logoutSaga()  
 {
     try {
-        yield call(LOGIN_API.logoutAsync);
-        yield call(AsyncStorageInstance.removeAccessToken);
-        yield put(logoutSuccess());
+        const { status } = yield call(LOGIN_API.logoutAsync);
+        
+        if (status === 'success') {
+            yield call(AsyncStorageInstance.removeAccessToken);
+            yield put(logoutSuccess());
+        }
+        
     } catch ({ message }) {
         console.log(message)
         yield put(logoutFailed({ message }));
@@ -158,7 +178,7 @@ function* selectProfileSaga(payload)
 }
 
 /**
- * Todo: in the api call, pass only the profile_id and movie_id
+ * Todo: Test API
  */
 function* toggleAddToMyListSaga(payload)
 {
@@ -171,7 +191,7 @@ function* toggleAddToMyListSaga(payload)
 }
 
 /**
- * Todo: in the api call, pass only the profile_id and movie_id
+ * Todo: Test API
  */
 function* toggleRemindMeOfComingShowSaga(payload)
 {
@@ -183,10 +203,14 @@ function* toggleRemindMeOfComingShowSaga(payload)
     }
 }
 
+/**
+ * Todo: Test API
+ */
 function* updateAuthenticatedProfileSaga(payload)
 {
     try {
         yield put(updateAuthenticatedProfileSuccess({ profile: payload }));
+        yield call(AUTH_API.updateProfileAsync, payload);
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(updateAuthenticatedProfileFailed({ message }));

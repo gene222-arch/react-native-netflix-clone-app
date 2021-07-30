@@ -55,3 +55,12 @@ export const toggleRemindMeAsync = async (payload) =>
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
+
+
+export const rateMovieAsync = async (payload) => 
+{
+    return await axiosInstance()
+        .post(`/user-ratings`, payload)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
