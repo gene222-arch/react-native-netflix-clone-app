@@ -1,23 +1,16 @@
 import Axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ENV from './../../env';
+import * as AsyncStorageInstance from './AsyncStorageInstance'
 
 const axiosInstance = () => 
 {
-    let accessToken = null;
+    let headers = {};
 
-    (async () => {
-        accessToken = await AsyncStorage.getItem('@access_token');
-    });
-
-    let headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json"
-    };
-
-    if (accessToken) {
-        headers.Authorization = `Bearer ${ accessToken }`
-    }
+    AsyncStorageInstance
+        .getAccessToken()
+        .then(token => {
+           headers = token ? headers.Authorization = `Bearer ${ token }` : headers
+        });
 
     const axiosInstance = Axios.create({
         baseURL: ENV.DEVELOPMENT_MODE_API_URL,

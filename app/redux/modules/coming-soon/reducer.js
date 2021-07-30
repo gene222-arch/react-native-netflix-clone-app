@@ -1,13 +1,13 @@
 import ACTION_TYPES from './action.types';
 
 const {
-    GET_COMING_SOON_SHOWS_START,
-    GET_COMING_SOON_SHOWS_SUCCESS,
-    GET_COMING_SOON_SHOWS_FAILED
+    GET_COMING_SOON_MOVIES_START,
+    GET_COMING_SOON_MOVIES_SUCCESS,
+    GET_COMING_SOON_MOVIES_FAILED
 } = ACTION_TYPES;
 
 const initialState = {
-    comingSoonShows: [],
+    comingSoonMovies: [],
     isLoading: false,
     errors: []
 }
@@ -19,21 +19,21 @@ export default (state = initialState, { type, payload }) =>
 
     switch (type) 
     {
-        case GET_COMING_SOON_SHOWS_START:
+        case GET_COMING_SOON_MOVIES_START:
             return { 
                 ...state, 
                 isLoading
             }
 
-        case GET_COMING_SOON_SHOWS_SUCCESS:
+        case GET_COMING_SOON_MOVIES_SUCCESS:
             return { 
                 ...state, 
-                comingSoonShows: payload.comingSoonShows,
+                comingSoonMovies: payload.comingSoonMovies,
                 isLoading: false,
                 errors
             }
 
-        case GET_COMING_SOON_SHOWS_FAILED:
+        case GET_COMING_SOON_MOVIES_FAILED:
             return { 
                 ...state,
                 isLoading: false,

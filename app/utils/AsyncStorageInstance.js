@@ -1,20 +1,29 @@
 import AsyncStorage  from '@react-native-async-storage/async-storage';
 
-export const setItem = async (key = '', value = '') => 
+const TOKEN_NAME = 'access_token';
+
+export const storeAccessToken = async (value = '') => 
 {
     try {
-        await AsyncStorage.setItem(key, value);
+        await AsyncStorage.setItem(TOKEN_NAME, value);
     } catch ({ message }) {
         console.log(message);
     }
 }
 
-export const getItem = (key) => 
+export const getAccessToken = async () => 
 {
     try {
-        const result = AsyncStorage.getItem(key);
+        return await AsyncStorage.getItem(TOKEN_NAME);
+    } catch ({ message }) {
+        console.log(message);
+    }
+}
 
-        return result;
+export const removeAccessToken = async () => 
+{
+    try {
+        return await AsyncStorage.removeItem(TOKEN_NAME);
     } catch ({ message }) {
         console.log(message);
     }

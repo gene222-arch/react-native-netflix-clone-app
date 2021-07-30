@@ -3,21 +3,23 @@ import { useDispatch, connect } from 'react-redux'
 import { Button, Text, CheckBox } from 'react-native-elements';
 import * as AUTH_ACTION from '../../redux/modules/auth/actions'
 import styles from './../../assets/stylesheets/loginScreen';
-import { ImageBackground, View, TextInput } from 'react-native';
+import { View } from 'react-native';
 import Colors from './../../constants/Colors';
 import { createStructuredSelector } from 'reselect';
-import { authSelector } from './../../redux/modules/auth/selectors'
+import { authSelector, selectAuthErrorMessages, selectAuthHasErrorMessages } from './../../redux/modules/auth/selectors'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import StyledTextInput from './../../components/styled-components/StyledTextInput';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import LoadingSpinner from './../../components/LoadingSpinner';
 
 
-const LoginScreen = ({ authReducer }) => 
+const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
     const dispatch = useDispatch();
 
     const [ isChecked, setIsChecked ] = useState(false);
-    const [ credentials, setCredentials ] = useState(authReducer.credentials)
+    const [ credentials, setCredentials ] = useState(AUTH.credentials)
 
-    
     const handleChange = ({ name, text }) => setCredentials({ ...credentials, [name]: text });
 
     const handlePressCheckbox = () => {
@@ -25,52 +27,72 @@ const LoginScreen = ({ authReducer }) =>
         setCredentials({ ...credentials, remember_me: !isChecked });
     }
 
-    const login = () => dispatch(AUTH_ACTION.loginStart(credentials));
+    const login = () => {
+        dispatch(AUTH_ACTION.loginStart(credentials));
+    }
 
     useEffect(() => {
-        setIsChecked(false);
-        setCredentials(authReducer.credentials);
+        
+        const onLoadLockToPortrait = async () => {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        }
+        
+        onLoadLockToPortrait();
+
+        return () => {
+            setIsChecked(false);
+            setCredentials(AUTH.credentials);
+        }
     }, []);
 
+    if (AUTH.isLoading) {
+        return <LoadingSpinner message='Signing In' />
+    }
+
     return (
-            <ImageBackground
-                source={{ uri: 'https://cdn.hipwallpaper.com/i/98/21/dUyCkp.jpg' }}
-                style={ styles.backgroundImg }
-            >
-                <Text h2 style={ styles.title }>Sign in</Text>
-                <TextInput
-                    placeholder='Email'
-                    placeholderTextColor={ Colors.grey }
-                    style={ [styles.inputContainerStyle, styles.email] }
-                    onChangeText={ text => handleChange({ name: 'email', text }) }
+        <View style={ styles.container }>
+            <Text h2 style={ styles.title }>Sign in</Text>
+            <StyledTextInput
+                placeholder='Email'
+                placeholderTextColor={ Colors.grey }
+                style={ [styles.inputContainerStyle, styles.email] }
+                value={ credentials.email }
+                onChangeText={ text => handleChange({ name: 'email', text }) }
+                error={ AUTH_HAS_ERROR_MESSAGE.email }
+                helperText={ AUTH_ERROR_MESSAGE.email }
+            />
+            <StyledTextInput
+                placeholder='Password'
+                placeholderTextColor={ Colors.grey }
+                style={ [styles.inputContainerStyle, styles.password] }
+                value={ credentials.password }
+                onChangeText={ text => handleChange({ name: 'password', text }) }
+                secureTextEntry
+                error={ AUTH_HAS_ERROR_MESSAGE.password }
+                helperText={ AUTH_ERROR_MESSAGE.password }
+            />
+            <Button title='Sign in' onPress={ login } buttonStyle={ styles.loginBtn } />
+            <View style={ styles.loginFooter }>
+                <CheckBox
+                    title='Remember me'
+                    containerStyle={ styles.rememberMeContainer }
+                    textStyle={ styles.rememberMeText }
+                    onPress={ handlePressCheckbox }
+                    checked={ isChecked }
+                    checkedColor={ Colors.grey }
                 />
-                <TextInput
-                    placeholder='Password'
-                    placeholderTextColor={ Colors.grey }
-                    style={ [styles.inputContainerStyle, styles.password] }
-                    onChangeText={ text => handleChange({ name: 'password', text }) }
-                    secureTextEntry
-                />
-                <Button title='Sign in' onPress={ login } buttonStyle={ styles.loginBtn } />
-                <View style={ styles.loginFooter }>
-                    <CheckBox
-                        title='Remember me'
-                        containerStyle={ styles.rememberMeContainer }
-                        textStyle={ styles.rememberMeText }
-                        onPress={ handlePressCheckbox }
-                        checked={ isChecked }
-                        checkedColor={ Colors.grey }
-                    />
-                    <TouchableOpacity>
-                        <Text style={ styles.needHelp }>Need help?</Text>
-                    </TouchableOpacity>
-                </View>
-            </ImageBackground>
+                <TouchableOpacity>
+                    <Text style={ styles.needHelp }>Need help?</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 }
 
 const mapStateToProps = createStructuredSelector({
-    authReducer: authSelector
+    AUTH: authSelector,
+    AUTH_ERROR_MESSAGE: selectAuthErrorMessages,
+    AUTH_HAS_ERROR_MESSAGE: selectAuthHasErrorMessages
 });
 
 export default connect(mapStateToProps)(LoginScreen)

@@ -2,9 +2,8 @@ import { StyleSheet } from 'react-native';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
-    backgroundImg: {
+    container: {
         flex: 1,
-        resizeMode: 'cover',
         justifyContent: 'center',
         paddingHorizontal: 30,
     },
@@ -13,14 +12,14 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     password: {
-        marginBottom: 30
+        marginBottom: 30,
     },
     inputContainerStyle: {
         backgroundColor: Colors.darkGrey,
         borderRadius: 5,
         height: 45,
         color: Colors.white,
-        padding: 15
+        padding: 15,
     },
     loginBtn: {
         backgroundColor: Colors.netFlixRed,

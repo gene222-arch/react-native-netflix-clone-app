@@ -23,7 +23,7 @@ const CreateProfileScreen = ({ AUTH }) =>
             id: (AUTH.profiles.length + 1), 
             name: '', 
             is_for_kids: false,
-            profile_photo: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
+            avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
     });
 
     const handlePressCreateProfile = () => {

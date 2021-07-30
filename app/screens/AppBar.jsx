@@ -9,9 +9,10 @@ import Image from './../components/Image';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native'
 import { createStructuredSelector } from 'reselect';
-import { authSelector } from './../redux/modules/auth/selectors';
+import { authProfileSelector } from './../redux/modules/auth/selectors';
+import APP_LOGO from './../assets/app-logo.png'
 
-const AppBar = ({ AUTH, showAvatar = true, showLogo = true, headerTitle = '', marginTop = 0 }) => 
+const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle = '', marginTop = 0 }) => 
 {
     const navigation = useNavigation();
     const offsetY = useRef(0);
@@ -34,9 +35,7 @@ const AppBar = ({ AUTH, showAvatar = true, showLogo = true, headerTitle = '', ma
             {
                 showLogo && (
                     <Image 
-                        source={{
-                            uri: 'https://pngimg.com/uploads/netflix/netflix_PNG15.png'
-                        }}
+                        source={ APP_LOGO }
                         style={ styles.netflixLogo }
                     />
                 )
@@ -57,7 +56,7 @@ const AppBar = ({ AUTH, showAvatar = true, showLogo = true, headerTitle = '', ma
                         <TouchableOpacity onPress={ navigateToAccountScreen }>
                             <Avatar
                                 source={{
-                                    uri: AUTH.profile.profile_photo,
+                                    uri: AUTH_PROFILE.avatar,
                                 }}
                                 avatarStyle={ styles.avatarIcon }
                             />
@@ -70,7 +69,7 @@ const AppBar = ({ AUTH, showAvatar = true, showLogo = true, headerTitle = '', ma
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(AppBar)

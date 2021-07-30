@@ -2,7 +2,9 @@ import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
 import ENV from './../../../../env';
 import * as RootNavigation from './../../../navigation/RootNavigation'
-import * as API from './../../../services/auth/login'
+import * as LOGIN_API from './../../../services/auth/login'
+import * as AUTH_API from './../../../services/auth/auth'
+import * as AsyncStorageInstance from './../../../utils/AsyncStorageInstance'
 import { 
     addToRecentWatchesSuccess,
     addToRecentWatchesFailed,
@@ -93,12 +95,13 @@ function* rateShowSaga(payload)
 function* loginSaga(payload)  
 {
     try {
-        const result = yield call(API.loginAsync, payload);
-        console.log('LOGIN SAGA RESULT');
-        console.log(result);
-        // yield call(AsyncStorage.setItem, '@access_token', 'token');
+        const { data } = yield call(LOGIN_API.loginAsync, payload);
+
+        const { access_token, data: auth } = data;
+        const {  profiles, ...user } = auth;
+        yield call(AsyncStorageInstance.storeAccessToken, access_token);
+        yield put(loginSuccess({ auth: user, profiles }));      
     } catch ({ message }) {
-        console.log('LOGIN ACTION FAILED', message);
         yield put(loginFailed({ message }));    
     }
 }
@@ -106,8 +109,11 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
+        yield call(LOGIN_API.logoutAsync);
+        yield call(AsyncStorageInstance.removeAccessToken);
         yield put(logoutSuccess());
     } catch ({ message }) {
+        console.log(message)
         yield put(logoutFailed({ message }));
     }
 }
@@ -144,26 +150,34 @@ function* selectProfileSaga(payload)
 {
     try {
         yield put(selectProfileSuccess(payload));
+        
         RootNavigation.navigate('Home');
     } catch ({ message }) {
         yield put(selectProfileFailed({ message }));
     }
 }
 
+/**
+ * Todo: in the api call, pass only the profile_id and movie_id
+ */
 function* toggleAddToMyListSaga(payload)
 {
     try {
         yield put(toggleAddToMyListSuccess({ show: payload }));
+        yield call(AUTH_API.toggleMyListAsync, payload);
     } catch ({ message }) {
         yield put(toggleAddToMyListFailed({ message }));
     }
 }
 
+/**
+ * Todo: in the api call, pass only the profile_id and movie_id
+ */
 function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {
         yield put(toggleRemindMeOfComingShowSuccess({ show: payload }));
-
+        yield call(AUTH_API.toggleRemindMeAsync, payload);
     } catch ({ message }) {
         yield put(toggleRemindMeOfComingShowFailed({ message }));
     }

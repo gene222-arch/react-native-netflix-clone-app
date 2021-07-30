@@ -1,5 +1,6 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
+import * as API from './../../../services/movie/movie'
 import { getMoviesSuccess, getMoviesFailed  } from './actions'
 import AsyncStorage  from '@react-native-async-storage/async-storage';
 
@@ -13,8 +14,8 @@ const {
 function* getMoviesSaga()  
 {
     try {
-        // const data = yield call(API.index);
-        yield put(getMoviesSuccess());
+        const { data: movies } = yield call(API.fetchAllAsync);
+        yield put(getMoviesSuccess({ movies }));
     } catch ({ message }) {
         yield put(getMoviesFailed({ message }));
     }

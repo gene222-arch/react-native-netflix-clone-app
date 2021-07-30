@@ -11,7 +11,7 @@ const config = {
     key: 'root',
     storage: AsyncStorage,
     whitelist: [''],
-    debug: false, //to get useful logging
+    debug: true, //to get useful logging
 };
 
 const middleware = [];
@@ -20,7 +20,7 @@ const sagaMiddleware = createSagaMiddleware();
 middleware.push(sagaMiddleware);
 
 if (__DEV__) {
-  // middleware.push(createLogger());
+  middleware.push(createLogger());
 }
 
 const reducers = persistCombineReducers(config, rootReducers);

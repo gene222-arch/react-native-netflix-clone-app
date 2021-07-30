@@ -1,5 +1,4 @@
 import ACTION_TYPES from './action.types';
-import accountProfiles from './../../../services/data/accountProfiles';
 
 const {
     ADD_TO_RECENT_WATCHES_START,
@@ -43,7 +42,8 @@ const {
     UPDATE_AUTHENTICATED_PROFILE_FAILED,
     VIEW_DOWNLOADS_START,
     VIEW_DOWNLOADS_SUCCESS,
-    VIEW_DOWNLOADS_FAILED
+    VIEW_DOWNLOADS_FAILED,
+    CLEAR_ERRORS_PROPERTY
 } = ACTION_TYPES;
 
 
@@ -60,9 +60,13 @@ const PROFILE_DEFAULT_PROPS =
     id: '',
     name: '',
     email: '',
-    profile_photo: '',
+    avatar: '',
+    is_for_kids: false,
     my_downloads: [],
-    recentlyWatchedShows: [] 
+    recently_watched_shows: [],
+    my_list: [],
+    reminded_coming_soon_shows: [],
+    liked_shows: [],
 };
 
 const RATED_SHOWS_DEFAULT_PROPS = 
@@ -76,27 +80,33 @@ const RATED_SHOWS_DEFAULT_PROPS =
     }
 ]
 
+const DEFAULT_ERROR_MESSAGE_PROPS = {
+    name: '',
+    password: '',
+    email: '',
+    avatar: '',
+}
+
 const initialState = 
 {
     isAuthenticated: false,
+    auth: null,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    profiles: accountProfiles,
+    profiles: [],
     profile: PROFILE_DEFAULT_PROPS,
     ratedShows: RATED_SHOWS_DEFAULT_PROPS,
     isLoading: false,
-    errors: []
+    errors: DEFAULT_ERROR_MESSAGE_PROPS
 }
 
 export default (state = initialState, { type, payload }) => 
 {
-    const {
-        profiles,
-        profile,
-    } = state;
+    const { profiles, profile } = state;
 
     const SELECT_AUTHENTICATED_PROFILE = profiles.find(({ id }) => id === profile.id);
+    
     const isLoading = false;
-    const errors = [];
+    const errors = DEFAULT_ERROR_MESSAGE_PROPS;
     let NEW_PROFILES = [];
 
     switch (type) 
@@ -221,7 +231,8 @@ export default (state = initialState, { type, payload }) =>
         case LOGIN_SUCCESS:
             return { 
                 ...state, 
-                credentials: payload.credentials,
+                auth: payload.auth,
+                profiles: payload.profiles.map(profile => ({ ...PROFILE_DEFAULT_PROPS, ...profile,  })),
                 isAuthenticated: true,
                 isLoading,
                 errors
@@ -238,6 +249,9 @@ export default (state = initialState, { type, payload }) =>
         case LOGOUT_SUCCESS:
             return { 
                 ...state, 
+                auth: null,
+                profiles: [],
+                profile: PROFILE_DEFAULT_PROPS,
                 isAuthenticated: false,
                 isLoading,
                 errors
@@ -315,9 +329,9 @@ export default (state = initialState, { type, payload }) =>
 
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
-            const isAlreadyInList = SELECT_AUTHENTICATED_PROFILE.my_list.findIndex(({ id }) => id === payload.show.id); 
+            const isAlreadyInList = SELECT_AUTHENTICATED_PROFILE.my_list.find(({ id }) => id === payload.show.id); 
 
-            let newMyList = (isAlreadyInList === -1) 
+            let newMyList = isAlreadyInList 
                 ? [ ...SELECT_AUTHENTICATED_PROFILE.my_list, payload.show ] 
                 : SELECT_AUTHENTICATED_PROFILE.my_list.filter(({ id }) => id !== payload.show.id);
 
@@ -395,6 +409,13 @@ export default (state = initialState, { type, payload }) =>
                 ...state,
                 profiles: NEW_PROFILES,
                 isLoading,
+                errors
+            }
+
+
+        case CLEAR_ERRORS_PROPERTY:
+            return {
+                ...state,
                 errors
             }
 

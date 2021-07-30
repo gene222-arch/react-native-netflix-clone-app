@@ -18,13 +18,6 @@ import PopUpDialog from './../../../components/PopUpDialog';
 import Spinner from 'react-native-loading-spinner-overlay';
 import LoadingSpinner from './../../../components/LoadingSpinner';
 
-const DEFAULT_PROFILE = {
-    id: '',
-    name: '',
-    is_for_kids: false,
-    profile_photo: ''
-}
-
 const EditProfileScreen = ({ AUTH, route }) => 
 {
     const dispatch = useDispatch();
@@ -34,7 +27,7 @@ const EditProfileScreen = ({ AUTH, route }) =>
         id: routeProfile.id,
         name: routeProfile.name, 
         is_for_kids: routeProfile.is_for_kids,
-        profile_photo: routeProfile.profile_photo
+        avatar: routeProfile.avatar
     });
     const [ showDeleteProfileDialog, setShowDeleteProfileDialog ] = useState(false);
 
@@ -49,14 +42,13 @@ const EditProfileScreen = ({ AUTH, route }) =>
 
     useEffect(() => {
         return () => {
-            setProfile(DEFAULT_PROFILE);
             setShowDeleteProfileDialog(false);
         }
     }, []);
 
     return (
         <ScrollView>
-            <LoadingSpinner />
+            <LoadingSpinner isLoading={ AUTH.isLoading } />
             <PopUpDialog 
                 textQuery="Are you sure you want to delete this profile? This profile's history will be gone forever
                 and you won't be able  to access it again."
@@ -68,12 +60,13 @@ const EditProfileScreen = ({ AUTH, route }) =>
                 onPressConfirm={ handlePressDeleteProfile }
             />
             <ProfileAppBar headerTitle='Edit Profile' onPress={ handlePressUpdateProfile } />
+
             <View style={ styles.inputContainer }>
                 <View style={ styles.container }>
                     <View style={ styles.imgContainer }>
                         <Image 
                             source={{ 
-                                uri: routeProfile.profile_photo
+                                uri: routeProfile.avatar
                             }}
                             style={ styles.image }
                         />
@@ -99,6 +92,7 @@ const EditProfileScreen = ({ AUTH, route }) =>
                         />
                     </View>
                 </View>
+
                 <Button 
                     type='clear'
                     title='  Delete Profile'
@@ -115,6 +109,7 @@ const EditProfileScreen = ({ AUTH, route }) =>
                     titleStyle={ styles.deleteBtnTitle }
                 />
             </View>
+       
         </ScrollView>
     )
 }
