@@ -5,7 +5,7 @@ import Image from './../Image';
 import { TouchableOpacity } from 'react-native';
 import styles from './../../assets/stylesheets/selectProfile';
 
-const SelectProfileItem = ({ item, handlePressSelectProfile }) => {
+const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle }) => {
     return (
         <View style={ styles.profile }>
             <TouchableOpacity onPress={ handlePressSelectProfile }>
@@ -13,7 +13,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile }) => {
                     source={{
                         uri: item.avatar
                     }}
-                    style={ styles.profileImg }
+                    style={[ styles.profileImg, imageStyle ]}
                 />
                 <Text h5 style={ styles.profileName }>{ item.name }</Text>
             </TouchableOpacity>

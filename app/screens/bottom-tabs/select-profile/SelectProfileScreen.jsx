@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, TouchableOpacity, FlatList } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';

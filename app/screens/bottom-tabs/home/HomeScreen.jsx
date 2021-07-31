@@ -84,8 +84,6 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
 
     const runAfterInteractions = () => 
     {
-        dispatch(MOVIE_ACTION.getMoviesStart());
-
         cacheImages();
         setCategories(categories_);
         setFrontPage(frontPageShows[0]);

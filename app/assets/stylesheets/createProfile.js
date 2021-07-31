@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     },
     switch: {
         marginBottom: 20,
-        backgroundColor: 'rgba(255, 255, 255, .8)'
+        backgroundColor: 'rgba(255, 255, 255, .8)',
+        borderRadius: 5
     },
     deleteBtnTitle: {
         color: Colors.grey

@@ -83,7 +83,7 @@ const EditProfileScreen = ({ AUTH, route }) =>
                         style={ styles.input }
                     />
                     <View style={ styles.switchContainer }>
-                        <Text style={ styles.switchLabel } >For Kids</Text>
+                        <Text style={ styles.switchLabel }>For Kids</Text>
                         <Switch  
                             value={ profile.is_for_kids }
                             onValueChange={ () => setProfile({ ...profile, is_for_kids: !profile.is_for_kids }) }

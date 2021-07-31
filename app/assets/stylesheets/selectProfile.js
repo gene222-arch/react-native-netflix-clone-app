@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     profile: {
-        marginBottom: 40
+        marginBottom: 40,
+
     },
     profilesContainer: {
         marginTop: 70,
@@ -40,7 +41,8 @@ const styles = StyleSheet.create({
         height: 120,
         resizeMode: 'cover',
         borderRadius: DEFAULT_IMG_STYLE.DEFAULT_BORDER_RADIUS,
-        marginBottom: 10
+        marginBottom: 10,
+        opacity: .4
     },
     profileImageContainer: {
         flexDirection: 'row',

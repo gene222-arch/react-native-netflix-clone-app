@@ -1,30 +1,11 @@
 import React, { useMemo } from 'react'
 import { View } from 'react-native';
-import { TextInput, StyleSheet } from 'react-native'
-import Colors from './../../constants/Colors';
+import { TextInput } from 'react-native'
 import Text from './../Text';
-
-const styles = (error = false) => StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    helperText: {
-        color: error ? Colors.warning : 'transparent',
-        marginTop: -10,
-        marginBottom: 20,
-        marginLeft: 10
-    },
-    textField: {
-        height: 60,
-        borderBottomWidth: error ? 2 : 0,
-        borderColor: error ? Colors.error : 'transparent',
-    }
-});
+import styles from './../../assets/stylesheets/styledTextInput';
 
 const StyledTextInput = ({ error = false, helperText = '', style, ...props }) => 
 {
-
     return (
         <View style={ styles().container }>
             <TextInput 

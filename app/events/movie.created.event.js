@@ -1,12 +1,12 @@
 import Pusher from './../utils/pusher'
 
-export default function ()
+export default () =>
 {
     let response = null;
-
+    
     Pusher()
         .private(`movie.created`)
-        .listen('LowStockEvent', res => {
+        .listen('MovieCreatedEvent', res => {
             response = res;
         });
 

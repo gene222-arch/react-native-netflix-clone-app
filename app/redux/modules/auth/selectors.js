@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 
 const getAuth = state => state.auth; 
 const getAuthProfile = state => {
-    return state.auth.profiles.find(({ id }) => id === state.auth.profile.id) || state.auth.profile;
+    return state.auth.profiles.find(({ id }) => id === state.auth.profile.id);
 }
 const getErrorMessages = state => state.auth.errors;
 

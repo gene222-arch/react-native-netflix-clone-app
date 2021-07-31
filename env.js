@@ -5,13 +5,16 @@ const DEVELOPMENT_MODE_BROADCAST_URL = "http://192.168.1.6:8000/broadcasting/aut
 const PRODUCTION_MODE_API_URL = "";
 const PRODUCTION_MODE_BROADCAST_URL = "";
 
-const PUSHER_CONFIG = {
+const PUSHER_CONFIG = 
+{
     WS_PORT: 6001,
     DRIVER: 'pusher',
-    APP_ID: 'myPusherId',
-    APP_KEY: 'myPusherKey',
-    APP_SECRET: 'myPusherSecret',
-    APP_CLUSTER: 'mt1'
+    APP_ID: 'IDukFb2MggByICNXro1nS',
+    APP_KEY: 'KEYukFb2MggByICNXro1nS',
+    APP_SECRET: 'SECRETukFb2MggByICNXro1nS',
+    APP_CLUSTER: 'mt1',
+    HOST: '192.168.1.6',
+    WEBSOCKET_HOST: '192.168.1.6:6001'
 }
 
 const ENVIRONMENT_VARIABLES = 

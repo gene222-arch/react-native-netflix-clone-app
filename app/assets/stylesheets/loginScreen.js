@@ -9,10 +9,8 @@ const styles = StyleSheet.create({
     },
     email: {
         marginTop: 25,
-        marginBottom: 10
     },
     password: {
-        marginBottom: 30,
     },
     inputContainerStyle: {
         backgroundColor: Colors.darkGrey,

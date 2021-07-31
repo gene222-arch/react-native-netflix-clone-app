@@ -32,11 +32,10 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import { useNavigation } from '@react-navigation/native';
 
 
-const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON }) => 
+const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ focusedIndex, setFocusedIndex ] = useState(0);
@@ -57,9 +56,9 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON }) =>
     }
 
     const runAfterInteractions = () => {
-        dispatch(COMING_SOON_ACTION.getComingSoonShowsStart(notifications));
+        dispatch(COMING_SOON_ACTION.getComingSoonMoviesStart(notifications));
 
-        COMING_SOON.comingSoonShows.map(({ id, video, video_poster, poster, title_logo }) => {
+        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video, video_poster, poster, title_logo }) => {
             cacheImage(video, id, 'ComingSoon/Videos/');
             cacheImage(poster, id, 'ComingSoon/Posters/');
             cacheImage(video_poster, id, 'ComingSoon/VideoPosters/');
@@ -92,7 +91,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON }) =>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
                 onScroll={ handleOnScroll }
-                data={ COMING_SOON.comingSoonShows }
+                data={ COMING_SOON_MOVIE.comingSoonMovies }
                 renderItem={ ({ item, index }) => {
 
                     const isReminded = AUTH_PROFILE.reminded_coming_soon_shows.findIndex(({ id }) => id === item.id) !== -1;
@@ -142,7 +141,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON }) =>
 
 const mapStateToProps = createStructuredSelector({
     AUTH_PROFILE: authProfileSelector,
-    COMING_SOON: comingSoonMoviesSelector
+    COMING_SOON_MOVIE: comingSoonMoviesSelector
 });
 
 export default connect(mapStateToProps)(ComingSoonScreen)

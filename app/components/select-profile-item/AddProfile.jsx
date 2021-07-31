@@ -13,8 +13,8 @@ const AddProfile = () =>
     const navigation = useNavigation();
 
     return (
-        <View styles={ styles.createProfileContainer }>
-            <TouchableOpacity onPress={ () => navigation.navigate('CreateProfile') }>
+        <TouchableOpacity onPress={ () => navigation.navigate('CreateProfile') }>
+            <View styles={ styles.createProfileContainer }>
                 <FontAwesome5Icon 
                     name='plus-circle'
                     size={ 60 }
@@ -22,8 +22,8 @@ const AddProfile = () =>
                     style={ styles.createProfileIcon }
                 />
                 <Text h5 style={ styles.createProfileText }>Add Profile</Text>
-            </TouchableOpacity>
-        </View>
+            </View>
+        </TouchableOpacity>
     )
 }
 

@@ -12,8 +12,8 @@ const {
 function* getComingSoonMoviesSaga(payload)  
 {
     try {
-        const { data: comingSoonMovies } = yield call(API.fetchAllAsync);
-        yield put(getComingSoonMoviesSuccess({ comingSoonMovies }));
+        // const { data: comingSoonMovies } = yield call(API.fetchAllAsync);
+        yield put(getComingSoonMoviesSuccess({ comingSoonMovies: payload }));
     } catch ({ message }) {
         yield put(getComingSoonMoviesFailed({ message }));
     }
