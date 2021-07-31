@@ -62,8 +62,10 @@ const NotificationsVideoItem = ({
             <Video 
                 ref={ video }
                 style={ styles.video }
-                source={{ uri: getCachedFile('ComingSoon/Videos/', comingSoon.id, comingSoon.video) }}
-                posterSource={{ uri: getCachedFile('ComingSoon/VideoPosters/', comingSoon.id, comingSoon.video_poster) }}
+                // source={{ uri: getCachedFile('ComingSoon/Videos/', comingSoon.id, comingSoon.video_trailer_path) }}
+                // posterSource={{ uri: getCachedFile('ComingSoon/VideoPosters/', comingSoon.id, comingSoon.poster_path) }}
+                source={{ uri: comingSoon.video_trailer_path }}
+                posterSource={{ uri: comingSoon.poster_path }}
                 posterStyle={ styles.posterStyle}
                 usePoster={ shouldShowPoster }
                 shouldPlay={ shouldPlay }
@@ -73,7 +75,8 @@ const NotificationsVideoItem = ({
             <View style={ styles.comingSoonVideoContainer }>
                 <Image 
                     source={{
-                        uri: `${ FileSystem.cacheDirectory }ComingSoon/TitleLogos/${ comingSoon.id }.${ getExtension(comingSoon.title_logo) }`
+                        // uri: `${ FileSystem.cacheDirectory }ComingSoon/TitleLogos/${ comingSoon.id }.${ getExtension(comingSoon.title_logo_path) }`
+                        uri: comingSoon.title_logo_path
                     }}
                     style={ styles.poster }
                 />
@@ -102,7 +105,7 @@ const NotificationsVideoItem = ({
                 <Text style={ styles.plot }>{ comingSoon.plot }</Text>
                 <View style={ styles.tagsContainer }>
                 {
-                    comingSoon.genres.map((genre, index) => (
+                    comingSoon.genres.split(',').map((genre, index) => (
                         <DisplayGenres 
                             key={ index } 
                             genreLength={ comingSoon.genres.length }

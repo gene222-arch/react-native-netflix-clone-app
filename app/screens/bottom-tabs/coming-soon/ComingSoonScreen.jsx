@@ -28,8 +28,12 @@ import AppBar from './../../AppBar';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { cacheImage } from './../../../utils/cacheImage';
-import LoadingScreen from './../../../components/LoadingScreen';
 import { useNavigation } from '@react-navigation/native';
+
+import Echo from './../../../utils/echo'
+import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
+import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
+import LoadingSpinner from './../../../components/LoadingSpinner';
 
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
@@ -45,17 +49,25 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (show, message) => 
-    {
+    const handlePressToggleRemindMe = (show, message) => {
         dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart(show));
         message.length && setTimeout(() => ToastAndroid.show(message, ToastAndroid.SHORT), 100);
     }
 
-    const handlePressInfo = (comingSoonShow) => {
-        navigation.navigate('TrailerInfo', { comingSoonShow });
-    }
+    const handlePressInfo = (comingSoonShow) => navigation.navigate('TrailerInfo', { comingSoonShow });
 
-    const runAfterInteractions = () => {
+    const runAfterInteractions = () => 
+    {
+        ComingSoonMovieCreatedEvent.listen(response => {
+            ToastAndroid.show(`${ response.data.title } is Coming Soon.`, ToastAndroid.SHORT);
+            dispatch(COMING_SOON_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
+        });
+
+        ComingSoonMovieReleasedEvent.listen(response => {
+            ToastAndroid.show(`${ response.data.title } is Released.`, ToastAndroid.SHORT);
+            dispatch(COMING_SOON_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+        });
+
         dispatch(COMING_SOON_ACTION.getComingSoonMoviesStart(notifications));
 
         COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video, video_poster, poster, title_logo }) => {
@@ -68,21 +80,19 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setIsInteractionsComplete(true);
     }
 
-    const cleanUp = () => {
-        setIsInteractionsComplete(false);
-        setFocusedIndex(0);
-    }
-
-    useEffect(() => {
+    useEffect(() => 
+    {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-
         return () => {
-            cleanUp();
+            ComingSoonMovieCreatedEvent.unListen();
+            ComingSoonMovieReleasedEvent.unListen();
+            setIsInteractionsComplete(false);
+            setFocusedIndex(0);
         }
     }, []);
 
     if (!isInteractionsComplete) {
-        return <LoadingScreen />
+        return <LoadingSpinner />
     }
 
     return (

@@ -1,4 +1,4 @@
-import Pusher from './../utils/pusher'
+import Pusher from './../utils/echo'
 
 export default () =>
 {

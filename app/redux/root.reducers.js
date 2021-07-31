@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const config = {
     key: 'root',
     storage: AsyncStorage,
-    blacklist: [''],
+    whitelist: [''],
     debug: true, //to get useful logging
 };
 

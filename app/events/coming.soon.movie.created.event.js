@@ -1,14 +1,15 @@
-import Pusher from './../utils/pusher'
+import Echo from './../utils/echo'
 
-export default () =>
+const listen = (callback) =>
 {
-    let response = null;
-
-    Pusher()
-        .private(`coming.soon.movie.created`)
-        .listen('ComingSoonMovieCreatedEvent', res => {
-            response = res;
+    return Echo()
+        .private('coming.soon.movie.created')
+        .listen('ComingSoonMovieCreatedEvent', callback)
+        .error(err => {
+            console.log(err)
         });
-
-    return response;
 }
+
+const unListen = () => Echo().private('coming.soon.movie.created').stopListening();
+
+export { listen, unListen }

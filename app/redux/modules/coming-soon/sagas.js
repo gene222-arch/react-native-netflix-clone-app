@@ -1,7 +1,10 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
 import * as API from './../../../services/movie/coming.soon.movies'
-import { getComingSoonMoviesSuccess, getComingSoonMoviesFailed  } from './actions'
+import { 
+    getComingSoonMoviesSuccess, 
+    getComingSoonMoviesFailed
+} from './actions'
 
 const {
     GET_COMING_SOON_MOVIES_START
@@ -33,7 +36,7 @@ function* getComingSoonMoviesWatcher()
 export default function* ()
 {
     yield all([
-        getComingSoonMoviesWatcher(),
+        getComingSoonMoviesWatcher()
     ]);
 }
 

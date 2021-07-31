@@ -4,7 +4,7 @@ import PusherNative from 'pusher-js/react-native';
 
 /** Utils */
 import * as AsyncStorageInstance from './AsyncStorageInstance'
-import ENV from './../../env';
+import ENV from '../../env';
 
 let accessToken = null;
 

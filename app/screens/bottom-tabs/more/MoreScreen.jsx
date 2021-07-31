@@ -12,7 +12,8 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
 import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
 import { useNavigation } from '@react-navigation/native';
-import * as AsyncStorageInstance from './../../../utils/AsyncStorageInstance'
+import DisplayOption from './../../../components/more-screen-display-option/DisplayOption';
+
 
 const moreOptions = ({ onPressSignOut, onPressMyList }) =>
 [
@@ -53,24 +54,6 @@ const moreOptions = ({ onPressSignOut, onPressMyList }) =>
     }
 ];
 
-const DisplayOption = ({ onPress, bottomDivider, Icon, name }) => 
-{
-    return (
-        <TouchableOpacity onPress={ onPress }>
-            <ListItem
-                bottomDivider={ bottomDivider } 
-                style={ styles.listItemContainer }
-                containerStyle={ styles.listItem }
-            >
-                { Icon && Icon }
-                <ListItem.Content>
-                    <ListItem.Title style={ styles.listItemTitle }>{ name }</ListItem.Title>
-                </ListItem.Content>
-            </ListItem>
-        </TouchableOpacity>
-    )
-}
-
 const MoreScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
     const navigation = useNavigation();
@@ -97,7 +80,8 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
     };
 
     /** Run after interactions */
-    const runAfterInteractions = () => {
+    const runAfterInteractions = () => 
+    {
         const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH_PROFILE.id);
         const middleArrValIndex = Math.floor(AUTH.profiles.length / 2);
         const profiles = AUTH.profiles;
@@ -176,17 +160,19 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
                     titleStyle={ styles.manageProfilesBtnTitle }
                 />
             </View>
+            
             <View style={ styles.lists }>
                 {
-                    moreOptions(moreOptions_).map(({ id, name, Icon, bottomDivider, onPress }) => (
-                        <DisplayOption 
-                            key={ id }
-                            onPress={ onPress }
-                            name={ name }
-                            Icon={ Icon }
-                            bottomDivider={ bottomDivider }
-                        />
-                    ))
+                    moreOptions(moreOptions_)
+                        .map(({ id, name, Icon, bottomDivider, onPress }) => (
+                            <DisplayOption 
+                                key={ id }
+                                onPress={ onPress }
+                                name={ name }
+                                Icon={ Icon }
+                                bottomDivider={ bottomDivider }
+                            />
+                        ))
                 }
             </View>
         </View>
