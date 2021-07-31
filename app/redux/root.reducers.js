@@ -1,8 +1,17 @@
 import authReducer from './modules/auth/reducer'
+import { persistCombineReducers } from 'redux-persist';
 import comingSoonMoviesReducer from './modules/coming-soon/reducer'
 import movieReducer from './modules/movie/reducer'
 import userReducer from './modules/user/reducer'
 import navigationReducer from './modules/navigation/reducer'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const config = {
+    key: 'root',
+    storage: AsyncStorage,
+    blacklist: [''],
+    debug: true, //to get useful logging
+};
 
 const rootReducers = {
     auth: authReducer,
@@ -12,4 +21,4 @@ const rootReducers = {
     navigation: navigationReducer,
 };
 
-export default rootReducers
+export default persistCombineReducers(config, rootReducers);

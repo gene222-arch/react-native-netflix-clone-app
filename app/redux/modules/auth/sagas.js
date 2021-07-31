@@ -125,19 +125,12 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
-<<<<<<< HEAD
         const { status } = yield call(LOGIN_API.logoutAsync);
         
         if (status === 'success') {
             yield call(AsyncStorageInstance.removeAccessToken);
             yield put(logoutSuccess());
         }
-        
-=======
-        yield call(LOGIN_API.logoutAsync);
-        yield call(AsyncStorageInstance.removeAccessToken);
-        yield put(logoutSuccess());
->>>>>>> 64ee380b9c106c23e5d93a6f46ee24664d984e51
     } catch ({ message }) {
         console.log(message)
         yield put(logoutFailed({ message }));
@@ -184,11 +177,7 @@ function* selectProfileSaga(payload)
 }
 
 /**
-<<<<<<< HEAD
  * Todo: Test API
-=======
- * Todo: in the api call, pass only the profile_id and movie_id
->>>>>>> 64ee380b9c106c23e5d93a6f46ee24664d984e51
  */
 function* toggleAddToMyListSaga(payload)
 {
@@ -201,11 +190,7 @@ function* toggleAddToMyListSaga(payload)
 }
 
 /**
-<<<<<<< HEAD
  * Todo: Test API
-=======
- * Todo: in the api call, pass only the profile_id and movie_id
->>>>>>> 64ee380b9c106c23e5d93a6f46ee24664d984e51
  */
 function* toggleRemindMeOfComingShowSaga(payload)
 {

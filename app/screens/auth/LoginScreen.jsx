@@ -6,7 +6,11 @@ import styles from './../../assets/stylesheets/loginScreen';
 import { View } from 'react-native';
 import Colors from './../../constants/Colors';
 import { createStructuredSelector } from 'reselect';
-import { authSelector, selectAuthErrorMessages, selectAuthHasErrorMessages } from './../../redux/modules/auth/selectors'
+import { 
+    authSelector, 
+    selectAuthErrorMessages, 
+    selectAuthHasErrorMessages 
+} from './../../redux/modules/auth/selectors'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import StyledTextInput from './../../components/styled-components/StyledTextInput';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -27,12 +31,10 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
         setCredentials({ ...credentials, remember_me: !isChecked });
     }
 
-    const login = () => {
-        dispatch(AUTH_ACTION.loginStart(credentials));
-    }
+    const login = () => dispatch(AUTH_ACTION.loginStart(credentials));
 
-    useEffect(() => {
-        
+    useEffect(() => 
+    {
         const onLoadLockToPortrait = async () => {
             await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
         }
@@ -52,6 +54,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
     return (
         <View style={ styles.container }>
             <Text h2 style={ styles.title }>Sign in</Text>
+
             <StyledTextInput
                 placeholder='Email'
                 placeholderTextColor={ Colors.grey }
@@ -61,6 +64,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
                 error={ AUTH_HAS_ERROR_MESSAGE.email }
                 helperText={ AUTH_ERROR_MESSAGE.email }
             />
+
             <StyledTextInput
                 placeholder='Password'
                 placeholderTextColor={ Colors.grey }
@@ -71,7 +75,9 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
                 error={ AUTH_HAS_ERROR_MESSAGE.password }
                 helperText={ AUTH_ERROR_MESSAGE.password }
             />
+
             <Button title='Sign in' onPress={ login } buttonStyle={ styles.loginBtn } />
+
             <View style={ styles.loginFooter }>
                 <CheckBox
                     title='Remember me'

@@ -1,4 +1,5 @@
 import ACTION_TYPES from './action.types';
+import accountProfiles from './../../../services/data/accountProfiles';
 
 const {
     ADD_TO_RECENT_WATCHES_START,
@@ -57,7 +58,7 @@ const CREDENTIALS_DEFAULT_PROPS =
 
 const PROFILE_DEFAULT_PROPS = 
 {
-    id: '',
+    id: 1,
     name: '',
     email: '',
     avatar: '',
@@ -68,17 +69,6 @@ const PROFILE_DEFAULT_PROPS =
     reminded_coming_soon_shows: [],
     liked_shows: [],
 };
-
-const RATED_SHOWS_DEFAULT_PROPS = 
-[
-    {
-        id: '',
-        title: '',
-        poster: '',
-        rate: '',
-        isRated: false
-    }
-]
 
 const DEFAULT_ERROR_MESSAGE_PROPS = {
     name: '',
@@ -92,9 +82,8 @@ const initialState =
     isAuthenticated: false,
     auth: null,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    profiles: [],
+    profiles: accountProfiles,
     profile: PROFILE_DEFAULT_PROPS,
-    ratedShows: RATED_SHOWS_DEFAULT_PROPS,
     isLoading: false,
     errors: DEFAULT_ERROR_MESSAGE_PROPS
 }

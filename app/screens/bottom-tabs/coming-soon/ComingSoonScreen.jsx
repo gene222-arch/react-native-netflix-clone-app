@@ -16,7 +16,7 @@ import styles from './../../../assets/stylesheets/comingSoon';
 
 /** Selectors */
 import { authProfileSelector } from './../../../redux/modules/auth/selectors'
-import { comingSoonSelector } from './../../../redux/modules/coming-soon/selectors';
+import { comingSoonMoviesSelector } from './../../../redux/modules/coming-soon/selectors';
 
 /** Components */
 import View from './../../../components/View';
@@ -142,7 +142,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON }) =>
 
 const mapStateToProps = createStructuredSelector({
     AUTH_PROFILE: authProfileSelector,
-    COMING_SOON: comingSoonSelector
+    COMING_SOON: comingSoonMoviesSelector
 });
 
 export default connect(mapStateToProps)(ComingSoonScreen)

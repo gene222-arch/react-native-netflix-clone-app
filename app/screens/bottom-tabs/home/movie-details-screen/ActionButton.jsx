@@ -7,7 +7,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { createStructuredSelector } from 'reselect';
-import { ratedShowsSelector, myListSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
 const ACTION_TYPES = {
@@ -150,9 +150,7 @@ const ActionButton = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH_PROFILE: authProfileSelector,
-    MY_LIST: myListSelector,
-    LIKED_SHOWS: ratedShowsSelector
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(ActionButton)

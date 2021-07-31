@@ -8,7 +8,7 @@ import { Divider } from 'react-native-elements'
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
 
 /** Selectors */
-import { comingSoonSelector } from './../../../redux/modules/coming-soon/selectors';
+import { comingSoonMoviesSelector } from './../../../redux/modules/coming-soon/selectors';
 
 /** Components */
 import View from './../../../components/View';
@@ -138,7 +138,7 @@ const TrailerInfo = ({ COMING_SOON, route, navigation }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    COMING_SOON: comingSoonSelector
+    COMING_SOON: comingSoonMoviesSelector
 });
 
 export default connect(mapStateToProps)(TrailerInfo)

@@ -24,7 +24,7 @@ const StackNavAvatar = ({ AUTH_PROFILE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authProfileSelector
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(StackNavAvatar)

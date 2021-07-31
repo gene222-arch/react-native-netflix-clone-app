@@ -4,13 +4,12 @@ import View from '../../../../components/View';
 import Text from '../../../../components/Text';
 import styles from './../../../../assets/stylesheets/continueWatchingForItem';
 import { createStructuredSelector } from 'reselect';
-import { authSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import ContinueWatchingForItem from './../../../../components/continue-watching-for-item/ContinueWatchingForItem';
 import { cacheImage } from '../../../../utils/cacheImage';
 
-const ContinueWatchingFor = ({ 
-    AUTH,
+const ContinueWatchingFor = ({
     AUTH_PROFILE,
     handleToggleRateRecentlyWatchedShow,
     handlePressRemoveRecentlyWatchedShow 
@@ -51,7 +50,6 @@ const ContinueWatchingFor = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 });
 

@@ -1,12 +1,9 @@
 import React from 'react'
 import SelectProfileItem from './SelectProfileItem';
-import styles from '../../assets/stylesheets/selectProfile';
 import AddProfile from './AddProfile';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from '../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
-
-const MAXIMUM_PROFILES = 5;
 
 const DisplayProfile = ({ AUTH, profile, handlePressSelectProfile, index }) => 
 {
