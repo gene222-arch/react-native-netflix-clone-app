@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 const ContinueWatchingForItem = ({ 
     AUTH_PROFILE,
-    episode,
+    movie,
     handleToggleLikeRecentlyWatchedShow,
     handleToggleUnLikeRecentlyWatchedShow, 
     handlePressRemoveRecentlyWatchedShow 
@@ -47,7 +47,7 @@ const ContinueWatchingForItem = ({
     if (shouldPlayVideo) {
         return (
             <VideoPlayerFullScreen  
-                uri={ getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, episode.id, episode.video) }
+                uri={ getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, movie.id, movie.video_path) }
                 handleCloseVideo={ handlePressPlayVideo }
             />
         )
@@ -56,22 +56,22 @@ const ContinueWatchingForItem = ({
     return (
         <View style={ styles.container }>
             <MoreActionList 
-                selectedVideo={ episode } 
+                selectedVideo={ movie } 
                 isVisible={ showMoreOptions } 
                 setIsVisible={ setShowMoreOptions } 
                 handleToggleLikeRecentlyWatchedShow={ handleToggleLikeRecentlyWatchedShow }
                 handleToggleUnLikeRecentlyWatchedShow={ handleToggleUnLikeRecentlyWatchedShow }
                 handlePressRemoveRecentlyWatchedShow={ handlePressRemoveRecentlyWatchedShow }
             />
-            <Info selectedShow={ episode } isVisible={ showInfo } setIsVisible={ setShowInfo } />
+            <Info selectedShow={ movie } isVisible={ showInfo } setIsVisible={ setShowInfo } />
             <Video 
                 ref={ videoRef }
                 style={ styles.video }
                 source={{
-                    uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, episode.id, episode.video)
+                    uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, movie.id, movie.video_path)
                 }}
                 usePoster={ !shouldPlayVideo  }
-                posterSource={{ uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, episode.id, episode.poster) }}
+                posterSource={{ uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, movie.id, movie.poster_path) }}
                 posterStyle={ styles.poster }
                 useNativeControls
             />

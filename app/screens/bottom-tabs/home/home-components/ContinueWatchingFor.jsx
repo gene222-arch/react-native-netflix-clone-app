@@ -1,33 +1,36 @@
 import React, { useEffect } from 'react'
 import { FlatList } from 'react-native'
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { connect, useDispatch } from 'react-redux';
+import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import View from '../../../../components/View';
 import Text from '../../../../components/Text';
 import styles from './../../../../assets/stylesheets/continueWatchingForItem';
-import { createStructuredSelector } from 'reselect';
-import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
-import { connect } from 'react-redux';
 import ContinueWatchingForItem from './../../../../components/continue-watching-for-item/ContinueWatchingForItem';
 import { cacheImage } from '../../../../utils/cacheImage';
 
-const ContinueWatchingFor = ({
-    AUTH_PROFILE,
-    handleToggleRateRecentlyWatchedShow,
-    handlePressRemoveRecentlyWatchedShow 
-}) => {
 
-    const hasRecentlyWatchedShows = (AUTH_PROFILE.recently_watched_shows.length > 0);
+const ContinueWatchingFor = ({ AUTH_PROFILE }) => 
+{
+    const dispatch  = useDispatch();
     
-    if (!hasRecentlyWatchedShows) {
-        return <Text h4>Your recently watched show's will be shown here.</Text>
-    }
+    const handleToggleRateRecentlyWatchedShow = (show, rate) => dispatch(AUTH_ACTION.rateShowStart({ show, rate }));
+
+    const handlePressRemoveRecentlyWatchedShow = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart(id));
 
     useEffect(() => {
-        /** Cache Recently Watched Shows */
         AUTH_PROFILE.recently_watched_shows.map(({ id, poster, video }) => {
             cacheImage(poster, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`);
             cacheImage(video, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`);
         });
-    }, [AUTH_PROFILE.recently_watched_shows]);
+
+    }, []);
+
+
+    if (! (AUTH_PROFILE.recently_watched_shows.length) ) {
+        return <Text h4>Your recently watched show's will be shown here.</Text>
+    }
 
     return (
         <View style={ styles.container }>
@@ -37,7 +40,7 @@ const ContinueWatchingFor = ({
                 data={ AUTH_PROFILE.recently_watched_shows }
                 renderItem={({ item }) =>  (
                     <ContinueWatchingForItem 
-                        episode={ item } 
+                        movie={ item } 
                         handleToggleLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item, 'like') }
                         handleToggleUnLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item, 'not for me') }
                         handlePressRemoveRecentlyWatchedShow={ () => handlePressRemoveRecentlyWatchedShow(item.id) }

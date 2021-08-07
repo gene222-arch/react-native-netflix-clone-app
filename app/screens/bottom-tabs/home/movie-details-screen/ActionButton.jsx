@@ -16,7 +16,7 @@ const ACTION_TYPES = {
     SHARE_SHOW: 'SHARE SHOW'
 }
 
-const TabIcon = ({ actionName, data, showID, isLoading }) => 
+const TabIcon = ({ actionName, movies, showID, isLoading }) => 
 {
     switch (actionName) 
     {
@@ -28,7 +28,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
         
             return (
                 <MaterialCommunityIcon 
-                    name={ data.findIndex(({ id }) => id === showID) !== -1 ? 'check' : 'plus' }
+                    name={ movies.findIndex(({ id }) => id === showID) !== -1 ? 'check' : 'plus' }
                     size={ 30 }
                     color='white'
                 />
@@ -45,7 +45,7 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
                     name='thumbs-up'
                     size={ 30 }
                     color='white'
-                    solid={ data.findIndex(({ id }) => id === showID) !== -1 }
+                    solid={ movies.findIndex(({ id }) => id === showID) !== -1 }
                 />
             )
 
@@ -67,53 +67,56 @@ const TabIcon = ({ actionName, data, showID, isLoading }) =>
 
 const ActionButton = ({ 
     AUTH_PROFILE,
-    selectedShowID, 
+    movieID, 
     isLoadingAddToMyList, 
-    handlePressTabAddToLIst, 
-    isLoadingLikedShows, 
-    handlePressTabLikeShow, 
+    isLoadingLike, 
+    handlePressAddToMyList, 
+    handlePressLike, 
     handlePressTabShare
 }) => 
 {
 
-    const myListIcon = () => {
+    const myListIcon = () => 
+    {
+        if (isLoadingAddToMyList) {
+            return <ActivityIndicator color='#fff' />   
+        }
+
         return (
-            isLoadingAddToMyList 
-                ? <ActivityIndicator color='#fff' />
-                : (
-                    <TabIcon 
-                        actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
-                        data={ AUTH_PROFILE.my_list } 
-                        showID={ selectedShowID }
-                    />
-                )
+            <TabIcon 
+                actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
+                movies={ AUTH_PROFILE.my_list } 
+                showID={ movieID }
+            />
         )
     }
 
-    const likeShowIcon = () => {
+    const likeShowIcon = () => 
+    {
+        if (isLoadingLike) {
+            return <ActivityIndicator color='#fff' />
+        }
+
         return (
-            isLoadingLikedShows 
-                ? <ActivityIndicator color='#fff' />
-                : (
-                    <TabIcon 
-                        actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
-                        data={ AUTH_PROFILE.liked_shows } 
-                        showID={ selectedShowID }
-                    /> 
-                )
+            <TabIcon 
+                actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
+                movies={ AUTH_PROFILE.liked_shows } 
+                showID={ movieID }
+            /> 
         )
     }
 
     const handlePressTabAddToLIst_ = () => 
     {
-        handlePressTabAddToLIst();
+        handlePressAddToMyList();
 
-        const hasAddedToList = AUTH_PROFILE.my_list.findIndex(({ id }) => id === selectedShowID) !== -1;
+        const hasAddedToList = AUTH_PROFILE.my_list.findIndex(({ id }) => id === movieID) !== -1;
         const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
         setTimeout(() => {
             ToastAndroid.show(message, ToastAndroid.SHORT);
         }, 100);
     }
+
 
     return (
         <View style={ styles.tabsContainer }>
@@ -130,14 +133,14 @@ const ActionButton = ({
                     icon={ likeShowIcon() }
                     titleStyle={ styles.tabItemTitle }
                     containerStyle={ styles.tabItemContainer }
-                    onPressIn={ handlePressTabLikeShow }
+                    onPressIn={ handlePressLike }
                 />
                 <Tab.Item 
                     title='Share' 
                     icon={ 
                         <TabIcon 
                             actionName={ ACTION_TYPES.SHARE_SHOW }
-                            showID={ selectedShowID }
+                            showID={ movieID }
                         /> 
                     }
                     titleStyle={ styles.tabItemTitle }

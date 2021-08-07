@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { FlatList, ToastAndroid } from 'react-native';
-import { StatusBar } from 'expo-status-bar'
 import { createStructuredSelector } from 'reselect';
 import { connect, useDispatch } from 'react-redux';
 import { ImageBackground, InteractionManager } from 'react-native'
@@ -11,7 +10,6 @@ import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 /** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
-import * as MOVIE_ACTION from './../../../redux/modules/movie/actions'
 
 /** API */
 import categories_ from './../../../services/data/categories';
@@ -62,12 +60,6 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
 
     const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
 
-    const handleToggleRateRecentlyWatchedShow = (show, rate) => dispatch(AUTH_ACTION.rateShowStart({ show, rate }));
-
-    const handlePressRemoveRecentlyWatchedShow = (recentlyWatchedShowID) => {
-        dispatch(AUTH_ACTION.removeToRecentWatchesStart(recentlyWatchedShowID));
-    }
-
     const cacheImages = () => 
     {
         /** Cache Categories */
@@ -90,20 +82,16 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
         setIsInteractionsComplete(true);
     }
 
-    const cleanUp = () => {
-        setCategories([]);
-        setFrontPage(DEFAULT_FRONT_PAGE);
-        setIsInteractionsComplete(false);
-        setShowFrontPageInfo(false);
-    }
-
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            cleanUp();
+            setCategories([]);
+            setFrontPage(DEFAULT_FRONT_PAGE);
+            setIsInteractionsComplete(false);
+            setShowFrontPageInfo(false);
         }
-    }, [AUTH_PROFILE?.recently_watched_shows]);
+    }, []);
 
 
     if (!isInteractionsComplete) {
@@ -129,17 +117,12 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
                             <FrontPageOptions 
                                 frontPage={ frontPage } 
                                 handleToggleAddToMyList={ handleToggleAddToMyList }
-                                authUserMyList={ AUTH_PROFILE.my_list }
-                                frontPageCacheDirectory={ 'FrontPages/' }
                                 handleClickShowInfo={ handleClickShowInfo }
                             />
                         </ImageBackground>   
 
                         {/* Continue Watching For */}
-                        <ContinueWatchingFor 
-                            handleToggleRateRecentlyWatchedShow={ handleToggleRateRecentlyWatchedShow }
-                            handlePressRemoveRecentlyWatchedShow={ handlePressRemoveRecentlyWatchedShow }
-                        />
+                        <ContinueWatchingFor />
                     </>             
                 }
             />

@@ -99,7 +99,7 @@ function* rateShowSaga(payload)
 {
     try {
         yield put(rateShowSuccess(payload));
-        yield put(AUTH_API.rateMovieAsync, payload);
+        // yield put(AUTH_API.rateMovieAsync, payload);
     } catch ({ message }) {
         yield put(rateShowFailed({ message }));
     }
@@ -128,10 +128,9 @@ function* logoutSaga()
         yield put(logoutSuccess());
 
         // const { status } = yield call(LOGIN_API.logoutAsync);
-        if (status === 'success') {
-            yield call(AsyncStorageInstance.removeAccessToken);
-            yield put(logoutSuccess());
-        }
+        yield call(AsyncStorageInstance.removeAccessToken);
+        yield put(logoutSuccess());
+        
     } catch ({ message }) {
         console.log(message)
         yield put(logoutFailed({ message }));

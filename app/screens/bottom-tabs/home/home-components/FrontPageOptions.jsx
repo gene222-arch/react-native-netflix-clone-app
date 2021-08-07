@@ -8,13 +8,17 @@ import Image from './../../../../components/Image';
 import { getCachedFile } from './../../../../utils/cacheImage';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import ShowInfo from './../../../../components/continue-watching-for-item/Info';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
 
-const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, frontPageCacheDirectory, handleClickShowInfo }) => 
+const FrontPageOptions = ({ AUTH_PROFILE, frontPage, handleToggleAddToMyList, handleClickShowInfo }) => 
 {
-    const handleToggleAddToMyList_ = () => {
-        const hasAddedToList = authUserMyList.findIndex(({ id }) => id === frontPage.id) !== -1;
+    const handleToggleAddToMyList_ = () => 
+    {
+        const hasAddedToList = AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id);
+
         const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
         handleToggleAddToMyList(message);
     }
@@ -23,7 +27,7 @@ const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, 
         <View style={ styles.frontPageOptions }>
             <Image 
                 source={{ 
-                    uri: getCachedFile(frontPageCacheDirectory, frontPage.id, frontPage.poster) }}
+                    uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster) }}
                 style={ styles.homeFrontPageShowLogo }
             />
             <View style={ styles.tagsContainer }>
@@ -42,7 +46,7 @@ const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, 
                 <TouchableOpacity onPress={ handleToggleAddToMyList_ }>
                     <View style={ styles.myListInfoActionContainer }>
                         <FeatherIcon 
-                            name={ authUserMyList.findIndex(({ id }) => id === frontPage.id) !== -1 ? 'check' : 'plus' }
+                            name={ AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
                             size={ 24 }
                             color='#fff'
                         />
@@ -78,4 +82,8 @@ const FrontPageOptions = ({ frontPage, handleToggleAddToMyList, authUserMyList, 
     )
 }
 
-export default FrontPageOptions
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+}); 
+
+export default connect(mapStateToProps)(FrontPageOptions)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import * as FileSystem from 'expo-file-system'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,7 +11,7 @@ import { StatusBar } from 'expo-status-bar'
 import * as AUTH_ACTION from './../../redux/modules/auth/actions'
 
 /** Selectors */
-import { authSelector, authProfileSelector } from './../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../redux/modules/auth/selectors';
 
 /** Styles */
 import styles from './../../assets/stylesheets/moreActionList';
@@ -24,14 +24,12 @@ import { BottomSheet, Overlay } from 'react-native-elements';
 
 /** Utils/Configs */
 import VIDEO_STATUSES from './../../config/video.statuses';
-import { ensureFileExists } from './../../utils/cacheImage';
 import View from './../View';
 import Text from './../Text';
 import { useNavigation } from '@react-navigation/native';
 
 
 const MoreActionList = ({
-    AUTH,
     AUTH_PROFILE,
     selectedVideo,
     handlePressRemoveRecentlyWatchedShow,
@@ -49,10 +47,15 @@ const MoreActionList = ({
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
 
-    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
-    const ratedShow = AUTH_PROFILE.recently_watched_shows.find(({ id }) => id === selectedVideo.id);
+    const FILE_URI = useMemo(() => {
+        return `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
+    }, [selectedVideo]);
 
+    const ratedShow = useMemo(() => {
+        return AUTH_PROFILE.recently_watched_shows.find(({ id }) => id === selectedVideo.id);
+    }, [selectedVideo]);
 
+    
     const actionList = 
     [
         {
@@ -102,7 +105,7 @@ const MoreActionList = ({
             onPress: () => (
                 status !== VIDEO_STATUSES.DOWNLOADED 
                     ? status === 'Downloading' ? pauseDownload() : (status === 'Paused' ? resumeDownload() : downloadVideo())
-                    : toggleOverlay()
+                    : toggleShowDownloadedMenu()
             ),
             onPressEndIcon: () => status === 'Downloading' && pauseDownload(),
             show: true,
@@ -132,8 +135,6 @@ const MoreActionList = ({
         },
     ];
 
-    const toggleOverlay = () => setShowDownloadedMenu(!showDownloadedMenu);
-
     const downloadProgressCallback = (downloadProgress) => {
         const progress = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
         setProgress(progress);
@@ -146,8 +147,12 @@ const MoreActionList = ({
             await downloadResumable.downloadAsync();
             setStatus(VIDEO_STATUSES.DOWNLOADED);
 
+            dispatch(AUTH_ACTION.downloadVideoStart({ 
+                show: { ...selectedVideo, downloaded_file_uri: FILE_URI, }, 
+                profile: AUTH_PROFILE 
+            }));
+
             ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
-            dispatch(AUTH_ACTION.downloadVideoStart({ show: { ...selectedVideo, downloaded_file_uri: FILE_URI, }, profile: AUTH.profile }));
         } catch ({ message }) {
             console.log(message);
         }
@@ -157,8 +162,10 @@ const MoreActionList = ({
     {
         try {
             setStatus('');
-            toggleOverlay();
+            toggleShowDownloadedMenu();
+
             await FileSystem.deleteAsync(FILE_URI);
+
             dispatch(AUTH_ACTION.removeToMyDownloadsStart(selectedVideo.id));
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
         } catch ({ message }) {
@@ -170,48 +177,62 @@ const MoreActionList = ({
     {
         try {
             await downloadResumable.pauseAsync();
+
             AsyncStorage.setItem(selectedVideo.video, JSON.stringify(downloadResumable.savable()));
+
             setStatus(VIDEO_STATUSES.PAUSED);
+
             ToastAndroid.show('Download Paused', ToastAndroid.SHORT);
         } catch ({ message }) {
             setStatus(VIDEO_STATUSES.PAUSED_FAILED);
         }
     }
 
-    const navigateToMyDownloads = () => {
-        toggleOverlay();
+    const navigateToMyDownloads = () => 
+    {
+        toggleShowDownloadedMenu();
         setIsVisible(false);
         navigation.navigate('Downloads');
     }
 
     const resumeDownload = async () => 
     {
-        /** Extract */
-        const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
-        const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
-
-        const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
-
         try {
+            const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
+            const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
+
+            const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
+
             setStatus(VIDEO_STATUSES.DOWNLOADING);
+
             await previousDownloadedFile.resumeAsync();
+
             setStatus(VIDEO_STATUSES.DOWNLOADED);
-            dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH.profile }));
+
+            dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH_PROFILE }));
+
             ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
         } catch ({ message }) {
             console.error({ message });
         }
     }
 
-    const checkIfFileExists = () => {
+    const toggleShowDownloadedMenu = () => setShowDownloadedMenu(!showDownloadedMenu);
+
+    const checkIfFileExists = () => 
+    {
         const fileExists = AUTH_PROFILE.my_downloads.findIndex(({ id }) => id === selectedVideo.id) !== -1;
-        !fileExists ? setStatus('') : setStatus(VIDEO_STATUSES.DOWNLOADED);
+
+        !fileExists 
+            ? setStatus('') 
+            : setStatus(VIDEO_STATUSES.DOWNLOADED);
     }
 
     useEffect(() => {
         if (!downloadResumable) {
             setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
         }
+
         return () => {
             setDownloadResumable(null);
             setProgress(0);
@@ -226,9 +247,10 @@ const MoreActionList = ({
 
     return (
         <View style={ styles.container }>
-            
+
             { isVisible && <StatusBar backgroundColor='rgba(0, 0, 0, .7)' /> }
-            <Overlay isVisible={ showDownloadedMenu } onBackdropPress={ toggleOverlay } overlayStyle={ styles.downloadedMenu }>
+
+            <Overlay isVisible={ showDownloadedMenu } onBackdropPress={ toggleShowDownloadedMenu } overlayStyle={ styles.downloadedMenu }>
                 <TouchableOpacity onPress={ deleteDownload }>
                     <Text style={ styles.deleteDownloadTitle }>Delete Download</Text>
                 </TouchableOpacity>
@@ -236,10 +258,11 @@ const MoreActionList = ({
                     <Text style={ styles.viewMyDownloadsTitle }>View My Downloads</Text>
                 </TouchableOpacity>
             </Overlay>
+
             <BottomSheet isVisible={ isVisible } containerStyle={ styles.bottomSheetContainer }>
-            {actionList.map((action, index) => action.show && (
-                <DisplayAction key={ index } actionType={ action }/>
-            ))}
+            {
+                actionList.map((action, index) => action.show && <DisplayAction key={ index } actionType={ action }/> )
+            }
             </BottomSheet>
         </View>
     )
@@ -247,7 +270,6 @@ const MoreActionList = ({
 
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 });
 

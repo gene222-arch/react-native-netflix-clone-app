@@ -7,7 +7,7 @@ import Colors from './../constants/Colors';
 
 const DownloadsTabBarBadge = ({ AUTH_PROFILE }) => 
 {
-    if (!AUTH_PROFILE?.has_new_downloads) {
+    if (! AUTH_PROFILE?.has_new_downloads) {
         return ''
     }
 

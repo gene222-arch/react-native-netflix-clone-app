@@ -33,6 +33,10 @@ import styles from '../../../../assets/stylesheets/movieDetail';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from './Header';
+import PlayDownloadButton from './PlayDownloadButton';
+import MovieDescription from './MovieDescription';
+import LoadingSpinner from './../../../../components/LoadingSpinner';
 
 const DEFAULT_EPISODE = {
     id: '',
@@ -46,7 +50,7 @@ const DEFAULT_EPISODE = {
 const MovieDetailsScreen = ({ AUTH, route }) => 
 {   
     const dispatch = useDispatch();
-    const { id: selectedShowID } = route.params;
+    const { id: movieID } = route.params;
 
     const videoRef = useRef(null);
     const [ currentSeasons, setCurrentSeasons ] = useState([]);
@@ -54,10 +58,10 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const [ currentSeasonEpisode, setCurrentSeasonEpisode ] = useState(DEFAULT_EPISODE);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isLoadingAddToMyList, setIsLoadingAddToMyList ] = useState(false);
-    const [ isLoadingLikedShows, setIsLoadingLikedShows ] = useState(false);
+    const [ isLoadingLike, setIsLoadingLikedShows ] = useState(false);
     const [ selectedSeason, setSelectedSeason ] = useState('');
     const [ show, setShow ] = useState(null);
-    const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
+    const [ isPlaying, setShouldPlayVideo ] = useState(false);
     const [ videoStatus, setVideoStatus ] = useState({});
 
     
@@ -78,14 +82,14 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
         setCurrentSeasonEpisodes(show.seasons[index].episodes);
     }
 
-    const handlePressTabAddToLIst = () => 
+    const handlePressAddToMyList = () => 
     {
         setIsLoadingAddToMyList(true);
         dispatch(AUTH_ACTION.toggleAddToMyListStart({ id: show.id, title: show.title, poster: show.poster }));
         setTimeout(() => setIsLoadingAddToMyList(false), 1);
     }
 
-    const handlePressTabLikeShow = () => 
+    const handlePressLike = () => 
     {
         const { seasons, ...showToLike } = show;
 
@@ -100,7 +104,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
 
     const runAfterInteractions = () => 
     {
-        const findShowByID = showsAPI.find(({ id }) => id === selectedShowID);
+        const findShowByID = showsAPI.find(({ id }) => id === movieID);
         
         const seasons = findShowByID.seasons.map(({ name }) => name);
         const firstSeason = findShowByID.seasons[0];
@@ -136,7 +140,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     }, []);
 
     if (!isInteractionsComplete) {
-        return <LoadingScreen />
+        return <LoadingSpinner />
     }
 
     return (
@@ -148,79 +152,41 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                     aspectRatio: 16/9
                 }}
                 source={{
-                    uri: currentSeasonEpisode.video
+                    uri: currentSeasonEpisode.video_path
                 }}
                 useNativeControls
                 resizeMode='contain'
-                onPlaybackStatusUpdate={status => {
-                    console.log(status)
-                    setVideoStatus(() => status)
-                }}
+                onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
             />
 
             <FlatList 
                 data={ currentSeasonEpisodes }
+                ListHeaderComponentStyle={ styles.listHeaderComponent }
                 renderItem={ ({ item }) => (
-                    <EpisodeItem episode={ item } onPress={ () => setCurrentSeasonEpisode(item) }/>
+                    <EpisodeItem 
+                        movie={ item } 
+                        onPress={ () => setCurrentSeasonEpisode(item) }
+                    />
                 )}
                 ListHeaderComponent={(
                     <View style={ styles.movieContainer }>
-                        {/* Movie Title */}
-                        <View style={ styles.movieTitleContainer }>
-                            <Text h3 style={ styles.title }>{ show.title }</Text>
-                            <View style={ styles.movieTitleInfo }>
-                                <Text style={ styles.match }>{ '98%' } Match </Text>
-                                <Text style={ styles.year }>{ show.year }</Text>
-                                <Badge status='warning' value='12+' textStyle={ styles.ageContainerText }/>
-                                <Text style={ styles.seasons }>{ `${ show.total_number_of_seasons } Seasons` }</Text>
-                                <MaterialCommunityIcon name='high-definition-box' color='#fff' size={ 30 }/>
-                            </View>
-                        </View>
+                        <Header movie={ show } />
 
-                        {/* Play and Download Buttons */}
-                        <View style={ styles.playDownloadBtnContainer }> 
-                            <Button
-                                icon={
-                                    <Ionicon
-                                        name={ shouldPlayVideo ? 'pause' : 'play' }
-                                        size={ 24 }
-                                        color='black'
-                                    />
-                                }
-                                title={ shouldPlayVideo ? 'Pause' : 'Play' }
-                                buttonStyle={ styles.playBtn }
-                                titleStyle={ styles.playBtnTitle }
-                                onPress={ () => videoStatus?.isPlaying ? handlePressPauseVideo() : handlePressPlayVideo() }
-                            />
-                            <Button 
-                                icon={
-                                    <FeatherIcon
-                                        name='download'
-                                        size={ 24 }
-                                        color='white'
-                                    />
-                                }
-                                title=' Download'
-                                buttonStyle={ styles.downloadBtn }
-                            />
-                        </View>
-
-                        {/* Movie Description */}
-                        <View style={ styles.movieDescriptionContainer }>
-                            <Text style={ styles.plot }>{ show.plot }</Text>
-                            <View style={ styles.castCreatorContainer }>
-                                <Text style={ styles.cast }>Cast: { show.cast }</Text>
-                                <Text style={ styles.creator }>Creator: { show.creator }</Text>
-                            </View>
-                        </View>
-
-                        {/* Action Buttons */}
+                        <PlayDownloadButton 
+                            isPlaying={ isPlaying }
+                            videoStatus={ videoStatus }
+                            handlePressPauseVideo={ handlePressPauseVideo }
+                            handlePressPlayVideo={ handlePressPlayVideo }
+                        />
+                        
+                        <MovieDescription movie={ show } />
+                    
                         <ActionButton
-                            selectedShowID={ selectedShowID }
+                            movieID={ movieID }
                             isLoadingAddToMyList={ isLoadingAddToMyList }
-                            isLoadingLikedShows={ isLoadingLikedShows }
-                            handlePressTabLikeShow={ handlePressTabLikeShow }
-                            handlePressTabAddToLIst={ handlePressTabAddToLIst }
+                            isLoadingLike={ isLoadingLike }
+                            handlePressLike={ handlePressLike }
+                            handlePressAddToMyList={ handlePressAddToMyList }
                             handlePressTabShare={ handlePressTabShare }
                         />
 
@@ -246,7 +212,6 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
 
                     </View>
                 )}
-                ListHeaderComponentStyle={ styles.listHeaderComponent }
             />
         </View>
     )

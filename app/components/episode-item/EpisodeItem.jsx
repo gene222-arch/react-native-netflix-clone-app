@@ -6,21 +6,23 @@ import Image from './../Image';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { Pressable } from 'react-native';
 
-const EpisodeItem = ({ episode, onPress }) => 
+const EpisodeItem = ({ movie, onPress }) => 
 {
+    const { poster_path, title, duration, plot } = movie;
+
     return (
         <Pressable onPress={ onPress }>
             <View style={ styles.container }>
                 <View row={ true } justifyContent='space-between' alignItems='center' padding={ 2 }>
                     <Image 
                         source={{
-                            uri: episode.poster
+                            uri: poster_path
                         }}
                         style={ styles.posterImg }
                     />
                     <View style={ styles.titleContainer }>
-                        <Text style={ styles.title }>{ episode.title }</Text>
-                        <Text style={ styles.duration }>{ episode.duration }</Text>
+                        <Text style={ styles.title }>{ title }</Text>
+                        <Text style={ styles.duration }>{ duration }</Text>
                     </View>
                     <FeatherIcon
                         name='download'
@@ -28,7 +30,7 @@ const EpisodeItem = ({ episode, onPress }) =>
                         color='#fff'
                     />
                 </View>
-                <Text style={ styles.plot }>{ episode.plot }</Text>
+                <Text style={ styles.plot }>{ plot }</Text>
             </View>
         </Pressable>
     )
