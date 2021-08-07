@@ -61,7 +61,6 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const [ isLoadingLike, setIsLoadingLikedShows ] = useState(false);
     const [ selectedSeason, setSelectedSeason ] = useState('');
     const [ show, setShow ] = useState(null);
-    const [ isPlaying, setShouldPlayVideo ] = useState(false);
     const [ videoStatus, setVideoStatus ] = useState({});
 
     
@@ -85,7 +84,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
     const handlePressAddToMyList = () => 
     {
         setIsLoadingAddToMyList(true);
-        dispatch(AUTH_ACTION.toggleAddToMyListStart({ id: show.id, title: show.title, poster: show.poster }));
+        dispatch(AUTH_ACTION.toggleAddToMyListStart(show));
         setTimeout(() => setIsLoadingAddToMyList(false), 1);
     }
 
@@ -172,8 +171,7 @@ const MovieDetailsScreen = ({ AUTH, route }) =>
                     <View style={ styles.movieContainer }>
                         <Header movie={ show } />
 
-                        <PlayDownloadButton 
-                            isPlaying={ isPlaying }
+                        <PlayDownloadButton
                             videoStatus={ videoStatus }
                             handlePressPauseVideo={ handlePressPauseVideo }
                             handlePressPlayVideo={ handlePressPlayVideo }

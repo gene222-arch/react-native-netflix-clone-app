@@ -1,40 +1,11 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
-import ENV from './../../../../env';
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
 import * as AsyncStorageInstance from './../../../utils/AsyncStorageInstance'
-import { 
-    addToRecentWatchesSuccess,
-    addToRecentWatchesFailed,
-    createProfileSuccess,
-    createProfileFailed,
-    deleteProfileSuccess,
-    deleteProfileFailed,
-    rateShowSuccess,
-    rateShowFailed,
-    loginSuccess, 
-    loginFailed, 
-    logoutSuccess, 
-    logoutFailed, 
-    downloadVideoSuccess,
-    downloadVideoFailed,
-    removeToMyDownloadsSuccess,
-    removeToMyDownloadsFailed,
-    removeToRecentWatchesSuccess,
-    removeToRecentWatchesFailed,
-    selectProfileFailed,
-    selectProfileSuccess,
-    toggleAddToMyListSuccess,
-    toggleAddToMyListFailed,
-    toggleRemindMeOfComingShowSuccess, 
-    toggleRemindMeOfComingShowFailed,
-    updateAuthenticatedProfileSuccess,
-    updateAuthenticatedProfileFailed,
-    viewDownloadsSuccess,
-    viewDownloadsFailed
-} from './actions'
+import * as ACTION from './actions'
+
 const {
     ADD_TO_RECENT_WATCHES_START,
     CREATE_PROFILE_START,
@@ -57,38 +28,40 @@ const {
 function* addToRecentWatchesSaga(payload)  
 {
     try {
-        yield put(addToRecentWatchesSuccess({ show: payload }));
+        yield put(ACTION.addToRecentWatchesSuccess({ show: payload }));
     } catch ({ message }) {
-        yield put(addToRecentWatchesFailed({ message }));
+        yield put(ACTION.addToRecentWatchesFailed({ message }));
     }
 }
 
 /**
  * Todo: Test API
+ * * Tested
  */
 function* createProfileSaga(payload)  
 {
     try {
-        yield put(createProfileSuccess({ profile: payload }));
-        yield call(AUTH_API.createProfileAsync, payload);
+        const { data: profile } = yield call(AUTH_API.createProfileAsync, payload);
+        yield put(ACTION.createProfileSuccess({ profile }));
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
-        yield put(createProfileFailed({ message }));
+        yield put(ACTION.createProfileFailed({ message }));
     }
 }
 
 /**
  * Todo: Test API
+ * * Tested
  */
 function* deleteProfileSaga(payload)  
 {
     try {
-        yield put(deleteProfileSuccess({ profileID: payload }));
+        yield put(ACTION.deleteProfileSuccess({ profileID: payload }));
         yield call(AUTH_API.deleteProfileByIdAsync, payload);
 
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
-        yield put(deleteProfileFailed({ message }));
+        yield put(ACTION.deleteProfileFailed({ message }));
     }
 }
 
@@ -98,10 +71,10 @@ function* deleteProfileSaga(payload)
 function* rateShowSaga(payload)  
 {
     try {
-        yield put(rateShowSuccess(payload));
-        // yield put(AUTH_API.rateMovieAsync, payload);
+        yield put(ACTION.rateShowSuccess(payload));
+        // yield put(ACTION.AUTH_API.rateMovieAsync, payload);
     } catch ({ message }) {
-        yield put(rateShowFailed({ message }));
+        yield put(ACTION.rateShowFailed({ message }));
     }
 }
 
@@ -113,9 +86,9 @@ function* loginSaga(payload)
         const { access_token, data: auth } = data;
         const {  profiles, ...user } = auth;
         yield call(AsyncStorageInstance.storeAccessToken, access_token);
-        yield put(loginSuccess({ auth: user, profiles }));      
+        yield put(ACTION.loginSuccess({ auth: user, profiles }));      
     } catch ({ message }) {
-        yield put(loginFailed({ message }));    
+        yield put(ACTION.loginFailed({ message }));    
     }
 }
 
@@ -125,24 +98,24 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
-        yield put(logoutSuccess());
+        yield put(ACTION.logoutSuccess());
 
         // const { status } = yield call(LOGIN_API.logoutAsync);
         yield call(AsyncStorageInstance.removeAccessToken);
-        yield put(logoutSuccess());
+        yield put(ACTION.logoutSuccess());
         
     } catch ({ message }) {
         console.log(message)
-        yield put(logoutFailed({ message }));
+        yield put(ACTION.logoutFailed({ message }));
     }
 }
 
 function* downloadVideoSaga(payload)  
 {
     try {
-        yield put(downloadVideoSuccess(payload));
+        yield put(ACTION.downloadVideoSuccess(payload));
     } catch ({ message }) {
-        yield put(downloadVideoFailed({ message }));
+        yield put(ACTION.downloadVideoFailed({ message }));
         console.log(message);
     }
 }
@@ -150,29 +123,29 @@ function* downloadVideoSaga(payload)
 function* removeToMyDownloadsSaga(payload)  
 {
     try {
-        yield put(removeToMyDownloadsSuccess({ showID: payload }));
+        yield put(ACTION.removeToMyDownloadsSuccess({ showID: payload }));
     } catch ({ message }) {
-        yield put(removeToMyDownloadsFailed({ message }));
+        yield put(ACTION.removeToMyDownloadsFailed({ message }));
     }
 }
 
 function* removeToRecentWatchesSaga(payload)  
 {
     try {
-        yield put(removeToRecentWatchesSuccess({ showID: payload }));
+        yield put(ACTION.removeToRecentWatchesSuccess({ showID: payload }));
     } catch ({ message }) {
-        yield put(removeToRecentWatchesFailed({ message }));
+        yield put(ACTION.removeToRecentWatchesFailed({ message }));
     }
 }
 
 function* selectProfileSaga(payload)  
 {
     try {
-        yield put(selectProfileSuccess(payload));
+        yield put(ACTION.selectProfileSuccess(payload));
         
         RootNavigation.navigate('Home');
     } catch ({ message }) {
-        yield put(selectProfileFailed({ message }));
+        yield put(ACTION.selectProfileFailed({ message }));
     }
 }
 
@@ -182,10 +155,10 @@ function* selectProfileSaga(payload)
 function* toggleAddToMyListSaga(payload)
 {
     try {
-        yield put(toggleAddToMyListSuccess({ show: payload }));
+        yield put(ACTION.toggleAddToMyListSuccess({ show: payload }));
         yield call(AUTH_API.toggleMyListAsync, payload);
     } catch ({ message }) {
-        yield put(toggleAddToMyListFailed({ message }));
+        yield put(ACTION.toggleAddToMyListFailed({ message }));
     }
 }
 
@@ -195,33 +168,34 @@ function* toggleAddToMyListSaga(payload)
 function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {
-        yield put(toggleRemindMeOfComingShowSuccess({ show: payload }));
+        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ show: payload }));
         yield call(AUTH_API.toggleRemindMeAsync, payload);
     } catch ({ message }) {
-        yield put(toggleRemindMeOfComingShowFailed({ message }));
+        yield put(ACTION.toggleRemindMeOfComingShowFailed({ message }));
     }
 }
 
 /**
  * Todo: Test API
+ * * Tested
  */
 function* updateAuthenticatedProfileSaga(payload)
 {
     try {
-        yield put(updateAuthenticatedProfileSuccess({ profile: payload }));
+        yield put(ACTION.updateAuthenticatedProfileSuccess({ profile: payload }));
         yield call(AUTH_API.updateProfileAsync, payload);
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
-        yield put(updateAuthenticatedProfileFailed({ message }));
+        yield put(ACTION.updateAuthenticatedProfileFailed({ message }));
     }
 }
 
 function* viewDownloadsSaga()
 {
     try {
-        yield put(viewDownloadsSuccess());
+        yield put(ACTION.viewDownloadsSuccess());
     } catch ({ message }) {
-        yield put(viewDownloadsFailed({ message }));
+        yield put(ACTION.viewDownloadsFailed({ message }));
     }
 }
 

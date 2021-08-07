@@ -10,7 +10,9 @@ const styles = StyleSheet.create({
     email: {
         marginTop: 25,
     },
-    password: {
+    formContainer: {
+        display: 'flex',
+        alignItems: 'center'
     },
     inputContainerStyle: {
         backgroundColor: Colors.darkGrey,

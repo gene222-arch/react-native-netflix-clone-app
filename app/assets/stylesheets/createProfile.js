@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
         height: 55,
         color: Colors.white,
         padding: 15,
-        marginBottom: 40,
     },
     inputContainer: {
         alignItems: 'stretch'

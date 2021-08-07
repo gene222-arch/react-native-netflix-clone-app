@@ -5,19 +5,19 @@ import { Button } from 'react-native-elements';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-const PlayDownloadButton = ({ isPlaying, videoStatus, handlePressPauseVideo, handlePressPlayVideo }) => 
+const PlayDownloadButton = ({ videoStatus, handlePressPauseVideo, handlePressPlayVideo }) => 
 {
     return (
         <View style={ styles.playDownloadBtnContainer }> 
             <Button
                 icon={
                     <Ionicon
-                        name={ isPlaying ? 'pause' : 'play' }
+                        name={ videoStatus?.isPlaying ? 'pause' : 'play' }
                         size={ 24 }
                         color='black'
                     />
                 }
-                title={ isPlaying ? 'Pause' : 'Play' }
+                title={ videoStatus?.isPlaying ? 'Pause' : 'Play' }
                 buttonStyle={ styles.playBtn }
                 titleStyle={ styles.playBtnTitle }
                 onPress={ () => {

@@ -50,7 +50,7 @@ const {
 
 const CREDENTIALS_DEFAULT_PROPS = 
 {
-    id: 1,
+    id: '',
     email: '',
     password: '',
     remember_me: false
@@ -58,7 +58,7 @@ const CREDENTIALS_DEFAULT_PROPS =
 
 const PROFILE_DEFAULT_PROPS = 
 {
-    id: 1,
+    id: '',
     name: '',
     email: '',
     avatar: '',
@@ -68,6 +68,7 @@ const PROFILE_DEFAULT_PROPS =
     my_list: [],
     reminded_coming_soon_shows: [],
     liked_shows: [],
+    has_new_downloads: false,
 };
 
 const DEFAULT_ERROR_MESSAGE_PROPS = {
@@ -82,7 +83,7 @@ const initialState =
     isAuthenticated: false,
     auth: null,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    profiles: accountProfiles,
+    profiles: [],
     profile: PROFILE_DEFAULT_PROPS,
     isLoading: false,
     errors: DEFAULT_ERROR_MESSAGE_PROPS
@@ -122,10 +123,10 @@ export default (state = initialState, { type, payload }) =>
 
         case ADD_TO_RECENT_WATCHES_SUCCESS:
 
-            const findShowIndex = SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.findIndex(({ id }) => id === payload.show.id);
+            const findShowIndex = SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.find(({ id }) => id === payload.show.id);
 
             /** The show already exists, remove and prepend it */
-            if (findShowIndex !== -1) {
+            if (findShowIndex) {
                 SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.splice(findShowIndex, 1);
                 SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.unshift(payload.show);
             }
@@ -134,11 +135,15 @@ export default (state = initialState, { type, payload }) =>
             }
 
             /** Update profiles */
-            const profiles_ = profiles.map((prof) => (prof.id === profile.id) ? SELECT_AUTHENTICATED_PROFILE : prof);
+            NEW_PROFILES = profiles.map((prof) => 
+                (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
+                ? SELECT_AUTHENTICATED_PROFILE 
+                : prof
+            );
 
             return { 
                 ...state,
-                profiles: profiles_,
+                profiles: NEW_PROFILES,
                 isLoading,
                 errors
             }
@@ -146,13 +151,8 @@ export default (state = initialState, { type, payload }) =>
         case CREATE_PROFILE_SUCCESS: 
 
             const newProfile = {
+                ...PROFILE_DEFAULT_PROPS,
                 ...payload.profile,
-                my_downloads: [],
-                recently_watched_shows: [],
-                my_list: [],
-                reminded_coming_soon_shows: [],
-                liked_shows: [],
-                has_new_downloads: false,
             }
 
             return {
@@ -174,6 +174,7 @@ export default (state = initialState, { type, payload }) =>
 
             /** Update auth profile liked shows */
             let newLikedShows = [];
+            
             let hasLikedShow = SELECT_AUTHENTICATED_PROFILE.liked_shows.findIndex(({ id }) => id === payload.show.id);
 
             if (hasLikedShow !== -1) {
@@ -318,15 +319,16 @@ export default (state = initialState, { type, payload }) =>
 
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
-            const isAlreadyInList = SELECT_AUTHENTICATED_PROFILE.my_list.find(({ id }) => id === payload.show.id); 
+            const currentMyList = SELECT_AUTHENTICATED_PROFILE.my_list;
+            const isAddedToList = currentMyList.find(({ id }) => id === payload.show.id); 
 
-            let newMyList = isAlreadyInList 
-                ? [ ...SELECT_AUTHENTICATED_PROFILE.my_list, payload.show ] 
-                : SELECT_AUTHENTICATED_PROFILE.my_list.filter(({ id }) => id !== payload.show.id);
+            const myList = !isAddedToList 
+                ? [ ...currentMyList, payload.show ] 
+                : currentMyList.filter(({ id }) => id !== payload.show.id);
 
             NEW_PROFILES = profiles.map((prof) => {
-                return (prof.id === profile.id) 
-                    ? { ...prof, my_list: newMyList } 
+                return (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
+                    ? { ...prof, my_list: myList } 
                     : prof;
             });
         

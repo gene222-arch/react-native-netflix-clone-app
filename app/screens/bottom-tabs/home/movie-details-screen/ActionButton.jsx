@@ -16,7 +16,7 @@ const ACTION_TYPES = {
     SHARE_SHOW: 'SHARE SHOW'
 }
 
-const TabIcon = ({ actionName, movies, showID, isLoading }) => 
+const TabIcon = ({ actionName, movies, movieID, isLoading }) => 
 {
     switch (actionName) 
     {
@@ -25,10 +25,10 @@ const TabIcon = ({ actionName, movies, showID, isLoading }) =>
             if (isLoading) {
                 return <ActivityIndicator color='#fff' />
             } 
-        
+
             return (
                 <MaterialCommunityIcon 
-                    name={ movies.findIndex(({ id }) => id === showID) !== -1 ? 'check' : 'plus' }
+                    name={ movies.find(({ id }) => id === movieID) ? 'check' : 'plus' }
                     size={ 30 }
                     color='white'
                 />
@@ -45,7 +45,7 @@ const TabIcon = ({ actionName, movies, showID, isLoading }) =>
                     name='thumbs-up'
                     size={ 30 }
                     color='white'
-                    solid={ movies.findIndex(({ id }) => id === showID) !== -1 }
+                    solid={ movies.find(({ id }) => id === movieID) }
                 />
             )
 
@@ -86,7 +86,7 @@ const ActionButton = ({
             <TabIcon 
                 actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
                 movies={ AUTH_PROFILE.my_list } 
-                showID={ movieID }
+                movieID={ movieID }
             />
         )
     }
@@ -101,7 +101,7 @@ const ActionButton = ({
             <TabIcon 
                 actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
                 movies={ AUTH_PROFILE.liked_shows } 
-                showID={ movieID }
+                movieID={ movieID }
             /> 
         )
     }
@@ -140,7 +140,7 @@ const ActionButton = ({
                     icon={ 
                         <TabIcon 
                             actionName={ ACTION_TYPES.SHARE_SHOW }
-                            showID={ movieID }
+                            movieID={ movieID }
                         /> 
                     }
                     titleStyle={ styles.tabItemTitle }

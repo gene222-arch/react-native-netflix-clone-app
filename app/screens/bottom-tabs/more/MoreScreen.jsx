@@ -158,6 +158,7 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
                     }
                     title='   Manage Profiles'
                     titleStyle={ styles.manageProfilesBtnTitle }
+                    onPress={ () => navigation.navigate('SelectProfile') }
                 />
             </View>
             

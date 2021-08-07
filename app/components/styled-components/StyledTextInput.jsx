@@ -4,13 +4,13 @@ import { TextInput } from 'react-native'
 import Text from './../Text';
 import styles from './../../assets/stylesheets/styledTextInput';
 
-const StyledTextInput = ({ error = false, helperText = '', style, ...props }) => 
+const StyledTextInput = ({ error = false, helperText = '', style = [], ...props }) => 
 {
     return (
         <View style={ styles().container }>
             <TextInput 
                 { ...props } 
-                style={[ ...style, styles(error).textField ]}
+                style={[ Array.isArray(style) ? [...style] : style, styles(error).textField ]}
             />
             {helperText.length > 0 && (
                 <Text style={ styles(error).helperText } >{ helperText }</Text>

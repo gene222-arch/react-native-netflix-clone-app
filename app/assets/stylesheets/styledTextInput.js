@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from './../../constants/Colors';
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 
 const styles = (error = false) => StyleSheet.create({
     container: {
@@ -9,11 +10,11 @@ const styles = (error = false) => StyleSheet.create({
     },
     helperText: {
         color: error ? Colors.warning : 'transparent',
-        marginBottom: 20,
         marginLeft: 10
     },
     textField: {
         height: 60,
+        width: DEVICE_WIDTH / 1.25,
         borderBottomWidth: error ? 2 : 0,
         borderColor: error ? Colors.error : 'transparent',
     }
