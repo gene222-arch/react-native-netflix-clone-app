@@ -98,9 +98,7 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
-        yield put(ACTION.logoutSuccess());
-
-        // const { status } = yield call(LOGIN_API.logoutAsync);
+        yield call(LOGIN_API.logoutAsync);
         yield call(AsyncStorageInstance.removeAccessToken);
         yield put(ACTION.logoutSuccess());
         

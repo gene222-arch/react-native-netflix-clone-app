@@ -1,5 +1,5 @@
-import React from 'react'
-import { ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
+import { ActivityIndicator, ToastAndroid } from 'react-native'
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { enableScreens } from 'react-native-screens'
@@ -13,12 +13,25 @@ import { authSelector } from './../redux/modules/auth/selectors'
 import NavigationBottomTabs from './NavigationBottomTabs';
 import AuthenticationStack from './AuthenticationStack';
 import { navigationRef } from './RootNavigation';
+import { toastSelector } from './../redux/modules/toast/selectors';
 
 
 enableScreens(true);
 
-const Navigation = ({ AUTH }) => 
+const Navigation = ({ AUTH, TOAST }) => 
 {
+
+    useEffect(() => {
+        if (TOAST.message) {
+            ToastAndroid.show(
+                TOAST.message, 
+                TOAST.toastAndroid === 'SHORT'
+                    ? ToastAndroid.SHORT 
+                    : ToastAndroid.LONG
+            )
+        }
+    }, [TOAST]);
+
     return (
         <NavigationContainer ref={ navigationRef } theme={ DarkTheme } fallback={ <ActivityIndicator color='#fff' /> }>
             { !AUTH.isAuthenticated ? <AuthenticationStack /> : <NavigationBottomTabs /> }
@@ -28,7 +41,8 @@ const Navigation = ({ AUTH }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    TOAST: toastSelector
 })
 
 export default connect(mapStateToProps)(Navigation)

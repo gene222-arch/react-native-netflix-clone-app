@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, connect } from 'react-redux'
-import { InteractionManager, FlatList, TouchableOpacity, ToastAndroid } from 'react-native'
+import { useDispatch, connect, batch } from 'react-redux'
+import { InteractionManager, FlatList, TouchableOpacity } from 'react-native'
 import * as AUTH_ACTION from '../../../redux/modules/auth/actions'
+import * as TOAST_ACTION from '../../../redux/modules/toast/actions'
 import styles from './../../../assets/stylesheets/moreScreen';
 import ProfilePhotoItem from '../../../components/profile-photo-item/ProfilePhotoItem';
 import View from './../../../components/View';
-import { Overlay, Button, ListItem } from 'react-native-elements';
+import { Overlay, Button } from 'react-native-elements';
 import Text from './../../../components/Text';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import LoadingScreen from './../../../components/LoadingScreen';
@@ -13,6 +14,7 @@ import { createStructuredSelector } from 'reselect';
 import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
 import { useNavigation } from '@react-navigation/native';
 import DisplayOption from './../../../components/more-screen-display-option/DisplayOption';
+import LoadingSpinner from '../../../components/LoadingSpinner'
 
 
 const moreOptions = ({ onPressSignOut, onPressMyList }) =>
@@ -68,8 +70,13 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
     const toggleSignOutDialog = () => setShowSignOutDialog(!showSignOutDialog);
 
     const handlePressSignOut = () => {
-        dispatch(AUTH_ACTION.logoutStart());
-        setTimeout(() => ToastAndroid.show('Signed Out', ToastAndroid.SHORT), 500);
+        batch(() => {
+            dispatch(TOAST_ACTION.createToastMessageStart({
+                message: 'Signing Out',
+                toastAndroid: 'SHORT',
+            }));
+            dispatch(AUTH_ACTION.logoutStart());
+        })
     }
 
     const handlePressMyList = () => navigation.navigate('MyListScreen', { headerTitle: 'My List' });
@@ -113,15 +120,16 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
 
     return (
         <View style={ styles.container }>
+            <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Sign out Dialog */}
             <Overlay isVisible={ showSignOutDialog } onBackdropPress={ toggleSignOutDialog } overlayStyle={ styles.signOutDialog }>
                 <Text style={ styles.signOutQuery }>Sign out from this account?</Text>
                 <View style={ styles.signOutDialogActionBtns }>
-                    <TouchableOpacity onPress={ toggleSignOutDialog }>
+                    <TouchableOpacity onPress={ toggleSignOutDialog } disabled={ AUTH.isLoading } >
                         <Text style={ styles.cancelSignOut }>Cancel</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={ handlePressSignOut }>
+                    <TouchableOpacity onPress={ handlePressSignOut } disabled={ AUTH.isLoading }>
                         <Text style={ styles.signOut }>Sign Out</Text>
                     </TouchableOpacity>
                 </View>
