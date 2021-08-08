@@ -10,59 +10,50 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
-const ACTION_TYPES = {
-    ADD_TO_MY_LIST: 'ADD TO MY LIST',
-    ADD_TO_LIKED_SHOWS: 'ADD TO LIKED SHOWS',
-    SHARE_SHOW: 'SHARE SHOW'
+const ShareIcon = ({ isLoading = false }) => 
+{
+    if (isLoading) {
+        return <ActivityIndicator color='#FFF' /> 
+    }
+
+    return (
+        <FeatherIcon 
+            name='share-2'
+            size={ 30 }
+            color='white'
+        />
+    )
 }
 
-const TabIcon = ({ actionName, movies, movieID, isLoading }) => 
+const LikeIcon = ({ isLoading, likedMovies, movieID }) => 
 {
-    switch (actionName) 
-    {
-        case ACTION_TYPES.ADD_TO_MY_LIST:
-
-            if (isLoading) {
-                return <ActivityIndicator color='#fff' />
-            } 
-
-            return (
-                <MaterialCommunityIcon 
-                    name={ movies.find(({ id }) => id === movieID) ? 'check' : 'plus' }
-                    size={ 30 }
-                    color='white'
-                />
-            )
-
-        case ACTION_TYPES.ADD_TO_LIKED_SHOWS:
-
-            if (isLoading) {
-                return <ActivityIndicator color='#fff' />
-            } 
-
-            return (
-                <FontAwesome5 
-                    name='thumbs-up'
-                    size={ 30 }
-                    color='white'
-                    solid={ movies.find(({ id }) => id === movieID) }
-                />
-            )
-
-        case ACTION_TYPES.SHARE_SHOW:
-
-            if (isLoading) {
-                return <ActivityIndicator color='#fff' />
-            } 
-
-            return (
-                <FeatherIcon 
-                    name='share-2'
-                    size={ 30 }
-                    color='white'
-                />
-            )
+    if (isLoading) {
+        return <ActivityIndicator color='#fff' />
     }
+
+    return (
+        <FontAwesome5 
+            name='thumbs-up'
+            size={ 30 }
+            color='white'
+            solid={ likedMovies.find(({ id }) => id === movieID) }
+        />
+    )
+}
+
+const PlusIcon = ({ isLoading, myList, movieID }) => 
+{
+    if (isLoading) {
+        return <ActivityIndicator color='#fff' />   
+    }
+
+    return (
+        <MaterialCommunityIcon 
+            name={ myList.find(({ id }) => id === movieID) ? 'check' : 'plus' }
+            size={ 30 }
+            color='white'
+        />
+    )
 }
 
 const ActionButton = ({ 
@@ -75,73 +66,28 @@ const ActionButton = ({
     handlePressTabShare
 }) => 
 {
-
-    const myListIcon = () => 
-    {
-        if (isLoadingAddToMyList) {
-            return <ActivityIndicator color='#fff' />   
-        }
-
-        return (
-            <TabIcon 
-                actionName={ ACTION_TYPES.ADD_TO_MY_LIST } 
-                movies={ AUTH_PROFILE.my_list } 
-                movieID={ movieID }
-            />
-        )
-    }
-
-    const likeShowIcon = () => 
-    {
-        if (isLoadingLike) {
-            return <ActivityIndicator color='#fff' />
-        }
-
-        return (
-            <TabIcon 
-                actionName={ ACTION_TYPES.ADD_TO_LIKED_SHOWS } 
-                movies={ AUTH_PROFILE.liked_shows } 
-                movieID={ movieID }
-            /> 
-        )
-    }
-
-    const handlePressTabAddToLIst_ = () => 
-    {
-        handlePressAddToMyList();
-
-        const hasAddedToList = AUTH_PROFILE.my_list.findIndex(({ id }) => id === movieID) !== -1;
-        const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
-        setTimeout(() => {
-            ToastAndroid.show(message, ToastAndroid.SHORT);
-        }, 100);
-    }
-
-
+    console.log(movieID);
+    
     return (
         <View style={ styles.tabsContainer }>
             <Tab value={ 0 } indicatorStyle={ styles.tabIndicator } disableIndicator={ true }>
                 <Tab.Item 
                     title='My List' 
-                    icon={ myListIcon() }
+                    icon={ <PlusIcon isLoading={ isLoadingAddToMyList } myList={ AUTH_PROFILE.my_list } movieID={ movieID } /> }
                     titleStyle={ styles.tabItemTitle  }
                     containerStyle={ styles.tabItemContainer }
-                    onPressIn={ handlePressTabAddToLIst_ }
+                    onPressIn={ handlePressAddToMyList }
                 />
                 <Tab.Item 
                     title='Like' 
-                    icon={ likeShowIcon() }
+                    icon={ <LikeIcon isLoading={ isLoadingLike } likedMovies={ AUTH_PROFILE.liked_shows } movieID={ movieID } /> }
                     titleStyle={ styles.tabItemTitle }
                     containerStyle={ styles.tabItemContainer }
                     onPressIn={ handlePressLike }
                 />
                 <Tab.Item 
                     title='Share' 
-                    icon={ 
-                        <TabIcon 
-                            actionName={ ACTION_TYPES.SHARE_SHOW }
-                            movieID={ movieID }
-                        /> 
+                    icon={ <ShareIcon /> 
                     }
                     titleStyle={ styles.tabItemTitle }
                     containerStyle={ styles.tabItemContainer }

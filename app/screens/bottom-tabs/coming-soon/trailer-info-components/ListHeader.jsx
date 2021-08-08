@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { ToastAndroid } from 'react-native'
 import View from './../../../../components/View';
 import VideoPlayer from './../../../../components/VideoPlayer';
 import ShowInfo from './ShowInfo';
@@ -6,12 +7,14 @@ import ActionButton from './../../home/movie-details-screen/ActionButton';
 import TrailerAndMoreLikeThisTab from './TrailerAndMoreLikeThisTab';
 import MoreLikeThis from './MoreLikeThis';
 import TrailersAndMore from './TrailersAndMore';
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import * as AUTH_ACTION from './../.././../../redux/modules/auth/actions'
 import { Divider } from 'react-native-elements';
 import styles from './../../../../assets/stylesheets/trailerInfo';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 
-const ListHeader = ({ comingSoonMovie }) => 
+const ListHeader = ({ AUTH_PROFILE, comingSoonMovie }) => 
 {
     const dispatch = useDispatch();
 
@@ -19,14 +22,26 @@ const ListHeader = ({ comingSoonMovie }) =>
     const [ isLoadingLikedShows, setIsLoadingLikedShows ] = useState(false);
     const [ selectedTabCategory, setSelectedTabCategory ] = useState(1);
 
-    const handlePressTabAddToLIst = () => 
+    const handlePressAddToMyList = () => 
     {
         setIsLoadingAddToMyList(true);
-        dispatch(AUTH_ACTION.toggleAddToMyListStart({ 
+
+        const payload = { 
             id: comingSoonMovie.id, 
             title: comingSoonMovie.title, 
-            poster: comingSoonMovie.poster 
-        }));
+            poster_path: comingSoonMovie.poster_path
+        };
+
+        dispatch(AUTH_ACTION.toggleAddToMyListStart(payload));
+
+        setTimeout(() => 
+        {
+            const movieExists = AUTH_PROFILE.my_list.find(({ id }) => id === comingSoonMovie.id);
+            const message = movieExists ? 'Removed from My List' : 'Added to My List';
+            
+            ToastAndroid.show(message, ToastAndroid.SHORT)
+        }, 100);
+
         setIsLoadingAddToMyList(false);
     }
 
@@ -59,11 +74,11 @@ const ListHeader = ({ comingSoonMovie }) =>
             <ShowInfo comingSoonMovie={ comingSoonMovie } />
 
             <ActionButton
-                selectedShowID={ comingSoonMovie.id }
+                movieID={ comingSoonMovie.id }
                 isLoadingAddToMyList={ isLoadingAddToMyList }
                 isLoadingLikedShows={ isLoadingLikedShows }
                 handlePressTabLikeShow={ handlePressTabLikeShow }
-                handlePressTabAddToLIst={ handlePressTabAddToLIst }
+                handlePressAddToMyList={ handlePressAddToMyList }
                 handlePressTabShare={ handlePressTabShare }
             />
 
@@ -88,4 +103,8 @@ const ListHeader = ({ comingSoonMovie }) =>
     )
 }
 
-export default ListHeader
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(ListHeader)

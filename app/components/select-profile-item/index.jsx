@@ -16,9 +16,9 @@ const style = StyleSheet.create({
 
 const DisplayProfile = ({ AUTH, profile, handlePressSelectProfile, index }) => 
 {
-    const isProfileCountMaxed = AUTH.profiles.length === index;
+    const isProfileCountMaxed = (AUTH.profiles.length + 1) !== (index + 1);
     
-    if (! isProfileCountMaxed) {
+    if (isProfileCountMaxed) {
         return (
             <SelectProfileItem 
                 item={ profile } 
@@ -28,7 +28,7 @@ const DisplayProfile = ({ AUTH, profile, handlePressSelectProfile, index }) =>
         )
     }
 
-    return (! isProfileCountMaxed) && <AddProfile />
+    return <AddProfile />
 }
 
 const mapStateToProps = createStructuredSelector({

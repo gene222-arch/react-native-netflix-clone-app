@@ -37,10 +37,8 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (show, message = '') => 
-    {
+    const handlePressToggleRemindMe = (show, message = '') => {
         dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, show }));
-
         message.length && setTimeout(() => ToastAndroid.show(message, ToastAndroid.SHORT), 100);
     }
 
@@ -48,6 +46,15 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
     const runAfterInteractions = () => 
     {
+        dispatch(COMING_SOON_ACTION.getComingSoonMoviesStart(notifications));
+
+        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
+            cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
+            cacheImage(poster_path, id, 'ComingSoon/Posters/');
+            cacheImage(wallpaper_path, id, 'ComingSoon/Wallpaper/');
+            cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
+        });
+
         ComingSoonMovieCreatedEvent.listen(response => {
             ToastAndroid.show(`${ response.data.title } is Coming Soon.`, ToastAndroid.SHORT);
             dispatch(COMING_SOON_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
@@ -56,15 +63,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         ComingSoonMovieReleasedEvent.listen(response => {
             ToastAndroid.show(`${ response.data.title } is Released.`, ToastAndroid.SHORT);
             dispatch(COMING_SOON_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-        });
-
-        dispatch(COMING_SOON_ACTION.getComingSoonMoviesStart(notifications));
-
-        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
-            cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
-            cacheImage(poster_path, id, 'ComingSoon/Posters/');
-            cacheImage(wallpaper_path, id, 'ComingSoon/Wallpaper/');
-            cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
         });
 
         setIsInteractionsComplete(true);

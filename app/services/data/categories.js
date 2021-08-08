@@ -6,27 +6,27 @@ const Categories = {
             id: 'movie1',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
+            poster_path: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
             id: 'movie2',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
+            poster_path: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
             id: 'movie3',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
             id: 'movie4',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
             id: 'movie5',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
+            poster_path: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category2',
@@ -35,27 +35,27 @@ const Categories = {
             id: 'movie6',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
+            poster_path: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
             id: 'movie7',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
+            poster_path: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
             id: 'movie8',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
             id: 'movie9',
             show_type: 'Anime',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
             id: 'movie10',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
+            poster_path: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category3',
@@ -64,27 +64,27 @@ const Categories = {
             id: 'movie11',
             show_type: 'Anime',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
+            poster_path: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
             id: 'movie12',
             show_type: 'Anime',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
+            poster_path: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
             id: 'movie13',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
             id: 'movie14',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
             id: 'movie15',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
+            poster_path: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category4',
@@ -93,27 +93,27 @@ const Categories = {
             id: 'movie16',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
+            poster_path: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
             id: 'movie17',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
+            poster_path: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
             id: 'movie18',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
             id: 'movie19',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
             id: 'movie20',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
+            poster_path: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }, {
         id: 'category5',
@@ -122,27 +122,27 @@ const Categories = {
             id: 'movie21',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
+            poster_path: 'https://static1.showtimes.com/poster/660x980/blood-water-netflix-145564.jpg',
         }, {
             id: 'movie22',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
+            poster_path: 'https://i.redd.it/wmcj8ml7wqh01.jpg',
         }, {
             id: 'movie23',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/9/9c/ImperialDreamsPoster.jpeg',
         }, {
             id: 'movie24',
             show_type: 'Movies',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
+            poster_path: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Sweet_Home_TV_series.jpg/250px-Sweet_Home_TV_series.jpg',
         }, {
             id: 'movie25',
             show_type: 'TV Shows',
             title: 'Pilot Part 1 & 2',
-            poster: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
+            poster_path: 'https://i.pinimg.com/564x/a6/14/83/a61483a9c7c29c5c3000b2fff37cc4ae.jpg',
         }]
     }]
 };

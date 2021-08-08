@@ -8,9 +8,9 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { InteractionManager } from 'react-native'
-import LoadingScreen from './../../../../components/LoadingScreen';
 import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
+import LoadingSpinner from './../../../../components/LoadingSpinner';
 
 
 const DEFAULT_PICKER_LIST = [
@@ -36,27 +36,25 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
     const handleChangePicker = (value, index) => setSelectedPicker(value);
 
     const runAfterInteractions = () => {
-        AUTH_PROFILE.my_list.map(({ id, poster }) => cacheImage(poster, id, `${ AUTH.credentials.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`))
+        AUTH_PROFILE.my_list.map(({ id, poster_path }) => {
+            cacheImage(poster_path, id, `${ AUTH.auth.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`)
+        })
         setIsInteractionsComplete(true);
-    }
-
-    const cleanUp = () => {
-        setIsInteractionsComplete(false);
-        setSelectedPicker('My List');
-        setShow(null);
-        setShouldDisplayShowInfo(false);
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            cleanUp();
+            setIsInteractionsComplete(false);
+            setSelectedPicker('My List');
+            setShow(null);
+            setShouldDisplayShowInfo(false);
         }
     }, []);
 
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
+    if (! isInteractionsComplete) {
+        return <LoadingSpinner />
     }
 
     return (
@@ -83,11 +81,11 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
             }
             </Picker>
             <FlatList
-                keyExtractor={ ({ id }) => id.toString() }
+                keyExtractor={ (item, index) => index.toString() }
                 data={ AUTH_PROFILE.my_list }
                 renderItem={ ({ item }) => (
                     <MyListItem 
-                        uri={ getCachedFile(`${ AUTH.credentials.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`, item.id, item.poster) }
+                        uri={ getCachedFile(`${ AUTH.auth.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`, item.id, item.poster_path) }
                         handlePressDisplayShowInfo={ () => handlePressDisplayShowInfo(item) }
                     />
                 )}

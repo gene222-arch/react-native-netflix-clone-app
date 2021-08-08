@@ -5,7 +5,7 @@ import styles from './../assets/stylesheets/videoPlayer';
 import View from './View';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-const VideoPlayer = ({ videoPath = '', posterPath = '', shouldPlay = true, shouldShowPoster = false }) => 
+const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, shouldShowPoster = false }) => 
 {
     const video = useRef(null)
     const [ status, setStatus ] = useState({});

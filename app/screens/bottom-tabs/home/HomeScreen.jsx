@@ -1,34 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, ToastAndroid } from 'react-native';
-import { createStructuredSelector } from 'reselect';
-import { connect, useDispatch } from 'react-redux';
+import { FlatList } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-
-/** Selectors */
-import { authProfileSelector } from './../../../redux/modules/auth/selectors';
-
-/** Actions */
-import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
-
-/** API */
 import categories_ from './../../../services/data/categories';
 import frontPageShows from './../../../services/data/frontPageShows';
-
-/** Components */
 import View from './../../../components/View';
 import HomeCategory from '../../../components/home-category/HomeCategory';
-import LoadingScreen from './../../../components/LoadingScreen';
-
-/** Styles */
 import styles from './../../../assets/stylesheets/homeScreen';
-
-/** Utils */
 import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import NavBar from './home-components/NavBar';
 import FrontPageOptions from './home-components/FrontPageOptions';
 import ContinueWatchingFor from './home-components/ContinueWatchingFor';
-import Info from './../../../components/continue-watching-for-item/Info';
+import LoadingSpinner from './../../../components/LoadingSpinner';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -41,42 +24,27 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-const HomeScreen = ({ AUTH_PROFILE }) => 
+const HomeScreen = () => 
 {
-    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ categories, setCategories ] = useState([]);    
-    const [ showFrontPageInfo, setShowFrontPageInfo ] = useState(false);
-
-    const handleClickShowInfo = () => setShowFrontPageInfo(!showFrontPageInfo);
-
-    const handleToggleAddToMyList = (message) => {
-        dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
-        ToastAndroid.show(message, ToastAndroid.SHORT);
-    }
 
     const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
 
-    const cacheImages = () => 
-    {
-        /** Cache Categories */
-        categories_.items.map(({ movies }) => {
-            movies.map(({ id, poster }) => cacheImage(poster, id, 'Categories/'))
-        });
-
-        /** Cache Front Page */
-        frontPageShows.map(({ id, poster, backgroundImage }) => {
-            cacheImage(poster, id, 'FrontPages/');
-            cacheImage(backgroundImage, id, 'FrontPages/');
-        });
-    }
-
     const runAfterInteractions = () => 
     {
-        cacheImages();
+        categories_.items.map(({ movies }) => {
+            movies.map(({ id, poster_path }) => cacheImage(poster_path, id, 'Categories/'))
+        });
+
+        frontPageShows.map(({ id, poster_path, backgroundImage }) => {
+            cacheImage(poster_path, id, 'FrontPages/');
+            cacheImage(backgroundImage, id, 'FrontPages/');
+        });
+
         setCategories(categories_);
         setFrontPage(frontPageShows[0]);
         setIsInteractionsComplete(true);
@@ -89,49 +57,40 @@ const HomeScreen = ({ AUTH_PROFILE }) =>
             setCategories([]);
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
-            setShowFrontPageInfo(false);
         }
     }, []);
 
 
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
+    if (! isInteractionsComplete) {
+        return <LoadingSpinner />
     }
 
     return (
         <View style={ styles.container }>
-            <Info selectedShow={ frontPage } isVisible={ showFrontPageInfo } setIsVisible={ setShowFrontPageInfo } />
             <FlatList 
                 data={ categories.items }
-                renderItem={({ item }) => <HomeCategory title={ item.title } categories={ item.movies } />}
-                ListHeaderComponent={
-                    <>
-                        <ImageBackground
-                            source={{  uri: getCachedFile('FrontPages/', frontPage.id, frontPage.backgroundImage) }}
-                            style={ styles.homeFrontPage }
-                        >
-                            {/* NavBar */}
-                            <NavBar handlePressCategory={ handlePressCategory } />
 
-                            {/* Front Page Options */}
-                            <FrontPageOptions 
-                                frontPage={ frontPage } 
-                                handleToggleAddToMyList={ handleToggleAddToMyList }
-                                handleClickShowInfo={ handleClickShowInfo }
-                            />
+                renderItem={({ item }) => (
+                    <HomeCategory 
+                        title={ item.title } 
+                        categories={ item.movies } 
+                    />
+                )}
+
+                ListHeaderComponent={
+                    <View>
+                         <ImageBackground source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.wallpaper_path) }}
+                            style={ styles.homeFrontPage }>
+                            <NavBar handlePressCategory={ handlePressCategory } />
+                            <FrontPageOptions frontPage={ frontPage } />
                         </ImageBackground>   
 
-                        {/* Continue Watching For */}
                         <ContinueWatchingFor />
-                    </>             
+                    </View>          
                 }
             />
         </View>
     )
 }
 
-const mapStateToProps = createStructuredSelector({
-    AUTH_PROFILE: authProfileSelector
-});
-
-export default connect(mapStateToProps)(HomeScreen)
+export default HomeScreen

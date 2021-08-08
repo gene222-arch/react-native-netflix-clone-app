@@ -156,12 +156,13 @@ function* selectProfileSaga(payload)
 
 /**
  * Todo: Test API Request to Server
+ * !Problem: Duplication of id with Movies and Coming Soon Movies
  */
 function* toggleAddToMyListSaga(payload)
 {
     try {
         yield put(ACTION.toggleAddToMyListSuccess({ show: payload }));
-        yield call(AUTH_API.toggleMyListAsync, payload);
+        // yield call(AUTH_API.toggleMyListAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.toggleAddToMyListFailed({ message }));
     }
@@ -181,10 +182,6 @@ function* toggleRemindMeOfComingShowSaga(payload)
     }
 }
 
-/**
- * Todo: Test API Request to Server
- * * Tested
- */
 function* updateAuthenticatedProfileSaga(payload)
 {
     try {

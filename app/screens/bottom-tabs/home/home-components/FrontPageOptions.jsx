@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { TouchableOpacity } from 'react-native'
+import React, { useState, useEffect, useMemo } from 'react'
+import { TouchableOpacity, ToastAndroid } from 'react-native'
 import { Button } from 'react-native-elements'
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';
@@ -10,40 +10,75 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
+import Info from './../../../../components/continue-watching-for-item/Info';
 
+const DEFAULT_FRONT_PAGE_MOVIE = {
+    id: '',
+    category: '',
+    title: '',
+    wallpaper_path: null,
+    poster_path: null,
+    genres: '',
+    plot: '',
+    trailer_video_path: null
+};
 
-const FrontPageOptions = ({ AUTH_PROFILE, frontPage, handleToggleAddToMyList, handleClickShowInfo }) => 
+const Genre = ({ genres }) => 
 {
-    const handleToggleAddToMyList_ = () => 
-    {
-        const hasAddedToList = AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id);
+    return (
+        genres.map((genre, index) => (
+            <Text key={ index } style={ styles.tagItem }>
+                { (genres.length - 1) !== index ? `${ genre }  · ` : genre }
+            </Text>
+        ))
+    )
+}
 
-        const message = hasAddedToList ? 'Removed from My List' : 'Added to My List';
-        handleToggleAddToMyList(message);
+const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }) => 
+{
+    const dispatch = useDispatch();
+
+    const [ showMovieInfo, setShowMovieInfo ] = useState(false);
+    const genres = useMemo(() => frontPage.genres.split(','), [ frontPage.genres ]);
+
+
+    const handleToggleAddToMyList = () => 
+    {
+        dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
+
+        const movieExists = AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id);
+        const message = movieExists ? 'Removed from My List' : 'Added to My List';
+
+        ToastAndroid.show(message, ToastAndroid.SHORT);
     }
+
+    useEffect(() => {
+        return () => {
+            setShowMovieInfo(false);
+        }
+    }, []);
 
     return (
         <View style={ styles.frontPageOptions }>
+            <Info 
+                selectedShow={ frontPage } 
+                isVisible={ showMovieInfo } 
+                setIsVisible={ setShowMovieInfo } 
+            />
+
             <Image 
-                source={{ 
-                    uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster) }}
+                source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster_path) }}
                 style={ styles.homeFrontPageShowLogo }
             />
+
             <View style={ styles.tagsContainer }>
-            {
-                frontPage.tags.map((name, index) => (
-                    <Text 
-                        key={ index }
-                        style={ styles.tagItem }
-                    >
-                        { (frontPage.tags.length - 1) !== index ? `${ name }  · ` : name }
-                    </Text>
-                ))
-            }
+                <Genre genres={ genres } />
             </View>
+
             <View style={ styles.actionBtnsContainer }>
-                <TouchableOpacity onPress={ handleToggleAddToMyList_ }>
+                <TouchableOpacity onPress={ handleToggleAddToMyList }>
                     <View style={ styles.myListInfoActionContainer }>
                         <FeatherIcon 
                             name={ AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
@@ -68,7 +103,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage, handleToggleAddToMyList, ha
                     titleStyle={ styles.playBtnTitle }
                 />
                 <View style={ styles.myListInfoActionContainer }>
-                    <TouchableOpacity onPress={ handleClickShowInfo }>
+                    <TouchableOpacity onPress={ () => setShowMovieInfo(!showMovieInfo) }>
                         <FeatherIcon 
                             name='info'
                             size={ 24 }
