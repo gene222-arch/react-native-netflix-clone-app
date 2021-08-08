@@ -14,39 +14,42 @@ import { cacheImage } from '../../../../utils/cacheImage';
 const ContinueWatchingFor = ({ AUTH_PROFILE }) => 
 {
     const dispatch  = useDispatch();
-    
-    const handleToggleRateRecentlyWatchedShow = (show, rate) => dispatch(AUTH_ACTION.rateShowStart({ show, rate }));
+    const recentlyWatchedMovies = AUTH_PROFILE.recently_watched_shows;
 
-    const handlePressRemoveRecentlyWatchedShow = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart(id));
+    const handleToggleLike = (show) => dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ show, rate: 'like' }));
+
+    const handleToggleDisLike = (show) => dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ show, rate: 'not for me' }));
+
+    const handlePressRemove = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart(id));
 
     useEffect(() => {
-        AUTH_PROFILE.recently_watched_shows.map(({ id, poster, video }) => {
-            cacheImage(poster, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`);
-            cacheImage(video, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`);
+        recentlyWatchedMovies.map(({ id, poster_path, video_path }) => {
+            cacheImage(poster_path, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`);
+            cacheImage(video_path, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`);
         });
-
     }, []);
 
 
-    if (! (AUTH_PROFILE.recently_watched_shows.length) ) {
+    if (! recentlyWatchedMovies.length) {
         return <Text h4>Your recently watched show's will be shown here.</Text>
     }
 
     return (
         <View style={ styles.container }>
             <Text h4>Continue Watching For { AUTH_PROFILE.name }</Text>
+
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ AUTH_PROFILE.recently_watched_shows }
+                data={ recentlyWatchedMovies }
+                horizontal
                 renderItem={({ item }) =>  (
                     <ContinueWatchingForItem 
                         movie={ item } 
-                        handleToggleLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item, 'like') }
-                        handleToggleUnLikeRecentlyWatchedShow={ () => handleToggleRateRecentlyWatchedShow(item, 'not for me') }
-                        handlePressRemoveRecentlyWatchedShow={ () => handlePressRemoveRecentlyWatchedShow(item.id) }
+                        handleToggleLike={ () => handleToggleLike(item) }
+                        handleToggleDisLike={ () => handleToggleDisLike(item) }
+                        handlePressRemove={ () => handlePressRemove(item.id) }
                     />
                 )}
-                horizontal
             />    
         </View>
     );

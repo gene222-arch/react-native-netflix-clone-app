@@ -10,10 +10,11 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     CREATE_PROFILE_START,
     DELETE_PROFILE_START,
-    RATE_SHOW_START,
+    DOWNLOAD_VIDEO_START,
     LOGIN_START,
     LOGOUT_START,
-    DOWNLOAD_VIDEO_START,
+    RATE_SHOW_START,
+    RATE_RECENTLY_WATCHED_MOVIE_START,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
@@ -34,14 +35,11 @@ function* addToRecentWatchesSaga(payload)
     }
 }
 
-/**
- * Todo: Test API
- * * Tested
- */
 function* createProfileSaga(payload)  
 {
     try {
         const { data: profile } = yield call(AUTH_API.createProfileAsync, payload);
+
         yield put(ACTION.createProfileSuccess({ profile }));
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
@@ -49,16 +47,12 @@ function* createProfileSaga(payload)
     }
 }
 
-/**
- * Todo: Test API
- * * Tested
- */
 function* deleteProfileSaga(payload)  
 {
     try {
         yield put(ACTION.deleteProfileSuccess({ profileID: payload }));
-        yield call(AUTH_API.deleteProfileByIdAsync, payload);
 
+        yield call(AUTH_API.deleteProfileByIdAsync, payload);
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.deleteProfileFailed({ message }));
@@ -66,7 +60,7 @@ function* deleteProfileSaga(payload)
 }
 
 /**
- * Todo: Test API
+ * Todo: Test API Request to Server
  */
 function* rateShowSaga(payload)  
 {
@@ -75,6 +69,19 @@ function* rateShowSaga(payload)
         // yield put(ACTION.AUTH_API.rateMovieAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.rateShowFailed({ message }));
+    }
+}
+
+/**
+ * Todo: Test API Request to Server
+ */
+function* rateRecentlyWatchedMovieSaga(payload)  
+{
+    try {
+        yield put(ACTION.rateRecentlyWatchedMovieSuccess(payload));
+        // yield put(ACTION.AUTH_API.rateMovieAsync, payload);
+    } catch ({ message }) {
+        yield put(ACTION.rateRecentlyWatchedMovieFailed({ message }));
     }
 }
 
@@ -92,9 +99,6 @@ function* loginSaga(payload)
     }
 }
 
-/**
- * Todo: Error still occurs
- */
 function* logoutSaga()  
 {
     try {
@@ -148,7 +152,7 @@ function* selectProfileSaga(payload)
 }
 
 /**
- * Todo: Test API
+ * Todo: Test API Request to Server
  */
 function* toggleAddToMyListSaga(payload)
 {
@@ -161,7 +165,7 @@ function* toggleAddToMyListSaga(payload)
 }
 
 /**
- * Todo: Test API
+ * Todo: Test API Request to Server
  */
 function* toggleRemindMeOfComingShowSaga(payload)
 {
@@ -174,7 +178,7 @@ function* toggleRemindMeOfComingShowSaga(payload)
 }
 
 /**
- * Todo: Test API
+ * Todo: Test API Request to Server
  * * Tested
  */
 function* updateAuthenticatedProfileSaga(payload)
@@ -222,11 +226,11 @@ function* deleteProfileWatcher()
     }
 }
 
-function* rateShowWatcher()
+function* downloadVideoWatcher()
 {
     while (true) {
-        const { payload } = yield take(RATE_SHOW_START);
-        yield call(rateShowSaga, payload);
+        const { payload } = yield take(DOWNLOAD_VIDEO_START);
+        yield call(downloadVideoSaga, payload);
     }
 }
 
@@ -246,13 +250,22 @@ function* logoutWatcher()
     }
 }
 
-function* downloadVideoWatcher()
+function* rateShowWatcher()
 {
     while (true) {
-        const { payload } = yield take(DOWNLOAD_VIDEO_START);
-        yield call(downloadVideoSaga, payload);
+        const { payload } = yield take(RATE_SHOW_START);
+        yield call(rateShowSaga, payload);
     }
 }
+
+function* rateRecentlyWatchedMovieWatcher()
+{
+    while (true) {
+        const { payload } = yield take(RATE_RECENTLY_WATCHED_MOVIE_START);
+        yield call(rateRecentlyWatchedMovieSaga, payload);
+    }
+}
+
 
 function* removeToMyDownloadsWatcher()
 {
@@ -318,10 +331,11 @@ export default function* ()
         addToRecentWatchesWatcher(),
         createProfileWatcher(),
         deleteProfileWatcher(),
-        rateShowWatcher(),
+        downloadVideoWatcher(),
         loginWatcher(),
         logoutWatcher(),
-        downloadVideoWatcher(),
+        rateShowWatcher(),
+        rateRecentlyWatchedMovieWatcher(),
         removeToMyDownloadsWatcher(),
         removeToRecentWatchesWatcher(),
         selectProfileWatcher(),

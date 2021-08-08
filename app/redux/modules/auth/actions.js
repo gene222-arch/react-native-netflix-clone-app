@@ -22,6 +22,9 @@ const {
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
+    RATE_RECENTLY_WATCHED_MOVIE_START,
+    RATE_RECENTLY_WATCHED_MOVIE_SUCCESS,
+    RATE_RECENTLY_WATCHED_MOVIE_FAILED,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_MY_DOWNLOADS_SUCCESS,
     REMOVE_TO_MY_DOWNLOADS_FAILED,
@@ -143,6 +146,39 @@ export const logoutFailed = (payload) => ({
     payload
 });
 
+
+/** Rate show */
+export const rateShowStart = (payload) => ({
+    type: RATE_SHOW_START,
+    payload
+});
+
+export const rateShowSuccess = (payload) => ({
+    type: RATE_SHOW_SUCCESS,
+    payload
+});
+
+export const rateShowFailed = (payload) => ({
+    type: RATE_SHOW_FAILED,
+    payload
+});
+
+/** Rate Recently Watched Movie */
+export const rateRecentlyWatchedMovieStart = (payload) => ({
+    type: RATE_RECENTLY_WATCHED_MOVIE_START,
+    payload
+});
+
+export const rateRecentlyWatchedMovieSuccess = (payload) => ({
+    type: RATE_RECENTLY_WATCHED_MOVIE_SUCCESS,
+    payload
+});
+
+export const rateRecentlyWatchedMovieFailed = (payload) => ({
+    type: RATE_RECENTLY_WATCHED_MOVIE_FAILED,
+    payload
+});
+
 /** Remove to my downloads */
 export const removeToMyDownloadsStart = (payload) => ({
     type: REMOVE_TO_MY_DOWNLOADS_START,
@@ -191,23 +227,6 @@ export const selectProfileFailed = (payload) => ({
     type: SELECT_PROFILE_FAILED,
     payload
 });
-
-/** Rate show */
-export const rateShowStart = (payload) => ({
-    type: RATE_SHOW_START,
-    payload
-});
-
-export const rateShowSuccess = (payload) => ({
-    type: RATE_SHOW_SUCCESS,
-    payload
-});
-
-export const rateShowFailed = (payload) => ({
-    type: RATE_SHOW_FAILED,
-    payload
-});
-
 
 /** Remind me of coming soon show */
 export const toggleRemindMeOfComingShowStart = (payload) => ({

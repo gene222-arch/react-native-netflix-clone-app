@@ -1,43 +1,23 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { useNavigation } from '@react-navigation/native';
+import { BottomSheet, Overlay } from 'react-native-elements';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import * as FileSystem from 'expo-file-system'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { connect, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { TouchableOpacity, ToastAndroid } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-
-/** Dispatch Actions */
+import * as FileSystem from 'expo-file-system'
 import * as AUTH_ACTION from './../../redux/modules/auth/actions'
-
-/** Selectors */
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
-
-/** Styles */
 import styles from './../../assets/stylesheets/moreActionList';
-
-/** Components */
 import DisplayAction from './DisplayAction';
-
-/** RNE Components */
-import { BottomSheet, Overlay } from 'react-native-elements';
-
-/** Utils/Configs */
 import VIDEO_STATUSES from './../../config/video.statuses';
 import View from './../View';
 import Text from './../Text';
-import { useNavigation } from '@react-navigation/native';
 
 
-const MoreActionList = ({
-    AUTH_PROFILE,
-    selectedVideo,
-    handlePressRemoveRecentlyWatchedShow,
-    handleToggleLikeRecentlyWatchedShow,
-    handleToggleUnLikeRecentlyWatchedShow,
-    isVisible,
-    setIsVisible
-}) => 
+const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, isVisible, setIsVisible }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -50,11 +30,6 @@ const MoreActionList = ({
     const FILE_URI = useMemo(() => {
         return `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
     }, [selectedVideo]);
-
-    const ratedShow = useMemo(() => {
-        return AUTH_PROFILE.recently_watched_shows.find(({ id }) => id === selectedVideo.id);
-    }, [selectedVideo]);
-
     
     const actionList = 
     [
@@ -111,26 +86,26 @@ const MoreActionList = ({
             show: true,
         },
         { 
-            title: !ratedShow?.rate ? 'Like' : 'Rated', 
+            title: (! selectedVideo?.rate) ? 'Like' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
-            isSolid: ratedShow?.rate === 'like',
-            onPress: handleToggleLikeRecentlyWatchedShow,
-            show: !ratedShow?.rate || ratedShow?.rate === 'like',
+            isSolid: selectedVideo?.rate === 'like',
+            onPress: () => handleToggleLike(),
+            show: (! selectedVideo?.rate) || selectedVideo?.rate === 'like',
         },
         { 
-            title: !ratedShow?.rate ? 'Not For Me' : 'Rated', 
+            title: (! selectedVideo?.rate) ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
-            isSolid: ratedShow?.rate === 'not for me',
-            onPress: handleToggleUnLikeRecentlyWatchedShow,
-            show: !ratedShow?.rate || ratedShow?.rate === 'not for me',
+            isSolid: selectedVideo?.rate === 'not for me',
+            onPress: () => handleToggleDisLike(),
+            show: (! selectedVideo?.rate) || selectedVideo?.rate === 'not for me',
         },
         {
             title: 'Remove From Row',
             iconType: 'font-awesome-5',
             iconName: 'ban',
-            onPress: handlePressRemoveRecentlyWatchedShow,
+            onPress: () => handlePressRemove(),
             show: true,
         },
     ];
@@ -178,7 +153,7 @@ const MoreActionList = ({
         try {
             await downloadResumable.pauseAsync();
 
-            AsyncStorage.setItem(selectedVideo.video, JSON.stringify(downloadResumable.savable()));
+            AsyncStorage.setItem(selectedVideo.video_path, JSON.stringify(downloadResumable.savable()));
 
             setStatus(VIDEO_STATUSES.PAUSED);
 
@@ -198,7 +173,7 @@ const MoreActionList = ({
     const resumeDownload = async () => 
     {
         try {
-            const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video);
+            const downloadSnapshotJson = await AsyncStorage.getItem(selectedVideo.video_path);
             const { url, fileUri, options, resumeData } = JSON.parse(downloadSnapshotJson);
 
             const previousDownloadedFile = new FileSystem.DownloadResumable(url, fileUri, options, downloadProgressCallback, resumeData);
@@ -229,8 +204,8 @@ const MoreActionList = ({
     }
 
     useEffect(() => {
-        if (!downloadResumable) {
-            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video, FILE_URI, {}, downloadProgressCallback));
+        if (! downloadResumable) {
+            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
         }
 
         return () => {

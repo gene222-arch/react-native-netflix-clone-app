@@ -23,6 +23,9 @@ const {
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
+    RATE_RECENTLY_WATCHED_MOVIE_START,
+    RATE_RECENTLY_WATCHED_MOVIE_SUCCESS,
+    RATE_RECENTLY_WATCHED_MOVIE_FAILED,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_MY_DOWNLOADS_SUCCESS,
     REMOVE_TO_MY_DOWNLOADS_FAILED,
@@ -48,16 +51,14 @@ const {
 } = ACTION_TYPES;
 
 
-const CREDENTIALS_DEFAULT_PROPS = 
-{
+const CREDENTIALS_DEFAULT_PROPS = {
     id: '',
     email: '',
     password: '',
     remember_me: false
 };
 
-const PROFILE_DEFAULT_PROPS = 
-{
+const PROFILE_DEFAULT_PROPS = {
     id: '',
     name: '',
     email: '',
@@ -78,13 +79,12 @@ const DEFAULT_ERROR_MESSAGE_PROPS = {
     avatar: '',
 }
 
-const initialState = 
-{
-    isAuthenticated: false,
+const initialState = {
     auth: null,
     credentials: CREDENTIALS_DEFAULT_PROPS,
-    profiles: [],
     profile: PROFILE_DEFAULT_PROPS,
+    profiles: [],
+    isAuthenticated: false,
     isLoading: false,
     errors: DEFAULT_ERROR_MESSAGE_PROPS
 }
@@ -93,11 +93,10 @@ export default (state = initialState, { type, payload }) =>
 {
     const { profiles, profile } = state;
 
-    const SELECT_AUTHENTICATED_PROFILE = profiles.find(({ id }) => id === profile.id);
-    
     const isLoading = false;
     const errors = DEFAULT_ERROR_MESSAGE_PROPS;
-    let NEW_PROFILES = [];
+    const loggedInProfile = profiles.find(({ id }) => id === profile.id);
+    let newProfiles = [];
 
     switch (type) 
     {
@@ -108,6 +107,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGIN_START:
         case LOGOUT_START:
         case RATE_SHOW_START:
+        case RATE_RECENTLY_WATCHED_MOVIE_START:
         case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
@@ -123,27 +123,22 @@ export default (state = initialState, { type, payload }) =>
 
         case ADD_TO_RECENT_WATCHES_SUCCESS:
 
-            const findShowIndex = SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.find(({ id }) => id === payload.show.id);
+            const recentlyWatchedMovieExists = loggedInProfile.recently_watched_shows.find(({ id }) => id === payload.show.id);
 
-            /** The show already exists, remove and prepend it */
-            if (findShowIndex) {
-                SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.splice(findShowIndex, 1);
-                SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.unshift(payload.show);
+            if (! recentlyWatchedMovieExists) {
+                loggedInProfile.recently_watched_shows.push(payload.show);
             }
-            else {
-                SELECT_AUTHENTICATED_PROFILE.recently_watched_shows.push(payload.show);
+            
+            if (recentlyWatchedMovieExists) {
+                loggedInProfile.recently_watched_shows.splice(recentlyWatchedMovieExists, 1);
+                loggedInProfile.recently_watched_shows.unshift(payload.show);
             }
 
-            /** Update profiles */
-            NEW_PROFILES = profiles.map((prof) => 
-                (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
-                ? SELECT_AUTHENTICATED_PROFILE 
-                : prof
-            );
+            newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? loggedInProfile : prof);
 
             return { 
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
@@ -175,21 +170,47 @@ export default (state = initialState, { type, payload }) =>
             /** Update auth profile liked shows */
             let newLikedShows = [];
             
-            let hasLikedShow = SELECT_AUTHENTICATED_PROFILE.liked_shows.findIndex(({ id }) => id === payload.show.id);
+            let isMovieLiked = loggedInProfile.liked_shows.find(({ id }) => id === payload.show.id);
 
-            if (hasLikedShow !== -1) {
-                newLikedShows = SELECT_AUTHENTICATED_PROFILE.liked_shows.filter(({ id }) => id !== payload.show.id);
-            }
-            else {
+            if (isMovieLiked) {
                 newLikedShows.push(payload.show);
             }
 
-            /** Update auth profile recently watched shows shows */
-            let recentlyWatchedShows_ = SELECT_AUTHENTICATED_PROFILE
-                .recently_watched_shows.map((show) => {
+            if (! isMovieLiked) {
+                newLikedShows = loggedInProfile.liked_shows.filter(({ id }) => id !== payload.show.id);
+            }
+
+            newProfiles = profiles.map(prof => {
+                return (prof.id === loggedInProfile.id) 
+                    ? { ...prof, liked_shows: newLikedShows } 
+                    : prof;
+            });
+
+            return { 
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
+        case RATE_RECENTLY_WATCHED_MOVIE_SUCCESS:
+            let newLikedShows_ = [];
+            
+            let isMovieLiked_ = loggedInProfile.liked_shows.find(({ id }) => id === payload.show.id);
+
+            if (isMovieLiked_) {
+                newLikedShows_.push(payload.show);
+            }
+
+            if (! isMovieLiked) {
+                newLikedShows_ = loggedInProfile.liked_shows.filter(({ id }) => id !== payload.show.id);
+            }
+
+            let recentlyWatchedMovies = loggedInProfile
+                .recently_watched_shows.map(show => {
                     if (show.id === payload.show.id) 
                     {
-                        if (!show.isRated) {
+                        if (! show.isRated) {
                             return { ...show, isRated: true, rate: payload.rate };
                         }
         
@@ -204,25 +225,25 @@ export default (state = initialState, { type, payload }) =>
                     return show;
                 });
 
-            /** Update profiles */
-            NEW_PROFILES = profiles.map((prof) => {
-                return (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
-                    ? { ...prof, recently_watched_shows: recentlyWatchedShows_, liked_shows: newLikedShows } 
+            newProfiles = profiles.map(prof => {
+                return (prof.id === loggedInProfile.id) 
+                    ? { ...prof, recently_watched_shows: recentlyWatchedMovies, liked_shows: newLikedShows_ } 
                     : prof;
             });
 
             return { 
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
+
 
         case LOGIN_SUCCESS:
             return { 
                 ...state, 
                 auth: payload.auth,
-                profiles: payload.profiles.map(profile => ({ ...PROFILE_DEFAULT_PROPS, ...profile,  })),
+                profiles: payload.profiles.map(profile => ({ ...PROFILE_DEFAULT_PROPS, ...profile })),
                 isAuthenticated: true,
                 isLoading,
                 errors
@@ -256,11 +277,14 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case DOWNLOAD_VIDEO_SUCCESS:
-
-            const updateProfileDownloads = profiles.map(({ id, my_downloads, ...profileInfo }) => {
-                return (id === payload.profile.id)
-                    ? { id, ...profileInfo, my_downloads: [ ...my_downloads, payload.show ], has_new_downloads: true }
-                    : { id, my_downloads, ...profileInfo }
+            const updateProfileDownloads = profiles.map(prof => {
+                return (prof.id === payload.profile.id)
+                    ? { 
+                        ...prof, 
+                        my_downloads: [ ...prof.my_downloads, payload.show ], 
+                        has_new_downloads: true 
+                    }
+                    : prof
             });
 
             return {
@@ -271,40 +295,38 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case REMOVE_TO_MY_DOWNLOADS_SUCCESS: 
-            let filteredMyDownloads = SELECT_AUTHENTICATED_PROFILE
+            let filteredMyDownloads = loggedInProfile
                 .my_downloads
                 .filter(({ id }) => id !== payload.showID);
 
-            /** Update profiles */
-            NEW_PROFILES = profiles.map((prof) => {
-                return (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
+            newProfiles = profiles.map(prof => {
+                return (prof.id === loggedInProfile.id) 
                     ? { ...prof, my_downloads: filteredMyDownloads } 
                     : prof;
             });
 
             return {
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
 
         case REMOVE_TO_RECENT_WATCHES_SUCCESS:
 
-            let filteredRecentlyWatchedShows = SELECT_AUTHENTICATED_PROFILE
+            const filteredRecentlyWatchedMovies = loggedInProfile
                 .recently_watched_shows
                 .filter(({ id }) => id !== payload.showID);
 
-            /** Update profiles */
-            NEW_PROFILES = profiles.map((prof) => {
+            newProfiles = profiles.map(prof => {
                 return (prof.id === profile.id) 
-                    ? { ...prof, recently_watched_shows: filteredRecentlyWatchedShows } 
+                    ? { ...prof, recently_watched_shows: filteredRecentlyWatchedMovies } 
                     : prof;
             });
 
             return { 
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
@@ -319,63 +341,63 @@ export default (state = initialState, { type, payload }) =>
 
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
-            const currentMyList = SELECT_AUTHENTICATED_PROFILE.my_list;
+            const currentMyList = loggedInProfile.my_list;
             const isAddedToList = currentMyList.find(({ id }) => id === payload.show.id); 
 
-            const myList = !isAddedToList 
+            const myList = (! isAddedToList) 
                 ? [ ...currentMyList, payload.show ] 
                 : currentMyList.filter(({ id }) => id !== payload.show.id);
 
-            NEW_PROFILES = profiles.map((prof) => {
-                return (prof.id === SELECT_AUTHENTICATED_PROFILE.id) 
+            newProfiles = profiles.map((prof) => {
+                return (prof.id === loggedInProfile.id) 
                     ? { ...prof, my_list: myList } 
                     : prof;
             });
         
             return {
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }            
 
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
             
-            let authProfileRemindedShows = SELECT_AUTHENTICATED_PROFILE.reminded_coming_soon_shows;
+            let remindedMovies = loggedInProfile.reminded_coming_soon_shows;
 
-            if (authProfileRemindedShows.length) 
+            if (! remindedMovies) {
+                remindedMovies.push(payload.show);
+            }
+
+            if (remindedMovies.length) 
             {
-                const indexOfShow = authProfileRemindedShows.findIndex(({ id }) => id === payload.show.id); 
+                const movieIndexLoc = remindedMovies.findIndex(({ id }) => id === payload.show.id); 
                 
-                for (let index = 0; index < authProfileRemindedShows.length; index++) 
+                for (let index = 0; index < remindedMovies.length; index++) 
                 {
-                    if (indexOfShow === -1) {
-                        authProfileRemindedShows.push(payload.show);
+                    if (movieIndexLoc === -1) {
+                        remindedMovies.push(payload.show);
                     } else {
-                        authProfileRemindedShows.splice(indexOfShow, 1);
+                        remindedMovies.splice(movieIndexLoc, 1);
                     }
                 }
             }
-            else {
-                authProfileRemindedShows.push(payload.show);
-            }
 
-            NEW_PROFILES = profiles.map((prof) => {
+            newProfiles = profiles.map(prof => {
                 return (prof.id === profile.id) 
-                    ? { ...prof, reminded_coming_soon_shows: authProfileRemindedShows } 
+                    ? { ...prof, reminded_coming_soon_shows: remindedMovies } 
                     : prof;
             });
 
             return {
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
 
         case UPDATE_AUTHENTICATED_PROFILE_SUCCESS: 
-
-            NEW_PROFILES = profiles.map(prevProfile => {
+            newProfiles = profiles.map(prevProfile => {
                 return prevProfile.id === payload.profile.id 
                     ? { ...prevProfile, ...payload.profile }
                     : prevProfile
@@ -383,26 +405,20 @@ export default (state = initialState, { type, payload }) =>
 
             return {
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
 
         case VIEW_DOWNLOADS_SUCCESS: 
-
-            NEW_PROFILES = profiles.map((prof) => {
-                return (prof.id === profile.id) 
-                    ? { ...prof, has_new_downloads: false } 
-                    : prof;
-            });
+            newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? { ...prof, has_new_downloads: false } : prof);
 
             return {
                 ...state,
-                profiles: NEW_PROFILES,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
-
 
         case CLEAR_ERRORS_PROPERTY:
             return {
@@ -416,6 +432,7 @@ export default (state = initialState, { type, payload }) =>
         case DOWNLOAD_VIDEO_FAILED:
         case SELECT_PROFILE_FAILED:
         case RATE_SHOW_FAILED:
+        case RATE_RECENTLY_WATCHED_MOVIE_FAILED:
         case REMOVE_TO_MY_DOWNLOADS_FAILED:
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:

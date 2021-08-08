@@ -14,33 +14,25 @@ import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
 
-const ContinueWatchingForItem = ({ 
-    AUTH_PROFILE,
-    movie,
-    handleToggleLikeRecentlyWatchedShow,
-    handleToggleUnLikeRecentlyWatchedShow, 
-    handlePressRemoveRecentlyWatchedShow 
-}) => 
+const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
     const videoRef = useRef(null)
-
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
 
-    const handlePressPlayVideo = () => setShouldPlayVideo(!shouldPlayVideo);
+    const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
-    const handlePressShowInfo = () => setShowInfo(!showInfo);
+    const handlePressShowInfo = () => setShowInfo(! showInfo);
 
-    const handlePressShowMoreOptions = () => setShowMoreOptions(!showMoreOptions);
+    const handlePressPlayVideo = () => setShouldPlayVideo(! shouldPlayVideo);
 
     useEffect(() => {
         return () => {
+            videoRef = null;
             setShowInfo(false);
             setShowMoreOptions(false);
             setShouldPlayVideo(false);
-    
-            videoRef.current = null;
         }
     }, []);
 
@@ -59,11 +51,13 @@ const ContinueWatchingForItem = ({
                 selectedVideo={ movie } 
                 isVisible={ showMoreOptions } 
                 setIsVisible={ setShowMoreOptions } 
-                handleToggleLikeRecentlyWatchedShow={ handleToggleLikeRecentlyWatchedShow }
-                handleToggleUnLikeRecentlyWatchedShow={ handleToggleUnLikeRecentlyWatchedShow }
-                handlePressRemoveRecentlyWatchedShow={ handlePressRemoveRecentlyWatchedShow }
+                handleToggleLike={ handleToggleLike }
+                handleToggleDisLike={ handleToggleDisLike }
+                handlePressRemove={ handlePressRemove }
             />
+
             <Info selectedShow={ movie } isVisible={ showInfo } setIsVisible={ setShowInfo } />
+
             <Video 
                 ref={ videoRef }
                 style={ styles.video }
@@ -75,6 +69,7 @@ const ContinueWatchingForItem = ({
                 posterStyle={ styles.poster }
                 useNativeControls
             />
+
             <MaterialCommunityIcon 
                 name='play-circle-outline'
                 size={ 50 }
@@ -82,6 +77,7 @@ const ContinueWatchingForItem = ({
                 style={ styles.playIcon }
                 onPress={ handlePressPlayVideo }
             />
+            
             <View style={ styles.infoMoreContainer }>
                 <TouchableOpacity onPress={ handlePressShowInfo }>
                     <FeatherIcon 

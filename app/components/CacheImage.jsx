@@ -2,10 +2,8 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Image } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 
-const CacheImage = props => 
+const CacheImage = ({ uri }) => 
 {
-    const { source: { uri } } = props;
-  
     const [imgURI, setImgURI] = useState(uri)
     const componentIsMounted = useRef(true)
 
