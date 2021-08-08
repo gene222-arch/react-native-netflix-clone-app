@@ -23,6 +23,7 @@
     "expo-linear-gradient": "~9.1.0",
     "expo-permissions": "~12.0.1",
     "expo-screen-orientation": "~3.1.0",
+    "expo-secure-store": "~10.1.0",
     "expo-status-bar": "~1.0.4",
     "expo-video-player": "^2.0.0",
     "laravel-echo": "^1.11.0",

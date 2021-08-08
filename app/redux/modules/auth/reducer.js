@@ -384,7 +384,7 @@ export default (state = initialState, { type, payload }) =>
             }
 
             newProfiles = profiles.map(prof => {
-                return (prof.id === profile.id) 
+                return (prof.id === loggedInProfile.id) 
                     ? { ...prof, reminded_coming_soon_shows: remindedMovies } 
                     : prof;
             });

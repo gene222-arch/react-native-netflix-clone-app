@@ -5,15 +5,15 @@ import Image from './../../../../components/Image';
 import styles from './../../../../assets/stylesheets/trailerInfo';
 
 
-const ShowInfo = ({ comingSoonShow }) => 
+const ShowInfo = ({ comingSoonMovie }) => 
 {
-    const { year, age_restriction, duration, additional_trailer, plot, starred_artists, director, title_logo } = comingSoonShow;
+    const { year, age_restriction, duration, additional_trailer, plot, starred_artists, director, title_logo_path } = comingSoonMovie;
 
     return (
         <View style={ styles.trailerInfo }>
             <Image 
                 source={{
-                    uri: title_logo
+                    uri: title_logo_path
                 }}
                 style={ styles.trailerTitleLogo }
             />

@@ -1,11 +1,11 @@
-import AsyncStorage  from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 const TOKEN_NAME = 'access_token';
 
 export const storeAccessToken = async (value = '') => 
 {
     try {
-        await AsyncStorage.setItem(TOKEN_NAME, value);
+        await SecureStore.setItemAsync(TOKEN_NAME, value);
     } catch ({ message }) {
         console.log(message);
     }
@@ -14,7 +14,7 @@ export const storeAccessToken = async (value = '') =>
 export const getAccessToken = async () => 
 {
     try {
-        return await AsyncStorage.getItem(TOKEN_NAME);
+        return await SecureStore.getItemAsync(TOKEN_NAME);
     } catch ({ message }) {
         console.log(message);
     }
@@ -23,7 +23,7 @@ export const getAccessToken = async () =>
 export const removeAccessToken = async () => 
 {
     try {
-        return await AsyncStorage.removeItem(TOKEN_NAME);
+        return await SecureStore.deleteItemAsync(TOKEN_NAME);
     } catch ({ message }) {
         console.log(message);
     }

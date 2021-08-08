@@ -6,6 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import { authSelector } from '../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
+const MAX_NUMBER_OF_USER_PROFILES = 5;
+
 const style = StyleSheet.create({
     img: {
         opacity: 1
@@ -14,9 +16,9 @@ const style = StyleSheet.create({
 
 const DisplayProfile = ({ AUTH, profile, handlePressSelectProfile, index }) => 
 {
-    const isProfileCountMaxed = (AUTH.profiles.length + 1) !== (index + 1);
+    const isProfileCountMaxed = AUTH.profiles.length === index;
     
-    if (isProfileCountMaxed) {
+    if (! isProfileCountMaxed) {
         return (
             <SelectProfileItem 
                 item={ profile } 
@@ -26,7 +28,7 @@ const DisplayProfile = ({ AUTH, profile, handlePressSelectProfile, index }) =>
         )
     }
 
-    return <AddProfile />
+    return (! isProfileCountMaxed) && <AddProfile />
 }
 
 const mapStateToProps = createStructuredSelector({

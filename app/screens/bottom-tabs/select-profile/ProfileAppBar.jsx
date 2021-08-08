@@ -5,15 +5,15 @@ import styles from '../../../assets/stylesheets/profileAppBar';
 import { TouchableOpacity } from 'react-native';
 import StackNavBackButton from '../../../components/stack-app-bar/StackNavBackButton';
 
-const ProfileAppBar = ({ onPress, headerTitle = '', ...props }) => 
+const ProfileAppBar = ({ isLoading = false, onPress, headerTitle = '', ...props }) => 
 {
     return (
         <View style={ styles.container }>
             <View style={ styles.backButtonContainer }>
-                <StackNavBackButton />
+                <StackNavBackButton isLoading={ isLoading } />
                 <Text style={ styles.headerTitle }>{ headerTitle }</Text>
             </View>
-            <TouchableOpacity onPress={ onPress }>
+            <TouchableOpacity onPress={ onPress } disabled={ isLoading } >
                 <Text style={ styles.saveText }>Save</Text>
             </TouchableOpacity>
         </View>

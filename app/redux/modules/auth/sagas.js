@@ -3,7 +3,7 @@ import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
-import * as AsyncStorageInstance from './../../../utils/AsyncStorageInstance'
+import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
 import * as ACTION from './actions'
 
 const {
@@ -88,12 +88,13 @@ function* rateRecentlyWatchedMovieSaga(payload)
 function* loginSaga(payload)  
 {
     try {
-        const { data } = yield call(LOGIN_API.loginAsync, payload);
+        const { data, status } = yield call(LOGIN_API.loginAsync, payload);
 
         const { access_token, data: auth } = data;
         const {  profiles, ...user } = auth;
-        yield call(AsyncStorageInstance.storeAccessToken, access_token);
-        yield put(ACTION.loginSuccess({ auth: user, profiles }));      
+
+        yield call(SecureStoreInstance.storeAccessToken, access_token);
+        yield put(ACTION.loginSuccess({ auth: user, profiles })); 
     } catch ({ message }) {
         yield put(ACTION.loginFailed({ message }));    
     }
@@ -102,10 +103,12 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
-        yield call(LOGIN_API.logoutAsync);
-        yield call(AsyncStorageInstance.removeAccessToken);
-        yield put(ACTION.logoutSuccess());
+        const { status } = yield call(LOGIN_API.logoutAsync);
         
+        if (status === 'success') {
+            yield call(SecureStoreInstance.removeAccessToken);
+            yield put(ACTION.logoutSuccess());
+        }
     } catch ({ message }) {
         console.log(message)
         yield put(ACTION.logoutFailed({ message }));
@@ -170,8 +173,9 @@ function* toggleAddToMyListSaga(payload)
 function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {
-        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ show: payload }));
-        yield call(AUTH_API.toggleRemindMeAsync, payload);
+        const { user_profile_id, show } = payload;
+        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ show }));
+        yield call(AUTH_API.toggleRemindMeAsync, { user_profile_id, coming_soon_movie_id: show.id });
     } catch ({ message }) {
         yield put(ACTION.toggleRemindMeOfComingShowFailed({ message }));
     }
@@ -185,8 +189,8 @@ function* updateAuthenticatedProfileSaga(payload)
 {
     try {
         yield put(ACTION.updateAuthenticatedProfileSuccess({ profile: payload }));
-        yield call(AUTH_API.updateProfileAsync, payload);
         RootNavigation.navigate('SelectProfile');
+        yield call(AUTH_API.updateProfileAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.updateAuthenticatedProfileFailed({ message }));
     }

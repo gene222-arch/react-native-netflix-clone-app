@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import StyledTextInput from './../../components/styled-components/StyledTextInput';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import LoadingSpinner from './../../components/LoadingSpinner';
-
+import * as securestore from '../../utils/SecureStoreInstance'
 
 const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
@@ -33,17 +33,22 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
 
     const login = () => dispatch(AUTH_ACTION.loginStart(credentials));
 
+    const onUnloadUnlockPortrait = async () => await ScreenOrientation.unlockAsync();
+
+    const onLoadLockToPortrait = async () => {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
+
+    const clearToken = async () => await securestore.removeAccessToken().then(res => console.log(res));
+
     useEffect(() => 
     {
-        const onLoadLockToPortrait = async () => {
-            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-        }
-        
         onLoadLockToPortrait();
 
         return () => {
             setIsChecked(false);
             setCredentials(AUTH.credentials);
+            onUnloadUnlockPortrait();
         }
     }, []);
 

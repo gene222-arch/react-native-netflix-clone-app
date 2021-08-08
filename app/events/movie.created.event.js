@@ -1,14 +1,22 @@
-import Pusher from './../utils/echo'
+import Echo from './../utils/echo'
 
-export default () =>
+export const listen = async (callback) =>
 {
-    let response = null;
-    
-    Pusher()
-        .private(`movie.created`)
-        .listen('MovieCreatedEvent', res => {
-            response = res;
-        });
+    return await Echo().then(res => {
+        res
+            .private('movie.created')
+            .listen('MovieCreatedEvent', callback)
+            .error(err => {
+                console.log(err)
+            });
+    })
+}
 
-    return response;
+export const unListen = async () => {
+    return await Echo()    
+        .then(res => {
+            res
+                .private('movie.created')
+                .stopListening('MovieCreatedEvent');
+        })
 }

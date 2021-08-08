@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TextInput, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import Image from '../../../components/Image';
@@ -11,37 +11,33 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import ProfileAppBar from './ProfileAppBar';
 import { useDispatch, connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { authSelector } from '../../../redux/modules/auth/selectors';
+import { authSelector, selectAuthErrorMessages, selectAuthHasErrorMessages } from '../../../redux/modules/auth/selectors';
 import { Button } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import PopUpDialog from './../../../components/PopUpDialog';
-import Spinner from 'react-native-loading-spinner-overlay';
 import LoadingSpinner from './../../../components/LoadingSpinner';
+import StyledTextInput from './../../../components/styled-components/StyledTextInput';
 
-const EditProfileScreen = ({ AUTH, route }) => 
+const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
     const dispatch = useDispatch();
-    const routeProfile = route.params.profile;
+    const { id } = route.params;
 
-    const [ profile, setProfile ] = useState({ 
-        id: routeProfile.id,
-        name: routeProfile.name, 
-        is_for_kids: routeProfile.is_for_kids,
-        avatar: routeProfile.avatar
-    });
+    const [ profile, setProfile ] = useState(AUTH.profiles.find(prof => prof.id === id));
     const [ showDeleteProfileDialog, setShowDeleteProfileDialog ] = useState(false);
 
     const handlePressUpdateProfile = () => dispatch(AUTH_ACTION.updateAuthenticatedProfileStart(profile));
 
     const handlePressDeleteProfile = () => {
+        dispatch(AUTH_ACTION.deleteProfileStart(id));
         toggleDeleteProfileDialog();
-        dispatch(AUTH_ACTION.deleteProfileStart(routeProfile.id));
     }
 
     const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
 
     useEffect(() => {
         return () => {
+            dispatch(AUTH_ACTION.clearErrorProperty());
             setShowDeleteProfileDialog(false);
         }
     }, []);
@@ -59,14 +55,18 @@ const EditProfileScreen = ({ AUTH, route }) =>
                 onPressCancel={ toggleDeleteProfileDialog }
                 onPressConfirm={ handlePressDeleteProfile }
             />
-            <ProfileAppBar headerTitle='Edit Profile' onPress={ handlePressUpdateProfile } />
+            <ProfileAppBar  
+                isLoading={ AUTH.isLoading }
+                headerTitle='Edit Profile' 
+                onPress={ handlePressUpdateProfile } 
+            />
 
             <View style={ styles.inputContainer }>
                 <View style={ styles.container }>
                     <View style={ styles.imgContainer }>
                         <Image 
                             source={{ 
-                                uri: routeProfile.avatar
+                                uri: profile.avatar
                             }}
                             style={ styles.image }
                         />
@@ -77,10 +77,12 @@ const EditProfileScreen = ({ AUTH, route }) =>
                             style={ styles.imgIcon }
                         />
                     </View>
-                    <TextInput 
+                    <StyledTextInput 
                         value={ profile.name }
                         onChangeText={ (textInput) => setProfile({ ...profile, name: textInput }) }
                         style={ styles.input }
+                        error={ AUTH_HAS_ERROR_MESSAGE.name }
+                        helperText={ AUTH_ERROR_MESSAGE.name }
                     />
                     <View style={ styles.switchContainer }>
                         <Text style={ styles.switchLabel }>For Kids</Text>
@@ -115,7 +117,9 @@ const EditProfileScreen = ({ AUTH, route }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector
+    AUTH: authSelector,
+    AUTH_ERROR_MESSAGE: selectAuthErrorMessages,
+    AUTH_HAS_ERROR_MESSAGE: selectAuthHasErrorMessages
 });
 
 export default connect(mapStateToProps)(EditProfileScreen)

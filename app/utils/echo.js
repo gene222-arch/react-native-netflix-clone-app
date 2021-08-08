@@ -3,17 +3,13 @@ import Echo from "laravel-echo"
 import PusherNative from 'pusher-js/react-native';
 
 /** Utils */
-import * as AsyncStorageInstance from './AsyncStorageInstance'
+import * as SecureStoreInstance from './SecureStoreInstance'
 import ENV from '../../env';
 
-let accessToken = null;
-
-AsyncStorageInstance
-	.getAccessToken()
-	.then(token => { accessToken = token; });
-	
-export default () => 
+export default async () => 
 {
+	const accessToken = await SecureStoreInstance.getAccessToken();
+	
 	PusherNative.logToConsole = true;
 
 	const auth = {

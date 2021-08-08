@@ -20,7 +20,7 @@ const ManageProfilesScreen = ({ AUTH }) =>
 {
     const navigation = useNavigation();
 
-    const handlePressSelectProfile = (profile) => navigation.navigate('EditProfile', { profile })
+    const handlePressSelectProfile = (id) => navigation.navigate('EditProfile', { id })
 
     return (
         <View style={ styles.container }>
@@ -33,7 +33,7 @@ const ManageProfilesScreen = ({ AUTH }) =>
                             <SelectProfileItem 
                                 key={ item.id }
                                 item={ item } 
-                                handlePressSelectProfile={ handlePressSelectProfile } 
+                                handlePressSelectProfile={ () => handlePressSelectProfile(item.id) } 
                                 imageStyle={ style.img }
                             />
                             <FontAwesome5Icon 
@@ -41,7 +41,7 @@ const ManageProfilesScreen = ({ AUTH }) =>
                                 color='#FFF'
                                 size={ 24 }
                                 style={ styles.editIcon }
-                                onPress={ () => handlePressSelectProfile(item) }
+                                onPress={ () => handlePressSelectProfile(item.id) }
                             />
                         </View>
                     )}

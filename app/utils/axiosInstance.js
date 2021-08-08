@@ -1,32 +1,26 @@
 import Axios from 'axios'
 import ENV from './../../env';
-import * as AsyncStorageInstance from './AsyncStorageInstance'
-
-
-let accessToken = ''; 
-
-AsyncStorageInstance
-    .getAccessToken()
-    .then(token => {
-        accessToken = token;
-    });
-
+import * as SecureStoreInstance from './SecureStoreInstance'
 
 const axiosInstance = () => 
 {
-    const headers = {
-        Authorization: `Bearer ${ accessToken }`
-    };
+    const headers = {};
 
     const axiosInstance = Axios.create({
         baseURL: ENV.DEVELOPMENT_MODE_API_URL,
         headers
     });
 
-    axiosInstance.interceptors.request.use(req => 
-    {
-        console.log(req);
-        return req;
+    axiosInstance.interceptors.request.use(async (req) => {
+        const accessToken = await SecureStoreInstance.getAccessToken();
+
+        return {
+            ...req,
+            headers: {
+                ...req.headers,
+                Authorization: `Bearer ${ accessToken }`
+            }
+        };
     })
 
     axiosInstance.interceptors.response.use(

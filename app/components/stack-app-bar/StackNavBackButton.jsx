@@ -13,7 +13,7 @@ const StackNavBackButton = (props) =>
         navigation.goBack();
     }
 
-    return <HeaderBackButton { ...props } onPress={ navigateBack }/>
+    return <HeaderBackButton { ...props } onPress={ navigateBack } disabled={ props.isLoading } />
 }
 
 

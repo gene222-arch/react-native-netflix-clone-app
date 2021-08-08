@@ -3310,6 +3310,11 @@ expo-screen-orientation@~3.1.0:
   dependencies:
     "@expo/config-plugins" "^1.0.18"
 
+expo-secure-store@~10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-10.1.0.tgz#a223b3323526b152cd29c6e13058d8c8c2711eab"
+  integrity sha512-mH53aCptDMiLGopsq0uSpeRLtVpFi+IgwqLGNvIKn0CnSxBUbzE9bq5TSKCBm4JxN4/viohpV3R7L6Qj8MQT+g==
+
 expo-status-bar@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.0.4.tgz#d8a4c4418b5868c1606969b12bdee85b6fa7d8a4"

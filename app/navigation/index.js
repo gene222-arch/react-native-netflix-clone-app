@@ -20,7 +20,6 @@ enableScreens(true);
 
 const Navigation = ({ AUTH, TOAST }) => 
 {
-
     useEffect(() => {
         if (TOAST.message) {
             ToastAndroid.show(

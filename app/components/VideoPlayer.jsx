@@ -5,29 +5,19 @@ import styles from './../assets/stylesheets/videoPlayer';
 import View from './View';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-const VideoPlayer = ({ episode, shouldPlay = true, shouldShowPoster = false, shouldToggleVideo = true, setToggleVideo}) => 
+const VideoPlayer = ({ videoPath = '', posterPath = '', shouldPlay = true, shouldShowPoster = false }) => 
 {
     const video = useRef(null)
     const [ status, setStatus ] = useState({});
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(shouldPlay);
     const [ usePoster, setUsePoster ] = useState(shouldShowPoster);
     
-    const handleUpdateStatus = (status) => 
-    {
+    const handleUpdateStatus = (status) => {
         setStatus(() => status);
 
-        if (!status.isPlaying) {
+        if (! status.isPlaying) {
             setUsePoster(true);
             setShouldPlayVideo(false);
-        }
-
-        if (shouldToggleVideo) {
-            if (!status.isPlaying) {
-                setToggleVideo(false);
-            }
-            else {
-                setToggleVideo(true);
-            }
         }
     }
 
@@ -40,33 +30,31 @@ const VideoPlayer = ({ episode, shouldPlay = true, shouldShowPoster = false, sho
     const onChangeSourceRestartVideo = async () => 
     {
         await video?.current?.unloadAsync();
-        await video?.current?.loadAsync({ uri: episode?.video }, {}, false);
+        await video?.current?.loadAsync({ uri: videoPath }, {}, false);
     } 
 
     useEffect(() => {
-        if (!video) {
-            return;
-        }
-
+        if (!video) return;
         onChangeSourceRestartVideo();
+
         return () => {
             setStatus({});
             setUsePoster(false);
             video.current = null;
             setShouldPlayVideo(false);
         }
-    }, [episode]);
+    }, [videoPath]);
 
-    if (!shouldShowPoster) {
+    if (! shouldShowPoster) {
         return (
             <Video 
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: episode.video
+                    uri: videoPath
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: episode.poster }}
+                posterSource={{ uri: posterPath }}
                 posterStyle={ styles.poster }
                 useNativeControls
                 resizeMode='contain'
@@ -82,10 +70,10 @@ const VideoPlayer = ({ episode, shouldPlay = true, shouldShowPoster = false, sho
                 ref={ video }
                 style={ styles.video }
                 source={{
-                    uri: episode?.video
+                    uri: videoPath
                 }}
                 usePoster={ usePoster }
-                posterSource={{ uri: episode?.poster }}
+                posterSource={{ uri: posterPath }}
                 posterStyle={ styles.poster }
                 useNativeControls
                 resizeMode='contain'

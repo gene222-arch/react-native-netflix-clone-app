@@ -1,15 +1,22 @@
 import Echo from './../utils/echo'
 
-const listen = (callback) =>
+export const listen = async (callback) =>
 {
-    return Echo()
-        .private('coming.soon.movie.released')
-        .listen('ComingSoonMovieReleasedEvent', callback)
-        .error(err => {
-            console.log(err)
-        });
+    return await Echo().then(res => {
+        res
+            .private('coming.soon.movie.released')
+            .listen('ComingSoonMovieReleasedEvent', callback)
+            .error(err => {
+                console.log(err)
+            });
+    })
 }
 
-const unListen = () => Echo().private('coming.soon.movie.released').stopListening();
-
-export { listen, unListen }
+export const unListen = async () => {
+    return await Echo()    
+        .then(res => {
+            res
+                .private('coming.soon.movie.released')
+                .stopListening('ComingSoonMovieReleasedEvent');
+        })
+}

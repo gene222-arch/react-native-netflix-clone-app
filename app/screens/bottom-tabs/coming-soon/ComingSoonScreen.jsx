@@ -3,34 +3,21 @@ import { InteractionManager, ToastAndroid } from 'react-native'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import { useDispatch, connect } from 'react-redux';
-
-/** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import * as COMING_SOON_ACTION from './../../../redux/modules/coming-soon/actions'
-
-/** API */
 import notifications from './../../../services/data/notifications';
-
-/** Styles */
 import styles from './../../../assets/stylesheets/comingSoon';
-
-/** Selectors */
 import { authProfileSelector } from './../../../redux/modules/auth/selectors'
 import { comingSoonMoviesSelector } from './../../../redux/modules/coming-soon/selectors';
-
-/** Components */
 import View from './../../../components/View';
 import Text from './../../../components/Text';
-import NotificationsVideoItem from '../../../components/notifications-video-item';
+import ComingSoonMovieItem from '../../../components/notifications-video-item';
 import AppBar from './../../AppBar';
-
-/** RNV Icons */
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { cacheImage } from './../../../utils/cacheImage';
 import { useNavigation } from '@react-navigation/native';
 
-import Echo from './../../../utils/echo'
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import LoadingSpinner from './../../../components/LoadingSpinner';
@@ -44,17 +31,20 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ focusedIndex, setFocusedIndex ] = useState(0);
 
+
     const handleOnScroll = useCallback((e) => {
         const offset = Math.round(e.nativeEvent.contentOffset.y / 500);
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (show, message) => {
-        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart(show));
+    const handlePressToggleRemindMe = (show, message = '') => 
+    {
+        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, show }));
+
         message.length && setTimeout(() => ToastAndroid.show(message, ToastAndroid.SHORT), 100);
     }
 
-    const handlePressInfo = (comingSoonShow) => navigation.navigate('TrailerInfo', { comingSoonShow });
+    const handlePressInfo = (comingSoonMovie) => navigation.navigate('TrailerInfo', { comingSoonMovie });
 
     const runAfterInteractions = () => 
     {
@@ -70,11 +60,11 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
         dispatch(COMING_SOON_ACTION.getComingSoonMoviesStart(notifications));
 
-        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video, video_poster, poster, title_logo }) => {
-            cacheImage(video, id, 'ComingSoon/Videos/');
-            cacheImage(poster, id, 'ComingSoon/Posters/');
-            cacheImage(video_poster, id, 'ComingSoon/VideoPosters/');
-            cacheImage(title_logo, id, 'ComingSoon/TitleLogos/');
+        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
+            cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
+            cacheImage(poster_path, id, 'ComingSoon/Posters/');
+            cacheImage(wallpaper_path, id, 'ComingSoon/Wallpaper/');
+            cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
         });
 
         setIsInteractionsComplete(true);
@@ -83,6 +73,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     useEffect(() => 
     {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+        
         return () => {
             ComingSoonMovieCreatedEvent.unListen();
             ComingSoonMovieReleasedEvent.unListen();
@@ -97,24 +88,21 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
     return (
         <View style={ styles.container }>
-            {/* Coming Soon Videos */}
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
                 onScroll={ handleOnScroll }
                 data={ COMING_SOON_MOVIE.comingSoonMovies }
                 renderItem={ ({ item, index }) => {
-
-                    const isReminded = AUTH_PROFILE.reminded_coming_soon_shows.findIndex(({ id }) => id === item.id) !== -1;
+                    let isReminded = AUTH_PROFILE.reminded_coming_soon_shows.find(({ id }) => id === item.id);
 
                     return (
-                        <NotificationsVideoItem 
-                            comingSoon={ item } 
-                            shouldPlay={ false } 
+                        <ComingSoonMovieItem 
+                            movie={ item }
                             shouldShowPoster={ focusedIndex !== index }
                             shouldFocus={ focusedIndex === index }
                             handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item, !isReminded ? 'Reminded' : '') }
                             handlePressInfo={ () => handlePressInfo(item) }
-                            isReminded={ isReminded }
+                            isReminded={ Boolean(AUTH_PROFILE.reminded_coming_soon_shows.find(({ id }) => id === item.id)) }
                         />
                     )
                 }}

@@ -18,17 +18,21 @@ const notifications =
         trailers: [
             {
                 id: 1,
-                coming_soon_show_id: 199,   
+                coming_soon_movie_id: 199,   
                 title: 'Lupin: Trilogy Teaser',
+                wallpaper_path: 'https://wallpapercave.com/wp/wp8385444.jpg',
+                title_logo_path: 'https://occ-0-1722-92.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABQKqgOEWXarVL00qTGkgNeWtAf4Y7hv-BC5j665JCzs5fU1DPunEaqbcplfDFfZKMKrF8uN08lF8elW_cCWHBuiTL203YjdW71Lk8rZOdRqNHcIxX4kQske3V6xr2PhYFqIk1w8sxIlUDxhepHImxTY6enxBygFciupPPpC-XNS4FA.png?r=8af',
                 poster_path: 'https://www.slashfilm.com/wp/wp-content/images/lupin-part-2-e1620746283685.jpg',
-                video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                video_path: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
             },
             {
                 id: 2,
-                coming_soon_show_id: 199,   
+                coming_soon_movie_id: 199,   
                 title: 'Lupin: Trilogy Trailer',
+                wallpaper_path: 'https://wallpapercave.com/wp/wp8385444.jpg',
+                title_logo_path: 'https://occ-0-1722-92.1.nflxso.net/dnm/api/v6/tx1O544a9T7n8Z_G12qaboulQQE/AAAABQKqgOEWXarVL00qTGkgNeWtAf4Y7hv-BC5j665JCzs5fU1DPunEaqbcplfDFfZKMKrF8uN08lF8elW_cCWHBuiTL203YjdW71Lk8rZOdRqNHcIxX4kQske3V6xr2PhYFqIk1w8sxIlUDxhepHImxTY6enxBygFciupPPpC-XNS4FA.png?r=8af',
                 poster_path: 'https://cdn.vox-cdn.com/thumbor/JW1UHWFQnB971PcGwsLykEnKFzA=/0x189:7603x4170/fit-in/1200x630/cdn.vox-cdn.com/uploads/chorus_asset/file/22507363/AL_101_Unit_02417.jpg',
-                video: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                video_path: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
             }
         ]
     }, 

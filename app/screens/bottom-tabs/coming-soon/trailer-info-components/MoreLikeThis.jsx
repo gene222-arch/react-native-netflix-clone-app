@@ -6,32 +6,39 @@ import Image from './../../../../components/Image';
 import styles from './../../../../assets/stylesheets/trailerInfo';
 import { levenshteinFuzzyMatched } from './../../../../utils/algorithm';
 import LoadingScreen from './../../../../components/LoadingScreen';
+import { createStructuredSelector } from 'reselect';
+import { comingSoonMoviesSelector } from './../../../../redux/modules/coming-soon/selectors';
+import { connect } from 'react-redux';
 
-const MoreLikeThis = ({ currentComingSoonShow, comingSoonShows, handlePressSimilarShow }) => 
+const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie, handlePressSimilarShow }) => 
 {
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ similarComingSoonShows, setSimilarComingSoonShows ] = useState([]);
+    const [ similarComingSoonMovies, setSimilarComingSoonMovies ] = useState([]);
 
     const filterViaLevenshteinAlgo = useCallback(e => {
 
         /** Remove the current show */
-        let similarShows = [];
-        let filteredShows = comingSoonShows.filter(({ id }) => id !== currentComingSoonShow.id);
+        let similarMovies = [];
+        let filteredMovies = COMING_SOON_MOVIE.comingSoonMovies.filter(({ id }) => id !== comingSoonMovie.id);
 
         /** Get the genre to filter */
-        const primaryGenre = currentComingSoonShow.genres[0];
+        const genres = comingSoonMovie.genres.split(',');
+        const primaryGenre = genres[0];
 
         /** Filter the genres of each show via Levenshtein algorithm */
-        filteredShows.forEach(show => {
-            show.genres.map(genre => {
-                /** Check the similarities of the string */
-                if (levenshteinFuzzyMatched(primaryGenre, genre, .7)) {
-                    similarShows.push(show);
-                }
-            });
+        filteredMovies.forEach(show => {
+            show
+                .genres
+                .split(',')
+                .map(genre => {
+                    /** Check the similarities of the string */
+                    if (levenshteinFuzzyMatched(primaryGenre, genre, .7)) {
+                        similarMovies.push(show);
+                    }
+                });
         });
 
-        setSimilarComingSoonShows(similarShows);
+        setSimilarComingSoonMovies(similarMovies);
     }, []);
 
     useEffect(() => {
@@ -39,6 +46,11 @@ const MoreLikeThis = ({ currentComingSoonShow, comingSoonShows, handlePressSimil
             filterViaLevenshteinAlgo();
             setIsInteractionsComplete(true);
         });
+
+        return () => {
+            setIsInteractionsComplete(false);
+            setSimilarComingSoonMovies([]);
+        }
     }, []);
 
     if (!isInteractionsComplete) {
@@ -49,23 +61,20 @@ const MoreLikeThis = ({ currentComingSoonShow, comingSoonShows, handlePressSimil
         <View style={ styles.moreLikeThisContainer }>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ similarComingSoonShows }
+                data={ similarComingSoonMovies }
+                numColumns={ 3 }
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressSimilarShow(item) }>
                         <Image 
-                            source={{ uri: item.poster }}
+                            source={{ uri: item.poster_path }}
                             style={ styles.moreLikeThisImg }
                         />
                     </TouchableOpacity>
                 )}
-                numColumns={ 3 }
                 ListEmptyComponent={
                     <View style={ styles.moreLikeThisEmptyMessageContainer }>
-                        <Text 
-                            h4 
-                            style={ styles.moreLikeThisEmptyMessage }
-                        >
-                            Oh darn. We don't have similar shows to '{ currentComingSoonShow.title }'.
+                        <Text h4 style={ styles.moreLikeThisEmptyMessage }>
+                            Oh darn. We don't have similar shows to { comingSoonMovie.title }.
                         </Text>
                         <Text style={ styles.similarMoviesNotFoundCaption }>Try searching for another coming soon movie or show.</Text>
                     </View>
@@ -75,4 +84,8 @@ const MoreLikeThis = ({ currentComingSoonShow, comingSoonShows, handlePressSimil
     )
 }
 
-export default MoreLikeThis
+const mapStateToProps = createStructuredSelector({
+    COMING_SOON_MOVIE: comingSoonMoviesSelector
+});
+
+export default connect(mapStateToProps)(MoreLikeThis)
