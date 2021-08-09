@@ -5,14 +5,16 @@ const {
     GET_COMING_SOON_MOVIES_SUCCESS,
     GET_COMING_SOON_MOVIES_FAILED,
     CREATE_COMING_SOON_MOVIE,
-    DELETE_COMING_SOON_MOVIE_BY_ID
+    DELETE_COMING_SOON_MOVIE_BY_ID,
+    INCREMENT_NEW_COMING_SOON_MOVIE_COUNT
 } = ACTION_TYPES;
 
 const initialState = {
     comingSoonMovies: [],
+    totalUpcomingMovies: 0,
     isLoading: false,
     errors: []
-}
+};
 
 export default (state = initialState, { type, payload }) => 
 {
@@ -60,6 +62,13 @@ export default (state = initialState, { type, payload }) =>
                 ...state,
                 isLoading: false,
                 errors: payload.message
+            }
+
+
+        case INCREMENT_NEW_COMING_SOON_MOVIE_COUNT:
+            return {
+                ...state,
+                totalUpcomingMovies: state.totalUpcomingMovies + 1
             }
 
         default:

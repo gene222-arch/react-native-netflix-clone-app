@@ -1,16 +1,17 @@
 import React from 'react'
-import View from './../../../../components/View';
+import View from './View';
 import { Tab } from 'react-native-elements';
-import styles from './../../../../assets/stylesheets/movieDetail';
+import styles from '../assets/stylesheets/movieDetail';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
-import * as TOAST_ACTION from './../../../../redux/modules/toast/actions'
+import * as AUTH_ACTION from '../redux/modules/auth/actions'
+import * as TOAST_ACTION from '../redux/modules/toast/actions'
 import { createStructuredSelector } from 'reselect';
-import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
 import { connect, useDispatch } from 'react-redux';
-import ActivityIndicatorWrapper from './../../../../components/ActivityIndicatorWrapper';
+import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
+
 
 const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) => 
 {

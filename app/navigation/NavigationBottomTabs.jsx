@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -9,15 +9,16 @@ import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
-import DownloadsTabBarBadge from './../components/DownloadsTabBarBadge';
+import DownloadsTabBarBadge from '../components/bottom-tabs-badges/DownloadsTabBarBadge';
 import { createStructuredSelector } from 'reselect';
 import { navigationSelector } from './../redux/modules/navigation/selectors';
 import { connect } from 'react-redux';
+import { comingSoonMoviesSelector } from './../redux/modules/coming-soon/selectors';
 
 
 const Tab = createBottomTabNavigator();
 
-const NavigationBottomTabs = ({ NAVIGATION }) => 
+const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) => 
 {
     const TAB_NAVIGATOR_OPTIONS = {
         initialRouteName: 'SelectProfile',
@@ -50,18 +51,30 @@ const NavigationBottomTabs = ({ NAVIGATION }) =>
         }
     };
 
-    const COMING_SOON_OPTIONS = ({ route }) => 
-    ({
-        tabBarIcon: (({ color }) => (
-            <MaterialIcons 
-                name='video-library' 
-                size={ 24 } 
-                color={ color }
-            />
-        )),
-        tabBarBadge: 1,
-        tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
-    });
+    const COMING_SOON_OPTIONS = useCallback(({ route }) => 
+    {
+        const tabBarBadgeNumber = COMING_SOON_MOVIE.totalUpcomingMovies;
+
+        const options = {
+            tabBarIcon: (({ color }) => (
+                <MaterialIcons 
+                    name='video-library' 
+                    size={ 24 } 
+                    color={ color }
+                />
+            )),
+            tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
+        };
+
+        if (tabBarBadgeNumber) {
+            return ({
+                ...options, 
+                tabBarBadge: tabBarBadgeNumber,
+            });
+        }
+        
+        return options;
+    }, [COMING_SOON_MOVIE.totalUpcomingMovies]);
 
     const DOWNLOAD_OPTIONS = ({
         tabBarIcon: (({ color }) => (
@@ -96,6 +109,7 @@ const NavigationBottomTabs = ({ NAVIGATION }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
+    COMING_SOON_MOVIE: comingSoonMoviesSelector,
     NAVIGATION: navigationSelector
 });
 

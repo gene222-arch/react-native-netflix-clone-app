@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { InteractionManager, ToastAndroid } from 'react-native'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { createStructuredSelector } from 'reselect';
-import { useDispatch, connect } from 'react-redux';
+import { useDispatch, connect, batch } from 'react-redux';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import * as COMING_SOON_ACTION from './../../../redux/modules/coming-soon/actions'
 import notifications from './../../../services/data/notifications';
@@ -16,7 +16,7 @@ import AppBar from './../../AppBar';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { cacheImage } from './../../../utils/cacheImage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
@@ -30,7 +30,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ focusedIndex, setFocusedIndex ] = useState(0);
-
 
     const handleOnScroll = useCallback((e) => {
         const offset = Math.round(e.nativeEvent.contentOffset.y / 500);
@@ -58,11 +57,24 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setIsInteractionsComplete(true);
     }
 
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         if (COMING_SOON_MOVIE.totalUpcomingMovies) {
+    //             dispatch(AUTH_ACTION.viewDownloadsStart());
+    //         }
+
+    //         return () => dispatch(AUTH_ACTION.viewDownloadsStart());
+    //     }, [COMING_SOON_MOVIE.totalUpcomingMovies])
+    // );
+
     useEffect(() => 
     {
         ComingSoonMovieCreatedEvent.listen(response => {
             ToastAndroid.show(`${ response.data.title } is Coming Soon.`, ToastAndroid.SHORT);
-            dispatch(COMING_SOON_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
+            batch(() => {
+                dispatch(COMING_SOON_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
+                dispatch(COMING_SOON_ACTION.incrementComingSoonMovieCount());
+            });
         });
 
         ComingSoonMovieReleasedEvent.listen(response => {

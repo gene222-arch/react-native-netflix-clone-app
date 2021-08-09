@@ -6,7 +6,6 @@ import moviesAPI from './../../../../services/data/movies';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
 import View from '../../../../components/View';
 import EpisodeItem from '../../../../components/episode-item/EpisodeItem';
-import ActionButton from './ActionButton';
 import styles from '../../../../assets/stylesheets/movieDetail';
 import Header from './Header';
 import PlayDownloadButton from './PlayDownloadButton';
@@ -15,6 +14,8 @@ import LoadingSpinner from './../../../../components/LoadingSpinner';
 import PaginationPicker from './PaginationPicker';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import ActionButton from './../../../../components/ActionButton';
+
 
 const PER_PAGE = 3;
 

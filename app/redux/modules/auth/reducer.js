@@ -166,8 +166,6 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case RATE_SHOW_SUCCESS:
-
-            /** Update auth profile liked shows */
             let newLikedShows = [];
             
             let isMovieLiked = loggedInProfile.liked_shows.find(({ id }) => id === payload.show.id);
