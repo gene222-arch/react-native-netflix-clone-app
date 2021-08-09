@@ -31,7 +31,8 @@ import LoadingScreen from './../../../components/LoadingScreen';
 import styles from './../../../assets/stylesheets/downloads';
 
 /** Utils */
-import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
+import { cacheImage } from './../../../utils/cacheImage';
+import LoadingSpinner from './../../../components/LoadingSpinner';
 
 
 const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) => 
@@ -74,9 +75,9 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     }
 
     const runAfterInteractions = () => {
-        AUTH_PROFILE.my_downloads.map(({ id, poster, video }) => {
-            cacheImage(poster, id, `${ AUTH_PROFILE.name }/Downloads/Posters/`);
-            cacheImage(video, id, `${ AUTH_PROFILE.name }/Downloads/Videos/`);
+        AUTH_PROFILE.my_downloads.map(({ id, poster_path, video_path }) => {
+            cacheImage(poster_path, id, `${ AUTH_PROFILE.name }/Downloads/Posters/`);
+            cacheImage(video_path, id, `${ AUTH_PROFILE.name }/Downloads/Videos/`);
         });
         setIsInteractionsComplete(true);
     }
@@ -107,13 +108,12 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
 
 
     /** Show Loading */
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
+    if (! isInteractionsComplete) {
+        return <LoadingSpinner />
     }
     
     /** Play Video in Full Screen */
-    if (showVideo) 
-    {
+    if (showVideo) {
         return (
             <VideoPlayerFullScreen 
                 uri={ download.downloaded_file_uri }
@@ -141,14 +141,12 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                 }
             </Overlay>
 
-            {/* App bar */}
             <AppBar 
                 marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } 
                 showLogo={ false } 
                 headerTitle='Downloads'
             />
 
-            {/* Header */}
             <View style={ styles.headerContainer }>
                 <Text h4>Download's for you</Text>
                 <View style={ styles.lastUpdateContainer }>
@@ -162,7 +160,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                 </View>
             </View>
 
-            {/* Downloads */}
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ AUTH_PROFILE.my_downloads }

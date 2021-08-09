@@ -17,7 +17,7 @@ const PaginationPicker = ({ selectedPage = 0, handleChangePage, pages = [] }) =>
                     onValueChange={ handleChangePage }
                     style={ styles.seasonPicker }
                 >
-                    { pages.map((page, index) => <Picker.Item key={ index } label={ `${index+1}` } value={ page } />) }
+                    { pages.map((page, index) => <Picker.Item key={ index } label={ `${ index + 1 }` } value={ page } />) }
                 </Picker>
             </View>            
         </View>

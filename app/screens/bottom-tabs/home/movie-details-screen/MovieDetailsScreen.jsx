@@ -1,6 +1,6 @@
 import React,{ useState, useEffect, useRef } from 'react'
 import { InteractionManager, FlatList } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { Video } from 'expo-av'
 import moviesAPI from './../../../../services/data/movies';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
@@ -13,19 +13,12 @@ import PlayDownloadButton from './PlayDownloadButton';
 import MovieDescription from './MovieDescription';
 import LoadingSpinner from './../../../../components/LoadingSpinner';
 import PaginationPicker from './PaginationPicker';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 
 const PER_PAGE = 3;
 
-const DEFAULT_DISPLAYED_MOVIE_PROPS = {
-    id: '',
-    title: '',
-    poster_path: null,
-    duration: '',
-    plot: '',
-    video_path: null,
-};
-
-const MovieDetailsScreen = ({ route }) => 
+const MovieDetailsScreen = ({ AUTH_PROFILE, route }) => 
 {   
     const dispatch = useDispatch();
     const { id: movieID } = route.params;
@@ -33,33 +26,23 @@ const MovieDetailsScreen = ({ route }) =>
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ movie, setMovie ] = useState(null);
-
     const [ movies, setMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
     const [ selectedPage, setSelectedPage ] = useState('');
     const [ defaultPageList, setDefaultPageList ] = useState([]);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
-    const handlePressPauseVideo = () => videoRef.current.pauseAsync();
-
     const handlePressPlayVideo = () => {
         videoRef.current.playAsync();
         dispatch(AUTH_ACTION.addToRecentWatchesStart(movie));
     }
 
+    const handlePressPauseVideo = () => videoRef.current.pauseAsync();
+
     const handleChangePage = (pageNumber, index) => {
         setSelectedPage(pageNumber);
         setDefaultPageList(movies[index]);
     }
-
-    const handlePressAddToMyList = () => dispatch(AUTH_ACTION.toggleAddToMyListStart(movie));
-
-    const handlePressLike = () => {
-        const { other_movies, ...movieDetails } = movie;
-        dispatch(AUTH_ACTION.rateShowStart({ show: movieDetails, rate: 'like' }));
-    }
-
-    const handlePressTabShare = () => console.log('Shared');
 
     const runAfterInteractions = () => 
     {
@@ -135,12 +118,7 @@ const MovieDetailsScreen = ({ route }) =>
                             handlePressPlayVideo={ handlePressPlayVideo }
                         />
                         <MovieDescription movie={ movie } />
-                        <ActionButton
-                            movieID={ movieID }
-                            handlePressLike={ handlePressLike }
-                            handlePressAddToMyList={ handlePressAddToMyList }
-                            handlePressTabShare={ handlePressTabShare }
-                        />
+                        <ActionButton movie={ movie } />
                         <PaginationPicker 
                             pages={ pages }
                             selectedPage={ selectedPage } 
@@ -153,4 +131,8 @@ const MovieDetailsScreen = ({ route }) =>
     )
 }
 
-export default MovieDetailsScreen
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(MovieDetailsScreen)

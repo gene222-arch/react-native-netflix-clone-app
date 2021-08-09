@@ -17,15 +17,13 @@ const DownloadItem = ({ downloadedVideo, onLongPress, handlePressNonSeries, hand
                 <View row={ true } justifyContent='space-between' alignItems='center' padding={ 2 }>
                     <View>
                         <Image 
-                            source={{ uri: getCachedFile('Downloads/Posters/', downloadedVideo.id, downloadedVideo.poster) }}
+                            source={{ uri: getCachedFile('Downloads/Posters/', downloadedVideo.id, downloadedVideo.poster_path) }}
                             style={ styles.posterImg }
                         />
                     </View>
                     <View style={ styles.titleContainer }>
                         <Text style={ styles.title }>{ downloadedVideo.title }</Text>
-                        <Text style={ styles.duration }>
-                            { `Episode ${downloadedVideo.episode} | ${ downloadedVideo.size }` }
-                        </Text>
+                        <Text style={ styles.duration }>{ downloadedVideo.size }</Text>
                     </View>
                     {
                         (downloadedVideo.total_number_of_episodes === 1)

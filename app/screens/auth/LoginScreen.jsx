@@ -15,7 +15,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import StyledTextInput from './../../components/styled-components/StyledTextInput';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import LoadingSpinner from './../../components/LoadingSpinner';
-import * as securestore from '../../utils/SecureStoreInstance'
 
 const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
@@ -31,15 +30,13 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
         setCredentials({ ...credentials, remember_me: !isChecked });
     }
 
-    const login = () => dispatch(AUTH_ACTION.loginStart(credentials));
+    const handlePressLogin = () => dispatch(AUTH_ACTION.loginStart(credentials));
 
     const onUnloadUnlockPortrait = async () => await ScreenOrientation.unlockAsync();
 
     const onLoadLockToPortrait = async () => {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
     }
-
-    const clearToken = async () => await securestore.removeAccessToken().then(res => console.log(res));
 
     useEffect(() => 
     {
@@ -59,7 +56,6 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
     return (
         <View style={ styles.container }>
             <Text h2 style={ styles.title }>Sign in</Text>
-
             <View style={ styles.formContainer }>
                 <StyledTextInput
                     placeholder='Email'
@@ -70,7 +66,6 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
                     error={ AUTH_HAS_ERROR_MESSAGE.email }
                     helperText={ AUTH_ERROR_MESSAGE.email }
                 />
-
                 <StyledTextInput
                     placeholder='Password'
                     placeholderTextColor={ Colors.grey }
@@ -82,9 +77,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
                     helperText={ AUTH_ERROR_MESSAGE.password }
                 />
             </View>
-
-            <Button title='Sign in' onPress={ login } buttonStyle={ styles.loginBtn } />
-
+            <Button title='Sign in' onPress={ handlePressLogin } buttonStyle={ styles.loginBtn } />
             <View style={ styles.loginFooter }>
                 <CheckBox
                     title='Remember me'

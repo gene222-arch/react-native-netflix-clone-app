@@ -172,11 +172,10 @@ export default (state = initialState, { type, payload }) =>
             
             let isMovieLiked = loggedInProfile.liked_shows.find(({ id }) => id === payload.show.id);
 
-            if (isMovieLiked) {
+            if (! isMovieLiked) {
                 newLikedShows.push(payload.show);
             }
-
-            if (! isMovieLiked) {
+            else {
                 newLikedShows = loggedInProfile.liked_shows.filter(({ id }) => id !== payload.show.id);
             }
 

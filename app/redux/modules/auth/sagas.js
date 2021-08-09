@@ -66,7 +66,6 @@ function* rateShowSaga(payload)
 {
     try {
         yield put(ACTION.rateShowSuccess(payload));
-        // yield put(ACTION.AUTH_API.rateMovieAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.rateShowFailed({ message }));
     }

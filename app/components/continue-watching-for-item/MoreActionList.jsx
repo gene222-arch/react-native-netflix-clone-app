@@ -17,6 +17,33 @@ import View from './../View';
 import Text from './../Text';
 
 
+const downloadIconName = (status) => 
+{
+    let label = null;
+
+    switch (status) 
+    {
+        case VIDEO_STATUSES.PAUSED:
+            label = 'play';
+            break;
+
+        case VIDEO_STATUSES.DOWNLOADING:
+        case VIDEO_STATUSES.RESUMING_DOWNLOAD:
+            label = null;
+            break;
+
+        case VIDEO_STATUSES.DOWNLOADED:
+            label = 'check';
+            break;
+
+        default:
+            label = 'download';
+            break;
+    }
+
+    return label;
+}
+
 const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, isVisible, setIsVisible }) => 
 {
     const dispatch = useDispatch();
@@ -30,7 +57,7 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
     const FILE_URI = useMemo(() => {
         return `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
     }, [selectedVideo]);
-    
+
     const actionList = 
     [
         {
@@ -52,25 +79,12 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
         { 
             title: !status ? 'Download Episode' : status, 
             iconType: 'feather',
-            iconName: (
-                status === VIDEO_STATUSES.PAUSED // download is paused show PLAY button
-                    ? 'play'
-                    : (
-                        status === VIDEO_STATUSES.DOWNLOADING // downloading show progress 
-                            ? null
-                            : (
-                                status !== VIDEO_STATUSES.DOWNLOADED // not yet downloaded
-                                    ? ( status === VIDEO_STATUSES.RESUMING_DOWNLOAD ? null : 'download' ) 
-                                    : 'check' 
-                            )
-                    ) 
-                    
-            ),
+            iconName: downloadIconName(status),
             status,
             iconNameOnEnd: status === 'Downloading' ? 'pause' : null,
             circularProgress: (
                 <AnimatedCircularProgress
-                    size={ 25 }
+                    size={ 20 }
                     width={ 3 }
                     fill={ progress }
                     tintColor='#00e0ff'
@@ -144,7 +158,6 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
             dispatch(AUTH_ACTION.removeToMyDownloadsStart(selectedVideo.id));
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
         } catch ({ message }) {
-            // Do something
         }
     }
 

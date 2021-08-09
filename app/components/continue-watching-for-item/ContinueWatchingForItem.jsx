@@ -16,9 +16,9 @@ import { connect } from 'react-redux';
 
 const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
-    const videoRef = useRef(null)
-    const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
+    const videoRef = useRef(null);
     const [ showInfo, setShowInfo ] = useState(false);
+    const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
@@ -29,7 +29,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
     useEffect(() => {
         return () => {
-            videoRef = null;
+            videoRef.current = null;
             setShowInfo(false);
             setShowMoreOptions(false);
             setShouldPlayVideo(false);

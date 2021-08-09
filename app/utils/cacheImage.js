@@ -33,7 +33,6 @@ export const ensureDirExists = async (directory) =>
     const dirInfo = await FileSystem.getInfoAsync(directory);
 
     if (!dirInfo.exists) { 
-        // Create new directory
         await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
     }
 }
