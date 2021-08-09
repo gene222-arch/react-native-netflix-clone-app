@@ -175,8 +175,8 @@ function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {
         const { user_profile_id, show } = payload;
-        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ show }));
         yield call(AUTH_API.toggleRemindMeAsync, { user_profile_id, coming_soon_movie_id: show.id });
+        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ show }));
     } catch ({ message }) {
         yield put(ACTION.toggleRemindMeOfComingShowFailed({ message }));
     }

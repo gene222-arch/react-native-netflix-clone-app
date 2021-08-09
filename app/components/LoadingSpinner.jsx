@@ -2,7 +2,7 @@ import React from 'react'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { StyleSheet } from 'react-native'
 
-const LoadingSpinner = ({ isLoading = true, message }) => {
+const LoadingSpinner = ({ isLoading = true, message = '' }) => {
     return (
         <Spinner 
             visible={ isLoading }

@@ -18,7 +18,7 @@ const DEFAULT_FRONT_PAGE = {
     id: '',
     category: '',
     title: '',
-    backgroundImage: null,
+    wallpaper_path: null,
     poster: null,
     tags: [],
     isAddedToMyList: false
@@ -40,9 +40,9 @@ const HomeScreen = () =>
             movies.map(({ id, poster_path }) => cacheImage(poster_path, id, 'Categories/'))
         });
 
-        frontPageShows.map(({ id, poster_path, backgroundImage }) => {
+        frontPageShows.map(({ id, poster_path, wallpaper_path }) => {
             cacheImage(poster_path, id, 'FrontPages/');
-            cacheImage(backgroundImage, id, 'FrontPages/');
+            cacheImage(wallpaper_path, id, 'FrontPages/');
         });
 
         setCategories(categories_);

@@ -55,6 +55,11 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
         });
 
+        setIsInteractionsComplete(true);
+    }
+
+    useEffect(() => 
+    {
         ComingSoonMovieCreatedEvent.listen(response => {
             ToastAndroid.show(`${ response.data.title } is Coming Soon.`, ToastAndroid.SHORT);
             dispatch(COMING_SOON_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
@@ -65,11 +70,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             dispatch(COMING_SOON_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
         });
 
-        setIsInteractionsComplete(true);
-    }
-
-    useEffect(() => 
-    {
         InteractionManager.runAfterInteractions(runAfterInteractions);
         
         return () => {

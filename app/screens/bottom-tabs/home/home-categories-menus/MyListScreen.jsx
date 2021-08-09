@@ -27,10 +27,8 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
     const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
 
     const handlePressDisplayShowInfo = (show) => {
-        setTimeout(() => {
-            setShow(show);
-            setShouldDisplayShowInfo(true);
-        }, 1);
+        setShow(show);
+        setShouldDisplayShowInfo(true);
     }
 
     const handleChangePicker = (value, index) => setSelectedPicker(value);

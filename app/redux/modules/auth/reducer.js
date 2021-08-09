@@ -365,10 +365,6 @@ export default (state = initialState, { type, payload }) =>
             
             let remindedMovies = loggedInProfile.reminded_coming_soon_shows;
 
-            if (! remindedMovies) {
-                remindedMovies.push(payload.show);
-            }
-
             if (remindedMovies.length) 
             {
                 const movieIndexLoc = remindedMovies.findIndex(({ id }) => id === payload.show.id); 
@@ -381,6 +377,10 @@ export default (state = initialState, { type, payload }) =>
                         remindedMovies.splice(movieIndexLoc, 1);
                     }
                 }
+            }
+
+            if (! remindedMovies.length) {
+                remindedMovies.push(payload.show);
             }
 
             newProfiles = profiles.map(prof => {

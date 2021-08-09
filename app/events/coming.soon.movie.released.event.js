@@ -15,8 +15,9 @@ export const listen = async (callback) =>
 export const unListen = async () => {
     return await Echo()    
         .then(res => {
-            res
-                .private('coming.soon.movie.released')
-                .stopListening('ComingSoonMovieReleasedEvent');
+            console.log('Unlistening to ComingSoonMovieReleasedEvent');
+            return res
+                    .private('coming.soon.movie.released')
+                    .stopListening('ComingSoonMovieReleasedEvent');
         })
 }
