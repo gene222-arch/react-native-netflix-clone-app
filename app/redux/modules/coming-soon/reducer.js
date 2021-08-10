@@ -6,7 +6,8 @@ const {
     GET_COMING_SOON_MOVIES_FAILED,
     CREATE_COMING_SOON_MOVIE,
     DELETE_COMING_SOON_MOVIE_BY_ID,
-    INCREMENT_NEW_COMING_SOON_MOVIE_COUNT
+    INCREMENT_NEW_COMING_SOON_MOVIE_COUNT,
+    VIEW_COMING_SOON_MOVIES
 } = ACTION_TYPES;
 
 const initialState = {
@@ -69,6 +70,14 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 totalUpcomingMovies: state.totalUpcomingMovies + 1
+            }
+
+
+        case VIEW_COMING_SOON_MOVIES:
+            return {
+                ...state,
+                totalUpcomingMovies: 0,
+                isLoading
             }
 
         default:

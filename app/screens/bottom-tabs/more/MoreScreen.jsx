@@ -15,6 +15,7 @@ import { authSelector, authProfileSelector } from './../../../redux/modules/auth
 import { useNavigation } from '@react-navigation/native';
 import DisplayOption from './../../../components/more-screen-display-option/DisplayOption';
 import LoadingSpinner from '../../../components/LoadingSpinner'
+import Echo from './../../../utils/echo'
 
 
 const moreOptions = ({ onPressSignOut, onPressMyList }) =>
@@ -69,14 +70,16 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
 
     const toggleSignOutDialog = () => setShowSignOutDialog(!showSignOutDialog);
 
-    const handlePressSignOut = () => {
+    const handlePressSignOut = async () => {
         batch(() => {
             dispatch(TOAST_ACTION.createToastMessageStart({
                 message: 'Signing Out',
                 toastAndroid: 'SHORT',
             }));
             dispatch(AUTH_ACTION.logoutStart());
-        })
+        });
+
+        (await Echo()).disconnect();
     }
 
     const handlePressMyList = () => navigation.navigate('MyListScreen', { headerTitle: 'My List' });

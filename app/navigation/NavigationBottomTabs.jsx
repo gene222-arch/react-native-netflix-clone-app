@@ -74,6 +74,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
         }
         
         return options;
+        
     }, [COMING_SOON_MOVIE.totalUpcomingMovies]);
 
     const DOWNLOAD_OPTIONS = ({

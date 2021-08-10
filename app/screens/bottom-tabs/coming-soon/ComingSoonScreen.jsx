@@ -4,7 +4,7 @@ import { FlatList, Platform, StatusBar } from 'react-native';
 import { createStructuredSelector } from 'reselect';
 import { useDispatch, connect, batch } from 'react-redux';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
-import * as COMING_SOON_ACTION from './../../../redux/modules/coming-soon/actions'
+import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
 import notifications from './../../../services/data/notifications';
 import styles from './../../../assets/stylesheets/comingSoon';
 import { authProfileSelector } from './../../../redux/modules/auth/selectors'
@@ -20,11 +20,13 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
+import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import LoadingSpinner from './../../../components/LoadingSpinner';
 
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
+    console.log('RENDER CSS Screen');
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -36,16 +38,43 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (show, message = '') => {
+    const handlePressToggleRemindMe = (show, isReminded = false) => 
+    {
         dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, show }));
-        message.length && setTimeout(() => ToastAndroid.show(message, ToastAndroid.SHORT), 100);
+
+        setTimeout(() => {
+            const message  = !isReminded ? 'Reminded' : '';
+            ToastAndroid.show(message, ToastAndroid.SHORT)
+        }, 100);
     }
 
     const handlePressInfo = (comingSoonMovie) => navigation.navigate('TrailerInfo', { comingSoonMovie });
 
+    const handleEvents = useCallback(() => 
+    {
+        ComingSoonMovieCreatedEvent.listen(response => {
+            batch(() => {
+                dispatch(TOAST_ACTION.createToastMessageStart({
+                    message: `Coming Soon ${ response.data.title }`
+                }));
+                dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
+                dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
+            });
+        });
+
+        ComingSoonMovieReleasedEvent.listen(response => {
+            batch(() => {
+                dispatch(TOAST_ACTION.createToastMessageStart({
+                    message: `Released ${ response.data.title }`
+                }));
+                dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+            });
+        });
+    }, []);
+
     const runAfterInteractions = () => 
     {
-        dispatch(COMING_SOON_ACTION.getComingSoonMoviesStart(notifications));
+        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart(notifications));
 
         COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
             cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
@@ -54,45 +83,31 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
         });
 
+        handleEvents();
+
         setIsInteractionsComplete(true);
     }
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         if (COMING_SOON_MOVIE.totalUpcomingMovies) {
-    //             dispatch(AUTH_ACTION.viewDownloadsStart());
-    //         }
+    useFocusEffect(
+        useCallback(() => {
+            if (COMING_SOON_MOVIE.totalUpcomingMovies) {
+                dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
+            }
+        }, [COMING_SOON_MOVIE.totalUpcomingMovies])
+    );
 
-    //         return () => dispatch(AUTH_ACTION.viewDownloadsStart());
-    //     }, [COMING_SOON_MOVIE.totalUpcomingMovies])
-    // );
-
-    useEffect(() => 
-    {
-        ComingSoonMovieCreatedEvent.listen(response => {
-            ToastAndroid.show(`${ response.data.title } is Coming Soon.`, ToastAndroid.SHORT);
-            batch(() => {
-                dispatch(COMING_SOON_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
-                dispatch(COMING_SOON_ACTION.incrementComingSoonMovieCount());
-            });
-        });
-
-        ComingSoonMovieReleasedEvent.listen(response => {
-            ToastAndroid.show(`${ response.data.title } is Released.`, ToastAndroid.SHORT);
-            dispatch(COMING_SOON_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-        });
-
+    useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-        
+
         return () => {
             ComingSoonMovieCreatedEvent.unListen();
             ComingSoonMovieReleasedEvent.unListen();
             setIsInteractionsComplete(false);
             setFocusedIndex(0);
         }
-    }, []);
+    }, []); 
 
-    if (!isInteractionsComplete) {
+    if (! isInteractionsComplete) {
         return <LoadingSpinner />
     }
 
@@ -103,16 +118,16 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                 onScroll={ handleOnScroll }
                 data={ COMING_SOON_MOVIE.comingSoonMovies }
                 renderItem={ ({ item, index }) => {
-                    let isReminded = AUTH_PROFILE.reminded_coming_soon_shows.find(({ id }) => id === item.id);
+                    let isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_shows.find(({ id }) => id === item.id));
 
                     return (
                         <ComingSoonMovieItem 
                             movie={ item }
                             shouldShowPoster={ focusedIndex !== index }
                             shouldFocus={ focusedIndex === index }
-                            handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item, !isReminded ? 'Reminded' : '') }
+                            handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item, isReminded) }
                             handlePressInfo={ () => handlePressInfo(item) }
-                            isReminded={ Boolean(AUTH_PROFILE.reminded_coming_soon_shows.find(({ id }) => id === item.id)) }
+                            isReminded={ isReminded }
                         />
                     )
                 }}

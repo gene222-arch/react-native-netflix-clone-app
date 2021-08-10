@@ -8,12 +8,8 @@ const styles = StyleSheet.create({
         height: 50
     },
     createProfileContainer: {
-        width: 120,
-        height: 120,
-        justifyContent: 'center',
-    },
-    createProfileIcon: {
-        textAlign: 'center'
+        width: '100%',
+        alignSelf: 'center'
     },
     createProfileText: {
         textAlign: 'center',
