@@ -26,7 +26,6 @@ import LoadingSpinner from './../../../components/LoadingSpinner';
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
-    console.log('RENDER CSS Screen');
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -38,25 +37,27 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (show, isReminded = false) => 
+    const handlePressToggleRemindMe = (movieID, isReminded = false) => 
     {
-        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, show }));
-
-        setTimeout(() => {
-            const message  = !isReminded ? 'Reminded' : '';
-            ToastAndroid.show(message, ToastAndroid.SHORT)
-        }, 100);
+        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
     }
 
     const handlePressInfo = (comingSoonMovie) => navigation.navigate('TrailerInfo', { comingSoonMovie });
 
-    const handleEvents = useCallback(() => 
+    // const cacheFiles = useCallback(() => {
+    //     COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
+    //         cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
+    //         cacheImage(poster_path, id, 'ComingSoon/Posters/');
+    //         cacheImage(wallpaper_path, id, 'ComingSoon/Wallpaper/');
+    //         cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
+    //     });
+    // }, [COMING_SOON_MOVIE.comingSoonMovies]);
+
+    const runAfterInteractions = () => 
     {
         ComingSoonMovieCreatedEvent.listen(response => {
             batch(() => {
-                dispatch(TOAST_ACTION.createToastMessageStart({
-                    message: `Coming Soon ${ response.data.title }`
-                }));
+                dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
                 dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
                 dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
             });
@@ -64,27 +65,12 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
         ComingSoonMovieReleasedEvent.listen(response => {
             batch(() => {
-                dispatch(TOAST_ACTION.createToastMessageStart({
-                    message: `Released ${ response.data.title }`
-                }));
+                dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
                 dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
             });
         });
-    }, []);
 
-    const runAfterInteractions = () => 
-    {
         dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart(notifications));
-
-        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
-            cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
-            cacheImage(poster_path, id, 'ComingSoon/Posters/');
-            cacheImage(wallpaper_path, id, 'ComingSoon/Wallpaper/');
-            cacheImage(title_logo_path, id, 'ComingSoon/TitleLogos/');
-        });
-
-        handleEvents();
-
         setIsInteractionsComplete(true);
     }
 
@@ -93,12 +79,15 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             if (COMING_SOON_MOVIE.totalUpcomingMovies) {
                 dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
             }
+
+            return () => {
+                dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
+            }
         }, [COMING_SOON_MOVIE.totalUpcomingMovies])
     );
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-
         return () => {
             ComingSoonMovieCreatedEvent.unListen();
             ComingSoonMovieReleasedEvent.unListen();
@@ -118,16 +107,16 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                 onScroll={ handleOnScroll }
                 data={ COMING_SOON_MOVIE.comingSoonMovies }
                 renderItem={ ({ item, index }) => {
-                    let isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_shows.find(({ id }) => id === item.id));
+                    let isReminded = AUTH_PROFILE.reminded_coming_soon_shows.find(movieID => movieID === item.id);
 
                     return (
                         <ComingSoonMovieItem 
                             movie={ item }
                             shouldShowPoster={ focusedIndex !== index }
                             shouldFocus={ focusedIndex === index }
-                            handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item, isReminded) }
+                            handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
                             handlePressInfo={ () => handlePressInfo(item) }
-                            isReminded={ isReminded }
+                            isReminded={ Boolean(isReminded) }
                         />
                     )
                 }}

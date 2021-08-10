@@ -359,25 +359,17 @@ export default (state = initialState, { type, payload }) =>
             }            
 
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
-            
+
+            const { movieID } = payload;
             let remindedMovies = loggedInProfile.reminded_coming_soon_shows;
 
-            if (remindedMovies.length) 
-            {
-                const movieIndexLoc = remindedMovies.findIndex(({ id }) => id === payload.show.id); 
-                
-                for (let index = 0; index < remindedMovies.length; index++) 
-                {
-                    if (movieIndexLoc === -1) {
-                        remindedMovies.push(payload.show);
-                    } else {
-                        remindedMovies.splice(movieIndexLoc, 1);
-                    }
-                }
-            }
+            let isReminded = remindedMovies.find(id => id === movieID);
 
-            if (! remindedMovies.length) {
-                remindedMovies.push(payload.show);
+            if (! isReminded) {
+                remindedMovies.push(movieID)
+            }
+            else {
+                 remindedMovies = remindedMovies.filter(id => id !== movieID);
             }
 
             newProfiles = profiles.map(prof => {

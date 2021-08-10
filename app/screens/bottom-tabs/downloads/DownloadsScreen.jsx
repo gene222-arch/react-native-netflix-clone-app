@@ -4,33 +4,16 @@ import { connect, useDispatch } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { InteractionManager, Platform, StatusBar, TouchableOpacity, FlatList, ToastAndroid, ActivityIndicator } from 'react-native'
 import * as FileSystem from 'expo-file-system'
-
-/** API */
-
-/** Actions */
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
-
-/** Selectors */
 import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
-
-/** RNE Components */
 import { Button, Overlay  } from 'react-native-elements';
-
-/** RNE Icons */
 import FeatherIcon from 'react-native-vector-icons/Feather';
-
-/** Components */
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import AppBar from '../../AppBar';
 import VideoPlayerFullScreen from '../../../components/VideoPlayerFullScreen';
 import DownloadItem from '../../../components/download-item/DownloadItem';
-import LoadingScreen from './../../../components/LoadingScreen';
-
-/** Styles */
 import styles from './../../../assets/stylesheets/downloads';
-
-/** Utils */
 import { cacheImage } from './../../../utils/cacheImage';
 import LoadingSpinner from './../../../components/LoadingSpinner';
 
@@ -107,12 +90,10 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     );
 
 
-    /** Show Loading */
     if (! isInteractionsComplete) {
         return <LoadingSpinner />
     }
     
-    /** Play Video in Full Screen */
     if (showVideo) {
         return (
             <VideoPlayerFullScreen 

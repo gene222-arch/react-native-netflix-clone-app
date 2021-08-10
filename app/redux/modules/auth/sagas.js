@@ -173,9 +173,10 @@ function* toggleAddToMyListSaga(payload)
 function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {
-        const { user_profile_id, show } = payload;
-        yield call(AUTH_API.toggleRemindMeAsync, { user_profile_id, coming_soon_movie_id: show.id });
-        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ show }));
+        const { user_profile_id, movieID: coming_soon_movie_id } = payload;
+
+        yield put(ACTION.toggleRemindMeOfComingShowSuccess({ movieID: coming_soon_movie_id }));
+        yield call(AUTH_API.toggleRemindMeAsync, { user_profile_id, coming_soon_movie_id });
     } catch ({ message }) {
         yield put(ACTION.toggleRemindMeOfComingShowFailed({ message }));
     }
