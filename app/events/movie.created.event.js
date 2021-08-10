@@ -1,23 +1,18 @@
 import Echo from './../utils/echo'
 
+const EVENT_NAME = 'MovieCreatedEvent';
+const CHANNEL = 'movie.created';
+
 export const listen = async (callback) =>
 {
     return await Echo().then(res => {
-        res
-            .private('movie.created')
-            .listen('MovieCreatedEvent', callback)
-            .error(err => {
-                console.log(err)
-            });
-    })
-}
-
-export const unListen = async () => {
-    return await Echo()    
-        .then(res => {
-            console.log('Unlistening to MovieCreatedEvent');
-            return res
-                    .private('movie.created')
-                    .stopListening('MovieCreatedEvent');
+        return res
+                .private('movie.created')
+                .listen(EVENT_NAME, callback)
+                .error(err => {
+                    console.log(err)
+                });
         })
 }
+
+export const unListen = async () => (await Echo()).leave(CHANNEL);

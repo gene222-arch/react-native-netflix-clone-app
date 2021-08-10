@@ -48,7 +48,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 <FlatList 
                     data={[ ...AUTH.profiles, { id: '' } ]}
                     numColumns={ 2 }
-                    renderItem={ ({ item, index }) => (
+                    renderItem={ ({ item, index }) => index !== 5 && (
                         <DisplayProfile
                             profile={ item }
                             handlePressSelectProfile={ () => handlePressSelectProfile(item.id) }

@@ -16,9 +16,7 @@ const style = StyleSheet.create({
 
 const DisplayProfile = ({ AUTH, profile, handlePressSelectProfile, index }) => 
 {
-    const isProfileCountMaxed = (AUTH.profiles.length + 1) !== (index + 1);
-    
-    if (isProfileCountMaxed) {
+    if (profile.id) {
         return (
             <SelectProfileItem 
                 item={ profile } 
