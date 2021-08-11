@@ -17,6 +17,8 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) =>
 {
     const dispatch = useDispatch();
 
+    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_shows.find(movie_ => movie_.id === movie.id));
+
     const handlePressAddToMyList = () => {
         dispatch(AUTH_ACTION.toggleAddToMyListStart(movie));
         
@@ -27,14 +29,14 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) =>
         dispatch(TOAST_ACTION.createToastMessageStart({ message }));
     }
 
-    const handlePressLike = () => {
+    const handlePressLike = () => 
+    {
         const { other_movies, ...movieDetails } = movie;
-        dispatch(AUTH_ACTION.rateShowStart({ show: movieDetails, rate: 'like' }));
+        const rate = !hasLikedMovie ? 'like' : '';
+        
+        dispatch(AUTH_ACTION.rateShowStart({ show: movieDetails, rate, user_profile_id: AUTH_PROFILE.id }));
 
-        const message = !AUTH_PROFILE.liked_shows.find(({ id }) => id === movie.id)
-            ? 'Liked'
-            : 'Unrated';
-
+        const message = !hasLikedMovie ? 'Liked' : 'Unrated';
         dispatch(TOAST_ACTION.createToastMessageStart({ message }));
     }
 
@@ -73,7 +75,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) =>
                                     name='thumbs-up'
                                     size={ 30 }
                                     color='white'
-                                    solid={ Boolean(AUTH_PROFILE.liked_shows.find(movie_ => movie_.id === movie.id)) }
+                                    solid={ hasLikedMovie }
                                 />
                             }
                         />

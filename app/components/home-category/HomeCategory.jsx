@@ -5,20 +5,26 @@ import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import Image from './../Image';
 import { getCachedFile } from './../../utils/cacheImage';
+import View from './../View';
 
 
-const HomeCategory = ({ title, categories }) => 
+const HomeCategory = ({ title, categorizedMovies }) => 
 {
     const navigation = useNavigation();
 
-    const handlePressMovieImage = (show) => navigation.navigate('MovieDetailScreen', { id: show.id, headerTitle: show.title });
+    const handlePressMovieImage = (movie) => {
+        navigation.navigate('MovieDetailScreen', { 
+            id: movie.id, 
+            headerTitle: movie.title 
+        });
+    }
 
-    return categories.length > 0 && (
-        <>
+    return (
+        <View>
             <Text h4 style={ styles.categoryTitle }>{ title }</Text>
             <FlatList 
-                keyExtractor={({ id }) => id}
-                data={ categories }
+                keyExtractor={({ id }) => id.toString() }
+                data={ categorizedMovies }
                 renderItem={({ item }) => (
                     <Pressable onPress={ () => handlePressMovieImage(item) }>
                         <Image 
@@ -33,7 +39,7 @@ const HomeCategory = ({ title, categories }) =>
                 showsHorizontalScrollIndicator={ false }
                 showsVerticalScrollIndicator={ false }
             />
-        </>
+        </View>
     )
 }
 

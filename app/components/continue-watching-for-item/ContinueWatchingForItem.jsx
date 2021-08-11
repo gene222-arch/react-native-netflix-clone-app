@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Video } from 'expo-av'
+import React, { useState, useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
 import styles from './../../assets/stylesheets/continueWatchingForItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -12,11 +11,11 @@ import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
+import Image from './../Image';
 
 
 const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
-    const videoRef = useRef(null);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
@@ -29,7 +28,6 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
     useEffect(() => {
         return () => {
-            videoRef.current = null;
             setShowInfo(false);
             setShowMoreOptions(false);
             setShouldPlayVideo(false);
@@ -58,16 +56,11 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
             <Info selectedShow={ movie } isVisible={ showInfo } setIsVisible={ setShowInfo } />
 
-            <Video 
-                ref={ videoRef }
-                style={ styles.video }
+            <Image 
                 source={{
-                    uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, movie.id, movie.video_path)
+                    uri: getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, movie.id, movie.poster_path)
                 }}
-                usePoster={ !shouldPlayVideo  }
-                posterSource={{ uri: getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, movie.id, movie.poster_path) }}
-                posterStyle={ styles.poster }
-                useNativeControls
+                style={ styles.poster }
             />
 
             <MaterialCommunityIcon 

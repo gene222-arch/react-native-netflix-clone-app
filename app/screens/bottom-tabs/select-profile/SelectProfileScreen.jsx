@@ -10,6 +10,7 @@ import { authSelector } from './../../../redux/modules/auth/selectors';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import { useNavigation } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 
 const SelectProfileScreen = ({ AUTH }) => 
@@ -23,7 +24,7 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     return (
         <View style={ styles.container }>
-
+            <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Header */}
             <View style={ styles.header }>
                 <Text></Text>

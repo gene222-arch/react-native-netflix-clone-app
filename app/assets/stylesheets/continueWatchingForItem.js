@@ -6,15 +6,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: 10,
     },
-    video: {
-        width: 125,
-        height: 170,
-        marginRight: 10,
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        resizeMode: 'contain',
-        backgroundColor: Colors.grey
-    },
     infoMoreContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -27,9 +18,14 @@ const styles = StyleSheet.create({
     playIcon: {
         position: 'absolute',
         top: '30%',
-        left: '25%'
+        left: '25%',
     },
     poster: {
+        width: 125,
+        height: 170,
+        marginRight: 10,
+        borderTopRightRadius: 5,
+        borderTopLeftRadius: 5,
         resizeMode: 'cover'
     },
 });

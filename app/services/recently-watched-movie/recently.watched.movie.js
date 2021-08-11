@@ -3,31 +3,42 @@ import axiosInstance from '../../utils/axiosInstance'
 export const fetchAllAsync = async (payload) => 
 {
     return await axiosInstance()
-        .get('/movies')
+        .get('/recently-watched-movies')
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
 
-export const fetchCategorizedMoviesAsync = async (payload) => 
+export const findByIdAsync = async (id) => 
 {
     return await axiosInstance()
-        .get('/movies/categorized')
+        .get(`/recently-watched-movies/${ id }`)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
 
-export const fetchLatestTwentyAsync = async (payload) => 
+export const createAsync = async (payload) => 
 {
     return await axiosInstance()
-        .get('/movies/latest/20')
+        .post(`/recently-watched-movies/${ payload.user_profile_id }`, payload)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
 
-export const findByIDAsync = async (id) => 
+export const updateAsync = async (payload) => 
 {
     return await axiosInstance()
-        .get(`/movies/${ id }`)
+        .put(`/recently-watched-movies`, payload)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
+
+export const destroyAsync = async (payload) => 
+{
+    return await axiosInstance()
+        .delete(`/recently-watched-movies`, {
+            data: payload
+        })
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+

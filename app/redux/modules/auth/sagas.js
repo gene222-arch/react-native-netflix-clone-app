@@ -3,6 +3,7 @@ import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
+import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
 import * as ACTION from './actions'
 
@@ -29,7 +30,10 @@ const {
 function* addToRecentWatchesSaga(payload)  
 {
     try {
+        const { user_profile_id, movie } = payload;
+
         yield put(ACTION.addToRecentWatchesSuccess({ show: payload }));
+        yield call(RECENTLY_WATCHED_MOVIE_API, { movie_id: movie.id, user_profile_id });
     } catch ({ message }) {
         yield put(ACTION.addToRecentWatchesFailed({ message }));
     }
@@ -65,7 +69,10 @@ function* deleteProfileSaga(payload)
 function* rateShowSaga(payload)  
 {
     try {
+        const { show, user_profile_id, rate } = payload;
+
         yield put(ACTION.rateShowSuccess(payload));
+        yield call(AUTH_API.rateMovieAsync, { user_profile_id, movie_id: 13, rate });
     } catch ({ message }) {
         yield put(ACTION.rateShowFailed({ message }));
     }
@@ -77,8 +84,10 @@ function* rateShowSaga(payload)
 function* rateRecentlyWatchedMovieSaga(payload)  
 {
     try {
+        const { show, user_profile_id, rate } = payload;
+        
         yield put(ACTION.rateRecentlyWatchedMovieSuccess(payload));
-        // yield put(ACTION.AUTH_API.rateMovieAsync, payload);
+        yield call(AUTH_API.rateMovieAsync, { user_profile_id, movie_id: 13, rate });
     } catch ({ message }) {
         yield put(ACTION.rateRecentlyWatchedMovieFailed({ message }));
     }
@@ -136,7 +145,9 @@ function* removeToMyDownloadsSaga(payload)
 function* removeToRecentWatchesSaga(payload)  
 {
     try {
-        yield put(ACTION.removeToRecentWatchesSuccess({ showID: payload }));
+        const { movie_id } = payload;
+        yield put(ACTION.removeToRecentWatchesSuccess({ movie_id }));
+        yield call(RECENTLY_WATCHED_MOVIE_API.destroyAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.removeToRecentWatchesFailed({ message }));
     }
@@ -145,8 +156,9 @@ function* removeToRecentWatchesSaga(payload)
 function* selectProfileSaga(payload)  
 {
     try {
-        yield put(ACTION.selectProfileSuccess(payload));
-        
+        const { id } = payload;
+        const { data } = yield call(AUTH_API.findProfileByIdAsync, id)
+        yield put(ACTION.selectProfileSuccess(data));
         RootNavigation.navigate('Home');
     } catch ({ message }) {
         yield put(ACTION.selectProfileFailed({ message }));
@@ -167,9 +179,6 @@ function* toggleAddToMyListSaga(payload)
     }
 }
 
-/**
- * Todo: Test API Request to Server
- */
 function* toggleRemindMeOfComingShowSaga(payload)
 {
     try {

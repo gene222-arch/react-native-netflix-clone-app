@@ -123,15 +123,15 @@ export default (state = initialState, { type, payload }) =>
 
         case ADD_TO_RECENT_WATCHES_SUCCESS:
 
-            const recentlyWatchedMovieExists = loggedInProfile.recently_watched_shows.find(({ id }) => id === payload.show.id);
+            const recentlyWatchedMovieExists = loggedInProfile.recently_watched_shows.find(({ id }) => id === payload.movie.id);
 
             if (! recentlyWatchedMovieExists) {
-                loggedInProfile.recently_watched_shows.push(payload.show);
+                loggedInProfile.recently_watched_shows.push(payload.movie);
             }
             
             if (recentlyWatchedMovieExists) {
                 loggedInProfile.recently_watched_shows.splice(recentlyWatchedMovieExists, 1);
-                loggedInProfile.recently_watched_shows.unshift(payload.show);
+                loggedInProfile.recently_watched_shows.unshift(payload.movie);
             }
 
             newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? loggedInProfile : prof);
@@ -313,10 +313,10 @@ export default (state = initialState, { type, payload }) =>
 
             const filteredRecentlyWatchedMovies = loggedInProfile
                 .recently_watched_shows
-                .filter(({ id }) => id !== payload.showID);
+                .filter(({ id }) => id !== payload.movie_id);
 
             newProfiles = profiles.map(prof => {
-                return (prof.id === profile.id) 
+                return (prof.id === loggedInProfile.id) 
                     ? { ...prof, recently_watched_shows: filteredRecentlyWatchedMovies } 
                     : prof;
             });
@@ -329,9 +329,23 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case SELECT_PROFILE_SUCCESS:
+
+            const { profile: profile_, recently_watched_movies } = payload;
+
+            newProfiles = profiles.map(prof => 
+                prof.id === profile_.id 
+                    ? { 
+                        ...prof,
+                        ...profile_, 
+                        recently_watched_shows: recently_watched_movies 
+                    } 
+                    : prof
+            );
+
             return {
                 ...state,
-                profile: profiles.find(({ id }) => id === payload.id),
+                profile: profile_,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }

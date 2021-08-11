@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { FlatList } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import categories_ from './../../../services/data/categories';
 import frontPageShows from './../../../services/data/frontPageShows';
 import View from './../../../components/View';
 import HomeCategory from '../../../components/home-category/HomeCategory';
@@ -12,7 +11,10 @@ import NavBar from './home-components/NavBar';
 import FrontPageOptions from './home-components/FrontPageOptions';
 import ContinueWatchingFor from './home-components/ContinueWatchingFor';
 import LoadingSpinner from './../../../components/LoadingSpinner';
-
+import { useDispatch, connect, batch } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { movieSelector } from './../../../redux/modules/movie/selectors';
+import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 
 const DEFAULT_FRONT_PAGE = {
     id: '',
@@ -24,19 +26,24 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-const HomeScreen = () => 
+const HomeScreen = ({ MOVIE }) => 
 {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
-    const [ categories, setCategories ] = useState([]);    
 
     const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
 
     const runAfterInteractions = () => 
     {
-        categories_.items.map(({ movies }) => {
+        batch(() => {
+            dispatch(MOVIE_ACTION.getCategorizedMoviesStart());
+            dispatch(MOVIE_ACTION.getMoviesStart());
+        });
+
+        MOVIE.categories.map(({ movies }) => {
             movies.map(({ id, poster_path }) => cacheImage(poster_path, id, 'Categories/'))
         });
 
@@ -45,7 +52,6 @@ const HomeScreen = () =>
             cacheImage(wallpaper_path, id, 'FrontPages/');
         });
 
-        setCategories(categories_);
         setFrontPage(frontPageShows[0]);
         setIsInteractionsComplete(true);
     }
@@ -54,7 +60,6 @@ const HomeScreen = () =>
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            setCategories([]);
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
         }
@@ -68,15 +73,14 @@ const HomeScreen = () =>
     return (
         <View style={ styles.container }>
             <FlatList 
-                data={ categories.items }
-
+                keyExtractor={ (item, index) => index.toString() }
+                data={ MOVIE.categories }
                 renderItem={({ item }) => (
                     <HomeCategory 
-                        title={ item.title } 
-                        categories={ item.movies } 
+                        title={ item.title }
+                        categorizedMovies={ item.movies } 
                     />
                 )}
-
                 ListHeaderComponent={
                     <View>
                          <ImageBackground source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.wallpaper_path) }}
@@ -93,4 +97,8 @@ const HomeScreen = () =>
     )
 }
 
-export default HomeScreen
+const mapStateToProps = createStructuredSelector({
+    MOVIE: movieSelector
+});
+
+export default connect(mapStateToProps)(HomeScreen)

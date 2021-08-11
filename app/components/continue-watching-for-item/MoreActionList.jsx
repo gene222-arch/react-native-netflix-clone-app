@@ -111,9 +111,9 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
             title: (! selectedVideo?.rate) ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
-            isSolid: selectedVideo?.rate === 'not for me',
+            isSolid: selectedVideo?.rate === 'dislike',
             onPress: () => handleToggleDisLike(),
-            show: (! selectedVideo?.rate) || selectedVideo?.rate === 'not for me',
+            show: (! selectedVideo?.rate) || selectedVideo?.rate === 'dislike',
         },
         {
             title: 'Remove From Row',

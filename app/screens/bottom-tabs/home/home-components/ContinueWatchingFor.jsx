@@ -14,33 +14,44 @@ import { cacheImage } from '../../../../utils/cacheImage';
 const ContinueWatchingFor = ({ AUTH_PROFILE }) => 
 {
     const dispatch  = useDispatch();
-    const recentlyWatchedMovies = AUTH_PROFILE.recently_watched_shows;
+    
+    const { id, name, recently_watched_shows } = AUTH_PROFILE;
 
-    const handleToggleLike = (show) => dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ show, rate: 'like' }));
+    const handleToggleLike = (show) => {
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ user_profile_id: id, show, rate: 'like' }));
+    }
 
-    const handleToggleDisLike = (show) => dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ show, rate: 'not for me' }));
+    const handleToggleDisLike = (show) => {
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ user_profile_id: id, show, rate: 'dislike' }));
+    }
 
-    const handlePressRemove = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart(id));
+    /**
+     * Todo: Not yet tested
+     */
+    const handlePressRemove = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart({
+        movie_id: id,
+        user_profile_id: AUTH_PROFILE.id
+    }));
 
     useEffect(() => {
-        recentlyWatchedMovies.map(({ id, poster_path, video_path }) => {
-            cacheImage(poster_path, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`);
-            cacheImage(video_path, id, `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`);
+        recently_watched_shows.map(({ id: movie_id, poster_path, video_path }) => {
+            cacheImage(poster_path, movie_id, `RecentlyWatchedShows/Profile/${ id }/Posters/`);
+            cacheImage(video_path, movie_id, `RecentlyWatchedShows/Profile/${ id }/Videos/`);
         });
-    }, []);
+    }, [AUTH_PROFILE.recently_watched_shows]);
 
 
-    if (! recentlyWatchedMovies.length) {
+    if (! recently_watched_shows.length) {
         return <Text h4>Your recently watched show's will be shown here.</Text>
     }
 
     return (
         <View style={ styles.container }>
-            <Text h4>Continue Watching For { AUTH_PROFILE.name }</Text>
+            <Text h4>Continue Watching For { name }</Text>
 
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ recentlyWatchedMovies }
+                data={ recently_watched_shows }
                 horizontal
                 renderItem={({ item }) =>  (
                     <ContinueWatchingForItem 

@@ -10,6 +10,10 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { getCachedFile } from './../../utils/cacheImage';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
 const DEFAULT_SHOW = {
     id: '',
@@ -27,7 +31,7 @@ const DEFAULT_SHOW = {
     trailer_video_path: ''
 };
 
-const Info = ({ selectedShow = DEFAULT_SHOW, isVisible, setIsVisible }) => 
+const Info = ({ AUTH_PROFILE, selectedShow = DEFAULT_SHOW, isVisible, setIsVisible }) => 
 {   
     const navigation = useNavigation();
 
@@ -43,7 +47,7 @@ const Info = ({ selectedShow = DEFAULT_SHOW, isVisible, setIsVisible }) =>
         setShowVideo(false);
     }
 
-    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { id: selectedShow?.id });
+    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { id: selectedShow.id });
 
     useEffect(() => {
         return () => {
@@ -70,7 +74,7 @@ const Info = ({ selectedShow = DEFAULT_SHOW, isVisible, setIsVisible }) =>
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
-                        source={{ uri: selectedShow.poster_path }}
+                        source={{ uri: getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, selectedShow.id, selectedShow.poster_path) }}
                         style={ styles.poster }
                     />
                     <ListItem.Content>
@@ -165,4 +169,8 @@ const Info = ({ selectedShow = DEFAULT_SHOW, isVisible, setIsVisible }) =>
     )
 }
 
-export default Info
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(Info)

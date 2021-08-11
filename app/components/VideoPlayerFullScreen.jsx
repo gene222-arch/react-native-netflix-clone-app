@@ -15,18 +15,11 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
     const video = useRef(null);
     const [inFullscreen, setInFullscreen] = useState(false);
 
-    const icon = {
-        play: <Text style={{ color: '#FFF' }}>PLAY</Text>,
-        pause: <Text style={{ color: '#FFF' }}>PAUSE</Text>,
-        replay: <Text style={{ color: '#FFF' }}>REPLAY</Text>,
-    };
-
     const onEnterFullScreen = async () => 
     {
         dispatch(NAVIGATION_ACTION.toggleTabBarStart());
-
-        setStatusBarHidden(true, 'fade')
         setInFullscreen(!inFullscreen)
+
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
         video?.current?.setStatusAsync({
           shouldPlay: true,
@@ -38,21 +31,20 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
         dispatch(NAVIGATION_ACTION.toggleTabBarStart());
 
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-        setStatusBarHidden(false, 'fade');
         setInFullscreen(false);
         handleCloseVideo();
     }
 
-    const style = {
-        videoBackgroundColor: 'black',
-        height: inFullscreen ? DEVICE_WIDTH : 160,
-        width: inFullscreen ? DEVICE_HEIGHT : 320,
-    };
+    const unLockOrientation = async () => {
+        await ScreenOrientation.unlockAsync();
+    }
 
     useEffect(() => {
         onEnterFullScreen();
+
         return () => {
             video.current = null;
+            unLockOrientation();
             setInFullscreen(false);
         }
     }, []);
@@ -65,13 +57,21 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
                 source: { uri },
                 ref: video,
             }}
-            icon={ icon }
+            icon={{
+                play: <Text style={{ color: '#FFF' }}>PLAY</Text>,
+                pause: <Text style={{ color: '#FFF' }}>PAUSE</Text>,
+                replay: <Text style={{ color: '#FFF' }}>REPLAY</Text>,
+            }}
             fullscreen={{
                 inFullscreen,
                 enterFullscreen: onEnterFullScreen,
                 exitFullscreen: onExitFullScreen,
             }}
-            style={ style }
+            style={{
+                videoBackgroundColor: 'black',
+                height: inFullscreen ? DEVICE_WIDTH : 160,
+                width: inFullscreen ? DEVICE_HEIGHT : 320,
+            }}
             
         />
     )

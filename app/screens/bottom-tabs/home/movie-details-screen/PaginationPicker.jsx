@@ -7,11 +7,11 @@ import Text from './../../../../components/Text';
 
 const PaginationPicker = ({ selectedPage = 0, handleChangePage, pages = [] }) => 
 {
-    return (
+    return pages.length > 0 && (
         <View>
             <Divider style={ styles.divider } />
             <View style={ styles.episodesAndMoreLikeThisContainer }>
-                <Text style={ styles.episodeHeader }>EPISODES</Text>
+                <Text style={ styles.episodeHeader }></Text>
                 <Picker
                     selectedValue={ selectedPage }
                     onValueChange={ handleChangePage }

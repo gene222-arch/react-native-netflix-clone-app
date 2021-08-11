@@ -1,7 +1,7 @@
 import Constants from 'expo-constants';
 
-const DEVELOPMENT_MODE_API_URL = "http://192.168.1.5:8000/api";
-const DEVELOPMENT_MODE_BROADCAST_URL = "http://192.168.1.5:8000/broadcasting/auth";
+const DEVELOPMENT_MODE_API_URL = "http://192.168.1.8:8000/api";
+const DEVELOPMENT_MODE_BROADCAST_URL = "http://192.168.1.8:8000/broadcasting/auth";
 const PRODUCTION_MODE_API_URL = "";
 const PRODUCTION_MODE_BROADCAST_URL = "";
 
@@ -13,8 +13,8 @@ const PUSHER_CONFIG =
     APP_KEY: 'KEYukFb2MggByICNXro1nS',
     APP_SECRET: 'SECRETukFb2MggByICNXro1nS',
     APP_CLUSTER: 'mt1',
-    HOST: '192.168.1.5',
-    WEBSOCKET_HOST: '192.168.1.5:6001'
+    HOST: '192.168.1.8',
+    WEBSOCKET_HOST: '192.168.1.8:6001'
 }
 
 const ENVIRONMENT_VARIABLES = 

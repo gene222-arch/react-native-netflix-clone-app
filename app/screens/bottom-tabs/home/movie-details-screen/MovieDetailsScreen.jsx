@@ -15,11 +15,12 @@ import PaginationPicker from './PaginationPicker';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import ActionButton from './../../../../components/ActionButton';
+import { movieSelector } from './../../../../redux/modules/movie/selectors';
 
 
 const PER_PAGE = 3;
 
-const MovieDetailsScreen = ({ AUTH_PROFILE, route }) => 
+const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) => 
 {   
     const dispatch = useDispatch();
     const { id: movieID } = route.params;
@@ -35,7 +36,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route }) =>
 
     const handlePressPlayVideo = () => {
         videoRef.current.playAsync();
-        dispatch(AUTH_ACTION.addToRecentWatchesStart(movie));
+        dispatch(AUTH_ACTION.addToRecentWatchesStart({ movie, user_profile_id: AUTH_PROFILE.id }));
     }
 
     const handlePressPauseVideo = () => videoRef.current.pauseAsync();
@@ -47,7 +48,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route }) =>
 
     const runAfterInteractions = () => 
     {
-        const { other_movies, ...movieDetails } = moviesAPI.find(({ id }) => id === movieID);
+        const { other_movies, ...movieDetails } = MOVIE.movies.find(({ id }) => id === movieID);
 
         let pageList_ = [];
         let totalPages = [];
@@ -97,9 +98,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route }) =>
                     width: '100%',
                     aspectRatio: 16/9
                 }}
-                source={{
-                    uri: movie.video_path
-                }}
+                source={{ uri: movie.video_path }}
                 useNativeControls
                 resizeMode='contain'
                 onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
@@ -133,7 +132,8 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH_PROFILE: authProfileSelector
+    AUTH_PROFILE: authProfileSelector,
+    MOVIE: movieSelector
 });
 
 export default connect(mapStateToProps)(MovieDetailsScreen)
