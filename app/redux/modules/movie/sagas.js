@@ -8,12 +8,15 @@ import {
     getMoviesFailed, 
     getLatestTwentyMoviesSuccess, 
     getLatestTwentyMoviesFailed,
+    incrementMovieViewsSuccess,
+    incrementMovieViewsFailed
 } from './actions'
 
 const {
     GET_CATEGORIZED_MOVIES_START,
     GET_MOVIES_START,
-    GET_LATEST_TWENTY_MOVIES_START
+    GET_LATEST_TWENTY_MOVIES_START,
+    INCREMENT_MOVIE_VIEWS_START
 } = ACTION_TYPES;
 
 
@@ -49,6 +52,16 @@ function* getLatestTwentyMoviesSaga()
     }
 }
 
+function* incrementMovieViewsSaga()  
+{
+    try {
+        yield call(API.incrementViewsAsync);
+        yield put(incrementMovieViewsSuccess());
+    } catch ({ message }) {
+        yield put(incrementMovieViewsFailed({ message }));
+    }
+}
+
 /** Watchers or Observers */
 
 function* getCategorizedMoviesWatcher()
@@ -75,6 +88,13 @@ function* getLatestTwentyMoviesWatcher()
     }
 }
 
+function* incrementMovieViewsWatcher()
+{
+    while (true) {
+        yield take(INCREMENT_MOVIE_VIEWS_START);
+        yield call(incrementMovieViewsSaga);
+    }
+}
 
 export default function* ()
 {
@@ -82,6 +102,7 @@ export default function* ()
         getCategorizedMoviesWatcher(),
         getMoviesWatcher(),
         getLatestTwentyMoviesWatcher(),
+        incrementMovieViewsWatcher(),
     ]);
 }
 

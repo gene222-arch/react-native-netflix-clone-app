@@ -7,7 +7,10 @@ const {
     CREATE_COMING_SOON_MOVIE,
     DELETE_COMING_SOON_MOVIE_BY_ID,
     INCREMENT_NEW_COMING_SOON_MOVIE_COUNT,
-    VIEW_COMING_SOON_MOVIES
+    VIEW_COMING_SOON_MOVIES,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_START,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_SUCCESS,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED
 } = ACTION_TYPES;
 
 /** 
@@ -45,6 +48,24 @@ export const deleteComingSoonMovieById = (payload) => ({
 
  export const viewComingSoonMovies = (payload) => ({
     type: VIEW_COMING_SOON_MOVIES,
+    payload
+});
+
+/** 
+ * Increment comign soon movie views
+ */
+ export const incrementComingSoonMovieViewsStart = (payload) => ({
+    type: INCREMENT_COMING_SOON_MOVIE_VIEWS_START,
+    payload
+});
+
+export const incrementComingSoonMovieViewsSuccess = (payload) => ({
+    type: INCREMENT_COMING_SOON_MOVIE_VIEWS_SUCCESS,
+    payload
+});
+
+export const incrementComingSoonMovieViewsFailed = (payload) => ({
+    type: INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED,
     payload
 });
 

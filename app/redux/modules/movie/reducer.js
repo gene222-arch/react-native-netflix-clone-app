@@ -10,7 +10,10 @@ const {
     GET_MOVIES_FAILED,
     GET_LATEST_TWENTY_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_SUCCESS,
-    GET_LATEST_TWENTY_MOVIES_FAILED
+    GET_LATEST_TWENTY_MOVIES_FAILED,
+    INCREMENT_MOVIE_VIEWS_START,
+    INCREMENT_MOVIE_VIEWS_SUCCESS,
+    INCREMENT_MOVIE_VIEWS_FAILED
 } = ACTION_TYPES;
 
 const initialState = {
@@ -22,24 +25,25 @@ const initialState = {
 
 export default (state = initialState, { type, payload }) => 
 {
-    const isLoading = true;
+    const isLoading = false;
     const errors = [];
 
     switch (type) 
     {
         case GET_CATEGORIZED_MOVIES_START:
+        case INCREMENT_MOVIE_VIEWS_START:
         case GET_LATEST_TWENTY_MOVIES_START:
         case GET_MOVIES_START:
             return { 
                 ...state, 
-                isLoading
+                isLoading: true
             }
 
         case GET_MOVIES_SUCCESS:
             return { 
                 ...state, 
                 movies: payload.movies,
-                isLoading: false,
+                isLoading,
                 errors
             }
 
@@ -47,7 +51,7 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 movies: payload.movies,
-                isLoading: false,
+                isLoading,
                 errors
             }
 
@@ -55,16 +59,24 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state, 
                 categories: payload.categorizedMovies,
-                isLoading: false,
+                isLoading,
+                errors
+            }
+
+        case INCREMENT_MOVIE_VIEWS_SUCCESS:
+            return {
+                ...state,
+                isLoading,
                 errors
             }
 
         case GET_CATEGORIZED_MOVIES_FAILED:
         case GET_LATEST_TWENTY_MOVIES_FAILED:
         case GET_MOVIES_FAILED:
+        case INCREMENT_MOVIE_VIEWS_FAILED:
             return { 
                 ...state,
-                isLoading: false,
+                isLoading,
                 errors: payload.message
             }
 

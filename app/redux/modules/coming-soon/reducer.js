@@ -7,7 +7,10 @@ const {
     CREATE_COMING_SOON_MOVIE,
     DELETE_COMING_SOON_MOVIE_BY_ID,
     INCREMENT_NEW_COMING_SOON_MOVIE_COUNT,
-    VIEW_COMING_SOON_MOVIES
+    VIEW_COMING_SOON_MOVIES,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_START,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_SUCCESS,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED
 } = ACTION_TYPES;
 
 const initialState = {
@@ -29,6 +32,7 @@ export default (state = initialState, { type, payload }) =>
     switch (type) 
     {
         case GET_COMING_SOON_MOVIES_START:
+        case INCREMENT_COMING_SOON_MOVIE_VIEWS_START:
             return { 
                 ...state, 
                 isLoading: true
@@ -58,26 +62,32 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
-        case GET_COMING_SOON_MOVIES_FAILED:
-            return { 
-                ...state,
-                isLoading: false,
-                errors: payload.message
-            }
-
-
         case INCREMENT_NEW_COMING_SOON_MOVIE_COUNT:
             return {
                 ...state,
                 totalUpcomingMovies: state.totalUpcomingMovies + 1
             }
 
+        case INCREMENT_COMING_SOON_MOVIE_VIEWS_SUCCESS:
+            return {
+                ...state,
+                isLoading,
+                errors
+            }
 
         case VIEW_COMING_SOON_MOVIES:
             return {
                 ...state,
                 totalUpcomingMovies: 0,
                 isLoading
+            }
+
+        case INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED:
+        case GET_COMING_SOON_MOVIES_FAILED:
+            return { 
+                ...state,
+                isLoading,
+                errors: payload.message
             }
 
         default:

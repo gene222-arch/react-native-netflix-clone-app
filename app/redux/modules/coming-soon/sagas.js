@@ -3,11 +3,14 @@ import ACTION_TYPES from './action.types'
 import * as API from './../../../services/movie/coming.soon.movies'
 import { 
     getComingSoonMoviesSuccess, 
-    getComingSoonMoviesFailed
+    getComingSoonMoviesFailed,
+    incrementComingSoonMovieViewsSuccess,
+    incrementComingSoonMovieViewsFailed
 } from './actions'
 
 const {
-    GET_COMING_SOON_MOVIES_START
+    GET_COMING_SOON_MOVIES_START,
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_START
 } = ACTION_TYPES;
 
 
@@ -22,6 +25,16 @@ function* getComingSoonMoviesSaga(payload)
     }
 }
 
+function* incrementComingSoonMovieViewsSaga()  
+{
+    try {
+        yield call(API.incrementViewsAsync);
+        yield put(incrementComingSoonMovieViewsSuccess());
+    } catch ({ message }) {
+        yield put(incrementComingSoonMovieViewsFailed({ message }));
+    }
+}
+
 
 /** Watchers or Observers */
 function* getComingSoonMoviesWatcher()
@@ -32,11 +45,20 @@ function* getComingSoonMoviesWatcher()
     }
 }
 
+function* incrementComingSoonMovieViewsWatcher()
+{
+    while (true) {
+        yield take(INCREMENT_COMING_SOON_MOVIE_VIEWS_START);
+        yield call(incrementComingSoonMovieViewsSaga);
+    }
+}
+
 
 export default function* ()
 {
     yield all([
-        getComingSoonMoviesWatcher()
+        getComingSoonMoviesWatcher(),
+        incrementComingSoonMovieViewsWatcher()
     ]);
 }
 

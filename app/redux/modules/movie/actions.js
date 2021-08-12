@@ -9,7 +9,10 @@ const {
     GET_MOVIES_FAILED,
     GET_LATEST_TWENTY_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_SUCCESS,
-    GET_LATEST_TWENTY_MOVIES_FAILED
+    GET_LATEST_TWENTY_MOVIES_FAILED,
+    INCREMENT_MOVIE_VIEWS_START,
+    INCREMENT_MOVIE_VIEWS_SUCCESS,
+    INCREMENT_MOVIE_VIEWS_FAILED
 } = ACTION_TYPES;
 
 /** 
@@ -63,5 +66,23 @@ export const getLatestTwentyMoviesSuccess = (payload) => ({
 
 export const getLatestTwentyMoviesFailed = (payload) => ({
     type: GET_LATEST_TWENTY_MOVIES_FAILED,
+    payload
+});
+
+/** 
+ * Increment movie views
+ */
+export const incrementMovieViewsStart = (payload) => ({
+    type: INCREMENT_MOVIE_VIEWS_START,
+    payload
+});
+
+export const incrementMovieViewsSuccess = (payload) => ({
+    type: INCREMENT_MOVIE_VIEWS_SUCCESS,
+    payload
+});
+
+export const incrementMovieViewsFailed = (payload) => ({
+    type: INCREMENT_MOVIE_VIEWS_FAILED,
     payload
 });
