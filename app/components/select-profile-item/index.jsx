@@ -6,8 +6,6 @@ import { createStructuredSelector } from 'reselect';
 import { authSelector } from '../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
-const MAX_NUMBER_OF_USER_PROFILES = 5;
-
 const style = StyleSheet.create({
     img: {
         opacity: 1

@@ -67,7 +67,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }
                 isVisible={ showMovieInfo } 
                 setIsVisible={ setShowMovieInfo } 
             />
-
+    
             <Image 
                 source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster_path) }}
                 style={ styles.homeFrontPageShowLogo }

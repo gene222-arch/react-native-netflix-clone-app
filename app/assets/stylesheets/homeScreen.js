@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { DEVICE_HEIGHT } from '../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     },
     homeFrontPage: {
         width: '100%',
-        height: Dimensions.get('window').height - (Dimensions.get('window').height * .25),
+        height: DEVICE_HEIGHT - (DEVICE_HEIGHT * .25),
         resizeMode: 'cover',
         opacity: .8,
         justifyContent: 'space-between'

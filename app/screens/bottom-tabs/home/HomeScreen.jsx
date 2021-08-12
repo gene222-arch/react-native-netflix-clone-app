@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import SkeletonContent from 'react-native-skeleton-content'
 import { FlatList } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
@@ -15,6 +16,7 @@ import { useDispatch, connect, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { movieSelector } from './../../../redux/modules/movie/selectors';
 import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
+import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 
 const DEFAULT_FRONT_PAGE = {
     id: '',
@@ -65,11 +67,10 @@ const HomeScreen = ({ MOVIE }) =>
         }
     }, []);
 
-
     if (! isInteractionsComplete) {
         return <LoadingSpinner />
     }
-
+    
     return (
         <View style={ styles.container }>
             <FlatList 
@@ -77,17 +78,24 @@ const HomeScreen = ({ MOVIE }) =>
                 data={ MOVIE.categories }
                 renderItem={({ item }) => (
                     <HomeCategory 
+                        isLoading={ MOVIE.isLoading }
                         title={ item.title }
                         categorizedMovies={ item.movies } 
                     />
                 )}
                 ListHeaderComponent={
                     <View>
-                         <ImageBackground source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.wallpaper_path) }}
-                            style={ styles.homeFrontPage }>
-                            <NavBar handlePressCategory={ handlePressCategory } />
-                            <FrontPageOptions frontPage={ frontPage } />
-                        </ImageBackground>   
+                        {
+                            MOVIE.isLoading
+                                ? <HomeFrontPageLoader />
+                                : (
+                                    <ImageBackground source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.wallpaper_path) }}
+                                        style={ styles.homeFrontPage }>
+                                        <NavBar handlePressCategory={ handlePressCategory } />
+                                        <FrontPageOptions frontPage={ frontPage } />
+                                    </ImageBackground>  
+                                )
+                        }
 
                         <ContinueWatchingFor />
                     </View>          

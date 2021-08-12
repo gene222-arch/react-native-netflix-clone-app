@@ -31,8 +31,11 @@ const DEFAULT_SHOW = {
     trailer_video_path: ''
 };
 
-const Info = ({ AUTH_PROFILE, selectedShow = DEFAULT_SHOW, isVisible, setIsVisible }) => 
+const Info = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
 {   
+    selectedShow = !selectedShow ? DEFAULT_SHOW : selectedShow;
+
+
     const navigation = useNavigation();
 
     const [ showVideo, setShowVideo ] = useState(false);
@@ -47,7 +50,7 @@ const Info = ({ AUTH_PROFILE, selectedShow = DEFAULT_SHOW, isVisible, setIsVisib
         setShowVideo(false);
     }
 
-    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { id: selectedShow.id });
+    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { id: selectedShow?.id });
 
     useEffect(() => {
         return () => {
@@ -59,7 +62,7 @@ const Info = ({ AUTH_PROFILE, selectedShow = DEFAULT_SHOW, isVisible, setIsVisib
     {
         return (
             <VideoPlayerFullScreen 
-                uri={ selectedShow.trailer_video_path }
+                uri={ selectedShow?.trailer_video_path }
                 handleCloseVideo={ handleCloseVideo }
             />
         )
@@ -74,13 +77,13 @@ const Info = ({ AUTH_PROFILE, selectedShow = DEFAULT_SHOW, isVisible, setIsVisib
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
-                        source={{ uri: getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, selectedShow.id, selectedShow.poster_path) }}
+                        source={{ uri: getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, selectedShow?.id, selectedShow?.poster_path) }}
                         style={ styles.poster }
                     />
                     <ListItem.Content>
                         <View style={ styles.posterDetails }>
                             <View style={ styles.titleCloseBtnContainer }>
-                                <Text h4 style={ styles.title }>{  selectedShow.title }</Text>
+                                <Text h4 style={ styles.title }>{  selectedShow?.title }</Text>
                                 <TouchableOpacity onPress={ () => setIsVisible(false) }>
                                     <FeatherIcon 
                                         name='x-circle'
@@ -91,11 +94,11 @@ const Info = ({ AUTH_PROFILE, selectedShow = DEFAULT_SHOW, isVisible, setIsVisib
                                 </TouchableOpacity>
                             </View>
                             <View style={ styles.basicDetail }>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow.year }</Text>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow.age_restriction }+</Text>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow.total_number_of_seasons } Seasons</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.year }</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.age_restriction }+</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.total_number_of_seasons } Seasons</Text>
                             </View>
-                            <Text style={ styles.plot }>{ selectedShow.plot.slice(0, 250).concat('...') }</Text>
+                            <Text style={ styles.plot }>{ selectedShow?.plot.slice(0, 250).concat('...') }</Text>
                         </View>
                     </ListItem.Content>
                 </ListItem>

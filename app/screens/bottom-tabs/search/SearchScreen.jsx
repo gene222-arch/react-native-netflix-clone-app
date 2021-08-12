@@ -9,6 +9,7 @@ import SearchBar from './SearchBar';
 import DefaultSearchList from './DefaultSearchList';
 import OnSearchList from './OnSearchList';
 import ShowInfo from './../../../components/continue-watching-for-item/Info';
+import LoadingSpinner from './../../../components/LoadingSpinner';
 
 
 const SearchScreen = () => 
@@ -21,10 +22,8 @@ const SearchScreen = () =>
     const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
 
     const handlePressDisplayShowInfo = (show) => {
-        setTimeout(() => {
-            setShow(show);
-            setShouldDisplayShowInfo(true);
-        }, 1);
+        setShow(show);
+        setShouldDisplayShowInfo(true);
     }
 
     const handleChangeSearchInput = (searchTextInput) => 
@@ -75,24 +74,20 @@ const SearchScreen = () =>
         setIsInteractionsComplete(true);
     }
 
-    const cleanUp = () => {
-        setIsInteractionsComplete(false);
-        setSearchList([]);
-        setSearchInput('');
-        setShow(null);
-        setShouldDisplayShowInfo(false);
-    }   
-
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            cleanUp();
+            setSearchList([]);
+            setSearchInput('');
+            setShow(null);
+            setShouldDisplayShowInfo(false);
+            setIsInteractionsComplete(false);
         }
     }, []);
     
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
+    if (! isInteractionsComplete) {
+        return <LoadingSpinner />
     }
 
     return (

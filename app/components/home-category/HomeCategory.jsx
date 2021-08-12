@@ -1,18 +1,18 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { Pressable, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
-import Image from './../Image';
-import { getCachedFile } from './../../utils/cacheImage';
 import View from './../View';
+import MovieItem from './MovieItem';
+import TextLoader from '../loading-skeletons/TextLoader';
 
 
-const HomeCategory = ({ title, categorizedMovies }) => 
+const HomeCategory = ({ isLoading = false, title, categorizedMovies }) => 
 {
     const navigation = useNavigation();
 
-    const handlePressMovieImage = (movie) => {
+    const handlePressImage = (movie) => {
         navigation.navigate('MovieDetailScreen', { 
             id: movie.id, 
             headerTitle: movie.title 
@@ -21,18 +21,15 @@ const HomeCategory = ({ title, categorizedMovies }) =>
 
     return (
         <View>
-            <Text h4 style={ styles.categoryTitle }>{ title }</Text>
+            {
+                isLoading 
+                    ? <TextLoader />
+                    : <Text h4 style={ styles.categoryTitle }>{ title }</Text>
+            }
             <FlatList 
                 keyExtractor={({ id }) => id.toString() }
                 data={ categorizedMovies }
-                renderItem={({ item }) => (
-                    <Pressable onPress={ () => handlePressMovieImage(item) }>
-                        <Image 
-                            style={ styles.image }
-                            source={{ uri: getCachedFile('Categories/', item.id, item.poster_path) }}
-                        />
-                    </Pressable>
-                )}
+                renderItem={({ item }) => <MovieItem movie={ item } handlePressImage={ () => handlePressImage(item) } />}
                 maxToRenderPerBatch={ 3 }
                 horizontal
                 style={ styles.categoryContainer }

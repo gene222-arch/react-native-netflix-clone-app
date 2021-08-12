@@ -6,19 +6,22 @@ import View from './../View';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoreActionList from './MoreActionList';
 import Info from './Info';
-import { getCachedFile } from './../../utils/cacheImage';
+import { getCachedFile, ensureFileExists } from './../../utils/cacheImage';
 import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import Image from './../Image';
+import PosterImageLoader from './../loading-skeletons/PosterImageLoader';
 
 
 const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
+    const cachedPosterImage = getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, movie.id, movie.poster_path);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
+    const [ fileExists, setFileExists ] = useState(false);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
@@ -26,13 +29,29 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
     const handlePressPlayVideo = () => setShouldPlayVideo(! shouldPlayVideo);
 
+    const onLoadCheckCachedFileExists = async() => {
+        try {
+            const { exists } =await ensureFileExists(cachedPosterImage);
+            return setFileExists(exists);
+        } catch ({ message }) {
+            return setFileExists(false);
+        }
+    }
+
     useEffect(() => {
+        onLoadCheckCachedFileExists();
         return () => {
             setShowInfo(false);
             setShowMoreOptions(false);
             setShouldPlayVideo(false);
+            setFileExists(false);
         }
     }, []);
+
+
+    if (! fileExists) {
+        return <PosterImageLoader />
+    }
 
     if (shouldPlayVideo) {
         return (
@@ -58,7 +77,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
             <Image 
                 source={{
-                    uri: getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, movie.id, movie.poster_path)
+                    uri: cachedPosterImage
                 }}
                 style={ styles.poster }
             />

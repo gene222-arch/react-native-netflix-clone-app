@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { createStructuredSelector } from 'reselect';
-import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect, useDispatch } from 'react-redux';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import View from '../../../../components/View';
@@ -9,9 +9,10 @@ import Text from '../../../../components/Text';
 import styles from './../../../../assets/stylesheets/continueWatchingForItem';
 import ContinueWatchingForItem from './../../../../components/continue-watching-for-item/ContinueWatchingForItem';
 import { cacheImage } from '../../../../utils/cacheImage';
+import TextLoader from './../../../../components/loading-skeletons/TextLoader';
 
 
-const ContinueWatchingFor = ({ AUTH_PROFILE }) => 
+const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) => 
 {
     const dispatch  = useDispatch();
     
@@ -47,7 +48,12 @@ const ContinueWatchingFor = ({ AUTH_PROFILE }) =>
 
     return (
         <View style={ styles.container }>
-            <Text h4>Continue Watching For { name }</Text>
+            
+            {
+                AUTH.isLoading 
+                    ? <TextLoader />
+                    : <Text h4>Continue Watching For { name }</Text>
+            }
 
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
@@ -67,6 +73,7 @@ const ContinueWatchingFor = ({ AUTH_PROFILE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 });
 
