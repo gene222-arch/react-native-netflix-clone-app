@@ -26,6 +26,9 @@ const {
     RATE_RECENTLY_WATCHED_MOVIE_START,
     RATE_RECENTLY_WATCHED_MOVIE_SUCCESS,
     RATE_RECENTLY_WATCHED_MOVIE_FAILED,
+    CLEAR_RECENT_WATCHES_START,
+    CLEAR_RECENT_WATCHES_SUCCESS,
+    CLEAR_RECENT_WATCHES_FAILED,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_MY_DOWNLOADS_SUCCESS,
     REMOVE_TO_MY_DOWNLOADS_FAILED,
@@ -95,7 +98,7 @@ export default (state = initialState, { type, payload }) =>
 
     const isLoading = false;
     const errors = DEFAULT_ERROR_MESSAGE_PROPS;
-    const loggedInProfile = profiles.find(({ id }) => id === profile.id);
+    const loggedInProfile = profiles?.find(profil => profil.id === profile.id);
     let newProfiles = [];
 
     switch (type) 
@@ -108,6 +111,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGOUT_START:
         case RATE_SHOW_START:
         case RATE_RECENTLY_WATCHED_MOVIE_START:
+        case CLEAR_RECENT_WATCHES_START:
         case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
@@ -123,15 +127,18 @@ export default (state = initialState, { type, payload }) =>
 
         case ADD_TO_RECENT_WATCHES_SUCCESS:
 
-            const recentlyWatchedMovieExists = loggedInProfile.recently_watched_shows.find(({ id }) => id === payload.movie.id);
+            const { movie } = payload;
+            const movieIndex = loggedInProfile.recently_watched_shows.findIndex(({ id }) => id === movie.id);
 
-            if (! recentlyWatchedMovieExists) {
-                loggedInProfile.recently_watched_shows.push(payload.movie);
+            const movie_ = { ...movie, user_ratings: [] };
+
+            if (movieIndex === -1) {
+                loggedInProfile.recently_watched_shows.unshift(movie_);
             }
             
-            if (recentlyWatchedMovieExists) {
-                loggedInProfile.recently_watched_shows.splice(recentlyWatchedMovieExists, 1);
-                loggedInProfile.recently_watched_shows.unshift(payload.movie);
+            if (movieIndex !== -1) {
+                loggedInProfile.recently_watched_shows.splice(movieIndex, 1);
+                loggedInProfile.recently_watched_shows.unshift(movie_);
             }
 
             newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? loggedInProfile : prof);
@@ -291,6 +298,20 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case CLEAR_RECENT_WATCHES_SUCCESS:
+            newProfiles = profiles.map(prof => {
+                return (prof.id === loggedInProfile.id)
+                    ? { ...prof, recently_watched_movies: [] }
+                    : prof
+            });
+
+            return {
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors 
+            }
+
         case REMOVE_TO_MY_DOWNLOADS_SUCCESS: 
             let filteredMyDownloads = loggedInProfile
                 .my_downloads
@@ -309,6 +330,7 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+            
         case REMOVE_TO_RECENT_WATCHES_SUCCESS:
 
             const filteredRecentlyWatchedMovies = loggedInProfile
@@ -436,6 +458,7 @@ export default (state = initialState, { type, payload }) =>
         case SELECT_PROFILE_FAILED:
         case RATE_SHOW_FAILED:
         case RATE_RECENTLY_WATCHED_MOVIE_FAILED:
+        case CLEAR_RECENT_WATCHES_FAILED:
         case REMOVE_TO_MY_DOWNLOADS_FAILED:
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:

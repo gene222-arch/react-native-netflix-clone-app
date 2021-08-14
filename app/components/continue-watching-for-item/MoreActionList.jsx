@@ -44,7 +44,7 @@ const downloadIconName = (status) =>
     return label;
 }
 
-const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, isVisible, setIsVisible }) => 
+const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, isVisible, setIsVisible }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -107,7 +107,7 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
             show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'like',
         },
         { 
-            title: (! getMovieRatingDetails?.rate) ? 'Not For Me' : 'Rated', 
+            title: !getMovieRatingDetails?.rate ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
             isSolid: getMovieRatingDetails?.rate === 'dislike',
@@ -115,7 +115,7 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
             show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'dislike',
         },
         {
-            title: 'Remove From Row',
+            title: !AUTH.isLoading ? 'Remove From Row' : 'Removing from row...',
             iconType: 'font-awesome-5',
             iconName: 'ban',
             onPress: () => handlePressRemove(),
@@ -248,7 +248,7 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
 
             <BottomSheet isVisible={ isVisible } containerStyle={ styles.bottomSheetContainer }>
             {
-                actionList.map((action, index) => action.show && <DisplayAction key={ index } actionType={ action }/> )
+                actionList.map((action, index) => action.show && <DisplayAction key={ index } isLoading={ AUTH.isLoading } actionType={ action }/> )
             }
             </BottomSheet>
         </View>
@@ -257,6 +257,7 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
 
 
 const mapStateToProps = createStructuredSelector({
+    AUTH: authProfileSelector,
     AUTH_PROFILE: authProfileSelector
 });
 

@@ -16,6 +16,7 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import ActionButton from './../../../../components/ActionButton';
 import { movieSelector } from './../../../../redux/modules/movie/selectors';
+import MovieDetailScreenLoader from '../../../../components/loading-skeletons/MovieDetailScreenLoader';
 
 
 const PER_PAGE = 3;
@@ -87,7 +88,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     }, []);
 
     if (! isInteractionsComplete) {
-        return <LoadingSpinner />
+        return <MovieDetailScreenLoader />
     }
 
     return (

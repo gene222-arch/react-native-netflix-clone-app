@@ -10,7 +10,17 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, handlePr
 {
     const video = useRef(null);
 
+    const onChangeSourceRestartVideo = async () => {
+        try {
+            await video?.current?.unloadAsync();
+            await video?.current?.loadAsync({ uri: movie.video_trailer_path }, {}, false);
+        } catch ({ message }) {
+            console.log(message);
+        }
+    } 
+    
     useEffect(() => {
+        onChangeSourceRestartVideo();
         return () => {
             video.current = null;
         }

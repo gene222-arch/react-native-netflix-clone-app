@@ -47,10 +47,12 @@ const SelectProfileScreen = ({ AUTH }) =>
             <View style={ styles.profilesContainer }>
                 <Text h4 style={ styles.whosWatchingText }>Who's Watching?</Text>
                 <FlatList 
+                    keyExtractor={ (item, index) => index.toString() }
                     data={[ ...AUTH.profiles, { id: '' } ]}
                     numColumns={ 2 }
                     renderItem={ ({ item, index }) => index !== 5 && (
                         <DisplayProfile
+                            key={ index }
                             profile={ item }
                             handlePressSelectProfile={ () => handlePressSelectProfile(item.id) }
                             index={ index }

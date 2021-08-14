@@ -1,12 +1,16 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { DEVICE_HEIGHT } from '../../constants/Dimensions';
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     avatarIcon: {
         borderRadius: 5
     },
     frontPage: {
         width: '100%',
-        height: Dimensions.get('window').height
+        height: DEVICE_HEIGHT
     },
     logo: {
         width: 50,

@@ -8,7 +8,7 @@ const searchList = [
         duration_in_minutes: '43',
         age_restriction: 29,
         year: 2021,
-        wallpaper_path: 'https://i.pinimg.com/originals/55/39/54/553954c0f30a23848c5ba63ee45cdbd5.jpg',
+        wallpaper_path: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fhdqwalls.com%2Fattack-on-titan-2-wallpaper&psig=AOvVaw2UpN5QM08joln4cftDUdhR&ust=1629014322959000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMDxlrKFsPICFQAAAAAdAAAAABAI',
         poster_path: 'https://m.media-amazon.com/images/M/MV5BMTY5ODk1NzUyMl5BMl5BanBnXkFtZTgwMjUyNzEyMTE@._V1_.jpg',
         video_trailer_path: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },

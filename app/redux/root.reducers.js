@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const config = {
     key: 'root',
     storage: AsyncStorage,
-    // whitelist: [''], array list to persists
+    // whitelist: [''],  // array list to persists
     blacklist: ['navigation', 'toast'], // array list not to persits
     debug: true, //to get useful logging
 };
@@ -24,4 +24,18 @@ const rootReducers = {
     toast: toastReducer
 };
 
-export default persistCombineReducers(config, rootReducers);
+const appReducer = persistCombineReducers(config, rootReducers);
+
+const clearStorage = async () => await AsyncStorage.removeItem('persist:root');
+
+const rootReducer = (state, action) => 
+{
+    if (action.type === 'LOGOUT_SUCCESS') {
+        clearStorage();
+        return appReducer(undefined, action);
+    }
+    
+    return appReducer(state, action);
+}
+
+export default rootReducer

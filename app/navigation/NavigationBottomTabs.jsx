@@ -98,7 +98,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
     };
 
     return (
-        <Tab.Navigator tabBarOptions={ TAB_NAVIGATOR_OPTIONS } detachInactiveScreens initialRouteName='SelectProfile'>
+        <Tab.Navigator tabBarOptions={ TAB_NAVIGATOR_OPTIONS } initialRouteName='SelectProfile'>
             <Tab.Screen name='SelectProfile' component={ SelectProfileTab } options={ hideTabScreen } />
             <Tab.Screen name='Home' component={ HomeTab } options={ HOME_TAB_OPTIONS } />
             <Tab.Screen name='Search' component={ SearchTab } options={ hideTabScreen } />

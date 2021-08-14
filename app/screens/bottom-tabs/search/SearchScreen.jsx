@@ -9,7 +9,23 @@ import DefaultSearchList from './DefaultSearchList';
 import OnSearchList from './OnSearchList';
 import ShowInfo from './../../../components/continue-watching-for-item/Info';
 import LoadingSpinner from './../../../components/LoadingSpinner';
+import SearchScreenLoader from '../../../components/loading-skeletons/SearchScreenLoader';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 
+
+const DisplayList = ({ isLoading = false, searchInput = '', movies, handlePressDisplayShowInfo }) => 
+{
+    if (isLoading) {
+        return <SearchScreenLoader />
+    }
+
+    return (
+        !searchInput.length  
+            ? <DefaultSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+            : <OnSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+    )
+}
 
 const SearchScreen = () => 
 {
@@ -86,10 +102,6 @@ const SearchScreen = () =>
             setIsInteractionsComplete(false);
         }
     }, []);
-    
-    if (! isInteractionsComplete) {
-        return <LoadingSpinner />
-    }
 
     return (
         <View style={ styles.container }>
@@ -103,13 +115,18 @@ const SearchScreen = () =>
                 handleChangeSearchInput={ handleChangeSearchInput } 
                 handleOnCancel={ handleOnCancel }
             />
-            {
-                !searchInput.length  
-                    ? <DefaultSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
-                    : <OnSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
-            }
+            <DisplayList 
+                isLoading={ !isInteractionsComplete }
+                movies={ movies } 
+                searchInput={ searchInput }
+                handlePressDisplayShowInfo={ handlePressDisplayShowInfo } 
+            />
         </View>
     )
 }
 
-export default SearchScreen
+const mapStateToProps = createStructuredSelector({
+
+});
+
+export default connect(mapStateToProps)(SearchScreen)

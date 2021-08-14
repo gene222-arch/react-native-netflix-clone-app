@@ -22,7 +22,28 @@ import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movi
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import LoadingSpinner from './../../../components/LoadingSpinner';
+import ComingSoonScreenLoader from '../../../components/loading-skeletons/ComingSoonScreenLoader';
 
+
+const NotificationHeader = () => {
+    return (
+        <View style={ styles.notificationsContainer }>
+            <View style={ styles.iconContainer }>
+                <FontAwesome5 
+                    name='bell'
+                    size={ 24 }
+                    color='#fff'
+                />
+                <Text style={ styles.notificationsText }>       Notifications</Text>
+            </View>
+            <FeatherIcon 
+                name='chevron-right'
+                size={ 24 }
+                color='#fff'
+            />
+        </View>
+    )
+}
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
@@ -42,7 +63,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
     }
 
-    const handlePressInfo = (comingSoonMovie) => navigation.navigate('TrailerInfo', { comingSoonMovie });
+    const handlePressInfo = (id) => navigation.navigate('TrailerInfo', { id });
 
     // const cacheFiles = useCallback(() => {
     //     COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path, wallpaper_path, poster_path, title_logo_path }) => {
@@ -70,7 +91,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             });
         });
 
-        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart(notifications));
+        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart());
         setIsInteractionsComplete(true);
     }
 
@@ -79,15 +100,12 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             if (COMING_SOON_MOVIE.totalUpcomingMovies) {
                 dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
             }
-
-            return () => {
-                dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
-            }
         }, [COMING_SOON_MOVIE.totalUpcomingMovies])
     );
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
+
         return () => {
             ComingSoonMovieCreatedEvent.unListen();
             ComingSoonMovieReleasedEvent.unListen();
@@ -96,57 +114,41 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         }
     }, []); 
 
-    if (! isInteractionsComplete) {
-        return <LoadingSpinner />
-    }
-
     return (
         <View style={ styles.container }>
-            <FlatList 
-                keyExtractor={ ({ id }) => id.toString() }
-                onScroll={ handleOnScroll }
-                data={ COMING_SOON_MOVIE.comingSoonMovies }
-                renderItem={ ({ item, index }) => {
-                    let isReminded = AUTH_PROFILE.reminded_coming_soon_shows.find(movieID => movieID === item.id);
+            <AppBar 
+                marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } 
+                showLogo={ false } 
+                headerTitle='Coming Soon'
+            />
+            {
+                !isInteractionsComplete || COMING_SOON_MOVIE.isLoading
+                    ? <ComingSoonScreenLoader />
+                    : (
+                        <FlatList 
+                            keyExtractor={ ({ id }) => id.toString() }
+                            onScroll={ handleOnScroll }
+                            data={ COMING_SOON_MOVIE.comingSoonMovies }
+                            renderItem={ ({ item, index }) => {
+                                let isReminded = AUTH_PROFILE.reminded_coming_soon_shows.find(movieID => movieID === item.id);
 
-                    return (
-                        <ComingSoonMovieItem 
-                            movie={ item }
-                            shouldShowPoster={ focusedIndex !== index }
-                            shouldFocus={ focusedIndex === index }
-                            handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
-                            handlePressInfo={ () => handlePressInfo(item) }
-                            isReminded={ Boolean(isReminded) }
+                                return  (
+                                    <ComingSoonMovieItem 
+                                        movie={ item }
+                                        shouldShowPoster={ focusedIndex !== index }
+                                        shouldFocus={ focusedIndex === index }
+                                        handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
+                                        handlePressInfo={ () => handlePressInfo(item.id) }
+                                        isReminded={ Boolean(isReminded) }
+                                    />
+                                )
+                            }}
+                            ListHeaderComponent={
+                                <NotificationHeader />
+                            }
                         />
                     )
-                }}
-                ListHeaderComponent={
-                    <>
-                        {/* Search icon container */}
-                        <AppBar 
-                            marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } 
-                            showLogo={ false } 
-                            headerTitle='Coming Soon'
-                        />
-                        {/* Notifications Container */}
-                        <View style={ styles.notificationsContainer }>
-                            <View style={ styles.iconContainer }>
-                                <FontAwesome5 
-                                    name='bell'
-                                    size={ 24 }
-                                    color='#fff'
-                                />
-                                <Text style={ styles.notificationsText }>       Notifications</Text>
-                            </View>
-                            <FeatherIcon 
-                                name='chevron-right'
-                                size={ 24 }
-                                color='#fff'
-                            />
-                        </View>
-                    </>
-                }
-            />
+            }
         </View>
     )
 }

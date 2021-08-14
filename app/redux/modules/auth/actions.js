@@ -31,6 +31,9 @@ const {
     REMOVE_TO_RECENT_WATCHES_START,
     REMOVE_TO_RECENT_WATCHES_SUCCESS,
     REMOVE_TO_RECENT_WATCHES_FAILED,
+    CLEAR_RECENT_WATCHES_START,
+    CLEAR_RECENT_WATCHES_SUCCESS,
+    CLEAR_RECENT_WATCHES_FAILED,
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
@@ -211,6 +214,24 @@ export const removeToRecentWatchesFailed = (payload) => ({
     type: REMOVE_TO_RECENT_WATCHES_FAILED,
     payload
 });
+
+
+/** Remove to recent watches nultiple*/
+export const clearRecentWatchesStart = (payload) => ({
+    type: CLEAR_RECENT_WATCHES_START,
+    payload
+});
+
+export const clearRecentWatchesSuccess = (payload) => ({
+    type: CLEAR_RECENT_WATCHES_SUCCESS,
+    payload
+});
+
+export const clearRecentWatchesFailed = (payload) => ({
+    type: CLEAR_RECENT_WATCHES_FAILED,
+    payload
+});
+
 
 /** Select profile */
 export const selectProfileStart = (payload) => ({

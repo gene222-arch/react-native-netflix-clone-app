@@ -22,26 +22,33 @@ const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, s
     }
 
     const handlePressPlayBtn = async () => {
-        setUsePoster(false);
-        setShouldPlayVideo(true);
-        await video.current.playAsync();
+        try {
+            setUsePoster(false);
+            setShouldPlayVideo(true);
+            await video.current.playAsync();
+        } catch ({ message }) {
+            console.log(message);
+        }
     }
 
     const onChangeSourceRestartVideo = async () => 
     {
-        await video?.current?.unloadAsync();
-        await video?.current?.loadAsync({ uri: videoPath }, {}, false);
+        try {
+            await video?.current?.unloadAsync();
+            await video?.current?.loadAsync({ uri: videoPath }, {}, false);
+        } catch ({ message }) {
+            console.log(message);
+        }
     } 
 
     useEffect(() => {
-        if (!video) return;
-        onChangeSourceRestartVideo();
-
+    
         return () => {
             setStatus({});
             setUsePoster(false);
             video.current = null;
             setShouldPlayVideo(false);
+            onChangeSourceRestartVideo();
         }
     }, [videoPath]);
 

@@ -7,7 +7,7 @@ import styles from './../../../../assets/stylesheets/trailerInfo';
 
 const ShowInfo = ({ comingSoonMovie }) => 
 {
-    const { year, age_restriction, duration, additional_trailer, plot, starred_artists, director, title_logo_path } = comingSoonMovie;
+    const { created_at, age_restriction, duration_in_minutes, additional_trailer, plot, casts, directors, title_logo_path } = comingSoonMovie;
 
     return (
         <View style={ styles.trailerInfo }>
@@ -18,15 +18,15 @@ const ShowInfo = ({ comingSoonMovie }) =>
                 style={ styles.trailerTitleLogo }
             />
             <View style={ styles.yearDuration }>
-                <Text style={ styles.yearDurationText }>{ year }</Text>
+                <Text style={ styles.yearDurationText }>{ created_at }</Text>
                 <Text style={ styles.ageRestrictionText }>{ age_restriction }+</Text>
-                <Text style={ styles.yearDurationText }>{ duration }</Text>
+                <Text style={ styles.yearDurationText }>{ duration_in_minutes } m</Text>
             </View>
-            <Text h4 style={ styles.additionalTrailerText }>{ additional_trailer }</Text>
+            <Text h4 style={ styles.additionalTrailerText }>{ additional_trailer || 'New Trailer To Be Announce' }</Text>
             <Text style={ styles.plotText }>{ plot }</Text>
             <View style={ styles.starringDirectorContainer }>
-                <Text style={ styles.starredArtistsText }><Text style={ styles.starringDesc }>Starring:</Text> { starred_artists }</Text>
-                <Text style={ styles.directorText }><Text style={ styles.directorDesc }>Director:</Text> { director }</Text>
+                <Text style={ styles.starredArtistsText }><Text style={ styles.starringDesc }>Starring:</Text> { casts }</Text>
+                <Text style={ styles.directorText }><Text style={ styles.directorDesc }>Director:</Text> { directors }</Text>
             </View>
         </View>
     )

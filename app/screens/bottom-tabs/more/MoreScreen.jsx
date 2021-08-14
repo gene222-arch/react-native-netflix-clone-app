@@ -141,7 +141,7 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
             {/* Profiles */}
             <View style={ styles.profileContainer }>
                 <FlatList
-                    keyExtractor={ item => item?.id.toString() }
+                    keyExtractor={ (item, index) => index.toString() }
                     data={ sortedProfiles }
                     renderItem={ ({ item, index }) => (
                         <ProfilePhotoItem 

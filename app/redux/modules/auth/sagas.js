@@ -9,6 +9,7 @@ import * as ACTION from './actions'
 
 const {
     ADD_TO_RECENT_WATCHES_START,
+    CLEAR_RECENT_WATCHES_START,
     CREATE_PROFILE_START,
     DELETE_PROFILE_START,
     DOWNLOAD_VIDEO_START,
@@ -32,10 +33,20 @@ function* addToRecentWatchesSaga(payload)
     try {
         const { user_profile_id, movie } = payload;
 
-        yield put(ACTION.addToRecentWatchesSuccess({ show: payload }));
+        yield put(ACTION.addToRecentWatchesSuccess(payload));
         yield call(RECENTLY_WATCHED_MOVIE_API, { movie_id: movie.id, user_profile_id });
     } catch ({ message }) {
         yield put(ACTION.addToRecentWatchesFailed({ message }));
+    }
+}
+
+function* clearRecentWatchesSaga(payload)  
+{
+    try {
+        yield put(ACTION.clearRecentWatchesSuccess());
+        yield call(RECENTLY_WATCHED_MOVIE_API.clearAsync, payload);
+    } catch ({ message }) {
+        yield put(ACTION.clearRecentWatchesFailed({ message }));
     }
 }
 
@@ -146,8 +157,8 @@ function* removeToRecentWatchesSaga(payload)
 {
     try {
         const { movie_id } = payload;
-        yield put(ACTION.removeToRecentWatchesSuccess({ movie_id }));
         yield call(RECENTLY_WATCHED_MOVIE_API.destroyAsync, payload);
+        yield put(ACTION.removeToRecentWatchesSuccess({ movie_id }));
     } catch ({ message }) {
         yield put(ACTION.removeToRecentWatchesFailed({ message }));
     }
@@ -218,6 +229,15 @@ function* addToRecentWatchesWatcher()
         yield call(addToRecentWatchesSaga, payload);
     }
 }
+
+function* clearRecentWatchesWatcher()
+{
+    while (true) {
+        const { payload } = yield take(CLEAR_RECENT_WATCHES_START);
+        yield call(clearRecentWatchesSaga, payload);
+    }
+}
+
 
 function* createProfileWatcher()
 {
@@ -338,6 +358,7 @@ export default function* ()
 {
     yield all([
         addToRecentWatchesWatcher(),
+        clearRecentWatchesWatcher(),
         createProfileWatcher(),
         deleteProfileWatcher(),
         downloadVideoWatcher(),

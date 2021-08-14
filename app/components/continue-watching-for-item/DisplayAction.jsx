@@ -39,10 +39,10 @@ const RightIcon = ({ name, type, onPress }) =>
     return null;
 }
 
-const DisplayAction = ({ actionType }) => 
+const DisplayAction = ({ isLoading = false, actionType }) => 
 {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity disabled={ isLoading }>
             <ListItem containerStyle={[ styles.listItemContainer, actionType.containerStyle ]} onPress={ actionType.onPress }>
             {
                 ( actionType.status === VIDEO_STATUSES.DOWNLOADING || actionType.status === VIDEO_STATUSES.RESUMING_DOWNLOAD) 

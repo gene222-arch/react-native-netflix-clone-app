@@ -42,3 +42,13 @@ export const destroyAsync = async (payload) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+
+export const clearAsync = async (payload) => 
+{
+    return await axiosInstance()
+        .delete(`/recently-watched-movies/clear`, {
+            data: payload
+        })
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}

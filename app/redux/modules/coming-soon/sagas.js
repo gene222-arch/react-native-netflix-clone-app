@@ -15,11 +15,11 @@ const {
 
 
 /** Sagas */
-function* getComingSoonMoviesSaga(payload)  
+function* getComingSoonMoviesSaga()  
 {
     try {
-        // const { data: comingSoonMovies } = yield call(API.fetchAllAsync);
-        yield put(getComingSoonMoviesSuccess({ comingSoonMovies: payload }));
+        const { data: comingSoonMovies } = yield call(API.fetchAllAsync);
+        yield put(getComingSoonMoviesSuccess({ comingSoonMovies }));
     } catch ({ message }) {
         yield put(getComingSoonMoviesFailed({ message }));
     }
@@ -40,8 +40,8 @@ function* incrementComingSoonMovieViewsSaga()
 function* getComingSoonMoviesWatcher()
 {
     while (true) {
-        const { payload } = yield take(GET_COMING_SOON_MOVIES_START);
-        yield call(getComingSoonMoviesSaga, payload);
+        yield take(GET_COMING_SOON_MOVIES_START);
+        yield call(getComingSoonMoviesSaga);
     }
 }
 

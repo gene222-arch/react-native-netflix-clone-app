@@ -16,6 +16,7 @@ import DownloadItem from '../../../components/download-item/DownloadItem';
 import styles from './../../../assets/stylesheets/downloads';
 import { cacheImage } from './../../../utils/cacheImage';
 import LoadingSpinner from './../../../components/LoadingSpinner';
+import DownloadScreenLoader from '../../../components/loading-skeletons/DownloadScreenLoader';
 
 
 const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) => 
@@ -43,7 +44,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
             setVisible(false);
         } catch ({ message }) {
-            // Do something
         }
     }
 
@@ -65,17 +65,13 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
         setIsInteractionsComplete(true);
     }
 
-    const cleanUp = () => {
-        setDownload(null);
-        setIsInteractionsComplete(false);
-        setShowVideo(false);
-        setVisible(false);
-    }
-
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
         return () => {
-            cleanUp();
+            setDownload(null);
+            setIsInteractionsComplete(false);
+            setShowVideo(false);
+            setVisible(false);
         }
     }, []);
 
@@ -89,11 +85,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
         }, [AUTH_PROFILE.has_new_downloads])
     );
 
-
-    if (! isInteractionsComplete) {
-        return <LoadingSpinner />
-    }
-    
     if (showVideo) {
         return (
             <VideoPlayerFullScreen 
@@ -141,20 +132,27 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                 </View>
             </View>
 
-            <FlatList 
-                keyExtractor={ ({ id }) => id.toString() }
-                data={ AUTH_PROFILE.my_downloads }
-                renderItem={ ({ item }) => (
-                    <DownloadItem 
-                        downloadedVideo={ item } 
-                        onLongPress={ () => toggleOverlay(item) }
-                        handlePressNonSeries={ () => handlePressNonSeries(item) }
-                        handlePressSeries={ () => handlePressSeries(item) }
-                    />
-                )}
-                showsHorizontalScrollIndicator={ false }
-                showsVerticalScrollIndicator={ false }
-            />
+            {
+                !isInteractionsComplete
+                    ? <DownloadScreenLoader />
+                    : (
+                        <FlatList 
+                            keyExtractor={ ({ id }) => id.toString() }
+                            data={ AUTH_PROFILE.my_downloads }
+                            renderItem={ ({ item }) => (
+                                <DownloadItem 
+                                    downloadedVideo={ item } 
+                                    onLongPress={ () => toggleOverlay(item) }
+                                    handlePressNonSeries={ () => handlePressNonSeries(item) }
+                                    handlePressSeries={ () => handlePressSeries(item) }
+                                />
+                            )}
+                            showsHorizontalScrollIndicator={ false }
+                            showsVerticalScrollIndicator={ false }
+                        />
+                    )
+            }
+                
             <View style={ styles.queryContainer }>
                 <Button 
                     title='Find Something to Download'
