@@ -80,6 +80,12 @@ const styles = StyleSheet.create({
         color: Colors.grey,
         paddingRight: 10,
         paddingBottom: 10
+    },
+    episodeAndMovieInfoContainer: {
+        backgroundColor: Colors.darkGrey
+    },
+    episodeAndMovieInfoTitle: {
+        color: Colors.white
     }
 });
 

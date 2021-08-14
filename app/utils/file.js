@@ -10,7 +10,7 @@ const EXT_TYPES = [
     'svg'
 ];
 
-export const getExtension = (string) => 
+export const getExtension = (string = '') => 
 {
     let ext = string.split('.').pop();
 

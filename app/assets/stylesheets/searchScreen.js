@@ -12,6 +12,15 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15
     },
+    image: {
+        flex: 1,
+        width: 125,
+        height: 170,
+        resizeMode: 'cover',
+        borderRadius: 5,
+        marginRight: 5,
+        marginBottom: 5
+    },
     listContentText: {
         textAlign: 'center'
     },  

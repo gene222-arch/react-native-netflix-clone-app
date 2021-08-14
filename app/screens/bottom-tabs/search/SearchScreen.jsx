@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import View from './../../../components/View';
 import { InteractionManager } from 'react-native'
 import styles from './../../../assets/stylesheets/searchScreen';
 import searchListAPI from './../../../services/data/searchList';
-import { cacheImage } from './../../../utils/cacheImage';
-import LoadingScreen from './../../../components/LoadingScreen';
+import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import SearchBar from './SearchBar';
 import DefaultSearchList from './DefaultSearchList';
 import OnSearchList from './OnSearchList';
@@ -16,61 +15,62 @@ const SearchScreen = () =>
 {
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
-    const [ searchList, setSearchList ] = useState([]);
+    const [ movies, setMovies ] = useState([]);
     const [ searchInput, setSearchInput ] = useState('');
     const [ show, setShow ] = useState(null);
-    const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
+    const [ isVisibleMovieInfo, setIsVisibleMovieInfo ] = useState(false);
+
+    const memoizedSearchList = useMemo(() => {
+        const memoizedSearchList = searchListAPI.map(({ title, authors, genres, ...props }) => ({ 
+            ...props, 
+            genres: genres.split(',').map(genre => genre.toLowerCase().trim()),
+            title: title.toLowerCase(), 
+            authors: authors.split(',').map(author => author.toLowerCase().trim())
+        }));
+
+        return memoizedSearchList;
+    }, []);
 
     const handlePressDisplayShowInfo = (show) => {
-        setShow(show);
-        setShouldDisplayShowInfo(true);
+        setShow({ ...show, poster_path: getCachedFile('SearchList/Posters/', show.id, show.poster_path) });
+        setIsVisibleMovieInfo(true);
     }
 
-    const handleChangeSearchInput = (searchTextInput) => 
+    const handleChangeSearchInput = (textInput) => 
     {
-        setSearchInput(searchTextInput);
+        setSearchInput(textInput);
         
-        if (!searchTextInput) {
-            setSearchList(searchListAPI);
+        if (! textInput) {
+            setMovies(searchListAPI);
         }
         else {  
-            let filteredList = [];
-            const text_ = searchTextInput.toLowerCase();
+            textInput = textInput.toLowerCase();
 
-            const mapSearchList = searchListAPI.map(({ title, author, genre, ...props }) => ({ 
-                ...props, 
-                genre: genre.map(name => name.toLowerCase()),
-                title: title.toLowerCase(), 
-                author: author.toLowerCase() 
-            }));
+            const filteredList = memoizedSearchList.filter(movie => {
+                const genresExists = movie.genres.find(genre => genre.indexOf(textInput) !== -1);
+                const authorsExists = movie.authors.find(author => author.indexOf(textInput) !== -1);
 
-            for (let index = 0; index < mapSearchList.length; index++) 
-            {
-                const { title, author, genre } = mapSearchList[index];
+                return movie.title.indexOf(textInput) !== -1 || authorsExists || genresExists;
+            });          
 
-                const genreExists = genre.find(name => name.indexOf(text_) !== -1);
-                
-                if (title.indexOf(text_) !== -1 || author.indexOf(text_) !== -1 || genreExists) {
-                    filteredList.push(searchListAPI[index]);
-                }
-            }
+            console.log("total num of filtered: ", filteredList.length)
 
-            setSearchList(filteredList);
+            setMovies(filteredList);
         }
     }
 
     const handleOnCancel = () => {
         setSearchInput('');
-        setSearchList(searchListAPI);
+        setMovies(searchListAPI);
     }
 
     const runAfterInteractions = () => {
-        searchListAPI.map(({ id, poster, wallpaper }) => {
-            cacheImage(poster, id, 'SearchList/Posters/');
-            cacheImage(wallpaper, id, 'SearchList/Wallpapers/');
+        searchListAPI.map(movie => {
+            cacheImage(movie.poster_path, movie.id, 'SearchList/Posters/');
+            cacheImage(movie.wallpaper_path, movie.id, 'SearchList/Wallpapers/');
         });
         
-        setSearchList(searchListAPI)
+        setMovies(searchListAPI)
         setIsInteractionsComplete(true);
     }
 
@@ -78,10 +78,11 @@ const SearchScreen = () =>
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            setSearchList([]);
+            console.log('CLEAN UP SEARCH SCREEN');
+            setMovies([]);
             setSearchInput('');
             setShow(null);
-            setShouldDisplayShowInfo(false);
+            setIsVisibleMovieInfo(false);
             setIsInteractionsComplete(false);
         }
     }, []);
@@ -94,8 +95,8 @@ const SearchScreen = () =>
         <View style={ styles.container }>
             <ShowInfo  
                 selectedShow={ show }
-                isVisible={ shouldDisplayShowInfo }
-                setIsVisible={ setShouldDisplayShowInfo }
+                isVisible={ isVisibleMovieInfo }
+                setIsVisible={ setIsVisibleMovieInfo }
             />
             <SearchBar 
                 searchInput={ searchInput } 
@@ -104,8 +105,8 @@ const SearchScreen = () =>
             />
             {
                 !searchInput.length  
-                    ? <DefaultSearchList searchList={ searchList } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
-                    : <OnSearchList searchList={ searchList } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+                    ? <DefaultSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+                    : <OnSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
             }
         </View>
     )

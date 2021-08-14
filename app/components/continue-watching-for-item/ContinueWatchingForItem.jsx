@@ -46,7 +46,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
             setShouldPlayVideo(false);
             setFileExists(false);
         }
-    }, []);
+    }, [cachedPosterImage]);
 
 
     if (! fileExists) {

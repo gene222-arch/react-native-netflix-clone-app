@@ -54,9 +54,8 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
 
-    const FILE_URI = useMemo(() => {
-        return `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
-    }, [selectedVideo]);
+    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
+    const getMovieRatingDetails = selectedVideo.user_ratings[0];
 
     const actionList = 
     [
@@ -100,20 +99,20 @@ const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handle
             show: true,
         },
         { 
-            title: (! selectedVideo?.rate) ? 'Like' : 'Rated', 
+            title: !getMovieRatingDetails?.rate ? 'Like' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
-            isSolid: selectedVideo?.rate === 'like',
+            isSolid: getMovieRatingDetails?.rate === 'like',
             onPress: () => handleToggleLike(),
-            show: (! selectedVideo?.rate) || selectedVideo?.rate === 'like',
+            show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'like',
         },
         { 
-            title: (! selectedVideo?.rate) ? 'Not For Me' : 'Rated', 
+            title: (! getMovieRatingDetails?.rate) ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
-            isSolid: selectedVideo?.rate === 'dislike',
+            isSolid: getMovieRatingDetails?.rate === 'dislike',
             onPress: () => handleToggleDisLike(),
-            show: (! selectedVideo?.rate) || selectedVideo?.rate === 'dislike',
+            show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'dislike',
         },
         {
             title: 'Remove From Row',

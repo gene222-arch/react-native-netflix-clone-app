@@ -10,8 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const config = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: [''], // array list to persists
-    // blacklist: [''] array list not to persits
+    // whitelist: [''], array list to persists
+    blacklist: ['navigation', 'toast'], // array list not to persits
     debug: true, //to get useful logging
 };
 

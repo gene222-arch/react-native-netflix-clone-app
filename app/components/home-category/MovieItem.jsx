@@ -7,7 +7,7 @@ import PosterImageLoader from './../loading-skeletons/PosterImageLoader';
 
 const MovieItem = ({ movie, handlePressImage }) => 
 {
-    const cachedFile = getCachedFile('Categories/', movie?.id, movie?.poster_path);
+    const cachedFile = getCachedFile('Categories/', movie.id, movie.poster_path);
     const [ fileExists, setFileExists ] = useState(false);
 
     const onLoadCheckFileExists = async () => 
@@ -26,7 +26,7 @@ const MovieItem = ({ movie, handlePressImage }) =>
         return () => {
             setFileExists(false);
         }
-    }, []);
+    }, [cachedFile]);
 
     if (! fileExists) {
         return <PosterImageLoader />

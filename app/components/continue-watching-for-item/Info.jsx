@@ -15,27 +15,8 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 
-const DEFAULT_SHOW = {
-    id: '',
-    title: '',
-    genres: '',
-    author: '',
-    plot: '',
-    wallpaper_path: '',
-    duration: '',
-    age_restriction: '',
-    year: '',
-    total_number_of_episodes: '',
-    total_number_of_seasons: '',
-    poster_path: '',
-    trailer_video_path: ''
-};
-
-const Info = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
+const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
 {   
-    selectedShow = !selectedShow ? DEFAULT_SHOW : selectedShow;
-
-
     const navigation = useNavigation();
 
     const [ showVideo, setShowVideo ] = useState(false);
@@ -62,7 +43,7 @@ const Info = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
     {
         return (
             <VideoPlayerFullScreen 
-                uri={ selectedShow?.trailer_video_path }
+                uri={ selectedShow?.video_trailer_path }
                 handleCloseVideo={ handleCloseVideo }
             />
         )
@@ -77,7 +58,7 @@ const Info = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
-                        source={{ uri: getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, selectedShow?.id, selectedShow?.poster_path) }}
+                        source={{ uri: selectedShow?.poster_path }}
                         style={ styles.poster }
                     />
                     <ListItem.Content>
@@ -150,16 +131,16 @@ const Info = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                 </View>          
             </View>
             <Divider />
-            {/* Episode and Info */}
+            {/* Episode and MovieInfo */}
             <TouchableOpacity onPress={ handlePressNavigateToShowDetailScreen }>
-                <ListItem containerStyle={ styles.episodeAndInfoContainer }>
+                <ListItem containerStyle={ styles.episodeAndMovieInfoContainer }>
                     <FeatherIcon 
                         name='info'
                         size={ 24 }
                         color='#fff'
                     />
                     <ListItem.Content style={ styles.listItemContent }>
-                        <ListItem.Title style={ styles.episodeAndInfoTitle }>Episode & Info</ListItem.Title>
+                        <ListItem.Title style={ styles.episodeAndMovieInfoTitle }>Episode & MovieInfo</ListItem.Title>
                     </ListItem.Content>
                     <FeatherIcon 
                         name='chevron-right'
@@ -176,4 +157,4 @@ const mapStateToProps = createStructuredSelector({
     AUTH_PROFILE: authProfileSelector
 });
 
-export default connect(mapStateToProps)(Info)
+export default connect(mapStateToProps)(MovieInfo)

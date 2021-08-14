@@ -30,12 +30,8 @@ const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel }) =>
             onChangeText={ onChangeText }
             placeholderTextColor={ Colors.grey }
             inputStyle={ styles.input }
-            inputContainerStyle={
-                styles.inputContainer
-            }
-            containerStyle={
-                styles.container
-            }
+            inputContainerStyle={ styles.inputContainer }
+            containerStyle={ styles.container }
             leftIcon={
                 <FeatherIcon 
                     name='search'

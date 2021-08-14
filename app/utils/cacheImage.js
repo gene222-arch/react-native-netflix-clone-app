@@ -12,10 +12,12 @@ export const cacheImage = async (uri, id, directory = '') =>
         const DIRECTORY = `${ FileSystem.cacheDirectory }${ directory }`;
         await ensureDirExists(DIRECTORY);
     
-        const fileURI = `${ id.toString() }.${ getExtension(uri) }`;
-        const fileToCache = DIRECTORY + fileURI;
+        const fileToCacheURI = DIRECTORY + `${ id.toString() }.${ getExtension(uri) }`;
+        const { exists } = await ensureFileExists(fileToCacheURI);
 
-        await FileSystem.downloadAsync(uri, fileToCache)
+        if (! exists) {
+            await FileSystem.downloadAsync(uri, fileToCacheURI)
+        }
 
     } catch ({ message }) {
     }

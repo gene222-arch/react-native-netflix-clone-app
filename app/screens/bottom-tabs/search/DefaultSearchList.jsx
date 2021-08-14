@@ -6,17 +6,17 @@ import styles from './../../../assets/stylesheets/searchScreen';
 import SearchItem from './../../../components/search-item/SearchItem';
 import { getCachedFile } from './../../../utils/cacheImage';
 
-const DefaultSearchList = ({ searchList = [], handlePressDisplayShowInfo }) => 
+const DefaultSearchList = ({ movies = [], handlePressDisplayShowInfo }) => 
 {
     return (
         <View style={{ flex: 1 }}>
             <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ searchList }
+                data={ movies }
                 renderItem={ ({ item }) => (
                     <SearchItem
-                        uri={ getCachedFile('SearchList/Wallpapers/', item.id, item.wallpaper) } 
+                        uri={ getCachedFile('SearchList/Wallpapers/', item.id, item?.wallpaper_path) } 
                         title={ item.title }
                         onPress={ () => handlePressDisplayShowInfo(item) }
                     />

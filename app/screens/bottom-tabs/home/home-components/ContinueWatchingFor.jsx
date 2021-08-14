@@ -26,9 +26,6 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
         dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ user_profile_id: id, show, rate: 'dislike' }));
     }
 
-    /**
-     * Todo: Not yet tested
-     */
     const handlePressRemove = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart({
         movie_id: id,
         user_profile_id: AUTH_PROFILE.id
