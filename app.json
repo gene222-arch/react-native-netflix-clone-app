@@ -18,10 +18,12 @@
       "**/*"
     ],
     "ios": {
+      "userInterfaceStyle": "dark",
       "supportsTablet": true,
       "requireFullScreen": true
     },
     "android": {
+      "userInterfaceStyle": "dark",
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/netflix-icon.png",
         "backgroundColor": "#000000"

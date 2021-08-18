@@ -5,15 +5,18 @@ import Colors from '../constants/Colors';
 const View = ({ row = false, style, ...props }) =>
 {
     const theme = useColorScheme();
+    
     return (
         <DefaultView 
-            style={ 
-                [
-                    { ...Colors.theme.container['dark'] }, 
-                    { ...styles, flexDirection: !row ? styles.viewDefaultStyle.flexDirection : 'row' }, 
-                    { ...style }
-                ] 
-            } {...props} 
+            style={[
+                Colors.theme.container['dark'], 
+                { 
+                    ...styles, 
+                    flexDirection: !row ? styles.viewDefaultStyle.flexDirection : 'row' 
+                }, 
+                style
+            ]} 
+            {...props} 
         />
     )
 }

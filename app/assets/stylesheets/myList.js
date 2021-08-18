@@ -13,6 +13,13 @@ const styles = StyleSheet.create({
         width: 120,
         color: Colors.white
     },
+    image: {
+        width: 120,
+        height: 160,
+        resizeMode: 'cover',
+        margin: 5,
+        borderRadius: 5
+    },
 });
 
 export default styles;

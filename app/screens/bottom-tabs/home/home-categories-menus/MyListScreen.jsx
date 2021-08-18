@@ -3,14 +3,13 @@ import View from '../../../../components/View';
 import { Picker } from '@react-native-picker/picker';
 import styles from './../../../../assets/stylesheets/myList';
 import { FlatList } from 'react-native-gesture-handler';
-import MyListItem from './../../../../components/my-list-item/MyListItem';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { InteractionManager } from 'react-native'
 import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
-import LoadingSpinner from './../../../../components/LoadingSpinner';
+import MyListScreenLoader from '../../../../components/loading-skeletons/MyListScreenLoader';
 
 
 const DEFAULT_PICKER_LIST = [
@@ -52,7 +51,7 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
     }, []);
 
     if (! isInteractionsComplete) {
-        return <LoadingSpinner />
+        return <MyListScreenLoader />
     }
 
     return (
@@ -82,10 +81,14 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
                 keyExtractor={ (item, index) => index.toString() }
                 data={ AUTH_PROFILE.my_list }
                 renderItem={ ({ item }) => (
-                    <MyListItem 
-                        uri={ getCachedFile(`${ AUTH.auth.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`, item.id, item.poster_path) }
-                        handlePressDisplayShowInfo={ () => handlePressDisplayShowInfo(item) }
-                    />
+                    <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
+                        <Image 
+                            source={{ 
+                                uri: getCachedFile(`${ AUTH.auth.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`, item.id, item.poster_path) 
+                            }}
+                            style={ styles.image }
+                        />
+                    </TouchableOpacity>
                 )}
                 numColumns={ 3 }
                 showsHorizontalScrollIndicator={ false }

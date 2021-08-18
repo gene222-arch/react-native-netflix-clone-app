@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     },
     topMenuContainer: {
         backgroundColor: 'rgba(0, 0, 0, .5)',
-        justifyContent: 'space-between'
     },
     tabTitle: {
         fontSize: 12,
