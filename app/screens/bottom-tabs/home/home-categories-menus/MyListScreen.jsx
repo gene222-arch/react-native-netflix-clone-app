@@ -33,7 +33,6 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
 
         return () => {
             setIsInteractionsComplete(false);
-            setSelectedPicker('My List');
             setShow(null);
             setShouldDisplayShowInfo(false);
         }
