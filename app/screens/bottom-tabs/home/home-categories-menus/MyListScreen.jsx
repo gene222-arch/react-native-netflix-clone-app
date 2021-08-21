@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import View from '../../../../components/View';
-import { Picker } from '@react-native-picker/picker';
 import styles from './../../../../assets/stylesheets/myList';
 import { FlatList } from 'react-native-gesture-handler';
 import { createStructuredSelector } from 'reselect';
@@ -11,17 +10,9 @@ import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
 import MyListScreenLoader from '../../../../components/loading-skeletons/MyListScreenLoader';
 
-
-const DEFAULT_PICKER_LIST = [
-    'My List',
-    'Pick 2',
-    'Pick 3'
-];
-
 const MyListScreen = ({ AUTH, AUTH_PROFILE }) => 
 {
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ selectedPicker, setSelectedPicker ] = useState('My List')
     const [ show, setShow ] = useState(null);
     const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
 
@@ -29,8 +20,6 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
         setShow(show);
         setShouldDisplayShowInfo(true);
     }
-
-    const handleChangePicker = (value, index) => setSelectedPicker(value);
 
     const runAfterInteractions = () => {
         AUTH_PROFILE.my_list.map(({ id, poster_path }) => {
@@ -61,22 +50,6 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
                 isVisible={ shouldDisplayShowInfo }
                 setIsVisible={ setShouldDisplayShowInfo }
             />
-            <Picker
-                selectedValue={ selectedPicker }
-                onValueChange={ handleChangePicker }
-                style={ styles.picker }
-                dropdownIconColor='white'
-            >
-            {
-                DEFAULT_PICKER_LIST.map((pick, index) => (
-                    <Picker.Item 
-                        key={ index } 
-                        label={ pick } 
-                        value={ pick } 
-                    />
-                ))
-            }
-            </Picker>
             <FlatList
                 keyExtractor={ (item, index) => index.toString() }
                 data={ AUTH_PROFILE.my_list }
