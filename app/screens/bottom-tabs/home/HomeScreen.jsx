@@ -81,13 +81,6 @@ const HomeScreen = ({ MOVIE }) =>
 
     return (
         <View style={ styles.container }>
-            {
-                yOffset > 75 && (
-                    <FadeInOutView shouldFadeIn={ yOffset > 72 }>
-                        <NavBar show={ yOffset > 72 } handlePressCategory={ handlePressCategory } />
-                    </FadeInOutView>
-                )
-            }
             <FlatList
                 onScroll={ handleOnScroll }
                 keyExtractor={ (item, index) => index.toString() }

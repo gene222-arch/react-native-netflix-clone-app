@@ -114,6 +114,7 @@ function* loginSaga(payload)
 
         yield call(SecureStoreInstance.storeAccessToken, access_token);
         yield put(ACTION.loginSuccess({ auth: user, profiles })); 
+        RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.loginFailed({ message }));    
     }
