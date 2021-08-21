@@ -7,39 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CategoriesMenu from './CategoriesMenu';
 import FadeInOutView from './../../../../components/animated/FadeInOutView';
 
-const Navigation = ({ handlePressTvShows, handlePressMovies, handleToggleCategories, }) => {
-    return (
-        <View style={ styles.tabContainer }>
-            <Text 
-                touchableOpacity={ true } 
-                style={ styles.tabItem }
-                onPress={ handlePressTvShows }
-            >
-                TV Shows
-            </Text>
-            <Text 
-                touchableOpacity={ true } 
-                style={ styles.tabItem }
-                onPress={ handlePressMovies }
-            >
-                Movies
-            </Text>
-            <TouchableOpacity onPress={ handleToggleCategories }>
-                <View style={ styles.categoriesContainer }>
-                    <Text style={ styles.tabItem }>Categories</Text>
-                    <FontAwesome5 
-                        name='sort-down'
-                        size={ 12 }
-                        color='#fff'
-                        style={ styles.categoriesIcon }
-                    />
-                </View>
-            </TouchableOpacity>
-        </View>
-    )
-}
-
-const NavBar = ({ show = true, handlePressCategory }) => 
+const NavBar = () => 
 {
     const [ showCategories, setShowCategories ] = useState(false);
 
@@ -52,13 +20,21 @@ const NavBar = ({ show = true, handlePressCategory }) =>
     }, []);
 
     return (
-        <FadeInOutView shouldFadeIn={ show }>
+        <FadeInOutView>
             <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
-            <Navigation 
-                handlePressTvShows={ () => handlePressCategory('TV Shows') }
-                handlePressMovies={ () => handlePressCategory('Movies') }
-                handleToggleCategories={ handleToggleCategories }
-            />
+            <View style={ styles.tabContainer }> 
+                <TouchableOpacity onPress={ handleToggleCategories }>
+                    <View style={ styles.categoriesContainer }>
+                        <Text style={ styles.tabItem }>Categories</Text>
+                        <FontAwesome5 
+                            name='sort-down'
+                            size={ 12 }
+                            color='#fff'
+                            style={ styles.categoriesIcon }
+                        />
+                    </View>
+                </TouchableOpacity>
+            </View>
         </FadeInOutView>
     )
 }

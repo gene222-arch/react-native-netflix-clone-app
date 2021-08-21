@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     },
     tabContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         padding: 30,
         paddingTop: 10,
         backgroundColor: 'transparent'

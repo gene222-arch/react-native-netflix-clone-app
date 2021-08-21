@@ -10,7 +10,7 @@ import { FlatList } from 'react-native';
 import categoriesConfig, { CATEGORY_NAMES } from './../../../../config/home.menu.category.list'
 
 
-const CategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory, handlePressChangeMainCategory }) => 
+const CategoriesMenu = ({ isVisible, setIsVisible }) => 
 {
     const navigation = useNavigation();
 
@@ -20,12 +20,17 @@ const CategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory, handleP
     }
 
     const handlePressCategoryOnChange = (category) => {
-        handlePressChangeMainCategory(category);
         setIsVisible(false);
+        navigation.navigate('CategoriesScreen', { headerTitle: 'Categories' });
     }
 
-    const categories = categoriesConfig({
-        homeOnPress: () => console.log('Home Menu Clicked'),
+    const handlePressHome = () => {
+        setIsVisible(false);
+        navigation.navigate('Home');
+    }
+
+    const menuList = categoriesConfig({
+        homeOnPress: handlePressHome,
         myListOnPress: handlePressNavigateToMyList,
         availableForDownloadOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.AVAILABLE_FOR_DOWNLOAD),
         actionOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ACTION),
@@ -49,7 +54,7 @@ const CategoriesMenu = ({ isVisible, setIsVisible, selectedMainCategory, handleP
                 <View style={ styles.modalContainer }>
                     <FlatList 
                         keyExtractor={ ({ title }) => title }
-                        data={ categories }
+                        data={ menuList }
                         renderItem={ ({ item }) => (
                             <TouchableOpacity onPress={ item.onPress }>
                                 <Text style={ styles.categoriesTxt }> { item.title }</Text>

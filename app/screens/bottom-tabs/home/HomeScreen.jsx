@@ -38,11 +38,8 @@ const HomeScreen = ({ MOVIE }) =>
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ yOffset, setYOffset ] = useState(0);
 
-    const handlePressCategory = (categoryName) => navigation.navigate('CategoriesScreen', { categoryName, headerTitle: categoryName });
-
     const handleOnScroll = useCallback((e) => {
         const y = Math.round(e.nativeEvent.contentOffset.y);
-        console.log('y:', y);
         setYOffset(y);
     }, [yOffset]);
 
@@ -106,7 +103,7 @@ const HomeScreen = ({ MOVIE }) =>
                                     >
                                         <View>
                                             <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
-                                            <NavBar yOffset={ yOffset } handlePressCategory={ handlePressCategory } />
+                                            <NavBar />
                                         </View>
                                         <FrontPageOptions frontPage={ frontPage } />
                                     </ImageBackground>  
