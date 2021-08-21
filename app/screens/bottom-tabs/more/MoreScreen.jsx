@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, connect, batch } from 'react-redux'
-import { InteractionManager, FlatList, TouchableOpacity } from 'react-native'
+import { FlatList, TouchableOpacity } from 'react-native'
 import * as AUTH_ACTION from '../../../redux/modules/auth/actions'
 import * as TOAST_ACTION from '../../../redux/modules/toast/actions'
 import styles from './../../../assets/stylesheets/moreScreen';
@@ -9,9 +9,8 @@ import View from './../../../components/View';
 import { Overlay, Button } from 'react-native-elements';
 import Text from './../../../components/Text';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import LoadingScreen from './../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
-import { authSelector, authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector, selectOrderedProfiles } from './../../../redux/modules/auth/selectors';
 import { useNavigation } from '@react-navigation/native';
 import DisplayOption from './../../../components/more-screen-display-option/DisplayOption';
 import LoadingSpinner from '../../../components/LoadingSpinner'
@@ -57,13 +56,11 @@ const moreOptions = ({ onPressSignOut, onPressMyList }) =>
     }
 ];
 
-const MoreScreen = ({ AUTH, AUTH_PROFILE }) => 
+const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) => 
 {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     
-    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ sortedProfiles, setSortedProfiles ] = useState([]);
     const [ showSignOutDialog, setShowSignOutDialog ] = useState(false);
 
     const handlePressSelectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }))
@@ -89,37 +86,11 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
         onPressMyList: handlePressMyList 
     };
 
-    /** Run after interactions */
-    const runAfterInteractions = () => 
-    {
-        const selectedProfileIndex = AUTH.profiles.findIndex(({ id }) => id === AUTH_PROFILE.id);
-        const middleArrValIndex = Math.floor(AUTH.profiles.length / 2);
-        const profiles = AUTH.profiles;
-
-        [ profiles[selectedProfileIndex], profiles[middleArrValIndex] ] = [ profiles[middleArrValIndex], profiles[selectedProfileIndex] ];
-
-        setSortedProfiles(profiles);
-
-        setIsInteractionsComplete(true);
-    }
-
-    const cleanUp = () => {
-        setIsInteractionsComplete(false);
-        setSortedProfiles([]);
-        setShowSignOutDialog(false);
-    }
-
     useEffect(() => {
-        InteractionManager.runAfterInteractions(runAfterInteractions);
-
         return () => {
-            cleanUp();
+            setShowSignOutDialog(false);
         }
     }, [AUTH_PROFILE]); 
-
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
-    }
 
     return (
         <View style={ styles.container }>
@@ -142,7 +113,7 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
             <View style={ styles.profileContainer }>
                 <FlatList
                     keyExtractor={ (item, index) => index.toString() }
-                    data={ sortedProfiles }
+                    data={ ORDERED_PROFILES }
                     renderItem={ ({ item, index }) => (
                         <ProfilePhotoItem 
                             key={ index }
@@ -193,7 +164,8 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE }) =>
 
 const mapStateToProps = createStructuredSelector({
     AUTH: authSelector,
-    AUTH_PROFILE: authProfileSelector
+    AUTH_PROFILE: authProfileSelector,
+    ORDERED_PROFILES: selectOrderedProfiles
 });
 
 export default connect(mapStateToProps)(MoreScreen)

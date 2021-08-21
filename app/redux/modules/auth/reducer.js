@@ -98,7 +98,7 @@ export default (state = initialState, { type, payload }) =>
 
     const isLoading = false;
     const errors = DEFAULT_ERROR_MESSAGE_PROPS;
-    const loggedInProfile = profiles?.find(profil => profil.id === profile.id);
+    const loggedInProfile = profiles.find(profil => profil.id === profile.id);
     let newProfiles = [];
 
     switch (type) 
