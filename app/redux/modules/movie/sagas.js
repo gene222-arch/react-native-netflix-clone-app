@@ -22,20 +22,20 @@ const {
 
 /** Sagas */
 
-function* getCategorizedMoviesSaga()  
+function* getCategorizedMoviesSaga(payload)  
 {
     try {
-        const { data: categorizedMovies } = yield call(API.fetchCategorizedMoviesAsync);
+        const { data: categorizedMovies } = yield call(API.fetchCategorizedMoviesAsync, payload);
         yield put(getCategorizedMoviesSuccess({ categorizedMovies }));
     } catch ({ message }) {
         yield put(getCategorizedMoviesFailed({ message }));
     }
 }
 
-function* getMoviesSaga()  
+function* getMoviesSaga(payload)  
 {
     try {
-        const { data: movies } = yield call(API.fetchAllAsync);
+        const { data: movies } = yield call(API.fetchAllAsync, payload);
         yield put(getMoviesSuccess({ movies }));
     } catch ({ message }) {
         yield put(getMoviesFailed({ message }));
@@ -67,16 +67,16 @@ function* incrementMovieViewsSaga()
 function* getCategorizedMoviesWatcher()
 {
     while (true) {
-        yield take(GET_CATEGORIZED_MOVIES_START);
-        yield call(getCategorizedMoviesSaga);
+        const { payload } = yield take(GET_CATEGORIZED_MOVIES_START);
+        yield call(getCategorizedMoviesSaga, payload);
     }
 }
 
 function* getMoviesWatcher()
 {
     while (true) {
-        yield take(GET_MOVIES_START);
-        yield call(getMoviesSaga);
+        const { payload } = yield take(GET_MOVIES_START);
+        yield call(getMoviesSaga, payload);
     }
 }
 

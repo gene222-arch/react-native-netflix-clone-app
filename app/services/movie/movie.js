@@ -1,17 +1,17 @@
 import axiosInstance from '../../utils/axiosInstance'
 
-export const fetchAllAsync = async (payload) => 
+export const fetchAllAsync = async ({ is_for_kids }) => 
 {
     return await axiosInstance()
-        .get('/movies')
+        .get(`/movies?isForKids=${ is_for_kids }`)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
 
-export const fetchCategorizedMoviesAsync = async (payload) => 
+export const fetchCategorizedMoviesAsync = async ({ is_for_kids }) => 
 {
     return await axiosInstance()
-        .get('/movies/categorized')
+        .get(`/movies/categorized?isForKids=${ is_for_kids }`)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }

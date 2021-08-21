@@ -19,6 +19,7 @@ import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFro
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
+import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 const DEFAULT_FRONT_PAGE = {
     id: '',
@@ -30,7 +31,7 @@ const DEFAULT_FRONT_PAGE = {
     isAddedToMyList: false
 }
 
-const HomeScreen = ({ MOVIE }) => 
+const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -51,8 +52,8 @@ const HomeScreen = ({ MOVIE }) =>
         });
 
         batch(() => {
-            dispatch(MOVIE_ACTION.getCategorizedMoviesStart());
-            dispatch(MOVIE_ACTION.getMoviesStart());
+            dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+            dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
         });
 
         MOVIE.categories.map(({ movies }) => {
@@ -77,6 +78,13 @@ const HomeScreen = ({ MOVIE }) =>
             MovieCreatedEvent.unListen();
         }
     }, []);
+
+    useEffect(() => {
+        batch(() => {
+            dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+            dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+        });
+    }, [AUTH_PROFILE])
 
     if (! isInteractionsComplete) {
         return <LoadingSpinner />
@@ -125,6 +133,7 @@ const HomeScreen = ({ MOVIE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector,
     MOVIE: movieSelector
 });
 
