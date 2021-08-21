@@ -1,6 +1,7 @@
 import ACTION_TYPES from './action.types';
 
 const {
+    CREATE_MOVIE,
     GET_CATEGORIZED_MOVIES_START,
     GET_CATEGORIZED_MOVIES_SUCCESS,
     GET_CATEGORIZED_MOVIES_FAILED,
@@ -14,6 +15,14 @@ const {
     INCREMENT_MOVIE_VIEWS_SUCCESS,
     INCREMENT_MOVIE_VIEWS_FAILED
 } = ACTION_TYPES;
+
+/** 
+ * Create Movie
+ */
+export const createMovie = (payload) => ({
+    type: CREATE_MOVIE,
+    payload
+});
 
 /** 
  * Get categorized movies

@@ -17,7 +17,8 @@ import { movieSelector } from './../../../redux/modules/movie/selectors';
 import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
-import FadeInOutView from '../../../components/animated/FadeInOutView';
+import * as MovieCreatedEvent from './../../../events/movie.created.event'
+import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 
 const DEFAULT_FRONT_PAGE = {
     id: '',
@@ -45,6 +46,10 @@ const HomeScreen = ({ MOVIE }) =>
 
     const runAfterInteractions = () => 
     {
+        MovieCreatedEvent.listen(response => {
+            dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
+        });
+
         batch(() => {
             dispatch(MOVIE_ACTION.getCategorizedMoviesStart());
             dispatch(MOVIE_ACTION.getMoviesStart());
@@ -69,6 +74,7 @@ const HomeScreen = ({ MOVIE }) =>
         return () => {
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
+            MovieCreatedEvent.unListen();
         }
     }, []);
 

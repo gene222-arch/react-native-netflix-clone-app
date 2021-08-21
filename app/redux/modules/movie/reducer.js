@@ -2,6 +2,7 @@ import ACTION_TYPES from './action.types';
 import movieAPI from './../../../services/data/movies';
 
 const {
+    CREATE_MOVIE,
     GET_CATEGORIZED_MOVIES_START,
     GET_CATEGORIZED_MOVIES_SUCCESS,
     GET_CATEGORIZED_MOVIES_FAILED,
@@ -16,9 +17,16 @@ const {
     INCREMENT_MOVIE_VIEWS_FAILED
 } = ACTION_TYPES;
 
+const CATEGORY_DEFAULT_PROPS = [
+    {
+        title: '',
+        movies: []
+    }
+];
+
 const initialState = {
     movies: [],
-    categories: [],
+    categories: CATEGORY_DEFAULT_PROPS,
     isLoading: false,
     errors: []
 }
@@ -37,6 +45,22 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 isLoading: true
+            }
+
+        case CREATE_MOVIE:
+
+            const newCategories = state
+                .categories
+                .map(category => {
+                    return category.title === 'Recently Added Movies'
+                            ? { ...category, movies: [ payload.movie, ...category.movies ] }
+                            : category;
+                });
+
+            return {
+                ...state,
+                categories: newCategories,
+                isLoading: false
             }
 
         case GET_MOVIES_SUCCESS:
