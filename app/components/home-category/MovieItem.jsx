@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Pressable } from 'react-native'
+import { Pressable, InteractionManager } from 'react-native'
 import { ensureFileExists, getCachedFile } from './../../utils/cacheImage';
 import Image from './../Image';
 import styles from './../../assets/stylesheets/homeCategory';
@@ -8,7 +8,8 @@ import PosterImageLoader from './../loading-skeletons/PosterImageLoader';
 const MovieItem = ({ movie, handlePressImage }) => 
 {
     const cachedFile = getCachedFile('Categories/', movie.id, movie.poster_path);
-    const [ fileExists, setFileExists ] = useState(false);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+    const [ isImageCached, setFileExists ] = useState(false);
 
     const onLoadCheckFileExists = async () => 
     {
@@ -20,15 +21,17 @@ const MovieItem = ({ movie, handlePressImage }) =>
         }
     }
 
-    useEffect(() => {
-        onLoadCheckFileExists();        
-
+    useEffect(() => {    
+        InteractionManager.runAfterInteractions(() => {
+            onLoadCheckFileExists();    
+            setIsInteractionsComplete(true);
+        })
         return () => {
             setFileExists(false);
         }
     }, [cachedFile]);
 
-    if (! fileExists) {
+    if (! isInteractionsComplete) {
         return <PosterImageLoader />
     }
 
@@ -36,7 +39,7 @@ const MovieItem = ({ movie, handlePressImage }) =>
         <Pressable onPress={ handlePressImage }>
             <Image 
                 style={ styles.image }
-                source={{ uri: cachedFile }}
+                source={{ uri: !isImageCached ? movie.poster_path : cachedFile }}
             />
         </Pressable>
     )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, InteractionManager } from 'react-native'
 import styles from './../../assets/stylesheets/continueWatchingForItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import View from './../View';
@@ -17,11 +17,13 @@ import PosterImageLoader from './../loading-skeletons/PosterImageLoader';
 
 const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
-    const cachedPosterImage = getCachedFile(`RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Posters/`, movie.id, movie.poster_path);
+    const cachedPosterImage = getCachedFile(`RecentlyWatchedShows/Posters/`, movie.id, movie.poster_path);
+
     const [ showInfo, setShowInfo ] = useState(false);
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
     const [ fileExists, setFileExists ] = useState(false);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
@@ -31,7 +33,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
     const onLoadCheckCachedFileExists = async() => {
         try {
-            const { exists } =await ensureFileExists(cachedPosterImage);
+            const { exists } = await ensureFileExists(cachedPosterImage);
             return setFileExists(exists);
         } catch ({ message }) {
             return setFileExists(false);
@@ -39,24 +41,28 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
     }
 
     useEffect(() => {
-        onLoadCheckCachedFileExists();
+        InteractionManager.runAfterInteractions(() => {
+            onLoadCheckCachedFileExists();
+            setIsInteractionsComplete(true);
+        });
+
         return () => {
             setShowInfo(false);
             setShowMoreOptions(false);
             setShouldPlayVideo(false);
             setFileExists(false);
         }
-    }, [cachedPosterImage]);
+    }, []);
 
 
-    if (! fileExists) {
+    if (! isInteractionsComplete) {
         return <PosterImageLoader />
     }
 
     if (shouldPlayVideo) {
         return (
             <VideoPlayerFullScreen  
-                uri={ getCachedFile( `RecentlyWatchedShows/Profile/${ AUTH_PROFILE.id }/Videos/`, movie.id, movie.video_path) }
+                uri={ getCachedFile( `RecentlyWatchedShows/Videos/`, movie.id, movie.video_path) }
                 handleCloseVideo={ handlePressPlayVideo }
             />
         )
@@ -77,7 +83,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
             <Image 
                 source={{
-                    uri: cachedPosterImage
+                    uri: !fileExists ? movie.poster_path : cachedPosterImage
                 }}
                 style={ styles.poster }
             />

@@ -33,8 +33,8 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 
     useEffect(() => {
         recently_watched_shows.map(({ id: movie_id, poster_path, video_path }) => {
-            cacheImage(poster_path, movie_id, `RecentlyWatchedShows/Profile/${ id }/Posters/`);
-            cacheImage(video_path, movie_id, `RecentlyWatchedShows/Profile/${ id }/Videos/`);
+            cacheImage(poster_path, movie_id, `RecentlyWatchedShows/Posters/`);
+            cacheImage(video_path, movie_id, `RecentlyWatchedShows/Videos/`);
         });
     }, [AUTH_PROFILE.recently_watched_shows]);
 
