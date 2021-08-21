@@ -36,13 +36,15 @@ export const selectAuthHasErrorMessages = createSelector(getErrorMessages, error
 
 export const selectOrderedProfiles = createSelector([getProfiles, authProfileSelector], (profiles, authProfile) => 
 {
-    const middleIndex = Math.floor(profiles.length / 2);
-    const currentProfileIndex = profiles.findIndex(profile => profile.id === authProfile.id);
-    
-    const getCenteredProfile = profiles[middleIndex];
+    if (authProfile.id) {
+        const middleIndex = Math.floor(profiles.length / 2);
+        const currentProfileIndex = profiles.findIndex(profile => profile.id === authProfile.id);
+        
+        const getCenteredProfile = profiles[middleIndex];
 
-    profiles.splice(middleIndex, 1, authProfile);
-    profiles.splice(currentProfileIndex, 1, getCenteredProfile);
+        profiles.splice(middleIndex, 1, authProfile);
+        profiles.splice(currentProfileIndex, 1, getCenteredProfile);
+    }
 
     return profiles;
 });

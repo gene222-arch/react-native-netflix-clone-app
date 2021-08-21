@@ -65,7 +65,7 @@ const PROFILE_DEFAULT_PROPS = {
     id: '',
     name: '',
     email: '',
-    avatar: '',
+    avatar: null,
     is_for_kids: false,
     my_downloads: [],
     recently_watched_shows: [],
