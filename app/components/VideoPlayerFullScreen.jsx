@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { Video } from 'expo-av'
 import * as NAVIGATION_ACTION from './../redux/modules/navigation/actions'
 import { setStatusBarHidden } from 'expo-status-bar'
@@ -6,6 +6,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
 import Text from './Text';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) => 
@@ -26,33 +27,31 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
         });
     }
 
-    const onExitFullScreen = async () => 
-    {
+    const onExitFullScreen = useCallback(async () => {
         setStatusBarHidden(false);
 
         setInFullscreen(false);
 
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        unLockOrientation();
 
-        video?.current?.setStatusAsync({
-            shouldPlay: false,
-        });
+        video.current?.pauseAsync();
 
         handleCloseVideo();
-    }
+    }, [uri]);
 
     const unLockOrientation = async () => await ScreenOrientation.unlockAsync();
 
-    
-    useEffect(() => {
-        onEnterFullScreen();
+    useFocusEffect(
+        useCallback(() => {
+            onEnterFullScreen();
 
-        return () => {
-            video.current = null;
-            unLockOrientation();
-            setInFullscreen(false);
-        }
-    }, []);
+            return () => {
+                video.current = null;
+                unLockOrientation();
+                setInFullscreen(false);
+            }
+        }, [])
+    );
 
     return (
         <VideoPlayer
