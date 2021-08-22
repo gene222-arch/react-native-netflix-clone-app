@@ -18,6 +18,7 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import CreateProfileScreen from './../screens/bottom-tabs/select-profile/CreateProfileScreen';
 import ManageProfilesScreen from './../screens/bottom-tabs/select-profile/ManageProfilesScreen';
 import EditProfileScreen from './../screens/bottom-tabs/select-profile/EditProfileScreen';
+import DisplayVideoScreen from './../screens/DisplayVideoScreen';
 
 const DEFAULT_OPTIONS = {
     headerShown: false,
@@ -65,7 +66,7 @@ export const HomeTab = ({ navigation }) =>
             <HomeStack.Screen 
                 name='Home' 
                 component={ HomeScreen } 
-                options={{ ...DEFAULT_OPTIONS, headerShown: false }}
+                options={ DEFAULT_OPTIONS }
             />
             <HomeStack.Screen 
                 name='MovieDetailScreen' 
@@ -187,5 +188,20 @@ export const MoreTab = () =>
                 options={ MORE_SCREEN_OPTIONS }
             />
         </AccountSoonStack.Navigator>
+    );
+}
+
+const DisplayVideoStack = createStackNavigator();
+
+export const DisplayVideoTab = () => 
+{    
+    return (
+        <DisplayVideoStack.Navigator initialRouteName='DisplayVideo'>
+            <DisplayVideoStack.Screen 
+                name='DisplayVideo' 
+                component={ DisplayVideoScreen } 
+                options={ DEFAULT_OPTIONS }
+            />
+        </DisplayVideoStack.Navigator>
     );
 }

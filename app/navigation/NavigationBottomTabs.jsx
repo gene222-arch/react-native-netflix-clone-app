@@ -4,7 +4,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 /** Screens */
-import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab } from './BottomTabStacks'
+import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab, DisplayVideoTab } from './BottomTabStacks'
 import Colors from './../constants/Colors';
 import LoadingScreen from './../components/LoadingScreen';
 import View from './../components/View';
@@ -105,6 +105,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
             <Tab.Screen name='Coming soon' component={ ComingSoonTab } options={ COMING_SOON_OPTIONS } />
             <Tab.Screen name='Downloads' component={ DownloadsTab } options={ DOWNLOAD_OPTIONS } />
             <Tab.Screen name='More' component={ MoreTab } options={ hideTabScreen }/>
+            <Tab.Screen name='DisplayVideo' component={ DisplayVideoTab } options={ hideTabScreen }/>
         </Tab.Navigator>
     );
 }
