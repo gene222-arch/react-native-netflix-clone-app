@@ -24,7 +24,7 @@ const DEFAULT_FRONT_PAGE = {
     title: '',
     wallpaper_path: null,
     poster: null,
-    tags: [],
+    genres: '',
     isAddedToMyList: false
 }
 
@@ -33,13 +33,14 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const dispatch = useDispatch();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ frontPage, setFrontPage ] = useState(frontPageShows[0]);
+    const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
 
     const runAfterInteractions = () => 
     {
         MovieCreatedEvent.listen(response => {
             dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
         });
+        setFrontPage(frontPageShows[0]);
 
         setIsInteractionsComplete(true);
     }
@@ -90,7 +91,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                                         }}
                                         style={ styles.homeFrontPage }
                                     >
-                                        <View>
+                                        <View style={ styles.appBarContainer }>
                                             <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
                                             <NavBar />
                                         </View>

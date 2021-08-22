@@ -4,7 +4,6 @@ import { Button } from 'react-native-elements'
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';
 import styles from './../../../../assets/stylesheets/homeScreen';
-import Image from './../../../../components/Image';
 import { getCachedFile } from './../../../../utils/cacheImage';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -13,6 +12,7 @@ import { authProfileSelector } from './../../../../redux/modules/auth/selectors'
 import { connect, useDispatch } from 'react-redux';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import Info from './../../../../components/continue-watching-for-item/Info';
+import { Image } from 'react-native-expo-image-cache';
 
 const DEFAULT_FRONT_PAGE_MOVIE = {
     id: '',
@@ -41,7 +41,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }
     const dispatch = useDispatch();
 
     const [ showMovieInfo, setShowMovieInfo ] = useState(false);
-    const genres = useMemo(() => frontPage.genres.split(','), [ frontPage.genres ]);
+    const genres = useMemo(() => frontPage?.genres.split(','), [ frontPage.genres ]);
 
 
     const handleToggleAddToMyList = () => 
@@ -69,7 +69,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }
             />
     
             <Image 
-                source={{ uri: getCachedFile('FrontPages/', frontPage.id, frontPage.poster_path) }}
+                uri={ frontPage.poster_path }
                 style={ styles.homeFrontPageShowLogo }
             />
 

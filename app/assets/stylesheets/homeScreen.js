@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         marginBottom: 15,
     },
+    appBarContainer: {
+        backgroundColor: 'transparent',
+    },  
     categoriesContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -18,10 +21,6 @@ const styles = StyleSheet.create({
     categoriesIcon: {
         paddingLeft: 10,
         marginTop: -5
-    },  
-    container: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, .5)'
     },
     continueWatchingForContainer: {
         marginVertical: 30,
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     topMenuContainer: {
-        backgroundColor: 'rgba(0, 0, 0, .5)',
+        backgroundColor: 'transparent'
     },
     tabTitle: {
         fontSize: 12,
