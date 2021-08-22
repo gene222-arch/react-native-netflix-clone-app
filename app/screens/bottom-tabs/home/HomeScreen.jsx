@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
 import frontPageShows from './../../../services/data/frontPageShows';
