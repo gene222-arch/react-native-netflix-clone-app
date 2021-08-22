@@ -3,8 +3,7 @@ import { FlatList, TouchableOpacity } from 'react-native'
 import Text from './../../../components/Text';
 import View from './../../../components/View';
 import styles from './../../../assets/stylesheets/searchScreen';
-import { getCachedFile } from './../../../utils/cacheImage';
-import Image from './../../../components/Image';
+import { Image } from 'react-native-expo-image-cache';
 
 
 const OnSearchList = ({ movies, handlePressDisplayShowInfo }) => 
@@ -19,7 +18,7 @@ const OnSearchList = ({ movies, handlePressDisplayShowInfo }) =>
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
                         <Image 
-                            source={{ uri: getCachedFile('SearchList/Posters/', item.id, item.poster_path) }}
+                            uri={ item.poster_path }
                             style={ styles.image }
                         />
                     </TouchableOpacity>

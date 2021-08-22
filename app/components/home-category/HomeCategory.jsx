@@ -6,7 +6,6 @@ import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import View from './../View';
 import TextLoader from '../loading-skeletons/TextLoader';
-import CacheImage from './../CacheImage';
 
 
 const HomeCategory = ({ isLoading = false, title, categorizedMovies }) => 

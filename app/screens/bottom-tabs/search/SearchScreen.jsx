@@ -48,7 +48,7 @@ const SearchScreen = () =>
     }, []);
 
     const handlePressDisplayShowInfo = (show) => {
-        setShow({ ...show, poster_path: getCachedFile('SearchList/Posters/', show.id, show.poster_path) });
+        setShow(show);
         setIsVisibleMovieInfo(true);
     }
 

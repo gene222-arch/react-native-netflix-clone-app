@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity, InteractionManager } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import styles from './../../assets/stylesheets/continueWatchingForItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import View from './../View';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoreActionList from './MoreActionList';
 import Info from './Info';
-import { getCachedFile, ensureFileExists } from './../../utils/cacheImage';
+import { getCachedFile } from './../../utils/cacheImage';
 import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
-import Image from './../Image';
-import PosterImageLoader from './../loading-skeletons/PosterImageLoader';
+import { Image } from 'react-native-expo-image-cache';
 
 
 const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
-    const cachedPosterImage = getCachedFile(`RecentlyWatchedShows/Posters/`, movie.id, movie.poster_path);
-
     const [ showInfo, setShowInfo ] = useState(false);
     const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
-    const [ fileExists, setFileExists ] = useState(false);
-    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
@@ -31,33 +26,13 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
 
     const handlePressPlayVideo = () => setShouldPlayVideo(! shouldPlayVideo);
 
-    const onLoadCheckCachedFileExists = async() => {
-        try {
-            const { exists } = await ensureFileExists(cachedPosterImage);
-            return setFileExists(exists);
-        } catch ({ message }) {
-            return setFileExists(false);
-        }
-    }
-
     useEffect(() => {
-        InteractionManager.runAfterInteractions(() => {
-            onLoadCheckCachedFileExists();
-            setIsInteractionsComplete(true);
-        });
-
         return () => {
             setShowInfo(false);
             setShowMoreOptions(false);
             setShouldPlayVideo(false);
-            setFileExists(false);
         }
     }, []);
-
-
-    if (! isInteractionsComplete) {
-        return <PosterImageLoader />
-    }
 
     if (shouldPlayVideo) {
         return (
@@ -82,9 +57,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
             <Info selectedShow={ movie } isVisible={ showInfo } setIsVisible={ setShowInfo } />
 
             <Image 
-                source={{
-                    uri: !fileExists ? movie.poster_path : cachedPosterImage
-                }}
+                uri={ movie.poster_path }
                 style={ styles.poster }
             />
 

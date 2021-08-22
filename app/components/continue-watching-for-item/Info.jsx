@@ -4,16 +4,16 @@ import { BottomSheet, ListItem, Divider, Button } from 'react-native-elements';
 import styles from './../../assets/stylesheets/info';
 import Text from './../Text';
 import View from './../View';
-import Image from './../Image';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { getCachedFile } from './../../utils/cacheImage';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
+import { Image } from 'react-native-expo-image-cache';
+
 
 const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
 {   
@@ -58,7 +58,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
-                        source={{ uri: selectedShow?.poster_path }}
+                        uri={ selectedShow?.poster_path }
                         style={ styles.poster }
                     />
                     <ListItem.Content>

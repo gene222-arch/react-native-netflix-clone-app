@@ -1,11 +1,12 @@
 import React from 'react'
 import View from './../View';
-import Image from './../Image';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import { TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Text from './../Text';
+import { Image } from 'react-native-expo-image-cache';
+
 
 const RemindMeIcon = ({ isReminded = false }) => 
 {
@@ -35,10 +36,7 @@ const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressI
     return (
         <View style={ styles.comingSoonVideoContainer }>
             <Image 
-                source={{
-                    // uri: `${ FileSystem.cacheDirectory }ComingSoon/TitleLogos/${ movie.id }.${ getExtension(movie.title_logo_path) }`
-                    uri: movie.title_logo_path
-                }}
+                uri={ movie.title_logo_path }
                 style={ styles.poster }
             />
             <View style={ styles.remindMeInfoContainer }>

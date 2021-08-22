@@ -31,11 +31,12 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
         user_profile_id: AUTH_PROFILE.id
     }));
 
+
     useEffect(() => {
-        recently_watched_shows.map(({ id: movie_id, poster_path, video_path }) => {
-            cacheImage(poster_path, movie_id, `RecentlyWatchedShows/Posters/`);
+        recently_watched_shows.map(({ id: movie_id, video_path }) => {
             cacheImage(video_path, movie_id, `RecentlyWatchedShows/Videos/`);
         });
+
     }, [AUTH_PROFILE.recently_watched_shows]);
 
 
@@ -45,7 +46,6 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 
     return (
         <View style={ styles.container }>
-            
             {
                 AUTH.isLoading 
                     ? <TextLoader />

@@ -1,10 +1,11 @@
 import React from 'react'
 import View from './../View';
 import Text from './../Text';
-import Image from './../Image';
 import styles from '../../assets/stylesheets/searchItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import { Image } from 'react-native-expo-image-cache';
+
 
 const SearchItem = ({ uri, title, onPress }) => 
 {
