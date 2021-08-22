@@ -51,19 +51,9 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
             dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
         });
 
-        batch(() => {
-            dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
-            dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
-        });
-
-        MOVIE.categories.map(({ movies }) => {
-            movies.map(({ id, poster_path }) => cacheImage(poster_path, id, 'Categories/'))
-        });
-
-        frontPageShows.map(({ id, poster_path, wallpaper_path }) => {
-            cacheImage(poster_path, id, 'FrontPages/');
-            cacheImage(wallpaper_path, id, 'FrontPages/');
-        });
+        // MOVIE.categories.map(({ movies }) => {
+        //     movies.map(({ id, poster_path }) => cacheImage(poster_path, id, 'Categories/'))
+        // });
 
         setFrontPage(frontPageShows[0]);
         setIsInteractionsComplete(true);
@@ -75,6 +65,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         return () => {
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
+            setYOffset(0);
             MovieCreatedEvent.unListen();
         }
     }, []);
@@ -111,7 +102,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                                 : (
                                     <ImageBackground 
                                         source={{ 
-                                            uri: getCachedFile('FrontPages/', frontPage.id, frontPage.wallpaper_path) 
+                                            uri: frontPage.wallpaper_path
                                         }}
                                         style={ styles.homeFrontPage }
                                     >

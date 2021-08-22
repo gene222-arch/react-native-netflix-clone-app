@@ -5,7 +5,6 @@ import Text from './../../../../components/Text';
 import styles from './../../../../assets/stylesheets/homeScreen';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CategoriesMenu from './CategoriesMenu';
-import FadeInOutView from './../../../../components/animated/FadeInOutView';
 
 const NavBar = () => 
 {
@@ -20,7 +19,7 @@ const NavBar = () =>
     }, []);
 
     return (
-        <FadeInOutView>
+        <View className={ styles.container } >
             <CategoriesMenu isVisible={ showCategories } setIsVisible={ setShowCategories }/>
             <View style={ styles.tabContainer }> 
                 <TouchableOpacity onPress={ handleToggleCategories }>
@@ -35,7 +34,7 @@ const NavBar = () =>
                     </View>
                 </TouchableOpacity>
             </View>
-        </FadeInOutView>
+        </View>
     )
 }
 

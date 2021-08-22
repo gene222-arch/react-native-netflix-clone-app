@@ -21,7 +21,6 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
-import LoadingSpinner from './../../../components/LoadingSpinner';
 import ComingSoonScreenLoader from '../../../components/loading-skeletons/ComingSoonScreenLoader';
 
 
@@ -58,7 +57,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (movieID, isReminded = false) => 
+    const handlePressToggleRemindMe = (movieID) => 
     {
         dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
     }
@@ -91,7 +90,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             });
         });
 
-        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart());
         setIsInteractionsComplete(true);
     }
 
@@ -113,6 +111,10 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             setFocusedIndex(0);
         }
     }, []); 
+    
+    useEffect(() => {
+        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+    }, [AUTH_PROFILE])
 
     return (
         <View style={ styles.container }>
@@ -122,7 +124,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                 headerTitle='Coming Soon'
             />
             {
-                !isInteractionsComplete || COMING_SOON_MOVIE.isLoading
+                (! isInteractionsComplete || COMING_SOON_MOVIE.isLoading)
                     ? <ComingSoonScreenLoader />
                     : (
                         <FlatList 
