@@ -193,7 +193,7 @@ export const MoreTab = () =>
 
 const DisplayVideoStack = createStackNavigator();
 
-export const DisplayVideoTab = () => 
+export const DisplayVideoTab = ({ route: { params } }) => 
 {    
     return (
         <DisplayVideoStack.Navigator initialRouteName='DisplayVideo'>
@@ -201,6 +201,7 @@ export const DisplayVideoTab = () =>
                 name='DisplayVideo' 
                 component={ DisplayVideoScreen } 
                 options={ DEFAULT_OPTIONS }
+                initialParams={ params }
             />
         </DisplayVideoStack.Navigator>
     );

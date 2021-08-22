@@ -6,21 +6,21 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
 import Text from './Text';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
-import { useDispatch } from 'react-redux';
 
 
 const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) => 
 {
-    const dispatch = useDispatch();
     const video = useRef(null);
-    const [inFullscreen, setInFullscreen] = useState(false);
+    const [ inFullscreen, setInFullscreen ] = useState(false);
 
     const onEnterFullScreen = async () => 
     {
-        dispatch(NAVIGATION_ACTION.toggleTabBarStart());
-        setInFullscreen(!inFullscreen)
+        setStatusBarHidden(true);
+
+        setInFullscreen(true);
 
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+
         video?.current?.setStatusAsync({
           shouldPlay: true,
         });
@@ -28,17 +28,22 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
 
     const onExitFullScreen = async () => 
     {
-        dispatch(NAVIGATION_ACTION.toggleTabBarStart());
+        setStatusBarHidden(false);
+
+        setInFullscreen(false);
 
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-        setInFullscreen(false);
+
+        video?.current?.setStatusAsync({
+            shouldPlay: false,
+        });
+
         handleCloseVideo();
     }
 
-    const unLockOrientation = async () => {
-        await ScreenOrientation.unlockAsync();
-    }
+    const unLockOrientation = async () => await ScreenOrientation.unlockAsync();
 
+    
     useEffect(() => {
         onEnterFullScreen();
 

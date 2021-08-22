@@ -1,7 +1,7 @@
 const frontPageShows = 
 [
     {
-        id: 1,
+        id: 391,
         category: 'anime',
         title: 'Dr. Stone',
         wallpaper_path: 'https://www.whats-on-netflix.com/wp-content/uploads/2019/09/Dr-Stone-Season-1-Netflix.jpg',
@@ -11,7 +11,7 @@ const frontPageShows =
         trailer_video_path: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },
     {
-        id: 2,
+        id: 392,
         category: 'TV Shows',
         title: 'The Witcher',
         wallpaper_path: 'https://i.pinimg.com/originals/65/37/b0/6537b006b39916f3e6a3f2d60b29dd10.jpg',
@@ -21,7 +21,7 @@ const frontPageShows =
         trailer_video_path: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
     },
     {
-        id: 3,
+        id: 393,
         category: 'Movies',
         title: 'The Avengers: End Game',
         wallpaper_path: 'https://i.insider.com/5ca3bed692c88634ca2ee223?width=750&format=jpeg&auto=webp',
@@ -31,7 +31,7 @@ const frontPageShows =
         genres: 'Exciting, Sci-Fi Anime, Wilderness Survival, Japanese'
     },
     {
-        id: 4,
+        id: 394,
         category: 'Anime',
         title: 'Assassination Classroom',
         wallpaper_path: 'https://i.pinimg.com/736x/8b/54/65/8b546552a4555d5b900dc32222e1fc8c.jpg',
@@ -41,7 +41,7 @@ const frontPageShows =
         genres: 'Exciting, Sci-Fi Anime, Wilderness Survival, Japanese'
     },
     {
-        id: 5,
+        id: 395,
         category: 'Available For Download',
         title: 'Assassination Classroom',
         wallpaper_path: 'https://www.dreadcentral.com/wp-content/uploads/2018/03/godzillaplanetofthemonsters2poster.jpg',

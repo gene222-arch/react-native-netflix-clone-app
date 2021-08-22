@@ -13,6 +13,7 @@ import { connect, useDispatch } from 'react-redux';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import Info from './../../../../components/continue-watching-for-item/Info';
 import { Image } from 'react-native-expo-image-cache';
+import { useNavigation } from '@react-navigation/native';
 
 const DEFAULT_FRONT_PAGE_MOVIE = {
     id: '',
@@ -39,10 +40,16 @@ const Genre = ({ genres }) =>
 const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }) => 
 {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const [ showMovieInfo, setShowMovieInfo ] = useState(false);
-    const genres = useMemo(() => frontPage?.genres.split(','), [ frontPage.genres ]);
+    
+    const genres = useMemo(() => frontPage.genres.split(','), [ frontPage.genres ]);
 
+    const handlePressNavigateToDisplayVideo = () => navigation.navigate('DisplayVideo', { 
+        videoUri: frontPage.trailer_video_path, 
+        id: frontPage.id 
+    });
 
     const handleToggleAddToMyList = () => 
     {
@@ -98,7 +105,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }
                         />
                     }
                     iconPosition='left'
-                    onPress={ () => console.log('Dr. Stone is Playing...') }
+                    onPress={ handlePressNavigateToDisplayVideo }
                     buttonStyle={ styles.playBtn }
                     titleStyle={ styles.playBtnTitle }
                 />
