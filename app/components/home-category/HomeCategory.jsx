@@ -1,4 +1,5 @@
 import React from 'react'
+import { Image } from "react-native-expo-image-cache";
 import { useNavigation } from '@react-navigation/native'
 import { FlatList, Pressable } from 'react-native'
 import styles from '../../assets/stylesheets/homeCategory';
@@ -31,7 +32,7 @@ const HomeCategory = ({ isLoading = false, title, categorizedMovies }) =>
                 data={ categorizedMovies }
                 renderItem={({ item }) => (
                     <Pressable onPress={ () => handlePressImage(item) }>
-                        <CacheImage 
+                        <Image 
                             style={ styles.image }
                             uri={ item.poster_path }
                         />

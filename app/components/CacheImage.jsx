@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Image } from 'react-native'
+import { Image, InteractionManager } from 'react-native'
 import * as FileSystem from 'expo-file-system'
+import PosterImageLoader from './loading-skeletons/PosterImageLoader';
 
 const CacheImage = ({ uri, ...props }) => 
 {
-    const [imgURI, setImgURI] = useState(uri)
-    const componentIsMounted = useRef(true)
+    const [imgURI, setImgURI] = useState(uri);
+    const componentIsMounted = useRef(true);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     const loadImage = async ({ fileURI }) => 
     {
@@ -30,21 +32,21 @@ const CacheImage = ({ uri, ...props }) =>
       }
 
     useEffect(() => {
-        loadImage({ fileURI: uri })
+        InteractionManager.runAfterInteractions(() => {
+            loadImage({ fileURI: uri });
+            setIsInteractionsComplete(true);
+        });
     
         return () => {
-            componentIsMounted.current = false
+            componentIsMounted.current = false;
+            setImgURI(null);
+            setIsInteractionsComplete(false);
         }
     }, []);
+
+    if (! isInteractionsComplete) return <PosterImageLoader />
   
-    return (
-        <Image
-            {...props}
-            source={{
-                uri: imgURI,
-            }}
-        />
-    )
+    return <Image {...props} source={{ uri: imgURI }} />
   }
 
 export default CacheImage
