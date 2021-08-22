@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
         marginTop: -5
     },  
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, .5)'
     },
     continueWatchingForContainer: {
         marginVertical: 30,

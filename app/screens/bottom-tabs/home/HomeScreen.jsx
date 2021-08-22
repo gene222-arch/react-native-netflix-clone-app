@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
 import frontPageShows from './../../../services/data/frontPageShows';
 import View from './../../../components/View';
 import HomeCategory from '../../../components/home-category/HomeCategory';
 import styles from './../../../assets/stylesheets/homeScreen';
-import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
 import NavBar from './home-components/NavBar';
 import FrontPageOptions from './home-components/FrontPageOptions';
 import ContinueWatchingFor from './home-components/ContinueWatchingFor';
@@ -18,7 +16,6 @@ import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
-import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 const DEFAULT_FRONT_PAGE = {
@@ -34,16 +31,9 @@ const DEFAULT_FRONT_PAGE = {
 const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
-    const [ yOffset, setYOffset ] = useState(0);
-
-    const handleOnScroll = useCallback((e) => {
-        const y = Math.round(e.nativeEvent.contentOffset.y);
-        setYOffset(y);
-    }, [yOffset]);
+    const [ frontPage, setFrontPage ] = useState(frontPageShows[0]);
 
     const runAfterInteractions = () => 
     {
@@ -51,11 +41,6 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
             dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
         });
 
-        // MOVIE.categories.map(({ movies }) => {
-        //     movies.map(({ id, poster_path }) => cacheImage(poster_path, id, 'Categories/'))
-        // });
-
-        setFrontPage(frontPageShows[0]);
         setIsInteractionsComplete(true);
     }
 
@@ -65,9 +50,8 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         return () => {
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
-            setYOffset(0);
             MovieCreatedEvent.unListen();
-        }
+        }   
     }, []);
 
     useEffect(() => {
@@ -77,6 +61,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         });
     }, [AUTH_PROFILE])
 
+    
     if (! isInteractionsComplete) {
         return <LoadingSpinner />
     }
@@ -84,7 +69,6 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     return (
         <View style={ styles.container }>
             <FlatList
-                onScroll={ handleOnScroll }
                 keyExtractor={ (item, index) => index.toString() }
                 data={ MOVIE.categories }
                 renderItem={({ item }) => (

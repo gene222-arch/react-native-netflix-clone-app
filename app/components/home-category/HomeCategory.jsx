@@ -1,11 +1,11 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { FlatList } from 'react-native'
+import { FlatList, Pressable } from 'react-native'
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import View from './../View';
-import MovieItem from './MovieItem';
 import TextLoader from '../loading-skeletons/TextLoader';
+import CacheImage from './../CacheImage';
 
 
 const HomeCategory = ({ isLoading = false, title, categorizedMovies }) => 
@@ -29,7 +29,14 @@ const HomeCategory = ({ isLoading = false, title, categorizedMovies }) =>
             <FlatList 
                 keyExtractor={({ id }) => id.toString() }
                 data={ categorizedMovies }
-                renderItem={({ item }) => <MovieItem movie={ item } handlePressImage={ () => handlePressImage(item) } />}
+                renderItem={({ item }) => (
+                    <Pressable onPress={ () => handlePressImage(item) }>
+                        <CacheImage 
+                            style={ styles.image }
+                            uri={ item.poster_path }
+                        />
+                    </Pressable>
+                )}
                 maxToRenderPerBatch={ 3 }
                 horizontal
                 style={ styles.categoryContainer }
