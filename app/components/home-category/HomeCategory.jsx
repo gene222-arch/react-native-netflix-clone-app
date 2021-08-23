@@ -32,6 +32,7 @@ const HomeCategory = ({ isLoading = false, title, categorizedMovies }) =>
                 renderItem={({ item }) => (
                     <Pressable onPress={ () => handlePressImage(item) }>
                         <Image 
+                            preview={{ uri: item.poster_path }}
                             style={ styles.image }
                             uri={ item.poster_path }
                         />

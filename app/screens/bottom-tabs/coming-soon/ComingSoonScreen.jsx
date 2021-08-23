@@ -96,7 +96,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             ComingSoonMovieCreatedEvent.unListen();
             ComingSoonMovieReleasedEvent.unListen();
             setIsInteractionsComplete(false);
-            setFocusedIndex(0);
         }
     }, [AUTH_PROFILE.id]); 
 
@@ -104,6 +103,10 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         useCallback(() => {
             if (COMING_SOON_MOVIE.totalUpcomingMovies) {
                 dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
+            }
+
+            return () => {
+                setFocusedIndex(0);
             }
         }, [COMING_SOON_MOVIE.totalUpcomingMovies])
     );

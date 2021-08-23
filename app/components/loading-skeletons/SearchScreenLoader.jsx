@@ -14,8 +14,9 @@ const MultipleSearchSkeleton = ({ count = 0 }) =>
                     layout={[
                         { 
                             key: `layout-1-${ count }`, 
-                            width: 150,
-                            height: 75,
+                            height: 80,
+                            width: 100,
+                            aspectRatio: 16/9,
                             borderRadius: 5,
                             marginBottom: 5,
                         },

@@ -62,9 +62,9 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         });
     }, [AUTH_PROFILE.id])
 
-    
+
     if (! isInteractionsComplete) {
-        return <LoadingSpinner />
+        return <HomeFrontPageLoader />
     }
 
     return (

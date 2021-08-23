@@ -19,14 +19,19 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
 {   
     const navigation = useNavigation();
 
-    const handlePressNavigateToDisplayVideo = () => navigation.navigate('DisplayVideo', { 
-        videoUri: selectedShow.video_trailer_path, 
-        id: selectedShow.id 
+    const handlePressPlay = () => navigation.navigate('DisplayVideo', { 
+        videoUri: selectedShow?.video_path, 
+        id: selectedShow?.id 
+    });
+    
+    const handlePressPlayPreview = () => navigation.navigate('DisplayVideo', { 
+        videoUri: selectedShow?.video_trailer_path, 
+        id: selectedShow?.id 
     });
 
     const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
-        id: selectedShow.id,
-        headerTitle: selectedShow.title
+        id: selectedShow?.id,
+        headerTitle: selectedShow?.title
     });
 
     return (
@@ -78,7 +83,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         }
                         titleStyle={ styles.playBtnTitle }
                         buttonStyle={ styles.playBtn }
-                        onPress={ handlePressNavigateToDisplayVideo }
+                        onPress={ handlePressPlay }
                     />
                     <Button
                         type='clear' 
@@ -107,7 +112,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         iconPosition='top'
                         buttonStyle={ styles.previewBtn }
                         titleStyle={ styles.actionBtnTitle }
-                        onPress={ handlePressNavigateToDisplayVideo }
+                        onPress={ handlePressPlayPreview }
                     />
                 </View>          
             </View>
