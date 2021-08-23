@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import View from './../../../components/View';
 import { InteractionManager } from 'react-native'
 import styles from './../../../assets/stylesheets/searchScreen';
-import searchListAPI from './../../../services/data/searchList';
-import { cacheImage, getCachedFile } from './../../../utils/cacheImage';
+import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import SearchBar from './SearchBar';
 import DefaultSearchList from './DefaultSearchList';
 import OnSearchList from './OnSearchList';
 import ShowInfo from './../../../components/continue-watching-for-item/Info';
-import LoadingSpinner from './../../../components/LoadingSpinner';
 import SearchScreenLoader from '../../../components/loading-skeletons/SearchScreenLoader';
 import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+import { movieSelector } from './../../../redux/modules/movie/selectors';
+import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 
 const DisplayList = ({ isLoading = false, searchInput = '', movies, handlePressDisplayShowInfo }) => 
@@ -27,25 +28,16 @@ const DisplayList = ({ isLoading = false, searchInput = '', movies, handlePressD
     )
 }
 
-const SearchScreen = () => 
+const SearchScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
+    const dispatch = useDispatch();
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
-    const [ movies, setMovies ] = useState([]);
+    const [ movies, setMovies ] = useState(MOVIE.topSearches);
     const [ searchInput, setSearchInput ] = useState('');
     const [ show, setShow ] = useState(null);
     const [ isVisibleMovieInfo, setIsVisibleMovieInfo ] = useState(false);
 
-    const memoizedSearchList = useMemo(() => {
-        const memoizedSearchList = searchListAPI.map(({ title, authors, genres, ...props }) => ({ 
-            ...props, 
-            genres: genres.split(',').map(genre => genre.toLowerCase().trim()),
-            title: title.toLowerCase(), 
-            authors: authors.split(',').map(author => author.toLowerCase().trim())
-        }));
-
-        return memoizedSearchList;
-    }, []);
 
     const handlePressDisplayShowInfo = (show) => {
         setShow(show);
@@ -57,17 +49,17 @@ const SearchScreen = () =>
         setSearchInput(textInput);
         
         if (! textInput) {
-            setMovies(searchListAPI);
+            setMovies(MOVIE.topSearches);
         }
         else {  
             textInput = textInput.toLowerCase();
 
-            const filteredList = memoizedSearchList.filter(movie => {
-                const genresExists = movie.genres.find(genre => genre.indexOf(textInput) !== -1);
-                const authorsExists = movie.authors.find(author => author.indexOf(textInput) !== -1);
-
-                return movie.title.indexOf(textInput) !== -1 || authorsExists || genresExists;
-            });          
+            const filteredList = MOVIE.topSearches.filter(({ title, authors, genres }) => {
+                const authorsExists = authors.split(',').find(author => author.indexOf(textInput) !== -1);
+                const genresExists = genres.split(',').find(genre => genre.indexOf(textInput) !== -1);
+                
+                return title.toLowerCase().indexOf(textInput) !== -1 || authorsExists || genresExists;
+            });             
 
             setMovies(filteredList);
         }
@@ -75,25 +67,34 @@ const SearchScreen = () =>
 
     const handleOnCancel = () => {
         setSearchInput('');
-        setMovies(searchListAPI);
+        setMovies(MOVIE.topSearches);
     }
 
     const runAfterInteractions = () => {
-        setMovies(searchListAPI)
+        dispatch(MOVIE_ACTION.getTopSearchedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
         setIsInteractionsComplete(true);
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-
         return () => {
-            setMovies([]);
-            setSearchInput('');
-            setShow(null);
-            setIsVisibleMovieInfo(false);
             setIsInteractionsComplete(false);
         }
-    }, []);
+    }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            // prevent loading on the following navigation
+            if (isInteractionsComplete) {
+                dispatch(MOVIE_ACTION.getTopSearchedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+            }
+            return () => {
+                setSearchInput('');
+                setShow(null);
+                setIsVisibleMovieInfo(false);
+            }
+        }, [])
+    );
 
     return (
         <View style={ styles.container }>
@@ -118,7 +119,8 @@ const SearchScreen = () =>
 }
 
 const mapStateToProps = createStructuredSelector({
-
+    AUTH_PROFILE: authProfileSelector,
+    MOVIE: movieSelector
 });
 
 export default connect(mapStateToProps)(SearchScreen)

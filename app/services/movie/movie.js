@@ -24,6 +24,14 @@ export const fetchLatestTwentyAsync = async (payload) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+export const fetchTopSearchesAsync = async ({ is_for_kids }) => 
+{
+    return await axiosInstance()
+        .get(`/movies/top-searches?isForKids=${ is_for_kids }`)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
 export const findByIDAsync = async (id) => 
 {
     return await axiosInstance()

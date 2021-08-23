@@ -12,6 +12,9 @@ const {
     GET_LATEST_TWENTY_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_SUCCESS,
     GET_LATEST_TWENTY_MOVIES_FAILED,
+    GET_TOP_SEARCHED_MOVIES_START,
+    GET_TOP_SEARCHED_MOVIES_SUCCESS,
+    GET_TOP_SEARCHED_MOVIES_FAILED,
     INCREMENT_MOVIE_VIEWS_START,
     INCREMENT_MOVIE_VIEWS_SUCCESS,
     INCREMENT_MOVIE_VIEWS_FAILED
@@ -27,6 +30,7 @@ const CATEGORY_DEFAULT_PROPS = [
 const initialState = {
     movies: [],
     categories: CATEGORY_DEFAULT_PROPS,
+    topSearches: [],
     isLoading: false,
     errors: []
 }
@@ -41,6 +45,7 @@ export default (state = initialState, { type, payload }) =>
         case GET_CATEGORIZED_MOVIES_START:
         case INCREMENT_MOVIE_VIEWS_START:
         case GET_LATEST_TWENTY_MOVIES_START:
+        case GET_TOP_SEARCHED_MOVIES_START:
         case GET_MOVIES_START:
             return { 
                 ...state, 
@@ -79,6 +84,14 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case GET_TOP_SEARCHED_MOVIES_SUCCESS:
+            return {
+                ...state,
+                topSearches: payload.movies,
+                isLoading,
+                errors
+            }
+
         case GET_CATEGORIZED_MOVIES_SUCCESS: 
             return {
                 ...state, 
@@ -97,6 +110,7 @@ export default (state = initialState, { type, payload }) =>
         case GET_CATEGORIZED_MOVIES_FAILED:
         case GET_LATEST_TWENTY_MOVIES_FAILED:
         case GET_MOVIES_FAILED:
+        case GET_TOP_SEARCHED_MOVIES_FAILED:
         case INCREMENT_MOVIE_VIEWS_FAILED:
             return { 
                 ...state,

@@ -8,6 +8,8 @@ import {
     getMoviesFailed, 
     getLatestTwentyMoviesSuccess, 
     getLatestTwentyMoviesFailed,
+    getTopSearchedMoviesSuccess,
+    getTopSearchedMoviesFailed,
     incrementMovieViewsSuccess,
     incrementMovieViewsFailed
 } from './actions'
@@ -16,6 +18,7 @@ const {
     GET_CATEGORIZED_MOVIES_START,
     GET_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_START,
+    GET_TOP_SEARCHED_MOVIES_START,
     INCREMENT_MOVIE_VIEWS_START
 } = ACTION_TYPES;
 
@@ -49,6 +52,16 @@ function* getLatestTwentyMoviesSaga()
         yield put(getLatestTwentyMoviesSuccess({ movies }));
     } catch ({ message }) {
         yield put(getLatestTwentyMoviesFailed({ message }));
+    }
+}
+
+function* getTopSearchedMoviesSaga(payload)  
+{
+    try {
+        const { data: movies } = yield call(API.fetchTopSearchesAsync, payload);
+        yield put(getTopSearchedMoviesSuccess({ movies }));
+    } catch ({ message }) {
+        yield put(getTopSearchedMoviesFailed({ message }));
     }
 }
 
@@ -88,6 +101,14 @@ function* getLatestTwentyMoviesWatcher()
     }
 }
 
+function* getTopSearchedMoviesWatcher()
+{
+    while (true) {
+        const { payload } = yield take(GET_TOP_SEARCHED_MOVIES_START);
+        yield call(getTopSearchedMoviesSaga, payload);
+    }
+}
+
 function* incrementMovieViewsWatcher()
 {
     while (true) {
@@ -102,6 +123,7 @@ export default function* ()
         getCategorizedMoviesWatcher(),
         getMoviesWatcher(),
         getLatestTwentyMoviesWatcher(),
+        getTopSearchedMoviesWatcher(),
         incrementMovieViewsWatcher(),
     ]);
 }
