@@ -8,12 +8,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 2,
-        backgroundColor: Colors.darkGrey
     },
     image: {
         flex: 1,
-        height: 75,
-        resizeMode: 'contain',
+        height: 80,
+        width: 100,
+        resizeMode: 'cover',
+        aspectRatio: 16/9,
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
     },

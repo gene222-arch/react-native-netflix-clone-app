@@ -15,7 +15,7 @@ const DefaultSearchList = ({ movies = [], handlePressDisplayShowInfo }) =>
                 data={ movies }
                 renderItem={ ({ item }) => (
                     <SearchItem
-                        uri={ item?.wallpaper_path } 
+                        uri={ item.wallpaper_path } 
                         title={ item.title }
                         onPress={ () => handlePressDisplayShowInfo(item) }
                     />

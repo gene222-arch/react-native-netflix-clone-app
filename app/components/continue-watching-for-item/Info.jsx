@@ -55,9 +55,8 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                                 </TouchableOpacity>
                             </View>
                             <View style={ styles.basicDetail }>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.year }</Text>
+                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.year_of_release }</Text>
                                 <Text style={ styles.yearAgeSeason }>{ selectedShow?.age_restriction }+</Text>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.total_number_of_seasons } Seasons</Text>
                             </View>
                             <Text style={ styles.plot }>{ selectedShow?.plot.slice(0, 250).concat('...') }</Text>
                         </View>

@@ -12,7 +12,7 @@ const SearchItem = ({ uri, title, onPress }) =>
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
-                <Image
+                <Image  
                     uri={ uri }
                     style={ styles.image }
                 />
