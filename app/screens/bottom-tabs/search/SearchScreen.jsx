@@ -15,7 +15,7 @@ import { movieSelector } from './../../../redux/modules/movie/selectors';
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 
-const DisplayList = ({ isLoading = false, searchInput = '', movies, handlePressDisplayShowInfo }) => 
+const DisplayList = ({ isLoading = false, searchInput = '', filteredMovies, defaultMovies, handlePressDisplayShowInfo }) => 
 {
     if (isLoading) {
         return <SearchScreenLoader />
@@ -23,8 +23,8 @@ const DisplayList = ({ isLoading = false, searchInput = '', movies, handlePressD
 
     return (
         !searchInput.length  
-            ? <DefaultSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
-            : <OnSearchList movies={ movies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+            ? <DefaultSearchList movies={ defaultMovies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
+            : <OnSearchList movies={ filteredMovies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
     )
 }
 
@@ -80,14 +80,10 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
         return () => {
             setIsInteractionsComplete(false);
         }
-    }, [])
+    }, [AUTH_PROFILE.id])
 
     useFocusEffect(
         useCallback(() => {
-            // prevent loading on the following navigation
-            if (isInteractionsComplete) {
-                dispatch(MOVIE_ACTION.getTopSearchedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
-            }
             return () => {
                 setSearchInput('');
                 setShow(null);
@@ -110,7 +106,8 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
             />
             <DisplayList 
                 isLoading={ !isInteractionsComplete }
-                movies={ movies } 
+                filteredMovies={ movies }
+                defaultMovies={ MOVIE.topSearches } 
                 searchInput={ searchInput }
                 handlePressDisplayShowInfo={ handlePressDisplayShowInfo } 
             />
