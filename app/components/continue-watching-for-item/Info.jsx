@@ -38,6 +38,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
             <View style={ styles.posterContainer }>
                 <ListItem containerStyle={ styles.showDetails }>
                     <Image 
+                        preview={{ uri: selectedShow?.poster_path }}
                         uri={ selectedShow?.poster_path }
                         style={ styles.poster }
                     />
@@ -77,7 +78,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         }
                         titleStyle={ styles.playBtnTitle }
                         buttonStyle={ styles.playBtn }
-                        onPress={ handlePressNavigateToShowDetailScreen }
+                        onPress={ handlePressNavigateToDisplayVideo }
                     />
                     <Button
                         type='clear' 

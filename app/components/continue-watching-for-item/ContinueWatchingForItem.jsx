@@ -57,6 +57,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
             <Info selectedShow={ movie } isVisible={ showInfo } setIsVisible={ setShowInfo } />
 
             <Image 
+                preview={{ uri: movie.poster_path }}
                 uri={ movie.poster_path }
                 style={ styles.poster }
             />

@@ -17,6 +17,7 @@ const OnSearchList = ({ movies, handlePressDisplayShowInfo }) =>
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
                         <Image
+                            preview={{ uri: item.poster_path }}
                             uri={ item.poster_path }
                             style={ styles.image }
                         />

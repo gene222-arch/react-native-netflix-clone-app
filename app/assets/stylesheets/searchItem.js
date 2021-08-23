@@ -18,6 +18,10 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
     },
+    title: {
+        flex: 1,
+        flexWrap: 'wrap'
+    },
     titlePlayIconContainer: {
         flex: 1,
         flexDirection: 'row',
