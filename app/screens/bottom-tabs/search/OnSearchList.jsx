@@ -8,7 +8,6 @@ import { Image } from 'react-native-expo-image-cache';
 
 const OnSearchList = ({ movies, handlePressDisplayShowInfo }) => 
 {
-    console.log('FILTERED MOVIES:', movies)
     return (
         <View style={{ flex: 1 }}>
             <Text h4 style={ styles.searchHeaderTitle }>TV Shows and Movies</Text>
@@ -17,7 +16,7 @@ const OnSearchList = ({ movies, handlePressDisplayShowInfo }) =>
                 data={ movies }
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
-                        <Image 
+                        <Image
                             uri={ item.poster_path }
                             style={ styles.image }
                         />

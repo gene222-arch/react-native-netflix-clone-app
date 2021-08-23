@@ -16,7 +16,7 @@ const DefaultSearchList = ({ movies = [], handlePressDisplayShowInfo }) =>
                 data={ movies }
                 renderItem={ ({ item }) => (
                     <SearchItem
-                        uri={ getCachedFile('SearchList/Wallpapers/', item.id, item?.wallpaper_path) } 
+                        uri={ item?.wallpaper_path } 
                         title={ item.title }
                         onPress={ () => handlePressDisplayShowInfo(item) }
                     />

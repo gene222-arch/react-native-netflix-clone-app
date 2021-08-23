@@ -69,8 +69,6 @@ const SearchScreen = () =>
                 return movie.title.indexOf(textInput) !== -1 || authorsExists || genresExists;
             });          
 
-            console.log("total num of filtered: ", filteredList.length)
-
             setMovies(filteredList);
         }
     }
@@ -81,11 +79,6 @@ const SearchScreen = () =>
     }
 
     const runAfterInteractions = () => {
-        searchListAPI.map(movie => {
-            cacheImage(movie.poster_path, movie.id, 'SearchList/Posters/');
-            cacheImage(movie.wallpaper_path, movie.id, 'SearchList/Wallpapers/');
-        });
-        
         setMovies(searchListAPI)
         setIsInteractionsComplete(true);
     }
@@ -94,7 +87,6 @@ const SearchScreen = () =>
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            console.log('CLEAN UP SEARCH SCREEN');
             setMovies([]);
             setSearchInput('');
             setShow(null);

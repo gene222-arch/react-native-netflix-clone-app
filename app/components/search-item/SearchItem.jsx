@@ -12,8 +12,8 @@ const SearchItem = ({ uri, title, onPress }) =>
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
-                <Image 
-                    source={{ uri }}
+                <Image
+                    uri={ uri }
                     style={ styles.image }
                 />
                 <View style={ styles.titlePlayIconContainer }>
