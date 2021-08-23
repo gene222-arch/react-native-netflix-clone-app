@@ -44,6 +44,11 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     const handlePressPauseVideo = () => videoRef.current.pauseAsync();
 
+    const handleChangePage = (pageNumber, index) => {
+        setSelectedPage(pageNumber);
+        setDefaultPageList(movies[index]);
+    }
+
     const onLoadCacheVideo = async (uri) => 
     {
         try {
@@ -63,18 +68,13 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     }
 
-    const handleChangePage = (pageNumber, index) => {
-        setSelectedPage(pageNumber);
-        setDefaultPageList(movies[index]);
-    }
-
     const runAfterInteractions = () => 
     {
-        const findMovie = MOVIE.movies.find(({ id }) => id === parseInt(movieID));
+        const findMovie = MOVIE.movies.find(({ id }) => id === movieID);
 
         if (findMovie) 
         {
-            const { other_movies, ...movieDetails } = findMovie;
+            const { other_movies, ...movieDetails } = findMovie;    
             onLoadCacheVideo(movieDetails.video_path);
 
             let pageList_ = [];

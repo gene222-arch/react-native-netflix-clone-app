@@ -19,35 +19,15 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
 {   
     const navigation = useNavigation();
 
-    const [ showVideo, setShowVideo ] = useState(false);
+    const handlePressNavigateToDisplayVideo = () => navigation.navigate('DisplayVideo', { 
+        videoUri: selectedShow.video_trailer_path, 
+        id: selectedShow.id 
+    });
 
-    const handlePlayVideo = () => {
-        navigation.setOptions({ headerShown: false });
-        setShowVideo(true);
-    }
-
-    const handleCloseVideo = () => {
-        navigation.setOptions({ headerShown: true });
-        setShowVideo(false);
-    }
-
-    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { id: selectedShow?.id });
-
-    useEffect(() => {
-        return () => {
-            setShowVideo(false);
-        }
-    }, []);
-
-    if (showVideo) 
-    {
-        return (
-            <VideoPlayerFullScreen 
-                uri={ selectedShow?.video_trailer_path }
-                handleCloseVideo={ handleCloseVideo }
-            />
-        )
-    }
+    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
+        id: selectedShow.id,
+        headerTitle: selectedShow.title
+    });
 
     return (
         <BottomSheet
@@ -98,6 +78,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         }
                         titleStyle={ styles.playBtnTitle }
                         buttonStyle={ styles.playBtn }
+                        onPress={ handlePressNavigateToShowDetailScreen }
                     />
                     <Button
                         type='clear' 
@@ -126,7 +107,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         iconPosition='top'
                         buttonStyle={ styles.previewBtn }
                         titleStyle={ styles.actionBtnTitle }
-                        onPress={ handlePlayVideo }
+                        onPress={ handlePressNavigateToDisplayVideo }
                     />
                 </View>          
             </View>
