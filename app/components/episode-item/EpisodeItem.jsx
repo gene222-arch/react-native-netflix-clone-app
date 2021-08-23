@@ -2,9 +2,9 @@ import React from 'react'
 import View from './../View';
 import Text from './../Text';
 import styles from './../../assets/stylesheets/episodeItem';
-import Image from './../Image';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { Pressable } from 'react-native';
+import { Image } from 'react-native-expo-image-cache';
 
 const EpisodeItem = ({ movie, onPress }) => 
 {
@@ -15,9 +15,7 @@ const EpisodeItem = ({ movie, onPress }) =>
             <View style={ styles.container }>
                 <View row={ true } justifyContent='space-between' alignItems='center' padding={ 2 }>
                     <Image 
-                        source={{
-                            uri: poster_path
-                        }}
+                        uri={ poster_path }
                         style={ styles.posterImg }
                     />
                     <View style={ styles.titleContainer }>
