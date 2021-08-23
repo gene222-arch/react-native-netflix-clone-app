@@ -131,6 +131,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                                         movie={ item }
                                         shouldShowPoster={ focusedIndex !== index }
                                         shouldFocus={ focusedIndex === index }
+                                        shouldPlay={ focusedIndex === index }
                                         handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
                                         handlePressInfo={ () => handlePressInfo(item.id) }
                                         isReminded={ Boolean(isReminded) }

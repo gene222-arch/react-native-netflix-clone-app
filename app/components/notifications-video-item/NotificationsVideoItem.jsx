@@ -6,7 +6,7 @@ import ComingSoonMovieDetails from './ComingSoonMovieDetails';
 import ComingSoonMovieButtons from './ComingSoonMovieButtons';
 
 
-const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
+const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPlay, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
 {
     const video = useRef(null);
 
@@ -36,7 +36,8 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, handlePr
                 source={{ uri: movie.video_trailer_path }}
                 posterSource={{ uri: movie.poster_path }}
                 posterStyle={ styles.posterStyle}
-                usePoster={ shouldShowPoster }
+                usePoster={ shouldShowPoster && !shouldPlay }
+                shouldPlay={ shouldPlay }
                 resizeMode='contain'
                 useNativeControls
             />
