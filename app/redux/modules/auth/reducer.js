@@ -351,12 +351,13 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case SELECT_PROFILE_SUCCESS:
-
+            const { profile: profile_ } = payload;
+            
             newProfiles = profiles.map(prof => 
                 prof.id === profile_.id 
                     ? { 
                         ...prof,
-                        ...payload.profile
+                        ...profile_
                     } 
                     : prof
             );
