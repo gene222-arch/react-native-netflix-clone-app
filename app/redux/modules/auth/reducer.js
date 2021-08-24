@@ -71,7 +71,8 @@ const PROFILE_DEFAULT_PROPS = {
     recently_watched_shows: [],
     my_list: [],
     reminded_coming_soon_movies: [],
-    // liked_shows: [],
+    liked_movies: [],
+    liked_coming_soon_movies: [],
     has_new_downloads: false,
 };
 

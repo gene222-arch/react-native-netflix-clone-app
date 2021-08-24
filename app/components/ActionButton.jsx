@@ -17,7 +17,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) =>
 {
     const dispatch = useDispatch();
 
-    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_shows.find(movie_ => movie_.id === movie.id));
+    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ id }) => id === movie.id));
 
     const handlePressAddToMyList = () => {
         dispatch(AUTH_ACTION.toggleAddToMyListStart(movie));
