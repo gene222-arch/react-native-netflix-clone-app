@@ -168,8 +168,8 @@ function* removeToRecentWatchesSaga(payload)
 function* selectProfileSaga(payload)  
 {
     try {
-        const { data } = yield call(AUTH_API.findProfileByIdAsync, payload.id)
-        yield put(ACTION.selectProfileSuccess(data));
+        const { data: profile } = yield call(AUTH_API.findProfileByIdAsync, payload.id)
+        yield put(ACTION.selectProfileSuccess({ profile }));
         RootNavigation.navigate('Home');
     } catch ({ message }) {
         yield put(ACTION.selectProfileFailed({ message }));

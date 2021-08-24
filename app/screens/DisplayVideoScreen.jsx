@@ -9,7 +9,6 @@ import { getExtension } from './../utils/file';
 
 const DisplayVideoScreen = ({ route }) => 
 {
-    console.log(route);
     const navigation = useNavigation();
     
     const [ uri, setUri ] = useState(null);

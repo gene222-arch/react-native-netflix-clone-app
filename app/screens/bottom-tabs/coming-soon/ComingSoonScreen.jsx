@@ -127,7 +127,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                             onScroll={ handleOnScroll }
                             data={ COMING_SOON_MOVIE.comingSoonMovies }
                             renderItem={ ({ item, index }) => {
-                                let isReminded = AUTH_PROFILE.reminded_coming_soon_shows.find(movieID => movieID === item.id);
+                                let isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(movieID => movieID === item.id);
 
                                 return  (
                                     <ComingSoonMovieItem 

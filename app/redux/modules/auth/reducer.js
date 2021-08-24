@@ -70,8 +70,8 @@ const PROFILE_DEFAULT_PROPS = {
     my_downloads: [],
     recently_watched_shows: [],
     my_list: [],
-    reminded_coming_soon_shows: [],
-    liked_shows: [],
+    reminded_coming_soon_movies: [],
+    // liked_shows: [],
     has_new_downloads: false,
 };
 
@@ -352,14 +352,11 @@ export default (state = initialState, { type, payload }) =>
 
         case SELECT_PROFILE_SUCCESS:
 
-            const { profile: profile_, recently_watched_movies } = payload;
-
             newProfiles = profiles.map(prof => 
                 prof.id === profile_.id 
                     ? { 
                         ...prof,
-                        ...profile_, 
-                        recently_watched_shows: recently_watched_movies 
+                        ...payload.profile
                     } 
                     : prof
             );
@@ -397,7 +394,7 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS:
 
             const { movieID } = payload;
-            let remindedMovies = loggedInProfile.reminded_coming_soon_shows;
+            let remindedMovies = loggedInProfile.reminded_coming_soon_movies;
 
             let isReminded = remindedMovies.find(id => id === movieID);
 
@@ -410,7 +407,7 @@ export default (state = initialState, { type, payload }) =>
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, reminded_coming_soon_shows: remindedMovies } 
+                    ? { ...prof, reminded_coming_soon_movies: remindedMovies } 
                     : prof;
             });
 
