@@ -2,6 +2,10 @@ import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
 import * as API from './../../../services/movie/movie'
 import { 
+    incrementMovieViewsSuccess,
+    incrementMovieViewsFailed,
+    incrementMovieSearchCountSuccess,
+    incrementMovieSearchCountFailed,
     getCategorizedMoviesSuccess,
     getCategorizedMoviesFailed,
     getMoviesSuccess, 
@@ -10,16 +14,15 @@ import {
     getLatestTwentyMoviesFailed,
     getTopSearchedMoviesSuccess,
     getTopSearchedMoviesFailed,
-    incrementMovieViewsSuccess,
-    incrementMovieViewsFailed
 } from './actions'
 
 const {
+    INCREMENT_MOVIE_VIEWS_START,
+    INCREMENT_MOVIE_SEARCH_COUNT_START,
     GET_CATEGORIZED_MOVIES_START,
     GET_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_START,
-    GET_TOP_SEARCHED_MOVIES_START,
-    INCREMENT_MOVIE_VIEWS_START
+    GET_TOP_SEARCHED_MOVIES_START
 } = ACTION_TYPES;
 
 
@@ -65,6 +68,16 @@ function* getTopSearchedMoviesSaga(payload)
     }
 }
 
+function* incrementMovieSearchCountSaga(payload)  
+{
+    try {
+        yield put(incrementMovieSearchCountSuccess());
+        yield call(API.incrementSearchCountAsync, payload.movieId);
+    } catch ({ message }) {
+        yield put(incrementMovieSearchCountFailed({ message }));
+    }
+}
+
 function* incrementMovieViewsSaga(payload)  
 {
     try {
@@ -76,6 +89,14 @@ function* incrementMovieViewsSaga(payload)
 }
 
 /** Watchers or Observers */
+
+function* incrementMovieSearchCountWatcher()
+{
+    while (true) {
+        const { payload } = yield take(INCREMENT_MOVIE_SEARCH_COUNT_START);
+        yield call(incrementMovieSearchCountSaga, payload);
+    }
+}
 
 function* getCategorizedMoviesWatcher()
 {
@@ -120,11 +141,12 @@ function* incrementMovieViewsWatcher()
 export default function* ()
 {
     yield all([
+        incrementMovieSearchCountWatcher(),
+        incrementMovieViewsWatcher(),
         getCategorizedMoviesWatcher(),
         getMoviesWatcher(),
         getLatestTwentyMoviesWatcher(),
         getTopSearchedMoviesWatcher(),
-        incrementMovieViewsWatcher(),
     ]);
 }
 

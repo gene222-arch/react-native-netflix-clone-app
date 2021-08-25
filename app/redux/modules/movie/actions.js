@@ -16,7 +16,10 @@ const {
     GET_TOP_SEARCHED_MOVIES_FAILED,
     INCREMENT_MOVIE_VIEWS_START,
     INCREMENT_MOVIE_VIEWS_SUCCESS,
-    INCREMENT_MOVIE_VIEWS_FAILED
+    INCREMENT_MOVIE_VIEWS_FAILED,
+    INCREMENT_MOVIE_SEARCH_COUNT_START,
+    INCREMENT_MOVIE_SEARCH_COUNT_SUCCESS,
+    INCREMENT_MOVIE_SEARCH_COUNT_FAILED,
 } = ACTION_TYPES;
 
 /** 
@@ -115,5 +118,23 @@ export const incrementMovieViewsSuccess = (payload) => ({
 
 export const incrementMovieViewsFailed = (payload) => ({
     type: INCREMENT_MOVIE_VIEWS_FAILED,
+    payload
+});
+
+/** 
+ * Increment movie views
+ */
+export const incrementMovieSearchCountStart = (payload) => ({
+    type: INCREMENT_MOVIE_SEARCH_COUNT_START,
+    payload
+});
+
+export const incrementMovieSearchCountSuccess = (payload) => ({
+    type: INCREMENT_MOVIE_SEARCH_COUNT_SUCCESS,
+    payload
+});
+
+export const incrementMovieSearchCountFailed = (payload) => ({
+    type: INCREMENT_MOVIE_SEARCH_COUNT_FAILED,
     payload
 });

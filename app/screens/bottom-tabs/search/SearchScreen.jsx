@@ -42,6 +42,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const handlePressDisplayShowInfo = (show) => {
         setShow(show);
         setIsVisibleMovieInfo(true);
+        dispatch(MOVIE_ACTION.incrementMovieSearchCountStart({ movieId: show.id }));
     }
 
     const handleChangeSearchInput = (textInput) => 

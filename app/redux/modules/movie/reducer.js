@@ -17,7 +17,10 @@ const {
     GET_TOP_SEARCHED_MOVIES_FAILED,
     INCREMENT_MOVIE_VIEWS_START,
     INCREMENT_MOVIE_VIEWS_SUCCESS,
-    INCREMENT_MOVIE_VIEWS_FAILED
+    INCREMENT_MOVIE_VIEWS_FAILED,
+    INCREMENT_MOVIE_SEARCH_COUNT_START,
+    INCREMENT_MOVIE_SEARCH_COUNT_SUCCESS,
+    INCREMENT_MOVIE_SEARCH_COUNT_FAILED,
 } = ACTION_TYPES;
 
 const CATEGORY_DEFAULT_PROPS = [
@@ -43,6 +46,7 @@ export default (state = initialState, { type, payload }) =>
     switch (type) 
     {
         case GET_CATEGORIZED_MOVIES_START:
+        case INCREMENT_MOVIE_SEARCH_COUNT_START:
         case INCREMENT_MOVIE_VIEWS_START:
         case GET_LATEST_TWENTY_MOVIES_START:
         case GET_TOP_SEARCHED_MOVIES_START:
@@ -65,6 +69,13 @@ export default (state = initialState, { type, payload }) =>
                 ...state,
                 categories: newCategories,
                 isLoading: false,
+                errors
+            }
+
+        case INCREMENT_MOVIE_SEARCH_COUNT_SUCCESS:
+            return {
+                ...state,
+                isLoading,
                 errors
             }
 
@@ -107,11 +118,12 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case INCREMENT_MOVIE_SEARCH_COUNT_FAILED:
+        case INCREMENT_MOVIE_VIEWS_FAILED:
         case GET_CATEGORIZED_MOVIES_FAILED:
         case GET_LATEST_TWENTY_MOVIES_FAILED:
         case GET_MOVIES_FAILED:
         case GET_TOP_SEARCHED_MOVIES_FAILED:
-        case INCREMENT_MOVIE_VIEWS_FAILED:
             return { 
                 ...state,
                 isLoading,

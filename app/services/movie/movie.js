@@ -40,6 +40,14 @@ export const findByIDAsync = async (id) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+export const incrementSearchCountAsync = async (id) => 
+{
+    return await axiosInstance()
+        .put(`/movies/${ id }/search-count`)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
 export const incrementViewsAsync = async (id) => 
 {
     return await axiosInstance()
