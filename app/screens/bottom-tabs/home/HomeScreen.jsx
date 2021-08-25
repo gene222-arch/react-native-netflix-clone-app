@@ -16,14 +16,19 @@ import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFro
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
-import { DEVICE_WIDTH } from '../../../constants/Dimensions';
+
+const DEFAULT_FRONT_PAGE_PROPS = {
+    poster_path: null,
+    title_logo_path: null,
+    genres: []
+};
 
 const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const dispatch = useDispatch();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ frontPage, setFrontPage ] = useState(null);
+    const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE_PROPS);
 
     useEffect(() => {
         batch(() => {
@@ -51,7 +56,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     useFocusEffect(
         useCallback(() => {
             return () => {
-                setFrontPage(null);
+                setFrontPage(DEFAULT_FRONT_PAGE_PROPS);
             }
         }, [])
     )
@@ -76,7 +81,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                     <View>
                         <ImageBackground 
                             source={{ 
-                                uri: frontPage?.poster_path
+                                uri: frontPage.poster_path
                             }}
                             style={ styles.homeFrontPage }
                         >

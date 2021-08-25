@@ -65,7 +65,8 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
             />
     
             <Image 
-                uri={ frontPage?.title_logo_path }
+                preview={{ uri: frontPage.title_logo_path }}
+                uri={ frontPage.title_logo_path }
                 style={ styles.homeFrontPageShowLogo }
             />
 
