@@ -405,7 +405,7 @@ export default (state = initialState, { type, payload }) =>
                 });
             }
             else {
-                 remindedMovies = remindedMovies.filter(({ coming_soon_movie_id }) => coming_soon_movie_id === movieID);
+                 remindedMovies = remindedMovies.filter(({ coming_soon_movie_id }) => coming_soon_movie_id !== movieID);
             }
 
             newProfiles = profiles.map(prof => {
