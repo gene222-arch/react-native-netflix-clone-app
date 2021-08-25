@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { Video } from 'expo-av'
-import * as NAVIGATION_ACTION from './../redux/modules/navigation/actions'
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
@@ -16,28 +15,29 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
 
     const onEnterFullScreen = async () => 
     {
+        video?.current?.setStatusAsync({
+            shouldPlay: true,
+        });
+
         setStatusBarHidden(true);
 
         setInFullscreen(true);
 
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-
-        video?.current?.setStatusAsync({
-          shouldPlay: true,
-        });
     }
 
-    const onExitFullScreen = useCallback(async () => {
+    const onExitFullScreen = async () => 
+    {
+        video?.current?.setStatusAsync({
+            shouldPlay: false,
+        });
+
         setStatusBarHidden(false);
 
-        setInFullscreen(false);
-
-        unLockOrientation();
-
-        video.current?.pauseAsync();
+        video?.current?.pauseAsync();
 
         handleCloseVideo();
-    }, [uri]);
+    };
 
     const unLockOrientation = async () => await ScreenOrientation.unlockAsync();
 
@@ -56,7 +56,7 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
     return (
         <VideoPlayer
             videoProps={{
-                shouldPlay: false,
+                shouldPlay: true,
                 resizeMode: Video.RESIZE_MODE_CONTAIN,
                 source: { uri },
                 ref: video,
@@ -65,6 +65,7 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
                 play: <Text style={{ color: '#FFF' }}>PLAY</Text>,
                 pause: <Text style={{ color: '#FFF' }}>PAUSE</Text>,
                 replay: <Text style={{ color: '#FFF' }}>REPLAY</Text>,
+
             }}
             fullscreen={{
                 inFullscreen,

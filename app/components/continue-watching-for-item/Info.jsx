@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { BottomSheet, ListItem, Divider, Button } from 'react-native-elements';
 import styles from './../../assets/stylesheets/info';
@@ -6,7 +6,6 @@ import Text from './../Text';
 import View from './../View';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { createStructuredSelector } from 'reselect';
@@ -19,13 +18,16 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
 {   
     const navigation = useNavigation();
 
-    const handlePressPlay = () => navigation.navigate('DisplayVideo', { 
-        title: selectedShow?.title,
-        videoUri: selectedShow?.video_path, 
-        id: selectedShow?.id 
+    const handlePressPlay = () => navigation.navigate('DisplayVideoRoot', {
+        screen: 'DisplayVideoScreen',
+        params: {
+            title: selectedShow?.title,
+            videoUri: selectedShow?.video_path, 
+            id: selectedShow?.id 
+        }
     });
     
-    const handlePressPlayPreview = () => navigation.navigate('DisplayVideo', { 
+    const handlePressPlayPreview = () => navigation.navigate('DisplayVideoScreen', { 
         videoUri: selectedShow?.video_trailer_path, 
         id: selectedShow?.id 
     });
