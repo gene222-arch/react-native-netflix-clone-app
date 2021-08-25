@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
-import frontPageShows from './../../../services/data/frontPageShows';
 import View from './../../../components/View';
 import HomeCategory from '../../../components/home-category/HomeCategory';
 import styles from './../../../assets/stylesheets/homeScreen';
 import NavBar from './home-components/NavBar';
 import FrontPageOptions from './home-components/FrontPageOptions';
 import ContinueWatchingFor from './home-components/ContinueWatchingFor';
-import LoadingSpinner from './../../../components/LoadingSpinner';
 import { useDispatch, connect, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { movieSelector } from './../../../redux/modules/movie/selectors';
@@ -23,9 +22,10 @@ const DEFAULT_FRONT_PAGE = {
     category: '',
     title: '',
     wallpaper_path: null,
-    poster: null,
+    poster_path: null,
     genres: '',
-    isAddedToMyList: false
+    plot: '',
+    trailer_video_path: null
 }
 
 const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
@@ -35,32 +35,36 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
 
-    const runAfterInteractions = () => 
-    {
-        MovieCreatedEvent.listen(response => {
-            dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
-        });
-        setFrontPage(frontPageShows[0]);
-
-        setIsInteractionsComplete(true);
-    }
-
     useEffect(() => {
-        InteractionManager.runAfterInteractions(runAfterInteractions);
+        InteractionManager.runAfterInteractions(() => {
+            MovieCreatedEvent.listen(response => {
+                dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
+            });
+    
+            setIsInteractionsComplete(true);
+        });
 
         return () => {
-            setFrontPage(DEFAULT_FRONT_PAGE);
-            setIsInteractionsComplete(false);
             MovieCreatedEvent.unListen();
+            setIsInteractionsComplete(false);
         }   
     }, []);
 
     useEffect(() => {
+        setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length))]);
         batch(() => {
             dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
         });
-    }, [AUTH_PROFILE.id])
+    }, [AUTH_PROFILE]);
+
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                setFrontPage(DEFAULT_FRONT_PAGE);
+            }
+        }, [])
+    )
 
 
     if (! isInteractionsComplete) {
@@ -87,7 +91,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                                 : (
                                     <ImageBackground 
                                         source={{ 
-                                            uri: frontPage.wallpaper_path
+                                            uri: frontPage.poster_path
                                         }}
                                         style={ styles.homeFrontPage }
                                     >

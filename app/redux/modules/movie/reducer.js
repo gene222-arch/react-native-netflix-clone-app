@@ -30,6 +30,7 @@ const CATEGORY_DEFAULT_PROPS = [
     }
 ];
 
+
 const initialState = {
     movies: [],
     categories: CATEGORY_DEFAULT_PROPS,

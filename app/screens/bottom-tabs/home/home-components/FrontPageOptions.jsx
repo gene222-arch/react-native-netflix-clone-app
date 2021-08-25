@@ -15,16 +15,6 @@ import Info from './../../../../components/continue-watching-for-item/Info';
 import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
 
-const DEFAULT_FRONT_PAGE_MOVIE = {
-    id: '',
-    category: '',
-    title: '',
-    wallpaper_path: null,
-    poster_path: null,
-    genres: '',
-    plot: '',
-    trailer_video_path: null
-};
 
 const Genre = ({ genres }) => 
 {
@@ -37,7 +27,7 @@ const Genre = ({ genres }) =>
     )
 }
 
-const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }) => 
+const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -76,7 +66,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage = DEFAULT_FRONT_PAGE_MOVIE }
             />
     
             <Image 
-                uri={ frontPage.poster_path }
+                uri={ frontPage.title_logo_path }
                 style={ styles.homeFrontPageShowLogo }
             />
 
