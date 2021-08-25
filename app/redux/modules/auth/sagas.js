@@ -179,10 +179,10 @@ function* selectProfileSaga(payload)
 function* toggleAddToMyListSaga(payload)
 {
     try {
-        const { movie, ...rest } = payload;
+        const { movie, user_profile_id } = payload;
 
         yield put(ACTION.toggleAddToMyListSuccess({ movie }));
-        yield call(AUTH_API.toggleMyListAsync, { movie_id: movie.id, ...rest });
+        yield call(AUTH_API.toggleMyListAsync, { movie_id: movie.id, user_profile_id });
     } catch ({ message }) {
         yield put(ACTION.toggleAddToMyListFailed({ message }));
     }

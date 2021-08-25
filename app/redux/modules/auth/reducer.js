@@ -373,11 +373,21 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
             const currentMyList = loggedInProfile.my_list;
-            const movieExistsInMyList = currentMyList.find(({ id }) => id === payload.movie.id); 
+            const movieExistsInMyList = currentMyList.find(({ movie_id }) => movie_id === payload.movie.id); 
 
-            const newMyList = !movieExistsInMyList 
-                ? [ ...currentMyList, payload.movie ] 
-                : currentMyList.filter(({ id }) => id !== payload.movie.id);
+            let newMyList = [];
+
+            if (! movieExistsInMyList) {
+                newMyList = [
+                    ...currentMyList,
+                    {
+                        ...payload.movie,
+                        movie_id: payload.movie.id
+                    }
+                ];
+            } else {
+                newMyList = currentMyList.filter(({ movie_id }) => movie_id !== payload.movie.id);;
+            }
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 

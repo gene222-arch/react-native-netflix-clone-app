@@ -39,7 +39,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
-            setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length))]);
+            setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
             MovieCreatedEvent.listen(response => {
                 dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
             });
@@ -52,15 +52,6 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
             setIsInteractionsComplete(false);
         }   
     }, []);
-
-    useFocusEffect(
-        useCallback(() => {
-            return () => {
-                setFrontPage(DEFAULT_FRONT_PAGE_PROPS);
-            }
-        }, [])
-    )
-
 
     if (! isInteractionsComplete) {
         return <HomeFrontPageLoader />
@@ -81,7 +72,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                     <View>
                         <ImageBackground 
                             source={{ 
-                                uri: frontPage.poster_path
+                                uri: frontPage?.poster_path
                             }}
                             style={ styles.homeFrontPage }
                         >
