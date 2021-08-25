@@ -65,10 +65,10 @@ function* getTopSearchedMoviesSaga(payload)
     }
 }
 
-function* incrementMovieViewsSaga()  
+function* incrementMovieViewsSaga(payload)  
 {
     try {
-        yield call(API.incrementViewsAsync);
+        yield call(API.incrementViewsAsync, payload.movieId);
         yield put(incrementMovieViewsSuccess());
     } catch ({ message }) {
         yield put(incrementMovieViewsFailed({ message }));
@@ -112,8 +112,8 @@ function* getTopSearchedMoviesWatcher()
 function* incrementMovieViewsWatcher()
 {
     while (true) {
-        yield take(INCREMENT_MOVIE_VIEWS_START);
-        yield call(incrementMovieViewsSaga);
+        const { payload } = yield take(INCREMENT_MOVIE_VIEWS_START);
+        yield call(incrementMovieViewsSaga, payload);
     }
 }
 

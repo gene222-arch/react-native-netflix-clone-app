@@ -1,9 +1,10 @@
 import React,{ useState, useEffect, useRef } from 'react'
 import { InteractionManager, FlatList } from 'react-native'
-import { useDispatch, connect } from 'react-redux';
+import { useDispatch, connect, batch } from 'react-redux';
 import { Video } from 'expo-av'
 import * as FileSystem from 'expo-file-system'
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
+import * as MOVIE_ACTION from './../../../../redux/modules/movie/actions'
 import View from '../../../../components/View';
 import EpisodeItem from '../../../../components/episode-item/EpisodeItem';
 import styles from '../../../../assets/stylesheets/movieDetail';
@@ -25,7 +26,7 @@ const PER_PAGE = 3;
 const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) => 
 {   
     const dispatch = useDispatch();
-    const { id: movieID } = route.params;
+    const { id: movieId } = route.params;
 
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
@@ -39,7 +40,11 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     const handlePressPlayVideo = () => {
         videoRef.current.playAsync();
-        dispatch(AUTH_ACTION.addToRecentWatchesStart({ movie, user_profile_id: AUTH_PROFILE.id }));
+        
+        batch(() => {
+            dispatch(AUTH_ACTION.addToRecentWatchesStart({ movie, user_profile_id: AUTH_PROFILE.id }));
+            dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId }))
+        });
     }
 
     const handlePressPauseVideo = () => videoRef.current.pauseAsync();
@@ -54,7 +59,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         try {
             const fileExt = getExtension(uri);
             
-            const fileToCacheURI = FileSystem.cacheDirectory + movieID + `.${ fileExt }`;
+            const fileToCacheURI = FileSystem.cacheDirectory + movieId + `.${ fileExt }`;
             const fileInfo = await ensureFileExists(fileToCacheURI);
     
             if (! fileInfo.exists) {
@@ -70,7 +75,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     const runAfterInteractions = () => 
     {
-        const findMovie = MOVIE.movies.find(({ id }) => id === movieID);
+        const findMovie = MOVIE.movies.find(({ id }) => id === movieId);
 
         if (findMovie) 
         {
