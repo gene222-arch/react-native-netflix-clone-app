@@ -19,18 +19,15 @@ const DisplayVideoScreen = ({ route }) =>
             InteractionManager.runAfterInteractions(async () => 
             {
                 try {
-                    const { id, videoUri } = route.params;
-                    const stringifiedId = id.toString();
+                    const { id, title, videoUri } = route.params;
                     const fileExt = getExtension(videoUri);
                     
-                    const fileToCacheURI = FileSystem.cacheDirectory + stringifiedId + `.${ fileExt }`;
-                    const fileInfo = await ensureFileExists(fileToCacheURI);
+                    const fileToCacheUri = FileSystem.cacheDirectory + `${ id }${ title }` + `.${ fileExt }`;
+                    const fileInfo = await ensureFileExists(fileToCacheUri);
             
-                    if (! fileInfo.exists) {
-                        await FileSystem.downloadAsync(videoUri, fileToCacheURI)
-                    }
+                    await FileSystem.downloadAsync(videoUri, fileToCacheUri)
                 
-                    setUri(fileToCacheURI);
+                    setUri(!fileInfo.exists ? videoUri: fileToCacheUri);
                 } catch ({ message }) {
                     console.log(message);
                 }
@@ -47,10 +44,12 @@ const DisplayVideoScreen = ({ route }) =>
     if (! isInteractionsComplete) return <LoadingSpinner />
 
     return (
-        <VideoPlayerFullScreen 
-            uri={ uri } 
-            handleCloseVideo={ () => navigation.goBack() } 
-        />
+        <React.Fragment key={ uri }>
+            <VideoPlayerFullScreen 
+                uri={ uri } 
+                handleCloseVideo={ () => navigation.goBack() } 
+            />
+        </React.Fragment>
     )
 }
 

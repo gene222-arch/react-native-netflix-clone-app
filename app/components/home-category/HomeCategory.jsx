@@ -27,7 +27,7 @@ const HomeCategory = ({ isLoading = false, title, categorizedMovies }) =>
                     : <Text h4 style={ styles.categoryTitle }>{ title }</Text>
             }
             <FlatList 
-                keyExtractor={({ id }) => id.toString() }
+                keyExtractor={(item, index) => index.toString() }
                 data={ categorizedMovies }
                 renderItem={({ item }) => (
                     <Pressable onPress={ () => handlePressImage(item) }>

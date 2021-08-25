@@ -20,6 +20,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
     const navigation = useNavigation();
 
     const handlePressPlay = () => navigation.navigate('DisplayVideo', { 
+        title: selectedShow?.title,
         videoUri: selectedShow?.video_path, 
         id: selectedShow?.id 
     });

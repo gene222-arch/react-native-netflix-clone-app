@@ -32,13 +32,13 @@ const initialState = {
     categories: CATEGORY_DEFAULT_PROPS,
     topSearches: [],
     isLoading: false,
-    errors: []
+    errors: null
 }
 
 export default (state = initialState, { type, payload }) => 
 {
     const isLoading = false;
-    const errors = [];
+    const errors = null;
 
     switch (type) 
     {
@@ -53,7 +53,6 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case CREATE_MOVIE:
-
             const newCategories = state
                 .categories
                 .map(category => {
@@ -65,7 +64,8 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 categories: newCategories,
-                isLoading: false
+                isLoading: false,
+                errors
             }
 
         case GET_MOVIES_SUCCESS:
