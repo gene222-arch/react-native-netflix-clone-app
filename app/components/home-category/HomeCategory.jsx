@@ -5,10 +5,9 @@ import { FlatList, Pressable } from 'react-native'
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import View from './../View';
-import TextLoader from '../loading-skeletons/TextLoader';
 
 
-const HomeCategory = ({ isLoading = false, title, categorizedMovies }) => 
+const HomeCategory = ({ title, categorizedMovies }) => 
 {
     const navigation = useNavigation();
 
@@ -21,11 +20,7 @@ const HomeCategory = ({ isLoading = false, title, categorizedMovies }) =>
 
     return (
         <View>
-            {
-                isLoading 
-                    ? <TextLoader />
-                    : <Text h4 style={ styles.categoryTitle }>{ title }</Text>
-            }
+            <Text h4 style={ styles.categoryTitle }>{ title }</Text>
             <FlatList 
                 keyExtractor={(item, index) => index.toString() }
                 data={ categorizedMovies }

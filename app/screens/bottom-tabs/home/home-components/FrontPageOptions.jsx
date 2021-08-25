@@ -15,7 +15,6 @@ import Info from './../../../../components/continue-watching-for-item/Info';
 import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
 
-
 const Genre = ({ genres }) => 
 {
     return (
@@ -34,18 +33,18 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
 
     const [ showMovieInfo, setShowMovieInfo ] = useState(false);
     
-    const genres = useMemo(() => frontPage.genres.split(','), [ frontPage.genres ]);
+    const genres = useMemo(() => frontPage?.genres.split(','), [ frontPage?.genres ]);
 
     const handlePressNavigateToDisplayVideo = () => navigation.navigate('DisplayVideo', { 
-        videoUri: frontPage.trailer_video_path, 
-        id: frontPage.id 
+        videoUri: frontPage?.trailer_video_path, 
+        id: frontPage?.id 
     });
 
     const handleToggleAddToMyList = () => 
     {
         dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
 
-        const movieExists = AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id);
+        const movieExists = AUTH_PROFILE.my_list.find(({ id }) => id === frontPage?.id);
         const message = movieExists ? 'Removed from My List' : 'Added to My List';
 
         ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -66,19 +65,19 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
             />
     
             <Image 
-                uri={ frontPage.title_logo_path }
+                uri={ frontPage?.title_logo_path }
                 style={ styles.homeFrontPageShowLogo }
             />
 
             <View style={ styles.tagsContainer }>
-                <Genre genres={ genres } />
+                { genres && <Genre genres={ genres } /> }
             </View>
 
             <View style={ styles.actionBtnsContainer }>
                 <TouchableOpacity onPress={ handleToggleAddToMyList }>
                     <View style={ styles.myListInfoActionContainer }>
                         <FeatherIcon 
-                            name={ AUTH_PROFILE.my_list.find(({ id }) => id === frontPage.id) ? 'check' : 'plus' }
+                            name={ AUTH_PROFILE.my_list.find(({ id }) => id === frontPage?.id) ? 'check' : 'plus' }
                             size={ 24 }
                             color='#fff'
                         />

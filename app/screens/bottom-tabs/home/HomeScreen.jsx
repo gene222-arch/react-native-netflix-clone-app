@@ -16,27 +16,25 @@ import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFro
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
-
-const DEFAULT_FRONT_PAGE = {
-    id: '',
-    category: '',
-    title: '',
-    wallpaper_path: null,
-    poster_path: null,
-    genres: '',
-    plot: '',
-    trailer_video_path: null
-}
+import { DEVICE_WIDTH } from '../../../constants/Dimensions';
 
 const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const dispatch = useDispatch();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
+    const [ frontPage, setFrontPage ] = useState(null);
+
+    useEffect(() => {
+        batch(() => {
+            dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+            dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+        });
+    }, [AUTH_PROFILE]);
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
+            setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length))]);
             MovieCreatedEvent.listen(response => {
                 dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
             });
@@ -50,18 +48,10 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         }   
     }, []);
 
-    useEffect(() => {
-        setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length))]);
-        batch(() => {
-            dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
-            dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
-        });
-    }, [AUTH_PROFILE]);
-
     useFocusEffect(
         useCallback(() => {
             return () => {
-                setFrontPage(DEFAULT_FRONT_PAGE);
+                setFrontPage(null);
             }
         }, [])
     )
@@ -77,33 +67,25 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 keyExtractor={ (item, index) => index.toString() }
                 data={ MOVIE.categories }
                 renderItem={({ item }) => (
-                    <HomeCategory 
-                        isLoading={ MOVIE.isLoading }
+                    <HomeCategory
                         title={ item.title }
                         categorizedMovies={ item.movies } 
                     />  
                 )}
                 ListHeaderComponent={
                     <View>
-                        {
-                            MOVIE.isLoading
-                                ? <HomeFrontPageLoader />
-                                : (
-                                    <ImageBackground 
-                                        source={{ 
-                                            uri: frontPage.poster_path
-                                        }}
-                                        style={ styles.homeFrontPage }
-                                    >
-                                        <View style={ styles.appBarContainer }>
-                                            <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
-                                            <NavBar />
-                                        </View>
-                                        <FrontPageOptions frontPage={ frontPage } />
-                                    </ImageBackground>  
-                                )
-                        }
-
+                        <ImageBackground 
+                            source={{ 
+                                uri: frontPage?.poster_path
+                            }}
+                            style={ styles.homeFrontPage }
+                        >
+                            <View style={ styles.appBarContainer }>
+                                <AppBar marginTop={ Platform.OS === 'android' ? StatusBar.currentHeight : 0 } />
+                                <NavBar />
+                            </View>
+                            <FrontPageOptions frontPage={ frontPage } />
+                        </ImageBackground>  
                         <ContinueWatchingFor />
                     </View>          
                 }

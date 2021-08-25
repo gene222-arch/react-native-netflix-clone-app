@@ -9,18 +9,18 @@ import * as AUTH_ACTION from '../redux/modules/auth/actions'
 import * as TOAST_ACTION from '../redux/modules/toast/actions'
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
-import { connect, useDispatch } from 'react-redux';
+import { batch, connect, useDispatch } from 'react-redux';
 import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
 
 
-const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) => 
+const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) => 
 {
     const dispatch = useDispatch();
 
     const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ id }) => id === movie.id));
 
     const handlePressAddToMyList = () => {
-        dispatch(AUTH_ACTION.toggleAddToMyListStart(movie));
+        dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
         
         const message = !AUTH_PROFILE.my_list.find(({ id }) => id === movie.id)
             ? 'Added to My List'
@@ -31,13 +31,14 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie }) =>
 
     const handlePressLike = () => 
     {
-        const { other_movies, ...movieDetails } = movie;
-        const rate = !hasLikedMovie ? 'like' : '';
-        
-        dispatch(AUTH_ACTION.rateShowStart({ show: movieDetails, rate, user_profile_id: AUTH_PROFILE.id }));
-
-        const message = !hasLikedMovie ? 'Liked' : 'Unrated';
-        dispatch(TOAST_ACTION.createToastMessageStart({ message }));
+        batch(() => {
+            const { other_movies, ...movieDetails } = movie;
+            const rate = !hasLikedMovie ? 'like' : '';
+            const message = !hasLikedMovie ? 'Liked' : 'Unrated';
+            
+            dispatch(AUTH_ACTION.rateShowStart({ show: movieDetails, rate, user_profile_id: AUTH_PROFILE.id }));
+            dispatch(TOAST_ACTION.createToastMessageStart({ message }));
+        });
     }
 
     const handlePressTabShare = () => console.log('Shared');

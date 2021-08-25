@@ -243,7 +243,6 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
-
         case LOGIN_SUCCESS:
             return { 
                 ...state, 
@@ -374,15 +373,15 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
             const currentMyList = loggedInProfile.my_list;
-            const isAddedToList = currentMyList.find(({ id }) => id === payload.show.id); 
+            const movieExistsInMyList = currentMyList.find(({ id }) => id === payload.movie.id); 
 
-            const myList = (! isAddedToList) 
-                ? [ ...currentMyList, payload.show ] 
-                : currentMyList.filter(({ id }) => id !== payload.show.id);
+            const newMyList = !movieExistsInMyList 
+                ? [ ...currentMyList, payload.movie ] 
+                : currentMyList.filter(({ id }) => id !== payload.movie.id);
 
-            newProfiles = profiles.map((prof) => {
+            newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, my_list: myList } 
+                    ? { ...prof, my_list: newMyList } 
                     : prof;
             });
         
