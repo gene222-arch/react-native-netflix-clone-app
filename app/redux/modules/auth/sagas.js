@@ -107,7 +107,7 @@ function* rateRecentlyWatchedMovieSaga(payload)
 function* loginSaga(payload)  
 {
     try {
-        const { data, status } = yield call(LOGIN_API.loginAsync, payload);
+        const { data } = yield call(LOGIN_API.loginAsync, payload);
 
         const { access_token, data: auth } = data;
         const {  profiles, ...user } = auth;
@@ -154,6 +154,9 @@ function* removeToMyDownloadsSaga(payload)
     }
 }
 
+/**
+ * Yet to implement
+ */
 function* removeToRecentWatchesSaga(payload)  
 {
     try {

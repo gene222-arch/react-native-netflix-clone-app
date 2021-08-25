@@ -17,31 +17,18 @@ import { Image } from 'react-native-expo-image-cache';
 const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
 {
     const [ showInfo, setShowInfo ] = useState(false);
-    const [ shouldPlayVideo, setShouldPlayVideo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
     const handlePressShowInfo = () => setShowInfo(! showInfo);
 
-    const handlePressPlayVideo = () => setShouldPlayVideo(! shouldPlayVideo);
-
     useEffect(() => {
         return () => {
             setShowInfo(false);
             setShowMoreOptions(false);
-            setShouldPlayVideo(false);
         }
     }, []);
-
-    if (shouldPlayVideo) {
-        return (
-            <VideoPlayerFullScreen  
-                uri={ getCachedFile( `RecentlyWatchedShows/Videos/`, movie.id, movie.video_path) }
-                handleCloseVideo={ handlePressPlayVideo }
-            />
-        )
-    }
 
     return (
         <View style={ styles.container }>
@@ -67,7 +54,6 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
                 size={ 50 }
                 color='#fff'
                 style={ styles.playIcon }
-                onPress={ handlePressPlayVideo }
             />
             
             <View style={ styles.infoMoreContainer }>

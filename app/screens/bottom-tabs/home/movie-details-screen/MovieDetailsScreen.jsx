@@ -160,7 +160,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                             handlePressPlayVideo={ handlePressPlayVideo }
                         />
                         <MovieDescription movie={ movie } />
-                        <ActionButton movie={ movie } />
+                        <ActionBwutton movie={ movie } />
                         <PaginationPicker 
                             pages={ pages }
                             selectedPage={ selectedPage } 
