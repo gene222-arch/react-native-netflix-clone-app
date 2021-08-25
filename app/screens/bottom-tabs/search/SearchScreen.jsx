@@ -113,6 +113,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 handlePressDisplayShowInfo={ handlePressDisplayShowInfo } 
             />
         </View>
+    
     )
 }
 

@@ -13,6 +13,7 @@ const DisplayVideoScreen = () =>
     const route = useRoute();
     
     const [ uri, setUri ] = useState(null);
+    const [ shouldPlay, setShouldPlay ] = useState(false);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
     useEffect(() => {
@@ -30,6 +31,7 @@ const DisplayVideoScreen = () =>
                 }
             
                 setUri(fileToCacheUri);
+                setShouldPlay(true);
             } catch ({ message }) {
                 console.log(message);
             }
@@ -42,14 +44,13 @@ const DisplayVideoScreen = () =>
         }
     }, [route.params])
 
-    const handleCloseVideo = () => navigation.goBack();
-
     if (! isInteractionsComplete) return <LoadingSpinner message='Loading' />
 
     return (
         <VideoPlayerFullScreen 
             uri={ uri }
-            handleCloseVideo={ handleCloseVideo } 
+            shouldPlay={ shouldPlay }
+            setShouldPlay={ setShouldPlay }
         />
     )
 }

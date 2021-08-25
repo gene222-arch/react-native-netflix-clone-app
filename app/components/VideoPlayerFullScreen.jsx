@@ -5,20 +5,17 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
 import Text from './Text';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 
-const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) => 
+const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) => 
 {
+    const navigation = useNavigation();
     const video = useRef(null);
     const [ inFullscreen, setInFullscreen ] = useState(false);
 
     const onEnterFullScreen = async () => 
     {
-        video?.current?.setStatusAsync({
-            shouldPlay: true,
-        });
-
         setStatusBarHidden(true);
 
         setInFullscreen(true);
@@ -28,15 +25,13 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
 
     const onExitFullScreen = async () => 
     {
-        video?.current?.setStatusAsync({
-            shouldPlay: false,
-        });
-
         setStatusBarHidden(false);
+
+        setShouldPlay(false);
 
         video?.current?.pauseAsync();
 
-        handleCloseVideo();
+        navigation.goBack();
     };
 
     const unLockOrientation = async () => await ScreenOrientation.unlockAsync();
@@ -56,7 +51,7 @@ const VideoPlayerFullScreen = ({ uri, handleCloseVideo }) =>
     return (
         <VideoPlayer
             videoProps={{
-                shouldPlay: true,
+                shouldPlay,
                 resizeMode: Video.RESIZE_MODE_CONTAIN,
                 source: { uri },
                 ref: video,
