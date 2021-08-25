@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     tabsContainer: {
-        width: '80%',
+        width: '85%',
         marginTop: 10,
         paddingHorizontal: 10,
     },

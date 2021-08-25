@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import View from '../../../../components/View';
 import styles from './../../../../assets/stylesheets/myList';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { createStructuredSelector } from 'reselect';
-import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { InteractionManager } from 'react-native'
-import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
 import MyListScreenLoader from '../../../../components/loading-skeletons/MyListScreenLoader';
+import { Image } from 'react-native-expo-image-cache';
 
-const MyListScreen = ({ AUTH, AUTH_PROFILE }) => 
+
+const MyListScreen = ({ AUTH_PROFILE }) => 
 {
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ show, setShow ] = useState(null);
@@ -21,18 +22,12 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
         setShouldDisplayShowInfo(true);
     }
 
-    const runAfterInteractions = () => {
-        AUTH_PROFILE.my_list.map(({ id, poster_path }) => {
-            cacheImage(poster_path, id, `${ AUTH.auth.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`)
-        })
-        setIsInteractionsComplete(true);
-    }
-
     useEffect(() => {
-        InteractionManager.runAfterInteractions(runAfterInteractions);
+        InteractionManager.runAfterInteractions(() => {
+            setIsInteractionsComplete(true);
+        });
 
         return () => {
-            setIsInteractionsComplete(false);
             setShow(null);
             setShouldDisplayShowInfo(false);
         }
@@ -55,9 +50,8 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
                         <Image 
-                            source={{ 
-                                uri: getCachedFile(`${ AUTH.auth.id }/Profiles/${ AUTH_PROFILE.id }/MyList/Posters/`, item.id, item.poster_path) 
-                            }}
+                            preview={ item.poster_path }
+                            uri={ item.poster_path }
                             style={ styles.image }
                         />
                     </TouchableOpacity>
@@ -71,7 +65,6 @@ const MyListScreen = ({ AUTH, AUTH_PROFILE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 });
 

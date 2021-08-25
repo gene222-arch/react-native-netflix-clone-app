@@ -176,10 +176,6 @@ function* selectProfileSaga(payload)
     }
 }
 
-/**
- * Todo: Test API Request to Server
- * !Problem: Duplication of id with Movies and Coming Soon Movies
- */
 function* toggleAddToMyListSaga(payload)
 {
     try {

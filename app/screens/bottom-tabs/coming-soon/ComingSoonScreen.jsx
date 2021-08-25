@@ -56,8 +56,11 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [setFocusedIndex]);
 
-    const handlePressToggleRemindMe = (movieID) => {
-        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
+    const handlePressToggleRemindMe = (movieID, isReminded = false) => {
+        batch(() => {
+            dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
+            !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
+        });
     }
 
     const handlePressInfo = (id) => navigation.navigate('TrailerInfo', { id });
@@ -127,7 +130,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                             onScroll={ handleOnScroll }
                             data={ COMING_SOON_MOVIE.comingSoonMovies }
                             renderItem={ ({ item, index }) => {
-                                let isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(movieID => movieID === item.id);
+                                let isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === item.id);
 
                                 return  (
                                     <ComingSoonMovieItem 

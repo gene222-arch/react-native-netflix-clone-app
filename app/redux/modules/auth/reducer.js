@@ -397,13 +397,15 @@ export default (state = initialState, { type, payload }) =>
             const { movieID } = payload;
             let remindedMovies = loggedInProfile.reminded_coming_soon_movies;
 
-            let isReminded = remindedMovies.find(id => id === movieID);
+            let isReminded = remindedMovies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movieID);
 
             if (! isReminded) {
-                remindedMovies.push(movieID)
+                remindedMovies.push({
+                    coming_soon_movie_id: movieID
+                });
             }
             else {
-                 remindedMovies = remindedMovies.filter(id => id !== movieID);
+                 remindedMovies = remindedMovies.filter(({ coming_soon_movie_id }) => coming_soon_movie_id === movieID);
             }
 
             newProfiles = profiles.map(prof => {

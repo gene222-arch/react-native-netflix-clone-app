@@ -135,6 +135,12 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     aspectRatio: 16/9
                 }}
                 source={{ uri: !videoUri ? movie.video_path : videoUri }}
+                usePoster={ true }
+                posterSource={{ uri: movie.wallpaper_path }}
+                posterStyle={{
+                    width: '100%',
+                    aspectRatio: 16/9
+                }}
                 useNativeControls
                 resizeMode='contain'
                 onPlaybackStatusUpdate={status => setVideoStatus(() => status)}

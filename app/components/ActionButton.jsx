@@ -11,12 +11,14 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
 import { batch, connect, useDispatch } from 'react-redux';
 import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
+import RemindMeIcon from './RemindMeIcon';
 
 
 const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) => 
 {
     const dispatch = useDispatch();
 
+    const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
     const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ id }) => id === movie.id));
 
     const handlePressAddToMyList = () => {
@@ -27,6 +29,10 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
             : 'Removed to My List';
 
         dispatch(TOAST_ACTION.createToastMessageStart({ message }));
+    }
+
+    const handlePressToggleRemindMe = () => {
+        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID: movie.id }));
     }
 
     const handlePressLike = () => 
@@ -47,24 +53,46 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     return (
         <View style={ styles.tabsContainer }>
             <Tab value={ 0 } indicatorStyle={ styles.tabIndicator } disableIndicator={ true }>
-                <Tab.Item 
-                    title='My List' 
-                    icon={ 
-                        <ActivityIndicatorWrapper 
-                            isLoading={ AUTH.isLoading }
-                            component={
-                                <MaterialCommunityIcon 
-                                    name={ AUTH_PROFILE.my_list.find(movie_ => movie_.id === movie.id) ? 'check' : 'plus' }
-                                    size={ 30 }
-                                    color='white'
-                                />
-                            }
-                        />
-                    }
-                    titleStyle={ styles.tabItemTitle  }
-                    containerStyle={ styles.tabItemContainer }
-                    onPressIn={ handlePressAddToMyList }
-                />
+                
+                {
+                    modelType !== 'Movie'
+                        ? (
+                            <Tab.Item 
+                                title='Remind Me' 
+                                icon={ 
+                                    <ActivityIndicatorWrapper 
+                                        isLoading={ AUTH.isLoading }
+                                        component={
+                                            <RemindMeIcon isReminded={ isReminded } />
+                                        }
+                                    />
+                                }
+                                titleStyle={ styles.tabItemTitle  }
+                                containerStyle={ styles.tabItemContainer }
+                                onPressIn={ handlePressToggleRemindMe }
+                            />
+                        )
+                        : (
+                            <Tab.Item 
+                                title='My List' 
+                                icon={ 
+                                    <ActivityIndicatorWrapper 
+                                        isLoading={ AUTH.isLoading }
+                                        component={
+                                            <MaterialCommunityIcon 
+                                                name={ AUTH_PROFILE.my_list.find(movie_ => movie_.id === movie.id) ? 'check' : 'plus' }
+                                                size={ 30 }
+                                                color='white'
+                                            />
+                                        }
+                                    />
+                                }
+                                titleStyle={ styles.tabItemTitle  }
+                                containerStyle={ styles.tabItemContainer }
+                                onPressIn={ handlePressAddToMyList }
+                            />
+                        )
+                }
 
                 <Tab.Item 
                     title='Like' 
