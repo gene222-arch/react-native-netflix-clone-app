@@ -69,7 +69,7 @@ const PROFILE_DEFAULT_PROPS = {
     is_for_kids: false,
     my_downloads: [],
     recently_watched_movies: [],
-    my_list: [],
+    my_lists: [],
     reminded_coming_soon_movies: [],
     liked_movies: [],
     liked_coming_soon_movies: [],
@@ -397,7 +397,7 @@ export default (state = initialState, { type, payload }) =>
 
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
-            const currentMyList = loggedInProfile.my_list;
+            const currentMyList = loggedInProfile.my_lists;
             const movieExistsInMyList = currentMyList.find(({ movie_id }) => movie_id === payload.movie.id); 
 
             let newMyList = [];
@@ -416,7 +416,7 @@ export default (state = initialState, { type, payload }) =>
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, my_list: newMyList } 
+                    ? { ...prof, my_lists: newMyList } 
                     : prof;
             });
         

@@ -20,14 +20,16 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
 
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
-    const handlePressAddToMyList = () => {
+    const handlePressAddToMyList = () => 
+    {
+        const movieExistsInMyList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id);
+
+        const message = !movieExistsInMyList
+            ? 'Added to My List'
+            : 'Removed to My List';
+
         batch(() => {
             dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
-        
-            const message = !AUTH_PROFILE.my_list.find(({ movie_id }) => movie_id === movie.id)
-                ? 'Added to My List'
-                : 'Removed to My List';
-    
             dispatch(TOAST_ACTION.createToastMessageStart({ message }));
         });
     }
@@ -81,7 +83,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
                                         isLoading={ AUTH.isLoading }
                                         component={
                                             <MaterialCommunityIcon 
-                                                name={ AUTH_PROFILE.my_list.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
+                                                name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
                                                 size={ 30 }
                                                 color='white'
                                             />
