@@ -16,7 +16,7 @@ import { authProfileSelector } from './../../../../redux/modules/auth/selectors'
 
 const ListHeader = ({ AUTH_PROFILE, comingSoonMovie }) => 
 {
-    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id));
+    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === comingSoonMovie.id));
     const [ selectedTabCategory, setSelectedTabCategory ] = useState(1);
 
     const handlePressSimilarShow = (recommendedSimilarShow) => navigation.push('TrailerInfo', { comingSoonMovie: recommendedSimilarShow });

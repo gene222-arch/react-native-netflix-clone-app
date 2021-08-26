@@ -14,12 +14,11 @@ import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
 import RemindMeIcon from './RemindMeIcon';
 
 
-const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) => 
+const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLikedMovie = false }) => 
 {
     const dispatch = useDispatch();
 
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
-    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ id }) => id === movie.id));
 
     const handlePressAddToMyList = () => {
         batch(() => {
@@ -44,7 +43,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
             const rate = !hasLikedMovie ? 'like' : '';
             const message = !hasLikedMovie ? 'Liked' : 'Unrated';
             
-            dispatch(AUTH_ACTION.rateShowStart({ show: movieDetails, rate, user_profile_id: AUTH_PROFILE.id }));
+            dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
             dispatch(TOAST_ACTION.createToastMessageStart({ message }));
         });
     }
