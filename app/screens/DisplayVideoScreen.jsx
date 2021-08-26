@@ -45,7 +45,9 @@ const DisplayVideoScreen = () =>
         }, [route.params])
     )
 
-    if (! isInteractionsComplete) return <LoadingSpinner message='Loading' />
+    if (! isInteractionsComplete) {
+        return <LoadingSpinner message='Loading' />
+    }
 
     return (
         <VideoPlayerFullScreen 
