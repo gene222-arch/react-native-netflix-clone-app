@@ -75,7 +75,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
         dispatch(MOVIE_ACTION.getTopSearchedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
         setIsInteractionsComplete(true);
     }
-
+    
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
         return () => {
@@ -85,7 +85,6 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
     useFocusEffect(
         useCallback(() => {
-            dispatch(MOVIE_ACTION.getTopSearchedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             return () => {
                 setSearchInput('');
                 setShow(null);

@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     poster: {
-        width: 300,
-        height: 100,
+        width: '100%',
+        height: '100%',
         marginBottom: 5,
         marginTop: 5,
         resizeMode: 'contain'
