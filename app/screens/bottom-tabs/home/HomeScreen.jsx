@@ -15,12 +15,17 @@ import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
-import { authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { authProfileSelector, authSelector } from './../../../redux/modules/auth/selectors';
+import frontPageShows from './../../../services/data/frontPageShows';
 
 const DEFAULT_FRONT_PAGE_PROPS = {
+    id: '',
+    title: '',
+    plot: '',
+    genres: '',
     poster_path: null,
-    title_logo_path: null,
-    genres: []
+    wallpaper_path: null,
+    title_logo_path: null
 };
 
 const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
@@ -83,7 +88,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                             <FrontPageOptions frontPage={ frontPage } />
                         </ImageBackground>  
                         <ContinueWatchingFor />
-                    </View>          
+                    </View>       
                 }
             />
         </View>

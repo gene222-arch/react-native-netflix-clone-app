@@ -63,12 +63,6 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
                 isVisible={ showMovieInfo } 
                 setIsVisible={ setShowMovieInfo } 
             />
-    
-            <Image 
-                preview={{ uri: frontPage?.title_logo_path }}
-                uri={ frontPage?.title_logo_path }
-                style={ styles.homeFrontPageShowLogo }
-            />
 
             <View style={ styles.tagsContainer }>
                 { genres && <Genre genres={ genres } /> }

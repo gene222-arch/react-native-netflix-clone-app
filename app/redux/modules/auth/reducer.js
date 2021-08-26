@@ -68,7 +68,7 @@ const PROFILE_DEFAULT_PROPS = {
     avatar: null,
     is_for_kids: false,
     my_downloads: [],
-    recently_watched_shows: [],
+    recently_watched_movies: [],
     my_list: [],
     reminded_coming_soon_movies: [],
     liked_movies: [],
@@ -129,17 +129,17 @@ export default (state = initialState, { type, payload }) =>
         case ADD_TO_RECENT_WATCHES_SUCCESS:
 
             const { movie } = payload;
-            const movieIndex = loggedInProfile.recently_watched_shows.findIndex(({ id }) => id === movie.id);
+            const movieIndex = loggedInProfile.recently_watched_movies.findIndex(({ id }) => id === movie.id);
 
             const movie_ = { ...movie, user_ratings: [] };
 
             if (movieIndex === -1) {
-                loggedInProfile.recently_watched_shows.unshift(movie_);
+                loggedInProfile.recently_watched_movies.unshift(movie_);
             }
             
             if (movieIndex !== -1) {
-                loggedInProfile.recently_watched_shows.splice(movieIndex, 1);
-                loggedInProfile.recently_watched_shows.unshift(movie_);
+                loggedInProfile.recently_watched_movies.splice(movieIndex, 1);
+                loggedInProfile.recently_watched_movies.unshift(movie_);
             }
 
             newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? loggedInProfile : prof);
@@ -176,18 +176,18 @@ export default (state = initialState, { type, payload }) =>
         case RATE_SHOW_SUCCESS:
             let newLikedShows = [];
             
-            let isMovieLiked = loggedInProfile.liked_shows.find(({ id }) => id === payload.show.id);
+            let isMovieLiked = loggedInProfile.liked_movies.find(({ id }) => id === payload.show.id);
 
             if (! isMovieLiked) {
                 newLikedShows.push(payload.show);
             }
             else {
-                newLikedShows = loggedInProfile.liked_shows.filter(({ id }) => id !== payload.show.id);
+                newLikedShows = loggedInProfile.liked_movies.filter(({ id }) => id !== payload.show.id);
             }
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, liked_shows: newLikedShows } 
+                    ? { ...prof, liked_movies: newLikedShows } 
                     : prof;
             });
 
@@ -201,38 +201,40 @@ export default (state = initialState, { type, payload }) =>
         case RATE_RECENTLY_WATCHED_MOVIE_SUCCESS:
             let newLikedShows_ = [];
             
-            let isMovieLiked_ = loggedInProfile.liked_shows.find(({ id }) => id === payload.show.id);
-
-            if (isMovieLiked_) {
-                newLikedShows_.push(payload.show);
+            let isMovieLiked_ = loggedInProfile.liked_movies.find(({ id }) => id === payload.movie.id);
+            
+            if (! isMovieLiked_) {
+                newLikedShows_.push(payload.movie);
             }
-
-            if (! isMovieLiked) {
-                newLikedShows_ = loggedInProfile.liked_shows.filter(({ id }) => id !== payload.show.id);
+            else {
+                newLikedShows_ = loggedInProfile.liked_movies.filter(({ id }) => id !== payload.movie.id);
             }
-
+            
+            let user_ratings = [];
+            
             let recentlyWatchedMovies = loggedInProfile
-                .recently_watched_shows.map(show => {
-                    if (show.id === payload.show.id) 
+                .recently_watched_movies.map(movie => {
+                    if (movie.id === payload.movie.id) 
                     {
-                        if (! show.isRated) {
-                            return { ...show, isRated: true, rate: payload.rate };
-                        }
-        
-                        if (show.isRated && show.rate !== payload.rate) {
-                            return { ...show, rate: payload.rate };
-                        }
-                        else {
-                            return { ...show, isRated: false, rate: '' };
+                        if (! movie.rate || movie.rate) {
+                            user_ratings = [{
+                                movie_id: movie.id,
+                                model_type: payload.model,
+                                rate: payload.rate
+                            }];
+
+                            return { ...movie, user_ratings };
+                        } else {
+                            return { ...movie, user_ratings: [] };
                         }
                     }
-
-                    return show;
-                });
+            
+                    return movie;
+            });
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, recently_watched_shows: recentlyWatchedMovies, liked_shows: newLikedShows_ } 
+                    ? { ...prof, recently_watched_movies: recentlyWatchedMovies, liked_movies: newLikedShows_ } 
                     : prof;
             });
 
@@ -334,12 +336,12 @@ export default (state = initialState, { type, payload }) =>
         case REMOVE_TO_RECENT_WATCHES_SUCCESS:
 
             const filteredRecentlyWatchedMovies = loggedInProfile
-                .recently_watched_shows
+                .recently_watched_movies
                 .filter(({ id }) => id !== payload.movie_id);
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, recently_watched_shows: filteredRecentlyWatchedMovies } 
+                    ? { ...prof, recently_watched_movies: filteredRecentlyWatchedMovies } 
                     : prof;
             });
 

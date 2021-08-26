@@ -44,7 +44,7 @@ const downloadIconName = (status) =>
     return label;
 }
 
-const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, isVisible, setIsVisible }) => 
+const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, handlePressRemoveRate, isVisible, setIsVisible }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -103,7 +103,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
             isSolid: getMovieRatingDetails?.rate === 'like',
-            onPress: () => handleToggleLike(),
+            onPress: () => !getMovieRatingDetails?.rate ? handleToggleLike() : handlePressRemoveRate(),
             show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'like',
         },
         { 
@@ -111,7 +111,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
             isSolid: getMovieRatingDetails?.rate === 'dislike',
-            onPress: () => handleToggleDisLike(),
+            onPress: () => !getMovieRatingDetails?.rate ? handleToggleDisLike() : handlePressRemoveRate(),
             show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'dislike',
         },
         {

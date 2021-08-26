@@ -16,14 +16,39 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 {
     const dispatch  = useDispatch();
     
-    const { id, name, recently_watched_shows } = AUTH_PROFILE;
+    const { id, name, recently_watched_movies } = AUTH_PROFILE;
 
-    const handleToggleLike = (show) => {
-        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ user_profile_id: id, show, rate: 'like' }));
+    const handleToggleLike = (movie) => {
+        const likePayload = {
+            movie,
+            user_profile_id: id,
+            rate: 'like',
+            model_type: 'Movie'
+        };
+
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(likePayload));
     }
 
-    const handleToggleDisLike = (show) => {
-        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart({ user_profile_id: id, show, rate: 'dislike' }));
+    const handleToggleDisLike = (movie) => {
+        const dislikePayload = {
+            movie,
+            user_profile_id: id,
+            rate: 'dislike',
+            model_type: 'Movie'
+        };
+
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(dislikePayload));
+    }
+
+    const handlePressRemoveRate = (movie) => {
+        const likePayload = {
+            movie,
+            user_profile_id: id,
+            rate: '',
+            model_type: 'Movie'
+        };
+
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(likePayload));
     }
 
     const handlePressRemove = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart({
@@ -33,15 +58,15 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 
 
     useEffect(() => {
-        recently_watched_shows.map(({ id: movie_id, video_path }) => {
+        recently_watched_movies.map(({ id: movie_id, video_path }) => {
             cacheImage(video_path, movie_id, `RecentlyWatchedShows/Videos/`);
         });
 
-    }, [AUTH_PROFILE.recently_watched_shows]);
+    }, [AUTH_PROFILE.recently_watched_movies]);
 
 
-    if (! recently_watched_shows.length) {
-        return <Text h4>Your recently watched show's will be shown here.</Text>
+    if (! recently_watched_movies.length) {
+        return <Text h4>Your recently watched movie's will be shown here.</Text>
     }
 
     return (
@@ -54,13 +79,14 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ recently_watched_shows }
+                data={ recently_watched_movies }
                 horizontal
                 renderItem={({ item }) =>  (
                     <ContinueWatchingForItem 
                         movie={ item } 
                         handleToggleLike={ () => handleToggleLike(item) }
                         handleToggleDisLike={ () => handleToggleDisLike(item) }
+                        handlePressRemoveRate={ () => handlePressRemoveRate(item) }
                         handlePressRemove={ () => handlePressRemove(item.id) }
                     />
                 )}

@@ -4,8 +4,8 @@ const frontPageShows =
         id: 391,
         category: 'anime',
         title: 'Dr. Stone',
-        wallpaper_path: 'https://www.whats-on-netflix.com/wp-content/uploads/2019/09/Dr-Stone-Season-1-Netflix.jpg',
-        poster_path: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Dr._Stone_Logo.png/640px-Dr._Stone_Logo.png',
+        poster_path: 'https://www.whats-on-netflix.com/wp-content/uploads/2019/09/Dr-Stone-Season-1-Netflix.jpg',
+        title_logo_path: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Dr._Stone_Logo.png/640px-Dr._Stone_Logo.png',
         genres: 'Exciting, Sci-Fi Anime, Wilderness Survival, Japanese',
         plot: "he game takes place in a land known simply as the continent and tells the story of Geralt of Rivia, a witcher – a genetically enhanced human with special powers trained to slay monsters. The Witcher contains three different paths, which affect the game's storyline.",
         video_trailer_path: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'

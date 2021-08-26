@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
 
 
-const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handleToggleDisLike,  handlePressRemove }) => 
+const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike, handlePressRemoveRate,  handlePressRemove }) => 
 {
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
@@ -38,6 +38,7 @@ const ContinueWatchingForItem = ({ AUTH_PROFILE, movie, handleToggleLike, handle
                 setIsVisible={ setShowMoreOptions } 
                 handleToggleLike={ handleToggleLike }
                 handleToggleDisLike={ handleToggleDisLike }
+                handlePressRemoveRate={ handlePressRemoveRate }
                 handlePressRemove={ handlePressRemove }
             />
 
