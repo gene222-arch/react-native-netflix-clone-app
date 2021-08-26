@@ -21,16 +21,7 @@ const DisplayVideoScreen = () =>
             {
                 try {   
                     const { id, title, videoUri } = route.params;
-                    const fileExt = getExtension(videoUri);
-                    
-                    const fileToCacheUri = FileSystem.cacheDirectory + `${ id }${ title }` + `.${ fileExt }`;
-                    const { exists } = await ensureFileExists(fileToCacheUri);
-            
-                    if (! exists) {
-                        await FileSystem.downloadAsync(videoUri, fileToCacheUri)
-                    }
-                
-                    setUri(fileToCacheUri);
+                    setUri(videoUri);
                     setShouldPlay(true);
                 } catch ({ message }) {
                     console.log(message);
