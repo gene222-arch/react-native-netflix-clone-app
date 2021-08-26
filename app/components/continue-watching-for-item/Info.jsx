@@ -28,9 +28,13 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
         }
     });
     
-    const handlePressPlayPreview = () => navigation.navigate('DisplayVideoScreen', { 
-        videoUri: selectedShow?.video_trailer_path, 
-        id: selectedShow?.id 
+    const handlePressPreview = () => navigation.navigate('DisplayVideoRoot', {
+        screen: 'DisplayVideoScreen',
+        params: {
+            title: selectedShow?.title,
+            videoUri: selectedShow?.video_trailer_path, 
+            id: selectedShow?.id 
+        }
     });
 
     const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
@@ -117,7 +121,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         iconPosition='top'
                         buttonStyle={ styles.previewBtn }
                         titleStyle={ styles.actionBtnTitle }
-                        onPress={ handlePressPlayPreview }
+                        onPress={ handlePressPreview }
                     />
                 </View>          
             </View>
