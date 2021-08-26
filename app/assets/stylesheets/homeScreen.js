@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     },
     homeFrontPage: {
         width: '100%',
-        height: DEVICE_HEIGHT - (DEVICE_HEIGHT * .25),
+        height: DEVICE_HEIGHT - 200,
         resizeMode: 'cover',
         opacity: .8,
         justifyContent: 'space-between'
