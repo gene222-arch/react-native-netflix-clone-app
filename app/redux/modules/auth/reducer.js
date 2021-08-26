@@ -182,7 +182,7 @@ export default (state = initialState, { type, payload }) =>
                 let isMovieLiked = loggedInProfile.liked_movies.find(({ movie_id }) => movie_id === payload.movie.id);
 
                 if (! isMovieLiked) {
-                    newRatedMovies.push(payload.movie);
+                    newRatedMovies.push({ ...payload.movie, movie_id: payload.movie.id });
                 }
                 else {
                     newRatedMovies = loggedInProfile.liked_movies.filter(({ movie_id }) => movie_id !== payload.movie.id);
@@ -191,7 +191,7 @@ export default (state = initialState, { type, payload }) =>
                 let isMovieLiked = loggedInProfile.liked_coming_soon_movies.find(({ movie_id }) => movie_id === payload.movie.id);
 
                 if (! isMovieLiked) {
-                    newRatedMovies.push(payload.movie);
+                    newRatedMovies.push({ ...payload.movie, movie_id: payload.movie.id });
                 }
                 else {
                     newRatedMovies = loggedInProfile.liked_coming_soon_movies.filter(({ movie_id }) => movie_id !== payload.movie.id);

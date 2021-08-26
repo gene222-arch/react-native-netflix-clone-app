@@ -38,11 +38,11 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
 
     const handlePressLike = () => 
     {
+        const { other_movies, ...movieDetails } = movie;
+        const rate = !hasLikedMovie ? 'like' : '';
+        const message = !hasLikedMovie ? 'Liked' : 'Unrated';
+        
         batch(() => {
-            const { other_movies, ...movieDetails } = movie;
-            const rate = !hasLikedMovie ? 'like' : '';
-            const message = !hasLikedMovie ? 'Liked' : 'Unrated';
-            
             dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
             dispatch(TOAST_ACTION.createToastMessageStart({ message }));
         });
