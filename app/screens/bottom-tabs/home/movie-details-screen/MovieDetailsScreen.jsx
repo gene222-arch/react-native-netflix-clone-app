@@ -8,17 +8,13 @@ import * as MOVIE_ACTION from './../../../../redux/modules/movie/actions'
 import View from '../../../../components/View';
 import EpisodeItem from '../../../../components/episode-item/EpisodeItem';
 import styles from '../../../../assets/stylesheets/movieDetail';
-import Header from './Header';
-import PlayDownloadButton from './PlayDownloadButton';
-import MovieDescription from './MovieDescription';
-import PaginationPicker from './PaginationPicker';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
-import ActionButton from './../../../../components/ActionButton';
 import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import MovieDetailScreenLoader from '../../../../components/loading-skeletons/MovieDetailScreenLoader';
 import { getExtension } from '../../../../utils/file';
 import { ensureFileExists } from '../../../../utils/cacheImage';
+import ListHeader from './ListHeader';
 
 
 const PER_PAGE = 3;
@@ -27,6 +23,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 {   
     const dispatch = useDispatch();
     const { id: movieId } = route.params;
+    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movieId));
 
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
@@ -151,23 +148,18 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 data={ defaultPageList }
                 ListHeaderComponentStyle={ styles.listHeaderComponent }
                 renderItem={ ({ item }) => <EpisodeItem movie={ item } onPress={ () => setMovie(item) } />}
-                ListHeaderComponent={(
-                    <View style={ styles.movieContainer }>
-                        <Header movie={ movie } />
-                        <PlayDownloadButton
-                            videoStatus={ videoStatus }
-                            handlePressPauseVideo={ handlePressPauseVideo }
-                            handlePressPlayVideo={ handlePressPlayVideo }
-                        />
-                        <MovieDescription movie={ movie } />
-                        <ActionButton movie={ movie } />
-                        <PaginationPicker 
-                            pages={ pages }
-                            selectedPage={ selectedPage } 
-                            handleChangePage={ handleChangePage }
-                        />
-                    </View>
-                )}
+                ListHeaderComponent={
+                    <ListHeader 
+                        movie={ movie }
+                        videoStatus={ videoStatus }
+                        handlePressPlayVideo={ handlePressPlayVideo }
+                        handlePressPauseVideo={ handlePressPauseVideo }
+                        hasLikedMovie={ hasLikedMovie }
+                        pages={ pages }
+                        selectedPage={ selectedPage }
+                        handleChangePage={ handleChangePage }
+                    />
+                }
             />
         </View>
     )
