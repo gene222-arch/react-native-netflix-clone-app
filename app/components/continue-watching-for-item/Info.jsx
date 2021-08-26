@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
+import MostLikedBadge from './../MostLikedBadge';
 
 
 const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
@@ -68,6 +69,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                                 <Text style={ styles.yearAgeSeason }>{ selectedShow?.age_restriction }+</Text>
                             </View>
                             <Text style={ styles.plot }>{ selectedShow?.plot.slice(0, 250).concat('...') }</Text>
+                            <MostLikedBadge movieId={ selectedShow?.id } />
                         </View>
                     </ListItem.Content>
                 </ListItem>
