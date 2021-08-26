@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: -75,
+        marginLeft: -140,
         marginRight: 60
     },
     remindMeInfoText: {

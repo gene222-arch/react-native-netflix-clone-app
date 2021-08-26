@@ -31,8 +31,6 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
             <Video 
                 ref={ video }
                 style={ styles.video }
-                // source={{ uri: getCachedFile('ComingSoon/Videos/', movie.id, movie.video_trailer_path) }}
-                // posterSource={{ uri: getCachedFile('ComingSoon/Wallpaper/', movie.id, movie.poster_path) }}
                 source={{ uri: movie.video_trailer_path }}
                 posterSource={{ uri: movie.poster_path }}
                 posterStyle={ styles.posterStyle}
