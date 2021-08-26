@@ -44,7 +44,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
     {
         dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie: frontPage, user_profile_id: AUTH_PROFILE.id }));
 
-        const movieExists = AUTH_PROFILE.my_list.find(({ movie_id }) => movie_id === frontPage?.id);
+        const movieExists = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === frontPage?.id);
         const message = movieExists ? 'Removed from My List' : 'Added to My List';
 
         ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -72,7 +72,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
                 <TouchableOpacity onPress={ handleToggleAddToMyList }>
                     <View style={ styles.myListInfoActionContainer }>
                         <FeatherIcon 
-                            name={ AUTH_PROFILE.my_list.find(({ movie_id }) => movie_id === frontPage?.id) ? 'check' : 'plus' }
+                            name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === frontPage?.id) ? 'check' : 'plus' }
                             size={ 24 }
                             color='#fff'
                         />

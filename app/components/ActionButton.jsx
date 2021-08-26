@@ -35,7 +35,10 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
     }
 
     const handlePressToggleRemindMe = () => {
-        dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID: movie.id }));
+        batch(() => {
+            dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID: movie.id }));
+            !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
+        });
     }
 
     const handlePressLike = () => 
