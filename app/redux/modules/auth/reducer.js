@@ -174,20 +174,20 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case RATE_SHOW_SUCCESS:
-            let newLikedShows = [];
+            let newLikedMovies = [];
             
-            let isMovieLiked = loggedInProfile.liked_movies.find(({ id }) => id === payload.show.id);
+            let isMovieLiked = loggedInProfile.liked_movies.find(({ movie_id }) => movie_id === payload.movie.id);
 
             if (! isMovieLiked) {
-                newLikedShows.push(payload.show);
+                newLikedMovies.push(payload.movie);
             }
             else {
-                newLikedShows = loggedInProfile.liked_movies.filter(({ id }) => id !== payload.show.id);
+                newLikedMovies = loggedInProfile.liked_movies.filter(({ movie_id }) => movie_id !== payload.movie.id);
             }
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, liked_movies: newLikedShows } 
+                    ? { ...prof, liked_movies: newLikedMovies } 
                     : prof;
             });
 
