@@ -85,6 +85,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
     useFocusEffect(
         useCallback(() => {
+            dispatch(MOVIE_ACTION.getTopSearchedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             return () => {
                 setSearchInput('');
                 setShow(null);
@@ -113,7 +114,6 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 handlePressDisplayShowInfo={ handlePressDisplayShowInfo } 
             />
         </View>
-    
     )
 }
 
