@@ -32,6 +32,15 @@ export const fetchTopSearchesAsync = async ({ is_for_kids }) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+export const fetchMostLikedMoviesAsync = async () => 
+{
+    return await axiosInstance()
+        .get('/movies/most-liked')
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
+
 export const findByIDAsync = async (id) => 
 {
     return await axiosInstance()

@@ -14,6 +14,9 @@ const {
     GET_TOP_SEARCHED_MOVIES_START,
     GET_TOP_SEARCHED_MOVIES_SUCCESS,
     GET_TOP_SEARCHED_MOVIES_FAILED,
+    GET_MOST_LIKED_MOVIES_START,
+    GET_MOST_LIKED_MOVIES_SUCCESS,
+    GET_MOST_LIKED_MOVIES_FAILED,
     INCREMENT_MOVIE_VIEWS_START,
     INCREMENT_MOVIE_VIEWS_SUCCESS,
     INCREMENT_MOVIE_VIEWS_FAILED,
@@ -102,6 +105,25 @@ export const getTopSearchedMoviesFailed = (payload) => ({
     type: GET_TOP_SEARCHED_MOVIES_FAILED,
     payload
 });
+
+/** 
+ * Get most liked movies
+ */
+export const getMostLikedMoviesStart = (payload) => ({
+    type: GET_MOST_LIKED_MOVIES_START,
+    payload
+});
+
+export const getMostLikedMoviesSuccess = (payload) => ({
+    type: GET_MOST_LIKED_MOVIES_SUCCESS,
+    payload
+});
+
+export const getMostLikedMoviesFailed = (payload) => ({
+    type: GET_MOST_LIKED_MOVIES_FAILED,
+    payload
+});
+
 
 /** 
  * Increment movie views

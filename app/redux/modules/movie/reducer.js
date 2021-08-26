@@ -15,6 +15,9 @@ const {
     GET_TOP_SEARCHED_MOVIES_START,
     GET_TOP_SEARCHED_MOVIES_SUCCESS,
     GET_TOP_SEARCHED_MOVIES_FAILED,
+    GET_MOST_LIKED_MOVIES_START,
+    GET_MOST_LIKED_MOVIES_SUCCESS,
+    GET_MOST_LIKED_MOVIES_FAILED,
     INCREMENT_MOVIE_VIEWS_START,
     INCREMENT_MOVIE_VIEWS_SUCCESS,
     INCREMENT_MOVIE_VIEWS_FAILED,
@@ -51,6 +54,7 @@ export default (state = initialState, { type, payload }) =>
         case INCREMENT_MOVIE_VIEWS_START:
         case GET_LATEST_TWENTY_MOVIES_START:
         case GET_TOP_SEARCHED_MOVIES_START:
+        case GET_MOST_LIKED_MOVIES_START:
         case GET_MOVIES_START:
             return { 
                 ...state, 
@@ -104,6 +108,14 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case GET_MOST_LIKED_MOVIES_SUCCESS:
+            return {
+                ...state,
+                most_liked_movies: payload.movies,
+                isLoading,
+                errors
+            }
+
         case GET_CATEGORIZED_MOVIES_SUCCESS: 
             return {
                 ...state, 
@@ -125,6 +137,7 @@ export default (state = initialState, { type, payload }) =>
         case GET_LATEST_TWENTY_MOVIES_FAILED:
         case GET_MOVIES_FAILED:
         case GET_TOP_SEARCHED_MOVIES_FAILED:
+        case GET_MOST_LIKED_MOVIES_FAILED:
             return { 
                 ...state,
                 isLoading,
