@@ -74,7 +74,7 @@ function* getTopSearchedMoviesSaga(payload)
 function* getMostLikedMoviesSaga()  
 {
     try {
-        const { data: movies } = yield call(API.fetchTopSearchesAsync);
+        const { data: movies } = yield call(API.fetchMostLikedMoviesAsync);
         yield put(getMostLikedMoviesSuccess({ movies }));
     } catch ({ message }) {
         yield put(getMostLikedMoviesFailed({ message }));
@@ -146,8 +146,8 @@ function* getTopSearchedMoviesWatcher()
 function* getMostLikedMoviesWatcher()
 {
     while (true) {
-        const { payload } = yield take(GET_MOST_LIKED_MOVIES_START);
-        yield call(getMostLikedMoviesSaga, payload);
+        yield take(GET_MOST_LIKED_MOVIES_START);
+        yield call(getMostLikedMoviesSaga);
     }
 }
 

@@ -5,6 +5,7 @@ import { FlatList, Pressable } from 'react-native'
 import styles from '../../assets/stylesheets/homeCategory';
 import Text from '../Text';
 import View from './../View';
+import MostLikedBadge from './../MostLikedBadge';
 
 
 const HomeCategory = ({ title, categorizedMovies }) => 
@@ -18,19 +19,20 @@ const HomeCategory = ({ title, categorizedMovies }) =>
         });
     }
 
-    return categorizedMovies.length > 0 && (
+    return (
         <View>
             <Text h4 style={ styles.categoryTitle }>{ title }</Text>
             <FlatList 
                 keyExtractor={(item, index) => index.toString() }
                 data={ categorizedMovies }
                 renderItem={({ item }) => (
-                    <Pressable onPress={ () => handlePressImage(item) }>
+                    <Pressable onPress={ () => handlePressImage(item) } style={ styles.imageContainer }>
                         <Image 
                             preview={{ uri: item.poster_path }}
                             style={ styles.image }
                             uri={ item.poster_path }
                         />
+                        <MostLikedBadge movieId={ item.id } />
                     </Pressable>
                 )}
                 maxToRenderPerBatch={ 3 }

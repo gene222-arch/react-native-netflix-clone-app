@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         borderRadius: 5,
         marginRight: 5
+    },
+    imageContainer: {
+        flex: 1,
+        alignItems: 'center'
     }
 });
 

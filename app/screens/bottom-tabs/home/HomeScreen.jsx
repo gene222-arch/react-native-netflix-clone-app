@@ -39,6 +39,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         batch(() => {
             dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+            dispatch(MOVIE_ACTION.getMostLikedMoviesStart());
         });
     }, [AUTH_PROFILE]);
 

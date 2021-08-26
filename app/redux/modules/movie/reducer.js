@@ -37,6 +37,7 @@ const CATEGORY_DEFAULT_PROPS = [
 const initialState = {
     movies: [],
     categories: CATEGORY_DEFAULT_PROPS,
+    most_liked_movies: [],
     topSearches: [],
     isLoading: false,
     errors: null
