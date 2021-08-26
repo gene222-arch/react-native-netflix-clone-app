@@ -46,11 +46,11 @@ const MyListScreen = ({ AUTH_PROFILE }) =>
             />
             <FlatList
                 keyExtractor={ (item, index) => index.toString() }
-                data={ AUTH_PROFILE.my_list }
+                data={ AUTH_PROFILE.my_lists }
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
                         <Image 
-                            preview={ item.poster_path }
+                            preview={{ uri: item.poster_path }}
                             uri={ item.poster_path }
                             style={ styles.image }
                         />
