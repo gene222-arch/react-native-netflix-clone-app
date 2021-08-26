@@ -14,34 +14,12 @@ import ComingSoonMovieItem from '../../../components/notifications-video-item';
 import AppBar from './../../AppBar';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { cacheImage } from './../../../utils/cacheImage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import ComingSoonScreenLoader from '../../../components/loading-skeletons/ComingSoonScreenLoader';
-
-
-const NotificationHeader = () => {
-    return (
-        <View style={ styles.notificationsContainer }>
-            <View style={ styles.iconContainer }>
-                <FontAwesome5 
-                    name='bell'
-                    size={ 24 }
-                    color='#fff'
-                />
-                <Text style={ styles.notificationsText }>       Notifications</Text>
-            </View>
-            <FeatherIcon 
-                name='chevron-right'
-                size={ 24 }
-                color='#fff'
-            />
-        </View>
-    )
-}
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
@@ -64,12 +42,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     }
 
     const handlePressInfo = (id) => navigation.navigate('TrailerInfo', { id });
-
-    const cacheFiles = useCallback(() => {
-        COMING_SOON_MOVIE.comingSoonMovies.map(({ id, video_trailer_path }) => {
-            cacheImage(video_trailer_path, id, 'ComingSoon/Videos/');
-        });
-    }, [COMING_SOON_MOVIE.comingSoonMovies]);
 
     const runAfterInteractions = () => 
     {
@@ -144,9 +116,6 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                                     />
                                 )
                             }}
-                            ListHeaderComponent={
-                                <NotificationHeader />
-                            }
                         />
                     )
             }
