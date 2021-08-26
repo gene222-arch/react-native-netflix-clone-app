@@ -7,7 +7,7 @@
     "icon": "./app/assets/netflix-icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./app/assets/app-splash-screen.jpg",
+      "image": "./app/assets/app-splash-screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },

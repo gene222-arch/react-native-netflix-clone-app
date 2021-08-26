@@ -4,8 +4,9 @@ import DEFAULT_IMG_STYLE from './../../constants/Image';
 
 const styles = StyleSheet.create({
     appLogoImg: {
-        width: '30%',
-        height: 50
+        width: '90%',
+        height: '100%',
+        resizeMode: 'contain'
     },
     createProfileContainer: {
         width: '100%',

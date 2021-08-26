@@ -11,6 +11,7 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
 import { useNavigation } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import NAV_LOGO from './../../../assets/logotop.png'
 
 
 const SelectProfileScreen = ({ AUTH }) => 
@@ -29,9 +30,7 @@ const SelectProfileScreen = ({ AUTH }) =>
             <View style={ styles.header }>
                 <Text></Text>
                 <Image 
-                    source={{
-                        uri: 'https://www.freepnglogos.com/uploads/netflix-logo-text-emblem-31.png'
-                    }}
+                    source={NAV_LOGO}
                     style={ styles.appLogoImg }
                 />
                 <TouchableOpacity onPress={ handlePressManageProfiles }>
