@@ -21,7 +21,7 @@ const MostLikedBadge = ({ MOVIE, movieId = 0 }) =>
         })
     }, []);
 
-    if (! isInteractionsComplete || MOVIE.isLoading) return <ActivityIndicator color='#FFF' />
+    if (! isInteractionsComplete) return <ActivityIndicator color='#FFF' />
 
     return !isMostLiked 
         ? <Text></Text>
