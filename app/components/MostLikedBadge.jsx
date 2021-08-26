@@ -44,7 +44,6 @@ const mapStateToProps = createStructuredSelector({
 
 const styles = StyleSheet.create({
     badgeContainer: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
