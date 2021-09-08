@@ -21,7 +21,7 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
 
     const handlePressCategoryOnChange = (category) => {
         setIsVisible(false);
-        navigation.navigate('CategoriesScreen', { headerTitle: 'Categories' });
+        navigation.navigate('CategoriesScreen', { headerTitle: category });
     }
 
     const handlePressHome = () => {

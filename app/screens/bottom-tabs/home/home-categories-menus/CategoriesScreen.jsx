@@ -1,44 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { createStructuredSelector } from 'reselect';
-import { connect, useDispatch } from 'react-redux';
-import { ImageBackground, InteractionManager, ToastAndroid, FlatList } from 'react-native'
+import { connect } from 'react-redux';
+import { ImageBackground, InteractionManager, FlatList } from 'react-native'
 
-/** Selectors */
 import { authSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
-
-/** Actions */
-import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
-
-/** API */
 import categories_ from './../../../../services/data/categories';
-
-/** Components */
 import View from './../../../../components/View';
 import HomeCategory from './../../../../components/home-category/HomeCategory';
-
-/** Styles */
 import styles from './../../../../assets/stylesheets/categories';
-import frontPageShows from './../../../../services/data/frontPageShows';
-import { cacheImage, getCachedFile } from './../../../../utils/cacheImage';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import FrontPageOptions from './../home-components/FrontPageOptions';
 import NavBar from './categories-components/NavBar';
 import ContinueWatchingFor from './../home-components/ContinueWatchingFor';
+import { movieSelector } from './../../../../redux/modules/movie/selectors';
 
 
 const DEFAULT_FRONT_PAGE = {
     id: '',
-    category: '',
     title: '',
-    backgroundImage: null,
-    poster: null,
-    tags: [],
-    isAddedToMyList: false
+    plot: '',
+    genres: '',
+    poster_path: null,
+    wallpaper_path: null,
+    title_logo_path: null
 }
 
-const CategoriesScreen = ({ AUTH, AUTH_PROFILE, route }) => 
+const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) => 
 {
-    const dispatch = useDispatch();
     const { categoryName } = route.params;
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
@@ -46,18 +34,16 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, route }) =>
     const [ selectedMainCategory, setSelectedMainCategory ] = useState(categoryName);
     const [ categoryItems, setCategoryItems ] = useState([]);
 
-    const handleToggleAddToMyList = (message) => {
-        dispatch(AUTH_ACTION.toggleAddToMyListStart(frontPage));
-        ToastAndroid.show(message, ToastAndroid.SHORT);
-    }
-
     const handlePressChangeMainCategory = (selectedCategory) => 
     {
         setSelectedMainCategory(selectedCategory);
-        setFrontPage(frontPageShows.find(({ category }) => category === selectedCategory));
+        setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
 
-        const newCategories = categories_.items.map(category => {
-            const filterMovies = category.movies.filter(({ show_type }) => show_type === selectedCategory);
+        const newCategories = MOVIE.categories.map(category => 
+        {
+            const filterMovies = category
+                .movies
+                .filter(({ genres }) => genres.split(',').includes(selectedCategory));
 
             return { 
                 ...category, 
@@ -68,102 +54,45 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, route }) =>
         setCategoryItems(newCategories);
     }
 
-    const handleToggleRateRecentlyWatchedShow = (recentlyWatchedShowID, rate) => 
-    {
-        const newRecentlyWatchedShows = AUTH.recentlyWatchedShows.map((rec) => {
-
-            if (rec.id === recentlyWatchedShowID) 
-            {
-                if (!rec.isRated) {
-                    return { ...rec, isRated: true, rate };
-                }
-
-                if (rec.isRated && rec.rate !== rate) {
-                    return { ...rec, isRated: true, rate };
-                }
-                else {
-                    return { ...rec, isRated: false, rate: '' };
-                }
-            }
-
-            return rec;
-        });
-    }
-
-    const handlePressRemoveRecentlyWatchedShow = (recentlyWatchedShowID) => {
-        dispatch(AUTH_ACTION.removeToRecentWatchesStart(recentlyWatchedShowID));
-    }
-
-    const cacheImages = () => 
-    {
-        /** Cache Categories */
-        categories_.items.map(({ movies }) => movies.map(({ id, poster }) => cacheImage(poster, id, 'Categories/')));
-
-        /** Cache Front Page */
-        frontPageShows.map(({ id, poster, backgroundImage }) => {
-            cacheImage(poster, id, 'HomeCategoriesFrontPages/Poster/');
-            cacheImage(backgroundImage, id, 'HomeCategoriesFrontPages/BackgroundImage/');
-        });
-    }
-
     const runAfterInteractions = () => 
     {
-        cacheImages();
         handlePressChangeMainCategory(categoryName);
         setIsInteractionsComplete(true);
-    }
-    
-    const cleanUp = () => {
-        setCategoryItems([]);
-        setFrontPage(DEFAULT_FRONT_PAGE);
-        setIsInteractionsComplete(false);
-        setSelectedMainCategory('');
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
-            cleanUp();
+            setCategoryItems([]);
+            setFrontPage(DEFAULT_FRONT_PAGE);
+            setIsInteractionsComplete(false);
+            setSelectedMainCategory('');
         }
     }, []);
 
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
-    }
+    if (! isInteractionsComplete) return <LoadingScreen />
     
     return (
         <View style={ styles.container }>
             <FlatList 
+                keyExtractor={ (item, index) => index.toString() }
                 data={ categoryItems }
-                renderItem={({ item }) => <HomeCategory title={ item.title } categories={ item.movies }/> }
+                renderItem={({ item }) => <HomeCategory title={ item.title } categorizedMovies={ item.movies }/> }
                 ListHeaderComponent=
                 {
                     <>
                         <ImageBackground 
-                            source={{ 
-                                uri: getCachedFile('HomeCategoriesFrontPages/BackgroundImage/', frontPage.id, frontPage.backgroundImage)
-                            }} 
+                            source={{ uri: frontPage.poster_path }} 
                             style={ styles.homeFrontPage }
                         >
                             <NavBar 
                                 selectedMainCategory={ selectedMainCategory }
                                 handlePressChangeMainCategory={ handlePressChangeMainCategory }
                             />
-
-                            <FrontPageOptions 
-                                frontPage={ frontPage } 
-                                handleToggleAddToMyList={ handleToggleAddToMyList }
-                                authUserMyList={ AUTH_PROFILE.my_list }
-                                frontPageCacheDirectory={ 'HomeCategoriesFrontPages/Poster/' }
-                            />
+                            <FrontPageOptions frontPage={ frontPage }/>
                         </ImageBackground>   
-
-                        {/* Continue Watching For */}
-                        <ContinueWatchingFor 
-                            handleToggleRateRecentlyWatchedShow={ handleToggleRateRecentlyWatchedShow }
-                            handlePressRemoveRecentlyWatchedShow={ handlePressRemoveRecentlyWatchedShow }
-                        />
+                        <ContinueWatchingFor />
                     </>             
                 }
             />
@@ -173,7 +102,8 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, route }) =>
 
 const mapStateToProps = createStructuredSelector({
     AUTH: authSelector,
-    AUTH_PROFILE: authProfileSelector
+    AUTH_PROFILE: authProfileSelector,
+    MOVIE: movieSelector
 });
 
 export default connect(mapStateToProps)(CategoriesScreen)
