@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { FlatList, TouchableOpacity, InteractionManager } from 'react-native';
 import Text from './../../../../components/Text';
 import View from './../../../../components/View';
-import Image from './../../../../components/Image';
 import styles from './../../../../assets/stylesheets/trailerInfo';
 import { levenshteinFuzzyMatched } from './../../../../utils/algorithm';
 import LoadingScreen from './../../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
 import { comingSoonMoviesSelector } from './../../../../redux/modules/coming-soon/selectors';
 import { connect } from 'react-redux';
+import { Image } from 'react-native-expo-image-cache';
 
 const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie, handlePressSimilarShow }) => 
 {
@@ -66,14 +66,15 @@ const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie, handlePressSimilarSh
                 renderItem={ ({ item }) => (
                     <TouchableOpacity onPress={ () => handlePressSimilarShow(item) }>
                         <Image 
-                            source={{ uri: item.poster_path }}
+                            preview={{ uri: item.poster_path }}
+                            uri={ item.poster_path }
                             style={ styles.moreLikeThisImg }
                         />
                     </TouchableOpacity>
                 )}
                 ListEmptyComponent={
                     <View style={ styles.moreLikeThisEmptyMessageContainer }>
-                        <Text h4 style={ styles.moreLikeThisEmptyMessage }>
+                        <Text h4>
                             Oh darn. We don't have similar shows to { comingSoonMovie.title }.
                         </Text>
                         <Text style={ styles.similarMoviesNotFoundCaption }>Try searching for another coming soon movie or show.</Text>

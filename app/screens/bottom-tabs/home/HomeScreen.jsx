@@ -64,7 +64,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     }
 
     return (
-        <View style={ styles.container }>
+        <View>
             <FlatList
                 keyExtractor={ (item, index) => index.toString() }
                 data={ MOVIE.categories }
