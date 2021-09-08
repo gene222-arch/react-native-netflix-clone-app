@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import View from '../../../../components/View';
 import styles from './../../../../assets/stylesheets/myList';
 import { FlatList, TouchableOpacity } from 'react-native';
@@ -9,6 +9,7 @@ import { InteractionManager } from 'react-native'
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
 import MyListScreenLoader from '../../../../components/loading-skeletons/MyListScreenLoader';
 import { Image } from 'react-native-expo-image-cache';
+import { useFocusEffect } from '@react-navigation/core';
 
 
 const MyListScreen = ({ AUTH_PROFILE }) => 
@@ -18,20 +19,23 @@ const MyListScreen = ({ AUTH_PROFILE }) =>
     const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
 
     const handlePressDisplayShowInfo = (show) => {
-        setShow(show);
         setShouldDisplayShowInfo(true);
+        setShow(show);
     }
 
-    useEffect(() => {
-        InteractionManager.runAfterInteractions(() => {
-            setIsInteractionsComplete(true);
-        });
+    useFocusEffect(
+        useCallback(() => {
+            InteractionManager.runAfterInteractions(() => {
+                setIsInteractionsComplete(true);
+            });
 
-        return () => {
-            setShow(null);
-            setShouldDisplayShowInfo(false);
-        }
-    }, []);
+            return () => {
+                setIsInteractionsComplete(false);
+                setShow(null);
+                setShouldDisplayShowInfo(false);
+            }
+        }, [])
+    )
 
     if (! isInteractionsComplete) {
         return <MyListScreenLoader />
@@ -48,10 +52,10 @@ const MyListScreen = ({ AUTH_PROFILE }) =>
                 keyExtractor={ (item, index) => index.toString() }
                 data={ AUTH_PROFILE.my_lists }
                 renderItem={ ({ item }) => (
-                    <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item) }>
+                    <TouchableOpacity onPress={ () => handlePressDisplayShowInfo(item.movie) }>
                         <Image 
-                            preview={{ uri: item.poster_path }}
-                            uri={ item.poster_path }
+                            preview={{ uri: item.movie.poster_path }}
+                            uri={ item.movie.poster_path }
                             style={ styles.image }
                         />
                     </TouchableOpacity>

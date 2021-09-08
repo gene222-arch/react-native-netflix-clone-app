@@ -406,7 +406,7 @@ export default (state = initialState, { type, payload }) =>
                 newMyList = [
                     ...currentMyList,
                     {
-                        ...payload.movie,
+                        movie: payload.movie,
                         movie_id: payload.movie.id
                     }
                 ];
