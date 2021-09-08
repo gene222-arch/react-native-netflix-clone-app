@@ -54,7 +54,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
 
-    const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
+    const FILE_URI = `${ FileSystem.documentDirectory }${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
     const getMovieRatingDetails = selectedVideo.user_ratings[0];
 
     const actionList = 
@@ -136,7 +136,8 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
             setStatus(VIDEO_STATUSES.DOWNLOADED);
 
             dispatch(AUTH_ACTION.downloadVideoStart({ 
-                show: { ...selectedVideo, downloaded_file_uri: FILE_URI, }, 
+                movie: selectedVideo, 
+                downloaded_file_uri: FILE_URI,
                 profile: AUTH_PROFILE 
             }));
 
@@ -154,7 +155,11 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
             await FileSystem.deleteAsync(FILE_URI);
 
-            dispatch(AUTH_ACTION.removeToMyDownloadsStart(selectedVideo.id));
+            dispatch(AUTH_ACTION.removeToMyDownloadsStart({
+                user_profile_id: AUTH_PROFILE.id,
+                movie_id: selectedVideo.id
+            }));
+
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
         } catch ({ message }) {
         }
@@ -196,7 +201,10 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
             setStatus(VIDEO_STATUSES.DOWNLOADED);
 
-            dispatch(AUTH_ACTION.downloadVideoStart({ show: selectedVideo, profile: AUTH_PROFILE }));
+            dispatch(AUTH_ACTION.downloadVideoStart({
+                user_profile_id: AUTH_PROFILE.id,
+                movie_id: selectedVideo.id
+            }));
 
             ToastAndroid.show('Download Complete', ToastAndroid.SHORT);
         } catch ({ message }) {
@@ -208,17 +216,16 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     const checkIfFileExists = () => 
     {
-        const fileExists = AUTH_PROFILE.my_downloads.findIndex(({ id }) => id === selectedVideo.id) !== -1;
+        const fileExists = AUTH_PROFILE.my_downloads.findIndex(({ movie_id }) => movie_id === selectedVideo.id) !== -1;
 
         !fileExists 
             ? setStatus('') 
             : setStatus(VIDEO_STATUSES.DOWNLOADED);
     }
 
-    useEffect(() => {
-        if (! downloadResumable) {
-            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
-        }
+    useEffect(() => 
+    {
+        setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
 
         return () => {
             setDownloadResumable(null);

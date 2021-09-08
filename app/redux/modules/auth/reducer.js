@@ -310,7 +310,7 @@ export default (state = initialState, { type, payload }) =>
                 return (prof.id === payload.profile.id)
                     ? { 
                         ...prof, 
-                        my_downloads: [ ...prof.my_downloads, payload.show ], 
+                        my_downloads: [ ...prof.my_downloads, { movie_id: payload.movie.id, movie: payload.movie, uri: payload.downloaded_file_uri } ], 
                         has_new_downloads: true 
                     }
                     : prof
@@ -340,7 +340,7 @@ export default (state = initialState, { type, payload }) =>
         case REMOVE_TO_MY_DOWNLOADS_SUCCESS: 
             let filteredMyDownloads = loggedInProfile
                 .my_downloads
-                .filter(({ id }) => id !== payload.showID);
+                .filter(({ movie_id }) => movie_id !== payload.showID);
 
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 

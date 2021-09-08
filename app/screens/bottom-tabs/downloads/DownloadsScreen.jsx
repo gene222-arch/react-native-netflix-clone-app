@@ -33,10 +33,13 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     const handlePressDeleteDownload = async () => 
     {
         try {
-            const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ downloadedMovie.movie_id }.mp4`;
+            const FILE_URI = `${ FileSystem.documentDirectory }${ AUTH_PROFILE.id }${ downloadedMovie.movie_id }.mp4`;
 
             await FileSystem.deleteAsync(FILE_URI);
-            dispatch(AUTH_ACTION.removeToMyDownloadsStart(downloadedMovie.movie_id));
+            dispatch(AUTH_ACTION.removeToMyDownloadsStart({
+                user_profile_id: AUTH_PROFILE.id,
+                movie_id: downloadedMovie.movie_id
+            }));
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
             setVisible(false);
         } catch ({ message }) {
@@ -117,7 +120,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                     ? <DownloadScreenLoader />
                     : (
                         <FlatList 
-                            keyExtractor={ ({ id }) => id.toString() }
+                            keyExtractor={ (item, index) => index.toString() }
                             data={ AUTH_PROFILE.my_downloads }
                             renderItem={ ({ item }) => (
                                 <DownloadItem 

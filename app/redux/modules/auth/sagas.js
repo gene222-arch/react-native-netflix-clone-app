@@ -3,6 +3,7 @@ import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
+import * as MY_DOWNLOADS_API from './../../../services/movie/my.downloads'
 import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
 import * as ACTION from './actions'
@@ -74,9 +75,6 @@ function* deleteProfileSaga(payload)
     }
 }
 
-/**
- * Todo: Test API Request to Server
- */
 function* rateShowSaga(payload)  
 {
     try {
@@ -89,9 +87,6 @@ function* rateShowSaga(payload)
     }
 }
 
-/**
- * Todo: Test API Request to Server
- */
 function* rateRecentlyWatchedMovieSaga(payload)  
 {
     try {
@@ -139,6 +134,11 @@ function* downloadVideoSaga(payload)
 {
     try {
         yield put(ACTION.downloadVideoSuccess(payload));
+        yield call(MY_DOWNLOADS_API.createDownloadAsync, {
+            user_profile_id: payload.profile.id,
+            movie_id: payload.movie.id,
+            uri: payload.downloaded_file_uri
+        });
     } catch ({ message }) {
         yield put(ACTION.downloadVideoFailed({ message }));
         console.log(message);
@@ -148,7 +148,11 @@ function* downloadVideoSaga(payload)
 function* removeToMyDownloadsSaga(payload)  
 {
     try {
-        yield put(ACTION.removeToMyDownloadsSuccess({ showID: payload }));
+        const { movie_id, user_profile_id } = payload;
+        const ids = Array.isArray(movie_id) ? movie_id : [ movie_id ];
+
+        yield put(ACTION.removeToMyDownloadsSuccess({ showID: movie_id }));
+        yield call(MY_DOWNLOADS_API.deleteDownloadAsync, { ids, user_profile_id });
     } catch ({ message }) {
         yield put(ACTION.removeToMyDownloadsFailed({ message }));
     }
