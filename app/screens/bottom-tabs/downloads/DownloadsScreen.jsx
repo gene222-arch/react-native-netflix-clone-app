@@ -11,11 +11,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import View from './../../../components/View';
 import Text from './../../../components/Text';
 import AppBar from '../../AppBar';
-import VideoPlayerFullScreen from '../../../components/VideoPlayerFullScreen';
 import DownloadItem from '../../../components/download-item/DownloadItem';
 import styles from './../../../assets/stylesheets/downloads';
-import { cacheImage } from './../../../utils/cacheImage';
-import LoadingSpinner from './../../../components/LoadingSpinner';
 import DownloadScreenLoader from '../../../components/loading-skeletons/DownloadScreenLoader';
 
 
@@ -24,53 +21,45 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const [ download, setDownload ] = useState(null);
+    const [ downloadedMovie, setDownloadedMovie ] = useState(null);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ showVideo, setShowVideo ] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    const toggleOverlay = (downloadedShow) => {
+    const toggleOverlay = (movie) => {
         setVisible(!visible);
-        setDownload(downloadedShow);
+        setDownloadedMovie(movie);
     }
 
     const handlePressDeleteDownload = async () => 
     {
         try {
-            const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ download.id }.mp4`;
+            const FILE_URI = `${ FileSystem.documentDirectory }Downloads-${ AUTH_PROFILE.id }${ downloadedMovie.movie_id }.mp4`;
 
             await FileSystem.deleteAsync(FILE_URI);
-            dispatch(AUTH_ACTION.removeToMyDownloadsStart(download.id));
+            dispatch(AUTH_ACTION.removeToMyDownloadsStart(downloadedMovie.movie_id));
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
             setVisible(false);
         } catch ({ message }) {
         }
     }
 
-    const handlePressNonSeries = (downloadedShow) => {
-        setShowVideo(true);
-        setDownload(downloadedShow);
-    }
-
-    const handlePressSeries = (downloadedShow) => {
-        const { id, title: headerTitle } = downloadedShow;
-        navigation.navigate('MoreDownloads', { id, headerTitle });
-    }
+    const handlePressPlay = () => navigation.navigate('DisplayVideoRoot', {
+        screen: 'DisplayVideoScreen',
+        params: {
+            title: downloadedMovie.movie.title,
+            videoUri: downloadedMovie.uri, 
+            id: downloadedMovie.movie_id 
+        }
+    });
 
     const runAfterInteractions = () => {
-        AUTH_PROFILE.my_downloads.map(({ id, poster_path, video_path }) => {
-            cacheImage(poster_path, id, `${ AUTH_PROFILE.name }/Downloads/Posters/`);
-            cacheImage(video_path, id, `${ AUTH_PROFILE.name }/Downloads/Videos/`);
-        });
         setIsInteractionsComplete(true);
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
         return () => {
-            setDownload(null);
             setIsInteractionsComplete(false);
-            setShowVideo(false);
             setVisible(false);
         }
     }, []);
@@ -85,15 +74,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
         }, [AUTH_PROFILE.has_new_downloads])
     );
 
-    if (showVideo) {
-        return (
-            <VideoPlayerFullScreen 
-                uri={ download.downloaded_file_uri }
-                handleCloseVideo={ () => setShowVideo(false) }
-            />
-        )
-    }
-
     return (
         <View style={ styles.container }>
             <Overlay isVisible={ visible } onBackdropPress={ toggleOverlay } overlayStyle={ styles.overlay }>
@@ -102,7 +82,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                         ? <ActivityIndicator color='#FFFFFF' />
                         : (
                             <>
-                                <TouchableOpacity onPress={ () => setShowVideo(true) }>
+                                <TouchableOpacity onPress={ handlePressPlay }>
                                     <Text style={ styles.overLayText }>Play</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={ handlePressDeleteDownload }>
@@ -141,10 +121,9 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                             data={ AUTH_PROFILE.my_downloads }
                             renderItem={ ({ item }) => (
                                 <DownloadItem 
-                                    downloadedVideo={ item } 
+                                    movie={ item } 
                                     onLongPress={ () => toggleOverlay(item) }
-                                    handlePressNonSeries={ () => handlePressNonSeries(item) }
-                                    handlePressSeries={ () => handlePressSeries(item) }
+                                    handlePressPlay={ () => handlePressPlay(item) }
                                 />
                             )}
                             showsHorizontalScrollIndicator={ false }
