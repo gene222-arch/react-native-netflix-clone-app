@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { DEVICE_HEIGHT } from '../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({

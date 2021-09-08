@@ -19,7 +19,7 @@ const HomeCategory = ({ title, categorizedMovies }) =>
         });
     }
 
-    return (
+    return categorizedMovies.length > 0 && (
         <View>
             <Text h4 style={ styles.categoryTitle }>{ title }</Text>
             <FlatList 

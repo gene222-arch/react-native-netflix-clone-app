@@ -13,6 +13,7 @@ import FrontPageOptions from './../home-components/FrontPageOptions';
 import NavBar from './categories-components/NavBar';
 import ContinueWatchingFor from './../home-components/ContinueWatchingFor';
 import { movieSelector } from './../../../../redux/modules/movie/selectors';
+import CategoriesScreenLoader from './../../../../components/loading-skeletons/CategoriesScreenLoader';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -71,7 +72,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
         }
     }, []);
 
-    if (! isInteractionsComplete) return <LoadingScreen />
+    if (! isInteractionsComplete) return <CategoriesScreenLoader />
     
     return (
         <View style={ styles.container }>
