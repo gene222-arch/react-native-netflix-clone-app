@@ -78,17 +78,16 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
     
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-        return () => {
-            setIsInteractionsComplete(false);
-        }
     }, [AUTH_PROFILE.id])
 
     useFocusEffect(
         useCallback(() => {
+            setIsInteractionsComplete(true);
             return () => {
                 setSearchInput('');
                 setShow(null);
                 setIsVisibleMovieInfo(false);
+                setIsInteractionsComplete(false);
             }
         }, [])
     );
