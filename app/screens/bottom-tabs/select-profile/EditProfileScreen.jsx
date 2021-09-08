@@ -17,6 +17,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import PopUpDialog from './../../../components/PopUpDialog';
 import LoadingSpinner from './../../../components/LoadingSpinner';
 import StyledTextInput from './../../../components/styled-components/StyledTextInput';
+import AvatarList from './AvatarList';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
@@ -25,6 +27,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const [ profile, setProfile ] = useState(AUTH.profiles.find(prof => prof.id === id));
     const [ showDeleteProfileDialog, setShowDeleteProfileDialog ] = useState(false);
+    const [ showAvatars, setShowAvatars ] = useState(false);
 
     const handlePressUpdateProfile = () => dispatch(AUTH_ACTION.updateAuthenticatedProfileStart(profile));
 
@@ -33,14 +36,32 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
         toggleDeleteProfileDialog();
     }
 
+    const handlePressChangeAvatar = (avatarUri) => {
+        setProfile({ ...profile, avatar: avatarUri });
+        setShowAvatars(false);
+    } 
+
     const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
 
     useEffect(() => {
         return () => {
             dispatch(AUTH_ACTION.clearErrorProperty());
             setShowDeleteProfileDialog(false);
+            setShowAvatars(false);
         }
     }, []);
+
+    if (showAvatars) return (
+        <View>
+            <ProfileAppBar  
+                isLoading={ AUTH.isLoading }
+                headerTitle='Edit Profile' 
+                onPress={ handlePressUpdateProfile } 
+                showSaveButton={ false }
+            />
+            <AvatarList handlePress={ handlePressChangeAvatar } />
+        </View>
+    )
 
     return (
         <ScrollView>
@@ -60,23 +81,24 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                 headerTitle='Edit Profile' 
                 onPress={ handlePressUpdateProfile } 
             />
-
             <View style={ styles.inputContainer }>
                 <View style={ styles.container }>
-                    <View style={ styles.imgContainer }>
-                        <Image 
-                            source={{ 
-                                uri: profile.avatar
-                            }}
-                            style={ styles.image }
-                        />
-                        <FontAwesome5Icon 
-                            name='pen-square'
-                            size={ 30 }
-                            color='#FFFFFF'
-                            style={ styles.imgIcon }
-                        />
-                    </View>
+                    <TouchableOpacity onPress={ () => setShowAvatars(true) }>
+                        <View style={ styles.imgContainer }>
+                            <Image 
+                                source={{ 
+                                    uri: profile.avatar
+                                }}
+                                style={ styles.image }
+                            />
+                            <FontAwesome5Icon 
+                                name='pen-square'
+                                size={ 30 }
+                                color='#FFFFFF'
+                                style={ styles.imgIcon }
+                            />
+                        </View>
+                    </TouchableOpacity>
                     <StyledTextInput 
                         value={ profile.name }
                         onChangeText={ (textInput) => setProfile({ ...profile, name: textInput }) }
@@ -111,7 +133,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                     titleStyle={ styles.deleteBtnTitle }
                 />
             </View>
-       
+                    
         </ScrollView>
     )
 }
