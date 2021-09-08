@@ -38,6 +38,10 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
     const handlePressChangeMainCategory = (selectedCategory) => 
     {
         setSelectedMainCategory(selectedCategory);
+
+        // const movies = MOVIE.movies;
+        // const frontPageMovies = movies.filter(movie => movie.genres.split(',').includes(selectedCategory));
+
         setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
 
         const newCategories = MOVIE.categories.map(category => 

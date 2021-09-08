@@ -41,7 +41,7 @@ const NavBar = ({ selectedMainCategory, handlePressChangeMainCategory }) =>
             />
             
             {/* Main Categories */}
-            <TouchableOpacity onPress={ handleToggleMainCategories }>
+            {/* <TouchableOpacity onPress={ handleToggleMainCategories }>
                 <View style={ styles.categoriesContainer }>
                     <Text style={styles.tabItemMainCategories}>{ selectedMainCategory }</Text>
                     <FontAwesome5 
@@ -51,7 +51,7 @@ const NavBar = ({ selectedMainCategory, handlePressChangeMainCategory }) =>
                         style={ styles.categoriesIcon }
                     />
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             {/* All Categories */}
             <TouchableOpacity onPress={ handleToggleCategories }>

@@ -17,7 +17,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        marginRight: 10
+        margin: 10,
+        marginTop: 0,
     },  
     categoriesIcon: {
         paddingLeft: 10,
