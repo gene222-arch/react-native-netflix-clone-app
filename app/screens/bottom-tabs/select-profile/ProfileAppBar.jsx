@@ -5,7 +5,7 @@ import styles from '../../../assets/stylesheets/profileAppBar';
 import { TouchableOpacity } from 'react-native';
 import StackNavBackButton from '../../../components/stack-app-bar/StackNavBackButton';
 
-const ProfileAppBar = ({ isLoading = false, onPress, headerTitle = '', ...props }) => 
+const ProfileAppBar = ({ isLoading = false, onPress, headerTitle = '', showSaveButton = true, ...props }) => 
 {
     return (
         <View style={ styles.container }>
@@ -13,9 +13,13 @@ const ProfileAppBar = ({ isLoading = false, onPress, headerTitle = '', ...props 
                 <StackNavBackButton isLoading={ isLoading } />
                 <Text style={ styles.headerTitle }>{ headerTitle }</Text>
             </View>
-            <TouchableOpacity onPress={ onPress } disabled={ isLoading } >
-                <Text style={ styles.saveText }>Save</Text>
-            </TouchableOpacity>
+            {
+                showSaveButton && (
+                    <TouchableOpacity onPress={ onPress } disabled={ isLoading } >
+                        <Text style={ styles.saveText }>Save</Text>
+                    </TouchableOpacity>
+                )
+            }
         </View>
     )
 }
