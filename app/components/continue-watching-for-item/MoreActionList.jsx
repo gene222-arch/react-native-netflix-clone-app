@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, Overlay } from 'react-native-elements';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -15,6 +15,7 @@ import DisplayAction from './DisplayAction';
 import VIDEO_STATUSES from './../../config/video.statuses';
 import View from './../View';
 import Text from './../Text';
+import { useFocusEffect } from '@react-navigation/core';
 
 
 const downloadIconName = (status) => 
@@ -54,7 +55,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
 
-    const FILE_URI = `${ FileSystem.documentDirectory }${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
+    const FILE_URI = `${ FileSystem.documentDirectory }${AUTH.id}${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
     const getMovieRatingDetails = selectedVideo.user_ratings[0];
 
     const actionList = 
@@ -153,12 +154,12 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
             setStatus('');
             toggleShowDownloadedMenu();
 
-            await FileSystem.deleteAsync(FILE_URI);
-
             dispatch(AUTH_ACTION.removeToMyDownloadsStart({
                 user_profile_id: AUTH_PROFILE.id,
                 movie_id: selectedVideo.id
             }));
+            
+            await FileSystem.deleteAsync(FILE_URI);
 
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
         } catch ({ message }) {
@@ -216,28 +217,31 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     const checkIfFileExists = () => 
     {
-        const fileExists = AUTH_PROFILE.my_downloads.find(myDownload => myDownload.movie.id === selectedVideo.id);
-
+        const fileExists = Boolean(AUTH_PROFILE.my_downloads.find(download => download?.movie?.id === selectedVideo.id));
+        
         !fileExists 
             ? setStatus('') 
             : setStatus(VIDEO_STATUSES.DOWNLOADED);
     }
 
-    useEffect(() => 
-    {
-        setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
+    useFocusEffect(
+        useCallback(() => {
+            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
 
-        return () => {
-            setDownloadResumable(null);
-            progress.current = 0;
-            setShowDownloadedMenu(false);
-            setStatus('');
-        }
-    }, []);
+            return () => {
+                setDownloadResumable(null);
+                progress.current = 0;
+                setShowDownloadedMenu(false);
+                setStatus('');
+            }
+        }, [])
+    )
 
-    useEffect(() => {
-        checkIfFileExists();
-    }, [AUTH_PROFILE.recenly_watched_movies])
+    useFocusEffect(
+        useCallback(() => {
+            checkIfFileExists();
+        }, [AUTH_PROFILE.recenly_watched_movies])
+    )
 
     return (
         <View style={ styles.container }>

@@ -33,15 +33,14 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     const handlePressDeleteDownload = async () => 
     {
         try {
-            const FILE_URI = `${ FileSystem.documentDirectory }${ AUTH_PROFILE.id }${ downloadedMovie.movie.id }.mp4`;
+            const FILE_URI = `${ FileSystem.documentDirectory }${AUTH.id}${ AUTH_PROFILE.id }${ downloadedMovie.movie.id }.mp4`;
 
             dispatch(AUTH_ACTION.removeToMyDownloadsStart({
                 user_profile_id: AUTH_PROFILE.id,
                 movie_id: downloadedMovie.movie.id
             }));
-
-            await FileSystem.deleteAsync(FILE_URI);
             setVisible(false);
+            await FileSystem.deleteAsync(FILE_URI);
             ToastAndroid.show('Download Deleted', ToastAndroid.SHORT);
         } catch ({ message }) {
         }
@@ -74,7 +73,6 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                 dispatch(AUTH_ACTION.viewDownloadsStart());
             }
 
-            return () => dispatch(AUTH_ACTION.viewDownloadsStart());
         }, [AUTH_PROFILE.has_new_downloads])
     );
 
