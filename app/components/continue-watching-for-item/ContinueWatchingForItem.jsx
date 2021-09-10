@@ -6,8 +6,6 @@ import View from './../View';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoreActionList from './MoreActionList';
 import Info from './Info';
-import { getCachedFile } from './../../utils/cacheImage';
-import VideoPlayerFullScreen from './../VideoPlayerFullScreen';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';

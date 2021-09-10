@@ -56,15 +56,6 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
         user_profile_id: AUTH_PROFILE.id
     }));
 
-
-    useEffect(() => {
-        recently_watched_movies.map(({ id: movie_id, video_path }) => {
-            cacheImage(video_path, movie_id, `RecentlyWatchedShows/Videos/`);
-        });
-
-    }, [AUTH_PROFILE.recently_watched_movies]);
-
-
     if (! recently_watched_movies.length) {
         return <Text h4>Your recently watched movie's will be shown here.</Text>
     }
@@ -78,7 +69,7 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
             }
 
             <FlatList 
-                keyExtractor={ ({ id }) => id.toString() }
+                keyExtractor={ (item, index) => index.toString() }
                 data={ recently_watched_movies }
                 horizontal
                 renderItem={({ item }) =>  (
