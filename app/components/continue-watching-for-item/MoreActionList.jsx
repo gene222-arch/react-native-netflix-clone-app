@@ -225,8 +225,9 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     useEffect(() => 
     {
-        setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
-
+        if (! downloadResumable) {
+            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
+        }
         return () => {
             setDownloadResumable(null);
             setProgress(0);
