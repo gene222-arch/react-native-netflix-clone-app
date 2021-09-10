@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet, Overlay } from 'react-native-elements';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -50,7 +50,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
     const navigation = useNavigation();
 
     const [ downloadResumable, setDownloadResumable ] = useState(null);
-    const [ progress, setProgress ] = useState(0);
+    const progress = useRef(0);
     const [ status, setStatus ] = useState('');
     const [ showDownloadedMenu, setShowDownloadedMenu ] = useState(false);
 
@@ -85,7 +85,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
                 <AnimatedCircularProgress
                     size={ 20 }
                     width={ 3 }
-                    fill={ progress }
+                    fill={ progress.current }
                     tintColor='#00e0ff'
                     backgroundColor='#3d5875' 
                 />
@@ -124,8 +124,8 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
     ];
 
     const downloadProgressCallback = (downloadProgress) => {
-        const progress = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
-        setProgress(progress);
+        const progressDownload = Math.round(((downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite) * 100));
+        progress.current = progressDownload;
     };
 
     const downloadVideo = async () => 
@@ -216,7 +216,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     const checkIfFileExists = () => 
     {
-        const fileExists = AUTH_PROFILE.my_downloads.findIndex(({ movie_id }) => movie_id === selectedVideo.id) !== -1;
+        const fileExists = AUTH_PROFILE.my_downloads.find(myDownload => myDownload.movie.id === selectedVideo.id);
 
         !fileExists 
             ? setStatus('') 
@@ -225,12 +225,11 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     useEffect(() => 
     {
-        if (! downloadResumable) {
-            setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
-        }
+        setDownloadResumable(FileSystem.createDownloadResumable(selectedVideo.video_path, FILE_URI, {}, downloadProgressCallback));
+
         return () => {
             setDownloadResumable(null);
-            setProgress(0);
+            progress.current = 0;
             setShowDownloadedMenu(false);
             setStatus('');
         }
@@ -238,7 +237,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     useEffect(() => {
         checkIfFileExists();
-    }, [AUTH_PROFILE.my_downloads])
+    }, [AUTH_PROFILE.recenly_watched_movies])
 
     return (
         <View style={ styles.container }>

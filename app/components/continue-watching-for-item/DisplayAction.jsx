@@ -42,8 +42,12 @@ const RightIcon = ({ name, type, onPress }) =>
 const DisplayAction = ({ isLoading = false, actionType }) => 
 {
     return (
-        <TouchableOpacity disabled={ isLoading }>
-            <ListItem containerStyle={[ styles.listItemContainer, actionType.containerStyle ]} onPress={ actionType.onPress }>
+        <>
+            <ListItem 
+                containerStyle={[ styles.listItemContainer, actionType.containerStyle ]} 
+                onPress={ actionType.onPress }
+                disabled={ isLoading }
+            >
             {
                 ( actionType.status === VIDEO_STATUSES.DOWNLOADING || actionType.status === VIDEO_STATUSES.RESUMING_DOWNLOAD) 
                 && actionType.circularProgress
@@ -63,7 +67,7 @@ const DisplayAction = ({ isLoading = false, actionType }) =>
                 onPress={ actionType.onPressEndIcon }
             />
             </ListItem>
-        </TouchableOpacity>
+        </>
     )
 }
 

@@ -19,7 +19,7 @@ export const findByIdAsync = async (id) =>
 export const createAsync = async (payload) => 
 {
     return await axiosInstance()
-        .post(`/recently-watched-movies/${ payload.user_profile_id }`, payload)
+        .post(`/recently-watched-movies/user-profiles/${ payload.user_profile_id }`, payload)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }

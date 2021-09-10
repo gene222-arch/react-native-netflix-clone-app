@@ -35,7 +35,7 @@ function* addToRecentWatchesSaga(payload)
         const { user_profile_id, movie } = payload;
 
         yield put(ACTION.addToRecentWatchesSuccess(payload));
-        yield call(RECENTLY_WATCHED_MOVIE_API, { movie_id: movie.id, user_profile_id });
+        yield call(RECENTLY_WATCHED_MOVIE_API.createAsync, { movie_id: movie.id, user_profile_id });
     } catch ({ message }) {
         yield put(ACTION.addToRecentWatchesFailed({ message }));
     }
