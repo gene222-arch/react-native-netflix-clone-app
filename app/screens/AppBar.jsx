@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native'
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../redux/modules/auth/selectors';
-import APP_LOGO from './../assets/app-logo.png'
+import APP_MINI_LOGO from './../assets/app-mini-logo.png'
 
 const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle = '', marginTop = 0 }) => 
 {
@@ -35,7 +35,7 @@ const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle 
             {
                 showLogo && (
                     <Image 
-                        source={ APP_LOGO }
+                        source={ APP_MINI_LOGO }
                         style={ styles.netflixLogo }
                     />
                 )
