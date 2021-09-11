@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
     },
     email: {
-        marginTop: 25,
     },
     formContainer: {
         display: 'flex',
@@ -19,7 +18,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         height: 45,
         color: Colors.white,
-        padding: 15,
+        padding: 20
     },
     loginBtn: {
         backgroundColor: Colors.netFlixRed,
@@ -35,9 +34,26 @@ const styles = StyleSheet.create({
         color: Colors.grey,
         fontWeight: 'bold'
     },  
+    password: {
+    },  
+    passwordContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative',
+        zIndex: 1
+    },  
+    touchablePassword: {
+        zIndex: 111
+    },  
     title: {
-        color: Colors.white
+        color: Colors.white,
+        marginBottom: 20
     },
+    rightIcon: {
+        position: 'absolute',
+        bottom: 0,
+        right: 10
+    },  
     rememberMeContainer: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',

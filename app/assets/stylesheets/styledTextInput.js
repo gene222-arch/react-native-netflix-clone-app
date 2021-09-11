@@ -16,7 +16,7 @@ const styles = (error = false) => StyleSheet.create({
         height: 60,
         width: DEVICE_WIDTH / 1.25,
         borderBottomWidth: error ? 2 : 0,
-        borderColor: error ? Colors.error : 'transparent',
+        borderColor: error ? Colors.error : 'transparent'
     }
 });
 

@@ -77,6 +77,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         if (findMovie) 
         {
             const { other_movies, ...movieDetails } = findMovie;    
+            setMovie(movieDetails);
             onLoadCacheVideo(movieDetails.video_path);
 
             let pageList_ = [];
@@ -93,7 +94,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 );
             }
     
-            setMovie(movieDetails);
             setMovies(pageList_);
             setPages(totalPages);
             setSelectedPage(1);
@@ -131,9 +131,9 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     width: '100%',
                     aspectRatio: 16/9
                 }}
-                source={{ uri: !videoUri ? movie.video_path : videoUri }}
+                source={{ uri: !videoUri ? movie?.video_path : videoUri }}
                 usePoster={ true }
-                posterSource={{ uri: movie.wallpaper_path }}
+                posterSource={{ uri: movie?.wallpaper_path }}
                 posterStyle={{
                     width: '100%',
                     aspectRatio: 16/9

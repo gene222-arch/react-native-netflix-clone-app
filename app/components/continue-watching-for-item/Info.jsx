@@ -32,7 +32,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
         screen: 'DisplayVideoScreen',
         params: {
             title: selectedShow?.title,
-            videoUri: selectedShow?.video_trailer_path, 
+            videoUri: selectedShow?.video_preview_path, 
             id: selectedShow?.id 
         }
     });

@@ -35,21 +35,22 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE_PROPS);
 
+    const onLoadSetFrontPage = () => {
+        setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
+    }    
+
     useEffect(() => {
         batch(() => {
             dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMostLikedMoviesStart());
         });
+        onLoadSetFrontPage();
     }, [AUTH_PROFILE]);
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
-            setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
-            MovieCreatedEvent.listen(response => {
-                dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
-            });
-    
+            MovieCreatedEvent.listen(response => dispatch(MOVIE_ACTION.createMovie({ movie: response.data })));
             setIsInteractionsComplete(true);
         });
 
