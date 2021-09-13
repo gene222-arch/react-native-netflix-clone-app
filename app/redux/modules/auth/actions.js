@@ -19,6 +19,9 @@ const {
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
+    MANAGE_PIN_CODE_START,
+    MANAGE_PIN_CODE_SUCCESS,
+    MANAGE_PIN_CODE_FAILED,
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
@@ -149,6 +152,21 @@ export const logoutFailed = (payload) => ({
     payload
 });
 
+/** Manage Pin Code */
+export const managePinCodeStart = (payload) => ({
+    type: MANAGE_PIN_CODE_START,
+    payload
+});
+
+export const managePinCodeSuccess = (payload) => ({
+    type: MANAGE_PIN_CODE_SUCCESS,
+    payload
+});
+
+export const managePinCodeFailed = (payload) => ({
+    type: MANAGE_PIN_CODE_FAILED,
+    payload
+});
 
 /** Rate show */
 export const rateShowStart = (payload) => ({

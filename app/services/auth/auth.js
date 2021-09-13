@@ -32,6 +32,14 @@ export const updateProfileAsync = async (payload) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+export const managePinCodeAsync = async ({ user_profile_id, pin_code }) => 
+{
+    return await axiosInstance()
+        .put(`/user-profiles/${ user_profile_id }/pin-code`, { user_profile_id, pin_code })
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
 export const deleteProfileByIdAsync = async (id) => 
 {
     return await axiosInstance()

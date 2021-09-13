@@ -11,15 +11,18 @@ const {
     DELETE_PROFILE_START,
     DELETE_PROFILE_SUCCESS,
     DELETE_PROFILE_FAILED,
+    DOWNLOAD_VIDEO_START,
+    DOWNLOAD_VIDEO_SUCCESS,
+    DOWNLOAD_VIDEO_FAILED,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
-    DOWNLOAD_VIDEO_START,
-    DOWNLOAD_VIDEO_SUCCESS,
-    DOWNLOAD_VIDEO_FAILED,
+    MANAGE_PIN_CODE_START,
+    MANAGE_PIN_CODE_SUCCESS,
+    MANAGE_PIN_CODE_FAILED,
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
@@ -65,6 +68,7 @@ const PROFILE_DEFAULT_PROPS = {
     id: '',
     name: '',
     email: '',
+    pin_code: '',
     avatar: null,
     is_for_kids: false,
     my_downloads: [],
@@ -105,14 +109,15 @@ export default (state = initialState, { type, payload }) =>
     switch (type) 
     {
         case ADD_TO_RECENT_WATCHES_START:
+        case CLEAR_RECENT_WATCHES_START:
         case CREATE_PROFILE_START:
         case DELETE_PROFILE_START:
         case DOWNLOAD_VIDEO_START:
         case LOGIN_START:
         case LOGOUT_START:
+        case MANAGE_PIN_CODE_START:
         case RATE_SHOW_START:
         case RATE_RECENTLY_WATCHED_MOVIE_START:
-        case CLEAR_RECENT_WATCHES_START:
         case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
@@ -305,6 +310,20 @@ export default (state = initialState, { type, payload }) =>
                 errors: payload.message
             }
 
+        case MANAGE_PIN_CODE_SUCCESS:
+            newProfiles = profiles.map(prof => {
+                return (prof.id === payload.user_profile_id)
+                    ? { ...prof, pin_code: payload.pin_code }
+                    : prof
+            });
+
+            return {
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
         case DOWNLOAD_VIDEO_SUCCESS:
             const updateProfileDownloads = profiles.map(prof => {
                 return (prof.id === payload.profile.id)
@@ -487,13 +506,14 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case ADD_TO_RECENT_WATCHES_FAILED:
+        case CLEAR_RECENT_WATCHES_FAILED:
         case CREATE_PROFILE_FAILED:
         case DELETE_PROFILE_FAILED:
         case DOWNLOAD_VIDEO_FAILED:
+        case MANAGE_PIN_CODE_FAILED:
         case SELECT_PROFILE_FAILED:
         case RATE_SHOW_FAILED:
         case RATE_RECENTLY_WATCHED_MOVIE_FAILED:
-        case CLEAR_RECENT_WATCHES_FAILED:
         case REMOVE_TO_MY_DOWNLOADS_FAILED:
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:

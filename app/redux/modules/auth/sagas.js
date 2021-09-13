@@ -16,6 +16,7 @@ const {
     DOWNLOAD_VIDEO_START,
     LOGIN_START,
     LOGOUT_START,
+    MANAGE_PIN_CODE_START,
     RATE_SHOW_START,
     RATE_RECENTLY_WATCHED_MOVIE_START,
     REMOVE_TO_MY_DOWNLOADS_START,
@@ -72,6 +73,16 @@ function* deleteProfileSaga(payload)
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.deleteProfileFailed({ message }));
+    }
+}
+
+function* managePinCodeSaga(payload)  
+{
+    try {
+        yield put(ACTION.managePinCodeSuccess(payload));
+        yield call(AUTH_API.managePinCodeAsync, payload);
+    } catch ({ message }) {
+        yield put(ACTION.managePinCodeFailed({ message }));
     }
 }
 
@@ -285,6 +296,14 @@ function* logoutWatcher()
     }
 }
 
+function* managePinCodeWatcher()
+{
+    while (true) {
+        const { payload } = yield take(RATE_SHOW_START);
+        yield call(managePinCodeSaga, payload);
+    }
+}
+
 function* rateShowWatcher()
 {
     while (true) {
@@ -370,6 +389,7 @@ export default function* ()
         downloadVideoWatcher(),
         loginWatcher(),
         logoutWatcher(),
+        managePinCodeWatcher(),
         rateShowWatcher(),
         rateRecentlyWatchedMovieWatcher(),
         removeToMyDownloadsWatcher(),
