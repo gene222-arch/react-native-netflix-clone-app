@@ -1,12 +1,28 @@
 import { StyleSheet, StatusBar } from 'react-native';
 import DEFAULT_IMG_STYLE from './../../constants/Image';
-
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
+import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
+    actionBtnsContainer: {
+        flexDirection: 'row',
+        backgroundColor: 'transparent',
+        justifyContent: 'flex-end'
+    },  
+    alertIcon: {
+        marginTop: 15,
+        textAlign: 'left'
+    },  
     appLogoImg: {
         width: '90%',
         height: '100%',
         resizeMode: 'contain'
+    },
+    cancelPinCodeText: {
+        fontSize: 16,
+        color: Colors.grey,
+        textAlign: 'right',
+        marginRight: 20
     },
     createProfileContainer: {
         width: '100%',
@@ -25,9 +41,30 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 10
     },
+    inputContainer: {
+        width: 42
+    },  
+    input: {
+        color: '#FFF'
+    },  
+    inputAndErrorContainer: {
+        backgroundColor: 'transparent'
+    },
+    inputPinCodeContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+        paddingVertical: 5
+    },
+    pinCodeOverLay: {
+        backgroundColor: Colors.darkGrey,
+        width: DEVICE_WIDTH / 1.15,
+        padding: 10,
+        paddingVertical: 25
+    },
     profile: {
         marginBottom: 40,
-
     },
     profilesContainer: {
         marginTop: 70,
@@ -48,6 +85,14 @@ const styles = StyleSheet.create({
     },
     profileName: {
         textAlign: 'center'
+    },
+    statement: {
+        textAlign: 'center',
+    },  
+    submitPinCodeText: {
+        fontSize: 16,
+        color: Colors.grey,
+        textAlign: 'right'
     },
     whosWatchingText: {
         textAlign: 'center',

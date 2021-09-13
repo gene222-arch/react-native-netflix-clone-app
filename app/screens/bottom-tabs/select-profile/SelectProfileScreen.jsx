@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, TouchableOpacity, FlatList } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
@@ -12,6 +12,9 @@ import { useNavigation } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
+import { Overlay, Icon, Input } from 'react-native-elements';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import Colors from './../../../constants/Colors';
 
 
 const SelectProfileScreen = ({ AUTH }) => 
@@ -19,12 +22,77 @@ const SelectProfileScreen = ({ AUTH }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
+    const [ profileId, setProfileId ] = useState('');
+    const [ pinCode, setPinCode ] = useState('');
+    const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
+    const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
+    const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
+
+    const handleTogglePinCodeModal = (pinCode, id) => {
+        setShowPinCodeModal(! showPinCodeModal);
+        setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
+        setProfileId(!profileId ? id : '');
+    }
+
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
 
-    const handlePressSelectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
+    const handleSubmitPinCode = () => {
+        if (pinCode === selectedProfilePinCode) {
+            dispatch(AUTH_ACTION.selectProfileStart({ id: profileId }));
+            setShowPinCodeModal(false);
+        } else {
+            setIsInCorrectPin(true);
+        }
+    }
+
+    useEffect(() => 
+    {
+        return () => {
+            setPinCode('');
+            setShowPinCodeModal(false);
+            setSelectedProfilePinCode('');
+            setIsInCorrectPin(false);
+            setProfileId('');
+        }
+    }, []);
 
     return (
         <View style={ styles.container }>
+            <Overlay isVisible={ showPinCodeModal } onBackdropPress={ handleTogglePinCodeModal } overlayStyle={ styles.pinCodeOverLay }>
+                <View style={ styles.inputPinCodeContainer }>
+                    <Text style={ styles.statement }>
+                        { !isInCorrectPin ? 'Enter your PIN to access this profile' : 'Incorrect PIN. Please try again.' }
+                    </Text>
+                    {
+                        isInCorrectPin && (
+                            <FeatherIcon 
+                                name='alert-octagon'
+                                size={ 16 }
+                                color={ Colors.error }
+                                style={ styles.alertIcon }
+                            />
+                        )
+                    }
+                    <View style={ styles.inputAndErrorContainer }>
+                        <Input
+                            placeholder=' - - - -'
+                            onChangeText={ (text) => setPinCode(text) }
+                            inputContainerStyle={ styles.inputContainer }
+                            placeholderTextColor='white'
+                            inputStyle={ styles.input }
+                            secureTextEntry
+                        />
+                    </View>
+                </View>
+                <View style={ styles.actionBtnsContainer }>
+                    <TouchableOpacity onPress={ handleTogglePinCodeModal } disabled={ AUTH.isLoading }>
+                        <Text style={ styles.cancelPinCodeText }>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={ handleSubmitPinCode } disabled={ AUTH.isLoading }>
+                        <Text style={ styles.submitPinCodeText }>Submit</Text>
+                    </TouchableOpacity>
+                </View>
+            </Overlay>
             <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Header */}
             <View style={ styles.header }>
@@ -53,7 +121,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                         <DisplayProfile
                             key={ index }
                             profile={ item }
-                            handlePressSelectProfile={ () => handlePressSelectProfile(item.id) }
+                            handlePressSelectProfile={ () => handleTogglePinCodeModal(item.pin_code, item.id) }
                             index={ index }
                         />
                     )}
