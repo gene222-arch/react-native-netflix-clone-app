@@ -33,6 +33,17 @@ const styles = StyleSheet.create({
     profile: {
         marginBottom: 20,
     },
+    profileImg: {
+        width: 120,
+        height: 120,
+        resizeMode: 'cover',
+        borderRadius: DEFAULT_IMG_STYLE.DEFAULT_BORDER_RADIUS,
+        marginBottom: 10,
+        opacity: .4
+    },
+    profileName: {
+        textAlign: 'center'
+    },
     profilesContainer: {
         marginTop: 70,
         paddingHorizontal: 60
