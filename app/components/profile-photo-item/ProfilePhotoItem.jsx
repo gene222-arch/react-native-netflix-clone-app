@@ -5,6 +5,7 @@ import styles from './../../assets/stylesheets/profilePhotoItem';
 import Image from './../Image';
 import Colors from './../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) => 
 {
@@ -23,6 +24,16 @@ const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) =>
                 }}>
                     { `${ profile?.name.slice(0, 6) }...` }
                 </Text>
+                {
+                    Boolean(profile.is_profile_locked) && (
+                        <FeatherIcon 
+                            name='lock'
+                            size={ 16 }
+                            color={ Colors.grey }
+                            style={ styles.lockIcon }
+                        />
+                    )
+                }
             </View>
         </TouchableOpacity>
     )

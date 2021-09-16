@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
     },
     img: {
         borderRadius: 2.5
+    },
+    lockIcon: {
+        marginTop: 5,
+        textAlign: 'center'
     }
 });
 
