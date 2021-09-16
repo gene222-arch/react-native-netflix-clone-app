@@ -15,6 +15,7 @@ import NAV_LOGO from './../../../assets/logotop.png'
 import { Overlay, Input } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Colors from './../../../constants/Colors';
+import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 
 
 const SelectProfileScreen = ({ AUTH }) => 
@@ -76,46 +77,13 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     return (
         <View style={ styles.container }>
-            <Overlay 
+            <InputPinCodeOverlay 
                 isVisible={ showPinCodeModal }
-                overlayStyle={ styles.pinCodeOverLay }
-            >
-                <View style={ styles.inputPinCodeContainer }>
-                    <Text style={ styles.statement }>
-                        { !isInCorrectPin ? 'Enter your PIN to access this profile' : 'Incorrect PIN. Please try again.' }
-                    </Text>
-                    {
-                        isInCorrectPin && (
-                            <FeatherIcon 
-                                name='alert-octagon'
-                                size={ 16 }
-                                color={ Colors.error }
-                                style={ styles.alertIcon }
-                            />
-                        )
-                    }
-                    <View style={ styles.inputAndErrorContainer }>
-                        <Input
-                            placeholder=' - - - -'
-                            value={ pinCode }
-                            onChangeText={ handleChangePin }
-                            inputContainerStyle={ styles.inputContainer }
-                            placeholderTextColor='white'
-                            inputStyle={ styles.input }
-                            secureTextEntry
-                            maxLength={ 4 }
-                            textAlign='center'
-                            autoFocus={ true }
-                            keyboardAppearance='dark'
-                        />
-                    </View>
-                </View>
-                <View style={ styles.actionBtnsContainer }>
-                    <TouchableOpacity onPress={ handleClickCancel } disabled={ AUTH.isLoading }>
-                        <Text style={ styles.cancelPinCodeText }>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
-            </Overlay>
+                pinCode={ pinCode }
+                hasError={ isInCorrectPin }
+                onChangeText={ handleChangePin }
+                onCancel={ handleClickCancel }
+            />
             <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Header */}
             <View style={ styles.header }>

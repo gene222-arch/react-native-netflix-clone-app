@@ -4,11 +4,6 @@ import { DEVICE_WIDTH } from './../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
-    actionBtnsContainer: {
-        flexDirection: 'row',
-        backgroundColor: 'transparent',
-        justifyContent: 'flex-end'
-    },  
     alertIcon: {
         marginTop: 15,
         textAlign: 'left'
@@ -17,12 +12,6 @@ const styles = StyleSheet.create({
         width: '90%',
         height: '100%',
         resizeMode: 'contain'
-    },
-    cancelPinCodeText: {
-        fontSize: 16,
-        color: Colors.grey,
-        textAlign: 'right',
-        marginRight: 20
     },
     createProfileContainer: {
         width: '100%',
@@ -41,57 +30,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 10
     },
-    inputContainer: {
-        width: 42
-    },  
-    input: {
-        color: '#FFF'
-    },  
-    inputAndErrorContainer: {
-        backgroundColor: 'transparent'
-    },
-    inputPinCodeContainer: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-        paddingVertical: 5
-    },
-    lockIcon: {
-        textAlign: 'center',
-        marginTop: 5
-    },  
-    pinCodeOverLay: {
-        backgroundColor: Colors.darkGrey,
-        width: DEVICE_WIDTH / 1.15,
-        padding: 10,
-        paddingVertical: 25
-    },
     profile: {
         marginBottom: 20,
     },
     profilesContainer: {
         marginTop: 70,
         paddingHorizontal: 60
-    },
-    profileImg: {
-        width: 120,
-        height: 120,
-        resizeMode: 'cover',
-        borderRadius: DEFAULT_IMG_STYLE.DEFAULT_BORDER_RADIUS,
-        marginBottom: 10,
-        opacity: .4
-    },
-    profileImageContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginBottom: 20
-    },
-    profileName: {
-        textAlign: 'center'
-    },
-    statement: {
-        textAlign: 'center',
     },
     whosWatchingText: {
         textAlign: 'center',
