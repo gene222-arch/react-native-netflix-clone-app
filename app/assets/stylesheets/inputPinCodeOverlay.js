@@ -22,6 +22,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: Colors.warning
     },  
+    forgotPinContainer: {
+        textAlign: 'center',
+        backgroundColor: 'transparent'
+    },  
+    forgotPinText: {
+        color: Colors.grey,
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.grey,
+        paddingBottom: 3
+    },  
     inputAndErrorContainer: { 
         backgroundColor: 'transparent'
     },  

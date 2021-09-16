@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
         borderColor: Colors.grey,
         color: Colors.white,
         height: 50,
-        marginVertical: 10,
         borderRadius: 5
     },
     loginFooter: {

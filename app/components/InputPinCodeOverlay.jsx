@@ -8,10 +8,17 @@ import { authSelector } from '../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import View from './View';
 import Text from './Text';
+import * as WebBrowser from 'expo-web-browser';
 import Colors from './../constants/Colors';
+
+const REACT_APP_FORGOT_PIN_URL = 'http://localhost:3000';
 
 const InputPinCodeOverlay = ({ AUTH, pinCode, isVisible, hasError, onChangeText, onCancel }) => 
 {
+    const handleClickForgotPinCode = async () => {
+        await WebBrowser.openBrowserAsync(REACT_APP_FORGOT_PIN_URL);
+    }
+
     return (
         <Overlay 
             isVisible={ isVisible }
@@ -56,6 +63,11 @@ const InputPinCodeOverlay = ({ AUTH, pinCode, isVisible, hasError, onChangeText,
                         keyboardAppearance='dark'
                         keyboardType='number-pad'
                     />
+                </View>
+                <View style={ styles.forgotPinContainer }>
+                    <TouchableOpacity onPress={ handleClickForgotPinCode }>
+                        <Text style={ styles.forgotPinText }>Forgot PIN?</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={ styles.actionBtnsContainer }>
