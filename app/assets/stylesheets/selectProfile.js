@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         paddingVertical: 25
     },
     profile: {
-        marginBottom: 40,
+        marginBottom: 20,
     },
     profilesContainer: {
         marginTop: 70,

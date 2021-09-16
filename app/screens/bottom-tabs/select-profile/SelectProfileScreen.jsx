@@ -28,6 +28,8 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
 
+    const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
+
     const handleChangePin = (pin) => 
     {
         setPinCode(pin);
@@ -35,7 +37,7 @@ const SelectProfileScreen = ({ AUTH }) =>
         if (pin.length === 4) 
         {
             if (pin === selectedProfilePinCode) {
-                dispatch(AUTH_ACTION.selectProfileStart({ id: profileId }));
+                selectProfile(profileId);
                 setShowPinCodeModal(false);
             } else {
                 setIsInCorrectPin(true);
@@ -49,6 +51,14 @@ const SelectProfileScreen = ({ AUTH }) =>
         setShowPinCodeModal(! showPinCodeModal);
         setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
         setProfileId(!profileId ? id : '');
+    }
+
+    const handleClickCancel = () => 
+    {
+        setIsInCorrectPin(false);
+        setShowPinCodeModal(false);
+        setSelectedProfilePinCode('');
+        setProfileId('');
     }
 
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
@@ -66,7 +76,10 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     return (
         <View style={ styles.container }>
-            <Overlay isVisible={ showPinCodeModal } onBackdropPress={ handleTogglePinCodeModal } overlayStyle={ styles.pinCodeOverLay }>
+            <Overlay 
+                isVisible={ showPinCodeModal }
+                overlayStyle={ styles.pinCodeOverLay }
+            >
                 <View style={ styles.inputPinCodeContainer }>
                     <Text style={ styles.statement }>
                         { !isInCorrectPin ? 'Enter your PIN to access this profile' : 'Incorrect PIN. Please try again.' }
@@ -98,7 +111,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                     </View>
                 </View>
                 <View style={ styles.actionBtnsContainer }>
-                    <TouchableOpacity onPress={ handleTogglePinCodeModal } disabled={ AUTH.isLoading }>
+                    <TouchableOpacity onPress={ handleClickCancel } disabled={ AUTH.isLoading }>
                         <Text style={ styles.cancelPinCodeText }>Cancel</Text>
                     </TouchableOpacity>
                 </View>
@@ -131,7 +144,11 @@ const SelectProfileScreen = ({ AUTH }) =>
                         <DisplayProfile
                             key={ index }
                             profile={ item }
-                            handlePressSelectProfile={ () => handleTogglePinCodeModal(item.pin_code, item.id) }
+                            handlePressSelectProfile={ 
+                                () => !item.is_profile_locked
+                                    ? selectProfile(item.id)
+                                    : handleTogglePinCodeModal(item.pin_code, item.id) 
+                            }
                             index={ index }
                         />
                     )}

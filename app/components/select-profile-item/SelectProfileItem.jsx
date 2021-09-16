@@ -19,7 +19,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle }) => {
                 />
                 <Text h5 style={ styles.profileName }>{ item.name }</Text>
                 {
-                    item.is_profile_locked && (
+                    Boolean(item.is_profile_locked) && (
                         <FeatherIcon 
                             name='lock'
                             size={ 16 }
