@@ -105,7 +105,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
                     </TouchableOpacity>
                 </View>
             </View>
-            <Button title='Sign in' onPress={ handlePressLogin } buttonStyle={ styles.loginBtn } />
+            <Button title='Sign In' onPress={ handlePressLogin } buttonStyle={ styles.loginBtn } />
             <View style={ styles.loginFooter }>
                 <CheckBox
                     title='Remember me'

@@ -14,7 +14,7 @@ const styles = (error = false) => StyleSheet.create({
     },
     textField: {
         height: 60,
-        width: DEVICE_WIDTH / 1.25,
+        width: DEVICE_WIDTH,
         borderBottomWidth: error ? 2 : 0,
         borderColor: error ? Colors.error : 'transparent'
     }

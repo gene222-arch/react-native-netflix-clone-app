@@ -4,8 +4,7 @@ import Colors from './../../constants/Colors';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 30,
+        justifyContent: 'center'
     },
     errorMessageText: {
         textAlign: 'center',
@@ -24,9 +23,13 @@ const styles = StyleSheet.create({
         padding: 20
     },
     loginBtn: {
-        backgroundColor: Colors.netFlixRed,
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: Colors.grey,
         color: Colors.white,
-        height: 45
+        height: 50,
+        marginVertical: 10,
+        borderRadius: 5
     },
     loginFooter: {
         flexDirection: 'row',
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
     },  
     title: {
         color: Colors.white,
-        marginBottom: 20
+        marginBottom: 40
     },
     rightIcon: {
         position: 'absolute',
