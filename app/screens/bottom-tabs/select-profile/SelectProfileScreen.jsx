@@ -46,9 +46,6 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const handleTogglePinCodeModal = (pinCode, id) => 
     {
-        if (! showPinCodeModal) {
-        }
-
         setShowPinCodeModal(! showPinCodeModal);
         setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
         setProfileId(!profileId ? id : '');

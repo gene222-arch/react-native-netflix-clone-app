@@ -57,6 +57,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         paddingVertical: 5
     },
+    lockIcon: {
+        textAlign: 'center',
+        marginTop: 5
+    },  
     pinCodeOverLay: {
         backgroundColor: Colors.darkGrey,
         width: DEVICE_WIDTH / 1.15,
