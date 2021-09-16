@@ -16,13 +16,15 @@ const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) =>
                     source={{ uri: profile?.avatar }}
                     style={ [isSelected ? styles.selectedImg : styles.defaultImg, styles.img] }
                 />
-                <Text style={{ 
-                    color: isSelected ? Colors.white : Colors.grey, 
-                    textAlign: 'center', 
-                    fontSize: isSelected ? 14 : 13,
-                    marginTop: 5
-                }}>
-                    { `${ profile?.name.slice(0, 6) }...` }
+                <Text 
+                    style={{ 
+                        color: isSelected ? Colors.white : Colors.grey, 
+                        textAlign: 'center', 
+                        fontSize: isSelected ? 14 : 13,
+                        marginTop: 5,
+                    }}
+                >
+                    { `${ profile?.name.slice(0, 6) }...`.toUpperCase() }
                 </Text>
                 {
                     Boolean(profile.is_profile_locked) && (

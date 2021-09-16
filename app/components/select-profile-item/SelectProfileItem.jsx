@@ -17,7 +17,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle }) => {
                     }}
                     style={[ styles.profileImg, imageStyle ]}
                 />
-                <Text h5 style={ styles.profileName }>{ item.name }</Text>
+                <Text h5 style={ styles.profileName }>{ item.name.toUpperCase() }</Text>
                 {
                     Boolean(item.is_profile_locked) && (
                         <FeatherIcon 
