@@ -7,8 +7,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 30,
     },
-    email: {
-    },
+    errorMessageText: {
+        textAlign: 'center',
+        color: Colors.warning,
+        marginVertical: 10
+    },  
     formContainer: {
         display: 'flex',
         alignItems: 'center'

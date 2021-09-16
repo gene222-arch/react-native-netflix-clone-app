@@ -59,6 +59,9 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
     return (
         <View style={ styles.container }>
             <Text h2 style={ styles.title }>Sign in</Text>
+            {
+                typeof AUTH.errors !== 'object' && <Text style={ styles.errorMessageText }>{ AUTH.errors }</Text>
+            }
             <View style={ styles.formContainer }>
                 <StyledTextInput
                     placeholder='Email'
