@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import DisplayOption from './../../../components/more-screen-display-option/DisplayOption';
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Echo from './../../../utils/echo'
+import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 
 
 const moreOptions = ({ onPressSignOut, onPressMyList }) =>
@@ -62,10 +63,46 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const dispatch = useDispatch();
     
     const [ showSignOutDialog, setShowSignOutDialog ] = useState(false);
+    const [ profileId, setProfileId ] = useState('');
+    const [ pinCode, setPinCode ] = useState('');
+    const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
+    const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
+    const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
 
-    const handlePressSelectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }))
+    const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
-    const toggleSignOutDialog = () => setShowSignOutDialog(!showSignOutDialog);
+    const handleChangePin = (pin) => 
+    {
+        setPinCode(pin);
+
+        if (pin.length === 4) 
+        {
+            if (pin === selectedProfilePinCode) {
+                selectProfile(profileId);
+                setShowPinCodeModal(false);
+            } else {
+                setIsInCorrectPin(true);
+                setPinCode('');
+            }
+        }
+    }
+
+    const handleTogglePinCodeModal = (pinCode, id) => 
+    {
+        setShowPinCodeModal(! showPinCodeModal);
+        setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
+        setProfileId(!profileId ? id : '');
+    }
+
+    const handleClickCancel = () => 
+    {
+        setIsInCorrectPin(false);
+        setShowPinCodeModal(false);
+        setSelectedProfilePinCode('');
+        setProfileId('');
+    }
+
+    const toggleSignOutDialog = () => setShowSignOutDialog(! showSignOutDialog);
 
     const handlePressSignOut = async () => {
         batch(() => {
@@ -89,11 +126,23 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     useEffect(() => {
         return () => {
             setShowSignOutDialog(false);
+            setShowPinCodeModal(false);
+            setSelectedProfilePinCode('');
+            setIsInCorrectPin(false);
+            setProfileId('');
+            handleChangePin('');
         }
     }, [AUTH_PROFILE]); 
 
     return (
         <View style={ styles.container }>
+            <InputPinCodeOverlay 
+                isVisible={ showPinCodeModal }
+                pinCode={ pinCode }
+                hasError={ isInCorrectPin }
+                onChangeText={ handleChangePin }
+                onCancel={ handleClickCancel }
+            />
             <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Sign out Dialog */}
             <Overlay isVisible={ showSignOutDialog } onBackdropPress={ toggleSignOutDialog } overlayStyle={ styles.signOutDialog }>
@@ -119,7 +168,11 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
                             key={ index }
                             profile={ item }
                             isSelected={ AUTH_PROFILE.id === item.id }
-                            onPress={ () => handlePressSelectProfile(item.id) }
+                            onPress={ 
+                                () => !item.is_profile_locked
+                                    ? selectProfile(item.id)
+                                    : handleTogglePinCodeModal(item.pin_code, item.id) 
+                            }
                         />
                     )}
                     horizontal

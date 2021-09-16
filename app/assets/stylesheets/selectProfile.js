@@ -48,6 +48,10 @@ const styles = StyleSheet.create({
         marginTop: 70,
         paddingHorizontal: 60
     },
+    lockIcon: {
+        textAlign: 'center',
+        marginTop: 5
+    },  
     whosWatchingText: {
         textAlign: 'center',
         marginBottom: 30,
