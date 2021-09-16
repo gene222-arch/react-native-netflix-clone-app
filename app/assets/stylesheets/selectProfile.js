@@ -88,11 +88,6 @@ const styles = StyleSheet.create({
     },
     statement: {
         textAlign: 'center',
-    },  
-    submitPinCodeText: {
-        fontSize: 16,
-        color: Colors.grey,
-        textAlign: 'right'
     },
     whosWatchingText: {
         textAlign: 'center',

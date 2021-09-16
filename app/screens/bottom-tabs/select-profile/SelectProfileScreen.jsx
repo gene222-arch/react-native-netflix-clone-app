@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Image, TouchableOpacity, FlatList } from 'react-native'
+import { Image, TouchableOpacity, FlatList, Keyboard } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import styles from './../../../assets/stylesheets/selectProfile';
@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
-import { Overlay, Icon, Input } from 'react-native-elements';
+import { Overlay, Input } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Colors from './../../../constants/Colors';
 
@@ -28,7 +28,27 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
 
-    const handleTogglePinCodeModal = (pinCode, id) => {
+    const handleChangePin = (pin) => 
+    {
+        setPinCode(pin);
+
+        if (pin.length === 4) 
+        {
+            if (pin === selectedProfilePinCode) {
+                dispatch(AUTH_ACTION.selectProfileStart({ id: profileId }));
+                setShowPinCodeModal(false);
+            } else {
+                setIsInCorrectPin(true);
+                setPinCode('');
+            }
+        }
+    }
+
+    const handleTogglePinCodeModal = (pinCode, id) => 
+    {
+        if (! showPinCodeModal) {
+        }
+
         setShowPinCodeModal(! showPinCodeModal);
         setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
         setProfileId(!profileId ? id : '');
@@ -36,23 +56,14 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
 
-    const handleSubmitPinCode = () => {
-        if (pinCode === selectedProfilePinCode) {
-            dispatch(AUTH_ACTION.selectProfileStart({ id: profileId }));
-            setShowPinCodeModal(false);
-        } else {
-            setIsInCorrectPin(true);
-        }
-    }
-
     useEffect(() => 
     {
         return () => {
-            setPinCode('');
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
             setProfileId('');
+            handleChangePin('');
         }
     }, []);
 
@@ -76,20 +87,22 @@ const SelectProfileScreen = ({ AUTH }) =>
                     <View style={ styles.inputAndErrorContainer }>
                         <Input
                             placeholder=' - - - -'
-                            onChangeText={ (text) => setPinCode(text) }
+                            value={ pinCode }
+                            onChangeText={ handleChangePin }
                             inputContainerStyle={ styles.inputContainer }
                             placeholderTextColor='white'
                             inputStyle={ styles.input }
                             secureTextEntry
+                            maxLength={ 4 }
+                            textAlign='center'
+                            autoFocus={ true }
+                            keyboardAppearance='dark'
                         />
                     </View>
                 </View>
                 <View style={ styles.actionBtnsContainer }>
                     <TouchableOpacity onPress={ handleTogglePinCodeModal } disabled={ AUTH.isLoading }>
                         <Text style={ styles.cancelPinCodeText }>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={ handleSubmitPinCode } disabled={ AUTH.isLoading }>
-                        <Text style={ styles.submitPinCodeText }>Submit</Text>
                     </TouchableOpacity>
                 </View>
             </Overlay>

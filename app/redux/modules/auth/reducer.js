@@ -68,9 +68,10 @@ const PROFILE_DEFAULT_PROPS = {
     id: '',
     name: '',
     email: '',
-    pin_code: '',
     avatar: null,
     is_for_kids: false,
+    is_profiled_locked: false,
+    pin_code: '',
     my_downloads: [],
     recently_watched_movies: [],
     my_lists: [],
@@ -313,7 +314,7 @@ export default (state = initialState, { type, payload }) =>
         case MANAGE_PIN_CODE_SUCCESS:
             newProfiles = profiles.map(prof => {
                 return (prof.id === payload.user_profile_id)
-                    ? { ...prof, pin_code: payload.pin_code }
+                    ? { ...prof, pin_code: payload.pin_code, is_profiled_locked: payload.is_profiled_locked }
                     : prof
             });
 

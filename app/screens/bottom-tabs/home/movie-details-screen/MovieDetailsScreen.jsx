@@ -78,7 +78,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         {
             const { other_movies, ...movieDetails } = findMovie;    
             setMovie(movieDetails);
-            onLoadCacheVideo(movieDetails.video_path);
+            // onLoadCacheVideo(movieDetails.video_path);
 
             let pageList_ = [];
             let totalPages = [];
@@ -119,7 +119,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         }
     }, []);
 
-    if (! isInteractionsComplete) {
+    if (! isInteractionsComplete && !movie) {
         return <MovieDetailScreenLoader />
     }
 
@@ -131,9 +131,9 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     width: '100%',
                     aspectRatio: 16/9
                 }}
-                source={{ uri: !videoUri ? movie?.video_path : videoUri }}
-                usePoster={ true }
-                posterSource={{ uri: movie?.wallpaper_path }}
+                source={{ uri: movie.video_path }}
+                usePoster={ false }
+                posterSource={{ uri: movie.wallpaper_path }}
                 posterStyle={{
                     width: '100%',
                     aspectRatio: 16/9
