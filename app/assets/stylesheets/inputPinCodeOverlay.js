@@ -18,6 +18,10 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         marginRight: 20
     },
+    errorText: {
+        textAlign: 'center',
+        color: Colors.warning
+    },  
     inputAndErrorContainer: { 
         backgroundColor: 'transparent'
     },  

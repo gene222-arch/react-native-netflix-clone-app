@@ -18,9 +18,19 @@ const InputPinCodeOverlay = ({ AUTH, pinCode, isVisible, hasError, onChangeText,
             overlayStyle={ styles.pinCodeOverLay } //
         >
             <View style={ styles.inputPinCodeContainer }>
-                <Text style={ styles.statement }>
-                    { !hasError ? 'Enter your PIN to access this profile' : 'Incorrect PIN. Please try again.' }
-                </Text>
+                {
+                    !hasError 
+                        ? (
+                            <Text style={ styles.statement }>
+                                Enter your PIN to access this profile
+                            </Text>
+                        )
+                        : (
+                            <Text style={ styles.errorText }>
+                                Incorrect PIN. Please try again.
+                            </Text>
+                        )
+                }
                 {
                     hasError && (
                         <FeatherIcon 
@@ -44,6 +54,7 @@ const InputPinCodeOverlay = ({ AUTH, pinCode, isVisible, hasError, onChangeText,
                         textAlign='center'
                         autoFocus={ true }
                         keyboardAppearance='dark'
+                        keyboardType='number-pad'
                     />
                 </View>
             </View>
