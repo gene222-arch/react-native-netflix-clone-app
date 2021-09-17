@@ -9,15 +9,10 @@ import styles from './../../../assets/stylesheets/comingSoon';
 import { authProfileSelector } from './../../../redux/modules/auth/selectors'
 import { comingSoonMoviesSelector } from './../../../redux/modules/coming-soon/selectors';
 import View from './../../../components/View';
-import Text from './../../../components/Text';
 import ComingSoonMovieItem from '../../../components/notifications-video-item';
 import AppBar from './../../AppBar';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
-import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import ComingSoonScreenLoader from '../../../components/loading-skeletons/ComingSoonScreenLoader';
 
@@ -53,23 +48,16 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             });
         });
 
-        ComingSoonMovieReleasedEvent.listen(response => {
-            batch(() => {
-                dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
-                dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-            });
-        });
-
+        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+        
         setIsInteractionsComplete(true);
     }
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
-        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
 
         return () => {
             ComingSoonMovieCreatedEvent.unListen();
-            ComingSoonMovieReleasedEvent.unListen();
             setIsInteractionsComplete(false);
         }
     }, [AUTH_PROFILE.id]); 
