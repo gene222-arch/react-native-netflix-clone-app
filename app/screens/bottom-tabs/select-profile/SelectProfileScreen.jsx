@@ -78,6 +78,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     return (
         <View style={ styles.container }>
             <InputPinCodeOverlay 
+                profileId={ profileId }
                 isVisible={ showPinCodeModal }
                 pinCode={ pinCode }
                 hasError={ isInCorrectPin }

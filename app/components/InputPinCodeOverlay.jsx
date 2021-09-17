@@ -10,13 +10,17 @@ import View from './View';
 import Text from './Text';
 import * as WebBrowser from 'expo-web-browser';
 import Colors from './../constants/Colors';
+import * as SecureStoreInstance from './../utils/SecureStoreInstance'
 
-const REACT_APP_FORGOT_PIN_URL = 'http://localhost:3000';
-
-const InputPinCodeOverlay = ({ AUTH, pinCode, isVisible, hasError, onChangeText, onCancel }) => 
+const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, hasError, onChangeText, onCancel }) => 
 {
-    const handleClickForgotPinCode = async () => {
-        await WebBrowser.openBrowserAsync(REACT_APP_FORGOT_PIN_URL);
+    const handleClickForgotPinCode = async (id) => 
+    {
+        const accessToken = await SecureStoreInstance.getAccessToken();
+
+        await WebBrowser.openBrowserAsync(
+            `http://192.168.1.10:3000/auth/sign-in?token=${ accessToken }&profileId=${ profileId }&action=FPC`
+        );
     }
 
     return (
