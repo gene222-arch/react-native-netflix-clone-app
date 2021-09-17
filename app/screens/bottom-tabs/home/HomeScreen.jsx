@@ -62,7 +62,6 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 batch(() => {
                     dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
                     dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-                    dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
                 });
             });
             

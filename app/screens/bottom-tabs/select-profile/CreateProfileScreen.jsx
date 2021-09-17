@@ -43,6 +43,8 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
         setShowAvatars(false);
     } 
 
+    const handleClickBackButton = () => setShowAvatars(false);
+
     useEffect(() => {
         return () => {
             setProfile(PROFILE_DEFAULT_PROPS);
@@ -54,7 +56,11 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
     return (
         <>
             <LoadingSpinner isLoading={ AUTH.isLoading } />
-            <ProfileAppBar headerTitle='Create Profile' onPress={ handlePressCreateProfile } />
+            <ProfileAppBar 
+                headerTitle='Create Profile' 
+                onPress={ handlePressCreateProfile } 
+                onBackArrowClick={ handleClickBackButton }
+            />
             {
                 showAvatars
                     ? <AvatarList setShowAvatars={ setShowAvatars } handlePress={ handlePressChangeAvatar } />

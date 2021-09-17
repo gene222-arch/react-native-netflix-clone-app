@@ -8,9 +8,15 @@ const StackNavBackButton = (props) =>
 {
     const navigation = useNavigation();
 
-    const navigateBack = () => {
-        Keyboard.dismiss();
-        navigation.goBack();
+    const navigateBack = () => 
+    { 
+        if (props.onBackArrowClick) {
+            props.onBackArrowClick();
+        }
+        else {
+            Keyboard.dismiss();
+            navigation.goBack();
+        }
     }
 
     return <HeaderBackButton { ...props } onPress={ navigateBack } disabled={ props.isLoading } />

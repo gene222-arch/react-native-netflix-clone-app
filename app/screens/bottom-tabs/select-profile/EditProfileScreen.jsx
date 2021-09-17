@@ -43,6 +43,8 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
 
+    const handleClickBackButton = () => setShowAvatars(false);
+
     useEffect(() => {
         return () => {
             dispatch(AUTH_ACTION.clearErrorProperty());
@@ -76,10 +78,10 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                 onPressCancel={ toggleDeleteProfileDialog }
                 onPressConfirm={ handlePressDeleteProfile }
             />
-            <ProfileAppBar  
-                isLoading={ AUTH.isLoading }
+            <ProfileAppBar
                 headerTitle='Edit Profile' 
                 onPress={ handlePressUpdateProfile } 
+                onBackArrowClick={ handleClickBackButton }
             />
             <View style={ styles.inputContainer }>
                 <View style={ styles.container }>
