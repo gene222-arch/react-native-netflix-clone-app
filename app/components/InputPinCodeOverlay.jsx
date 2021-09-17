@@ -14,13 +14,14 @@ import * as SecureStoreInstance from './../utils/SecureStoreInstance'
 
 const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, hasError, onChangeText, onCancel }) => 
 {
-    const handleClickForgotPinCode = async (id) => 
+    const handleClickForgotPinCode = async () => 
     {
         const accessToken = await SecureStoreInstance.getAccessToken();
 
-        await WebBrowser.openBrowserAsync(
-            `http://192.168.1.10:3000/auth/sign-in?token=${ accessToken }&profileId=${ profileId }&action=FPC`
-        );
+        const url = `http://192.168.1.10:3000/settings/lock/${ profileId }`;
+        const queryParams = `?token=${ accessToken }&profileId=${ profileId }&action=FPC`;
+
+        await WebBrowser.openBrowserAsync(url + queryParams);
     }
 
     return (
