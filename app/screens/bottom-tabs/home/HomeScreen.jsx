@@ -15,8 +15,10 @@ import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
-import { authProfileSelector, authSelector } from './../../../redux/modules/auth/selectors';
-import frontPageShows from './../../../services/data/frontPageShows';
+import { authProfileSelector } from './../../../redux/modules/auth/selectors';
+import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
+import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
+import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 
 const DEFAULT_FRONT_PAGE_PROPS = {
     id: '',
@@ -39,18 +41,29 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
     }    
 
-    useEffect(() => {
+    useEffect(() => 
+    {
         batch(() => {
             dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMostLikedMoviesStart());
         });
+
         onLoadSetFrontPage();
     }, [AUTH_PROFILE]);
 
     useEffect(() => {
-        InteractionManager.runAfterInteractions(() => {
+        InteractionManager.runAfterInteractions(() => 
+        {
             MovieCreatedEvent.listen(response => dispatch(MOVIE_ACTION.createMovie({ movie: response.data })));
+
+            ComingSoonMovieReleasedEvent.listen(response => {
+                batch(() => {
+                    dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
+                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                });
+            });
+            
             setIsInteractionsComplete(true);
         });
 
