@@ -57,10 +57,12 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         {
             MovieCreatedEvent.listen(response => dispatch(MOVIE_ACTION.createMovie({ movie: response.data })));
 
-            ComingSoonMovieReleasedEvent.listen(response => {
+            ComingSoonMovieReleasedEvent.listen(response => 
+            {
                 batch(() => {
                     dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
                     dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                    dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
                 });
             });
             
@@ -69,6 +71,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
         return () => {
             MovieCreatedEvent.unListen();
+            ComingSoonMovieReleasedEvent.unListen();
             setIsInteractionsComplete(false);
         }   
     }, []);
