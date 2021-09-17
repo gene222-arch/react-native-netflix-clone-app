@@ -4,6 +4,10 @@ import { DEVICE_WIDTH } from './../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
+    addIcon: {
+        textAlign: 'center',
+        width: 120
+    },  
     alertIcon: {
         marginTop: 15,
         textAlign: 'left'
@@ -14,8 +18,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     createProfileContainer: {
-        width: '100%',
-        alignSelf: 'center'
     },
     createProfileText: {
         textAlign: 'center',
