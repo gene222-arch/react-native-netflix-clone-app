@@ -62,6 +62,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 batch(() => {
                     dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
                     dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                    dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }))
                 });
             });
             
