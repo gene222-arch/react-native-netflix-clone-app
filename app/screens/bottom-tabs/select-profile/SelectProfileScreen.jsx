@@ -12,9 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
-import { Overlay, Input } from 'react-native-elements';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import Colors from './../../../constants/Colors';
+import * as USER_PROFILE_PIN_CODE_UPDATED_EVENT from './../../../events/user.profile.pin.code.updated.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 
 
@@ -66,7 +64,12 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     useEffect(() => 
     {
+        USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
+            dispatch(AUTH_ACTION.updateUserProfile(response.data));
+        });
+
         return () => {
+            USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen();
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
