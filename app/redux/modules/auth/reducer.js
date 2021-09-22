@@ -53,6 +53,7 @@ const {
     VIEW_DOWNLOADS_START,
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED,
+    UPDATE_USER_PROFILE,
     CLEAR_ERRORS_PROPERTY
 } = ACTION_TYPES;
 
@@ -498,6 +499,19 @@ export default (state = initialState, { type, payload }) =>
                 profiles: newProfiles,
                 isLoading,
                 errors
+            }
+
+        case UPDATE_USER_PROFILE:
+
+            newProfiles = profiles.map(prof => {
+                return prof.id === payload.user_profile_id
+                    ? { ...prof, ...payload }
+                    : prof;
+            })
+
+            return {
+                ...state,
+                profiles: newProfiles
             }
 
         case CLEAR_ERRORS_PROPERTY:
