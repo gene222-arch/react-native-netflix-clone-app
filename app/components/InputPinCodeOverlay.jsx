@@ -19,7 +19,7 @@ const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, hasError, on
         const accessToken = await SecureStoreInstance.getAccessToken();
 
         const url = `http://192.168.1.10:3000/settings/lock/${ profileId }`;
-        const queryParams = `?token=${ accessToken }&profileId=${ profileId }&action=FPC`;
+        const queryParams = `?token=${ accessToken }&profileId=${ profileId }`;
 
         await WebBrowser.openBrowserAsync(url + queryParams);
     }

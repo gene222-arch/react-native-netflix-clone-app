@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Image, TouchableOpacity, FlatList, Keyboard } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
@@ -14,6 +14,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
 import * as USER_PROFILE_PIN_CODE_UPDATED_EVENT from './../../../events/user.profile.pin.code.updated.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
+import { useFocusEffect } from '@react-navigation/core';
 
 
 const SelectProfileScreen = ({ AUTH }) => 
@@ -66,6 +67,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     {
         USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
             dispatch(AUTH_ACTION.updateUserProfile(response.data));
+            setSelectedProfilePinCode(response.data.pin_code);
         });
 
         return () => {
@@ -77,6 +79,14 @@ const SelectProfileScreen = ({ AUTH }) =>
             handleChangePin('');
         }
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                setPinCode('');
+            }
+        }, [])
+    )
 
     return (
         <View style={ styles.container }>
