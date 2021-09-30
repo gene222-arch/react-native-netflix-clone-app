@@ -29,7 +29,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
-    const [ videoUri, setVideoUri ] = useState(null);
     const [ movie, setMovie ] = useState(null);
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
@@ -104,7 +103,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             setSelectedPage(1);
             setVideoStatus(null);
             setIsInteractionsComplete(false);
-            setVideoUri(null);
             videoRef.current = null;
         }
     }, []);

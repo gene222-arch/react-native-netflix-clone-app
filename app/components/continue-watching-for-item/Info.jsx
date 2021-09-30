@@ -135,7 +135,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         color='#fff'
                     />
                     <ListItem.Content style={ styles.listItemContent }>
-                        <ListItem.Title style={ styles.episodeAndMovieInfoTitle }>Episode & MovieInfo</ListItem.Title>
+                        <ListItem.Title style={ styles.episodeAndMovieInfoTitle }>Similar Movies & Movie Information</ListItem.Title>
                     </ListItem.Content>
                     <FeatherIcon 
                         name='chevron-right'
