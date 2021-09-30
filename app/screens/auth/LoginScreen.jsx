@@ -83,28 +83,23 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
                         error={ AUTH_HAS_ERROR_MESSAGE.password }
                         helperText={ AUTH_ERROR_MESSAGE.password }
                     />
-                    <TouchableOpacity style={ styles.touchablePassword } onPress={ () => setShowPassword(! showPassword) }>
-                        {
-                            !showPassword
-                                ? (
-                                    <FeatherIcon 
-                                        name='eye'
-                                        size={ 24 }
-                                        color='#FFF'
-                                        style={ styles.rightIcon }
-                                    />
-                                ): (
-                                    <FeatherIcon 
-                                        name='eye-off'
-                                        size={ 24 }
-                                        color='#FFF'
-                                        style={ styles.rightIcon }
-                                    />
-                                )
-                        }
-                    </TouchableOpacity>
                 </View>
             </View>
+            <CheckBox
+                title={ !showPassword ? 'Show Password' : 'Hide Password' }
+                containerStyle={ styles.showPasswordContainer }
+                textStyle={ styles.showPasswordText }
+                onPress={ () => setShowPassword(! showPassword) }
+                checked={ showPassword }
+                checkedColor={ Colors.grey }
+                iconRight
+                iconType='feather'
+                checkedIcon='eye'
+                uncheckedIcon='eye-off'
+                checkedColor='red'
+                size={ 28 }
+                style={ styles.checkbox }
+            />
             <Button title='Sign In' onPress={ handlePressLogin } buttonStyle={ styles.loginBtn } />
             <View style={ styles.loginFooter }>
                 <CheckBox

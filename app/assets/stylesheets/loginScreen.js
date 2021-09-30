@@ -4,8 +4,12 @@ import Colors from './../../constants/Colors';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: 5
     },
+    checkbox: {
+        marginRight: 10
+    },  
     errorMessageText: {
         textAlign: 'center',
         color: Colors.warning,
@@ -67,7 +71,17 @@ const styles = StyleSheet.create({
     },
     rememberMeText: {
         color: Colors.grey
-    }
+    },
+    showPasswordContainer: {
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+        width: '100%',
+        alignItems: 'flex-end',
+        marginBottom: 15
+    },
+    showPasswordText: {
+        color: Colors.grey
+    },
 });
 
 export default styles;
