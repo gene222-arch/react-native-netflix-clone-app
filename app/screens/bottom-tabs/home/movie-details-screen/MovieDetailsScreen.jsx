@@ -51,46 +51,26 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         setDefaultPageList(movies[index]);
     }
 
-    const onLoadCacheVideo = async (uri) => 
-    {
-        try {
-            const fileExt = getExtension(uri);
-            
-            const fileToCacheURI = FileSystem.cacheDirectory + movieId + `.${ fileExt }`;
-            const fileInfo = await ensureFileExists(fileToCacheURI);
-    
-            if (! fileInfo.exists) {
-                await FileSystem.downloadAsync(uri, fileToCacheURI)
-            }
-
-            setVideoUri(fileToCacheURI);
-        } catch ({ message }) {
-            console.log(message);
-        }
-
-    }
-
     const runAfterInteractions = () => 
     {
         const findMovie = MOVIE.movies.find(({ id }) => id === movieId);
 
         if (findMovie) 
         {
-            const { other_movies, ...movieDetails } = findMovie;    
+            const { similar_movies, ...movieDetails } = findMovie;    
             setMovie(movieDetails);
-            // onLoadCacheVideo(movieDetails.video_path);
 
             let pageList_ = [];
             let totalPages = [];
-            const totalNumberOfPages = Math.ceil(other_movies.length / PER_PAGE);
+            const totalNumberOfPages = Math.ceil(similar_movies.length / PER_PAGE);
     
             for (let pageCount = 1; pageCount <= totalNumberOfPages; pageCount++) {
                 totalPages.push(pageCount);
             }
     
-            for (let index = 0; index < other_movies.length; index += PER_PAGE) {
+            for (let index = 0; index < similar_movies.length; index += PER_PAGE) {
                 pageList_.push(
-                    other_movies.slice(index, index + PER_PAGE)
+                    similar_movies.slice(index, index + PER_PAGE)
                 );
             }
     
@@ -119,9 +99,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         }
     }, []);
 
-    if (! isInteractionsComplete && !movie) {
-        return <MovieDetailScreenLoader />
-    }
+    if (! isInteractionsComplete && !movie) return <MovieDetailScreenLoader />
 
     return (
         <View style={ styles.container }>
