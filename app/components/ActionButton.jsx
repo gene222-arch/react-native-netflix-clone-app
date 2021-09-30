@@ -12,6 +12,7 @@ import { authProfileSelector, authSelector } from '../redux/modules/auth/selecto
 import { batch, connect, useDispatch } from 'react-redux';
 import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
 import RemindMeIcon from './RemindMeIcon';
+import MaterialButton from './styled-components/MaterialButton';
 
 
 const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLikedMovie = false }) => 
