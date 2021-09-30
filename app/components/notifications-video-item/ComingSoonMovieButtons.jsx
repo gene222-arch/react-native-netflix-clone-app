@@ -5,7 +5,6 @@ import { TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Text from './../Text';
 import { Image } from 'react-native-expo-image-cache';
-import RemindMeIcon from './../RemindMeIcon';
 
 const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressInfo, isReminded = false}) => 
 {
@@ -18,7 +17,11 @@ const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressI
             <View style={ styles.remindMeInfoContainer }>
                 <TouchableOpacity onPress={ handlePressToggleRemindMe }>
                     <View style={ styles.remindMeContainer }>
-                        <RemindMeIcon isReminded={ isReminded } />
+                        <FeatherIcon 
+                            name={ !isReminded ? 'bell' : 'check' }
+                            size={ 28 }
+                            color='#fff'
+                        />
                         <Text style={ styles.remindMeInfoText }>Remind Me</Text>
                     </View>
                 </TouchableOpacity>

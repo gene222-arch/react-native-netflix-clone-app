@@ -11,8 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
 import { batch, connect, useDispatch } from 'react-redux';
 import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
-import RemindMeIcon from './RemindMeIcon';
-import MaterialButton from './styled-components/MaterialButton';
 
 
 const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLikedMovie = false }) => 
@@ -70,7 +68,11 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
                                     <ActivityIndicatorWrapper 
                                         isLoading={ AUTH.isLoading }
                                         component={
-                                            <RemindMeIcon isReminded={ isReminded } />
+                                            <FeatherIcon 
+                                                name={ !isReminded ? 'bell' : 'check' }
+                                                size={ 28 }
+                                                color='#fff'
+                                            />
                                         }
                                     />
                                 }
