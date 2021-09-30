@@ -11,7 +11,7 @@ import { Image } from 'react-native-expo-image-cache';
 const DownloadItem = ({ movie, onLongPress, handlePressPlay }) => 
 {
     return (
-        <TouchableOpacity onLongPress={ onLongPress }>
+        <TouchableOpacity onLongPress={ onLongPress } onPress={ handlePressPlay }>
             <View style={ styles.container }>
                 <View row={ true } justifyContent='space-between' alignItems='center' padding={ 2 }>
                     <View>

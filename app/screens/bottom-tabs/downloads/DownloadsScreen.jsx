@@ -46,14 +46,27 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
         }
     }
 
-    const handlePressPlay = () => navigation.navigate('DisplayVideoRoot', {
-        screen: 'DisplayVideoScreen',
-        params: {
-            title: downloadedMovie.movie.title,
-            videoUri: downloadedMovie.uri, 
-            id: downloadedMovie.movie_id 
-        }
-    });
+    const handlePressPlay = (selectedMovie = null) => {
+        navigation.navigate('DisplayVideoRoot', {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: selectedMovie.movie.title,
+                videoUri: selectedMovie.movie.video_path, 
+                id: selectedMovie.id 
+            }
+        });
+    }
+
+    const handleLongPressPlay = () => {
+        navigation.navigate('DisplayVideoRoot', {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: downloadedMovie.movie.title,
+                videoUri: downloadedMovie.movie.video_path, 
+                id: downloadedMovie.id
+            }
+        });
+    }
 
     const runAfterInteractions = () => {
         setIsInteractionsComplete(true);
@@ -84,7 +97,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                         ? <ActivityIndicator color='#FFFFFF' />
                         : (
                             <>
-                                <TouchableOpacity onPress={ handlePressPlay }>
+                                <TouchableOpacity onPress={ handleLongPressPlay }>
                                     <Text style={ styles.overLayText }>Play</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={ handlePressDeleteDownload }>
