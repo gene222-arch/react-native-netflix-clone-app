@@ -33,6 +33,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
     const [ selectedPage, setSelectedPage ] = useState('');
+    const [ pageIndex, setPageIndex ] = useState(0);
     const [ defaultPageList, setDefaultPageList ] = useState([]);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
@@ -49,6 +50,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     const handleChangePage = (pageNumber, index) => {
         setSelectedPage(pageNumber);
+        setPageIndex(index);
         setDefaultPageList(similarMovies[index]);
     }
 
@@ -56,10 +58,17 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     {
         setMovie(selectedMovie);
         setIsMovieLiked(Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === selectedMovie.id)));
+        
         navigations.setParams({
             headerTitle: selectedMovie.title
         });
-        
+
+        const filteredMovies = similarMovies[pageIndex].filter(similarMovie => similarMovie.id !== selectedMovie.id);
+        const newMovies = [ movie, ...filteredMovies ];
+        let filterSimilarMovies = similarMovies.map((similarMovie, index) => index === pageIndex ? newMovies : similarMovie);
+
+        setSimilarMovies(filterSimilarMovies);
+        setDefaultPageList(newMovies);
     }
 
     const runAfterInteractions = () => 
@@ -72,15 +81,16 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
             let pageList_ = [];
             let totalPages = [];
-            const totalNumberOfPages = Math.ceil(similar_movies.length / PER_PAGE);
+            const similarMovies_ = similar_movies.map(({ movie }) => movie);
+            const totalNumberOfPages = Math.ceil(similarMovies_.length / PER_PAGE);
     
             for (let pageCount = 1; pageCount <= totalNumberOfPages; pageCount++) {
                 totalPages.push(pageCount);
             }
     
-            for (let index = 0; index < similar_movies.length; index += PER_PAGE) {
+            for (let index = 0; index < similarMovies_.length; index += PER_PAGE) {
                 pageList_.push(
-                    similar_movies.slice(index, index + PER_PAGE)
+                    similarMovies_.slice(index, index + PER_PAGE)
                 );
             }
 
@@ -138,7 +148,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ defaultPageList }
                 ListHeaderComponentStyle={ styles.listHeaderComponent }
-                renderItem={ ({ item }) => <EpisodeItem movie={ item } onPress={ () => handleClickChangeMovie(item.movie) } />}
+                renderItem={ ({ item }) => <EpisodeItem movie={ item } onPress={ () => handleClickChangeMovie(item) } />}
                 ListHeaderComponent={
                     <ListHeader 
                         movie={ movie }
