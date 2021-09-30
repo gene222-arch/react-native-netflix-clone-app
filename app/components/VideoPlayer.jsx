@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Video } from 'expo-av'
 import styles from './../assets/stylesheets/videoPlayer';
 import View from './View';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/core';
 
 const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, shouldShowPoster = false }) => 
 {
@@ -41,16 +42,26 @@ const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, s
         }
     } 
 
-    useEffect(() => {
+    // useEffect(() => {
     
-        return () => {
+    //     return () => {
+    //         setStatus({});
+    //         setUsePoster(false);
+    //         video.current = null;
+    //         setShouldPlayVideo(false);
+    //         onChangeSourceRestartVideo();
+    //     }
+    // }, [videoPath]);
+
+    useFocusEffect(
+        useCallback(() => {
             setStatus({});
             setUsePoster(false);
             video.current = null;
             setShouldPlayVideo(false);
             onChangeSourceRestartVideo();
-        }
-    }, [videoPath]);
+        }, [videoPath])
+    )
 
     if (! shouldShowPoster) {
         return (

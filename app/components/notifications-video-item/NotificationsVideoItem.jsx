@@ -1,30 +1,40 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import { Video } from 'expo-av';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import View from './../View';
 import ComingSoonMovieDetails from './ComingSoonMovieDetails';
 import ComingSoonMovieButtons from './ComingSoonMovieButtons';
+import { useFocusEffect } from '@react-navigation/core';
 
 
 const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPlay, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
 {
     const video = useRef(null);
+    const [ play, setPlay ] = useState(shouldPlay);
 
     const onChangeSourceRestartVideo = async () => {
         try {
             await video?.current?.unloadAsync();
             await video?.current?.loadAsync({ uri: movie.video_trailer_path }, {}, false);
-        } catch ({ message }) {
-            console.log(message);
-        }
+            video.current = null;
+            setPlay(false);
+        } catch ({ message }) {}
     } 
     
-    useEffect(() => {
-        onChangeSourceRestartVideo();
-        return () => {
-            video.current = null;
-        }
-    }, []);
+    // useEffect(() => {
+    //     onChangeSourceRestartVideo();
+    //     return () => {
+    //         video.current = null;
+    //     }
+    // }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                onChangeSourceRestartVideo();
+            }
+        }, [])
+    )
 
     return (
         <View style={{ ...styles.container, opacity: shouldFocus ? 1 : 0.25 }}>
@@ -35,7 +45,7 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
                 posterSource={{ uri: movie.poster_path }}
                 posterStyle={ styles.posterStyle}
                 usePoster={ shouldShowPoster && !shouldPlay }
-                shouldPlay={ shouldPlay }
+                shouldPlay={ play }
                 resizeMode='contain'
                 useNativeControls
             />
