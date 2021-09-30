@@ -25,11 +25,11 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const dispatch = useDispatch();
     const navigations = useNavigation();
     const { id: movieId } = route.params;
-    const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movieId));
 
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ movie, setMovie ] = useState(null);
+    const [ isMovieLiked, setIsMovieLiked ] = useState(false);
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
     const [ selectedPage, setSelectedPage ] = useState('');
@@ -55,9 +55,11 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const handleClickChangeMovie = (selectedMovie) => 
     {
         setMovie(selectedMovie);
+        setIsMovieLiked(Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === selectedMovie.id)));
         navigations.setParams({
             headerTitle: selectedMovie.title
         });
+        
     }
 
     const runAfterInteractions = () => 
@@ -67,7 +69,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         if (findMovie) 
         {
             const { similar_movies, ...movieDetails } = findMovie;    
-            setMovie(movieDetails);
 
             let pageList_ = [];
             let totalPages = [];
@@ -82,7 +83,11 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     similar_movies.slice(index, index + PER_PAGE)
                 );
             }
+
+            const isLiked = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movieId));
     
+            setMovie(movieDetails);
+            setIsMovieLiked(isLiked);
             setSimilarMovies(pageList_);
             setPages(totalPages);
             setSelectedPage(1);
@@ -140,7 +145,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                         videoStatus={ videoStatus }
                         handlePressPlayVideo={ handlePressPlayVideo }
                         handlePressPauseVideo={ handlePressPauseVideo }
-                        hasLikedMovie={ hasLikedMovie }
+                        hasLikedMovie={ isMovieLiked }
                         pages={ pages }
                         selectedPage={ selectedPage }
                         handleChangePage={ handleChangePage }
