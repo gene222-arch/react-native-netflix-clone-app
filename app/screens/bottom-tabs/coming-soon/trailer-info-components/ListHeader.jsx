@@ -37,7 +37,7 @@ const ListHeader = ({ AUTH_PROFILE, comingSoonMovie }) =>
             />
             <ShowInfo comingSoonMovie={ comingSoonMovie } />
 
-            <ActionButton movie={ comingSoonMovie } modelType='ComingSoonMovie' hasLikedMovie={ hasLikedMovie } />
+            <ActionButton movie={ comingSoonMovie } modelType='ComingSoonMovie' />
 
             <Divider style={ styles.divider } />
 

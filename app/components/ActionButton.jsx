@@ -26,7 +26,12 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 {
     const dispatch = useDispatch();
 
-    const isMovieLiked = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id));
+    const isMovieLiked = (
+        modelType === 'Movie' 
+            ? Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id))
+            : Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id))
+    );
+
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
     const handlePressAddToMyList = () => 
@@ -95,7 +100,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                 size={ 30 }
                 isLoading={ AUTH.isLoading }
                 onPress={ handlePressLike }
-                isSolid={ Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id)) }
+                isSolid={ isMovieLiked }
             />
 
             <FeatherButton 
