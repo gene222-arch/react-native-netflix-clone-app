@@ -8,7 +8,7 @@ import { Image } from 'react-native-expo-image-cache';
 
 const EpisodeItem = ({ movie, onPress }) => 
 {
-    const { poster_path, title, duration, plot } = movie;
+    const { movie: { poster_path, title, duration, plot } } = movie;
 
     return (
         <Pressable onPress={ onPress }>

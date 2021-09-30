@@ -29,7 +29,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ videoUri, setVideoUri ] = useState(null);
     const [ movie, setMovie ] = useState(null);
-    const [ movies, setMovies ] = useState([]);
+    const [ similarMovies, setSimilarMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
     const [ selectedPage, setSelectedPage ] = useState('');
     const [ defaultPageList, setDefaultPageList ] = useState([]);
@@ -48,7 +48,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
     const handleChangePage = (pageNumber, index) => {
         setSelectedPage(pageNumber);
-        setDefaultPageList(movies[index]);
+        setDefaultPageList(similarMovies[index]);
     }
 
     const runAfterInteractions = () => 
@@ -74,7 +74,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 );
             }
     
-            setMovies(pageList_);
+            setSimilarMovies(pageList_);
             setPages(totalPages);
             setSelectedPage(1);
             setDefaultPageList(pageList_[0]);
@@ -88,7 +88,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
         return () => {
             setMovie(null);
-            setMovies([]);
+            setSimilarMovies([]);
             setPages([]);
             setDefaultPageList([]);
             setSelectedPage(1);
