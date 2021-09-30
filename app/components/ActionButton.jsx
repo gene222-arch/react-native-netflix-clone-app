@@ -1,23 +1,32 @@
 import React from 'react'
 import View from './View';
-import { Tab } from 'react-native-elements';
-import styles from '../assets/stylesheets/movieDetail';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FeatherIcon from 'react-native-vector-icons/Feather';
+import { StyleSheet } from 'react-native'
 import * as AUTH_ACTION from '../redux/modules/auth/actions'
 import * as TOAST_ACTION from '../redux/modules/toast/actions'
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
 import { batch, connect, useDispatch } from 'react-redux';
-import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
 import MaterialButton from './styled-components/MaterialButton';
+import FeatherButton from './styled-components/FeatherButton';
+import FontAwesomeButton from './styled-components/FontAwesomeButton';
 
 
-const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLikedMovie = false }) => 
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '60%',
+        marginLeft: 30,
+        marginTop: 10
+    }
+});
+
+
+const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) => 
 {
     const dispatch = useDispatch();
 
+    const isMovieLiked = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id));
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
     const handlePressAddToMyList = () => 
@@ -44,8 +53,8 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
     const handlePressLike = () => 
     {
         const { other_movies, ...movieDetails } = movie;
-        const rate = !hasLikedMovie ? 'like' : '';
-        const message = !hasLikedMovie ? 'Liked' : 'Unrated';
+        const rate = !isMovieLiked ? 'like' : '';
+        const message = !isMovieLiked ? 'Liked' : 'Unrated';
         
         batch(() => {
             dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
@@ -57,71 +66,45 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
 
 
     return (
-        <View style={ styles.tabsContainer }>
-            <Tab value={ 0 } indicatorStyle={ styles.tabIndicator } disableIndicator={ true }>
-                
-                {
-                    modelType !== 'Movie'
-                        ? (
-                            <MaterialButton 
-                                label='Remind Me'
-                                name={ !isReminded ? 'bell' : 'check' }
-                                size={ 28 }
-                                isLoading={ AUTH.isLoading }
-                                onPress={ handlePressToggleRemindMe }
-                            />
-                        )
-                        : (
-                            <MaterialButton 
-                                label='My List'
-                                name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
-                                size={ 28 }
-                                isLoading={ AUTH.isLoading }
-                                onPress={ handlePressAddToMyList }
-                            />
-                        )
-                }
-
-                <Tab.Item 
-                    title='Like' 
-                    icon={ 
-                        <ActivityIndicatorWrapper 
+        <View style={ styles.container }>
+            {
+                modelType !== 'Movie'
+                    ? (
+                        <MaterialButton 
+                            label='Remind Me'
+                            name={ !isReminded ? 'bell' : 'check' }
+                            size={ 30 }
                             isLoading={ AUTH.isLoading }
-                            component={ 
-                                <FontAwesome5 
-                                    name='thumbs-up'
-                                    size={ 30 }
-                                    color='white'
-                                    solid={ hasLikedMovie }
-                                />
-                            }
+                            onPress={ handlePressToggleRemindMe }
                         />
-                    }
-                    titleStyle={ styles.tabItemTitle }
-                    containerStyle={ styles.tabItemContainer }
-                    onPressIn={ handlePressLike }
-                />
-
-                <Tab.Item 
-                    title='Share' 
-                    icon={ 
-                        <ActivityIndicatorWrapper 
+                    )
+                    : (
+                        <MaterialButton 
+                            label='My List'
+                            name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
+                            size={ 30 }
                             isLoading={ AUTH.isLoading }
-                            component={
-                                <FeatherIcon 
-                                    name='share-2'
-                                    size={ 30 }
-                                    color='white'
-                                />
-                            }
+                            onPress={ handlePressAddToMyList }
                         />
-                    }
-                    titleStyle={ styles.tabItemTitle }
-                    containerStyle={ styles.tabItemContainer }
-                    onPressIn={ handlePressTabShare }
-                />
+                    )
+            }
 
-            </Tab>
+            <FontAwesomeButton 
+                label='Like'
+                name={ 'thumbs-up' }
+                size={ 30 }
+                isLoading={ AUTH.isLoading }
+                onPress={ handlePressLike }
+                isSolid={ Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id)) }
+            />
+
+            <FeatherButton 
+                label='Share'
+                name={ 'share-2' }
+                size={ 30 }
+                isLoading={ AUTH.isLoading }
+                onPress={ handlePressTabShare }
+            />
         </View>
     )
 }

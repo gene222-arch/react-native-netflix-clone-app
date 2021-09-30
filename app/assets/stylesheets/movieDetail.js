@@ -80,24 +80,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.darkGrey,
         marginTop: 20
     },
-    tabsContainer: {
-        width: '85%',
-        marginTop: 10,
-        paddingHorizontal: 10,
-    },
-    tabIndicator: {
-        backgroundColor: Colors.error
-    },
-    tabItemContainer: {
-        backgroundColor: 'transparent'
-    },  
-    tabItemTitle: {
-        fontSize: 10,
-        color: Colors.grey
-    },
-    tabItem: {
-
-    },
     year: {
         color: Colors.grey
     }

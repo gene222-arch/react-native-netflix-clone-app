@@ -29,7 +29,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ movie, setMovie ] = useState(null);
-    const [ isMovieLiked, setIsMovieLiked ] = useState(false);
+    const [ isMovieLiked, setIsMovieLiked ] = useState(Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === parseInt(movieId))));
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
     const [ selectedPage, setSelectedPage ] = useState('');
@@ -155,7 +155,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                         videoStatus={ videoStatus }
                         handlePressPlayVideo={ handlePressPlayVideo }
                         handlePressPauseVideo={ handlePressPauseVideo }
-                        hasLikedMovie={ isMovieLiked }
                         pages={ pages }
                         selectedPage={ selectedPage }
                         handleChangePage={ handleChangePage }

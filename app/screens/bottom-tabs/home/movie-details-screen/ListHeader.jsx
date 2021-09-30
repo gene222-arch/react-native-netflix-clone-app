@@ -17,7 +17,7 @@ const ListHeader = ({ movie, videoStatus, handlePressPauseVideo, handlePressPlay
                 handlePressPlayVideo={ handlePressPlayVideo }
             />
             <MovieDescription movie={ movie } />
-            <ActionButton movie={ movie } hasLikedMovie={ hasLikedMovie } />
+            <ActionButton movie={ movie } />
             <PaginationPicker 
                 pages={ pages }
                 selectedPage={ selectedPage } 
