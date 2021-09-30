@@ -15,6 +15,7 @@ import MovieDetailScreenLoader from '../../../../components/loading-skeletons/Mo
 import { getExtension } from '../../../../utils/file';
 import { ensureFileExists } from '../../../../utils/cacheImage';
 import ListHeader from './ListHeader';
+import { useNavigation } from '@react-navigation/native';
 
 
 const PER_PAGE = 3;
@@ -22,6 +23,7 @@ const PER_PAGE = 3;
 const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) => 
 {   
     const dispatch = useDispatch();
+    const navigations = useNavigation();
     const { id: movieId } = route.params;
     const hasLikedMovie = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movieId));
 
@@ -49,6 +51,14 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const handleChangePage = (pageNumber, index) => {
         setSelectedPage(pageNumber);
         setDefaultPageList(similarMovies[index]);
+    }
+
+    const handleClickChangeMovie = (selectedMovie) => 
+    {
+        setMovie(selectedMovie);
+        navigations.setParams({
+            headerTitle: selectedMovie.title
+        });
     }
 
     const runAfterInteractions = () => 
@@ -125,7 +135,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ defaultPageList }
                 ListHeaderComponentStyle={ styles.listHeaderComponent }
-                renderItem={ ({ item }) => <EpisodeItem movie={ item } onPress={ () => setMovie(item) } />}
+                renderItem={ ({ item }) => <EpisodeItem movie={ item } onPress={ () => handleClickChangeMovie(item.movie) } />}
                 ListHeaderComponent={
                     <ListHeader 
                         movie={ movie }
