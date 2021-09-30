@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
 import { batch, connect, useDispatch } from 'react-redux';
 import ActivityIndicatorWrapper from './ActivityIndicatorWrapper';
+import MaterialButton from './styled-components/MaterialButton';
 
 
 const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLikedMovie = false }) => 
@@ -62,43 +63,21 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie', hasLiked
                 {
                     modelType !== 'Movie'
                         ? (
-                            <Tab.Item 
-                                title='Remind Me' 
-                                icon={ 
-                                    <ActivityIndicatorWrapper 
-                                        isLoading={ AUTH.isLoading }
-                                        component={
-                                            <FeatherIcon 
-                                                name={ !isReminded ? 'bell' : 'check' }
-                                                size={ 28 }
-                                                color='#fff'
-                                            />
-                                        }
-                                    />
-                                }
-                                titleStyle={ styles.tabItemTitle  }
-                                containerStyle={ styles.tabItemContainer }
-                                onPressIn={ handlePressToggleRemindMe }
+                            <MaterialButton 
+                                label='Remind Me'
+                                name={ !isReminded ? 'bell' : 'check' }
+                                size={ 28 }
+                                isLoading={ AUTH.isLoading }
+                                onPress={ handlePressToggleRemindMe }
                             />
                         )
                         : (
-                            <Tab.Item 
-                                title='My List' 
-                                icon={ 
-                                    <ActivityIndicatorWrapper 
-                                        isLoading={ AUTH.isLoading }
-                                        component={
-                                            <MaterialCommunityIcon 
-                                                name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
-                                                size={ 30 }
-                                                color='white'
-                                            />
-                                        }
-                                    />
-                                }
-                                titleStyle={ styles.tabItemTitle  }
-                                containerStyle={ styles.tabItemContainer }
-                                onPressIn={ handlePressAddToMyList }
+                            <MaterialButton 
+                                label='My List'
+                                name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
+                                size={ 28 }
+                                isLoading={ AUTH.isLoading }
+                                onPress={ handlePressAddToMyList }
                             />
                         )
                 }
