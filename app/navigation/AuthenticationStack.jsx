@@ -1,8 +1,13 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, TransitionPresets     } from '@react-navigation/stack'
 import LoginScreen from '../screens/auth/LoginScreen';
 import GetStartedScreen from './../screens/auth/GetStartedScreen';
 import AppLogo from './../components/AppLogo';
+
+
+const TransitionScreenOptions = {
+  ...TransitionPresets.SlideFromRightIOS, 
+};
 
 const Stack = createStackNavigator();
 
@@ -13,7 +18,7 @@ const defaultOptions = {
 const AuthenticationStack = () => 
 {
     return (
-        <Stack.Navigator  initialRouteName='GetStartedScreen'>
+        <Stack.Navigator  initialRouteName='GetStartedScreen' screenOptions={ TransitionScreenOptions }>
             <Stack.Screen name='GetStartedScreen' component={ GetStartedScreen } options={ defaultOptions }/>
             <Stack.Screen 
                 name='Login' 
