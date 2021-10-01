@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import Text from '../../../components/Text'
 import View from '../../../components/View'
@@ -6,6 +6,7 @@ import Colors from './../../../constants/Colors';
 import { Button } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/core';
 
 const styles = StyleSheet.create({
     btn: {
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
 const InputEmail = ({ onPressCloseIcon }) => 
 {
     const navigation = useNavigation();
+    const inputRef = useRef(null);
 
     const [ email, setEmail ] = useState('');
     const [ hasError, setHasError ] = useState(false);
@@ -84,21 +86,36 @@ const InputEmail = ({ onPressCloseIcon }) =>
         }
     }
 
-    const handleClickSubmit = () => {
-        if (! hasError && email.length) {
+    const handleClickSubmit = () => 
+    {
+        if (! email.length) {
+            setHasError(true);
+            setErrorMessage('Email is required');
+        }
+
+        if (! hasError && email.length) 
+        {
+            setHasError(false);
+            setErrorMessage('');
+
             navigation.navigate('Login', {
                 email
             });
         }
     }
 
-    useEffect(() => {
-        return () => {
-            setEmail('');
-            setHasError(false);
-            setErrorMessage('');
-        }
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            inputRef.current.focus();
+
+            return () => {
+                setEmail('');
+                setHasError(false);
+                setErrorMessage('');
+                inputRef.current = null;
+            }
+        }, [])
+    )
 
     return (
         <View style={ styles.container }>
@@ -113,6 +130,7 @@ const InputEmail = ({ onPressCloseIcon }) =>
             <Text style={ styles.readyToWatchText }>Ready to watch?</Text>
             <Text style={ styles.instructionText }>Enter your email in order to sign in to your account.</Text>
             <TextInput 
+                ref={ (input) => { inputRef.current = input } }
                 placeholder='Email'
                 placeholderTextColor={ Colors.darkGrey }
                 style={[ styles.input, { borderColor: hasError ? Colors.netFlixRed : '' } ]}
