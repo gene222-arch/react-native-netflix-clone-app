@@ -28,13 +28,14 @@ const styles = StyleSheet.create({
         flex: 1
     },
     carouselContainer: {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        height: 530
     },
     getStarted: {
         padding: 25
     },  
     renderItemContainer: {
-        height: '70%',
+        height: '100%',
         width: '100%'
     }
 });
@@ -89,7 +90,6 @@ const GetStartedScreen = () =>
                 itemWidth={ DEVICE_WIDTH }
                 layout={'stack'} 
                 layoutCardOffset={ 18 }
-                style={ styles.carousel }
                 pagingEnabled
                 enableSnap
                 contentContainerCustomStyle={ styles.carouselContainer }
