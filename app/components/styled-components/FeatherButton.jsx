@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const FeatherButton = ({ name, size, color = '#FFF', label = 'Label', isLoading = false, onPress }) => 
+const FeatherButton = ({ name, size, color = '#FFF', label = '', isLoading = false, onPress, iconStyle = {} }) => 
 {
     return (
         <TouchableOpacity onPress={ onPress }>
@@ -31,6 +31,7 @@ const FeatherButton = ({ name, size, color = '#FFF', label = 'Label', isLoading 
                             name={ name }
                             size={ size }
                             color={ color }
+                            style={ iconStyle }
                         />
                     }
                 />

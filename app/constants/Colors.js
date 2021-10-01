@@ -12,6 +12,7 @@ const Colors = {
     grey: 'rgba(255, 255, 255, 0.7)',
     darkGrey: '#2c2c2c',
     darkMode: '#121212',
+    textSecondary: 'rgb(107, 107, 107)',
     theme: {
         container: {
             light: {
