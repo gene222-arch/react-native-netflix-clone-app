@@ -4,12 +4,15 @@ import Text from './Text'
 import { StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import Image from './../components/Image';
 import APP_MINI_LOGO from './../assets/app-mini-logo.png'
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: Platform.OS === 'android' ? StatusBar.currentHeight + 15 : 15
+        alignItems: 'center',
+        marginTop: Platform.OS === 'android' ? StatusBar.currentHeight + 15 : 15,
+        paddingHorizontal: 5,
     },
     logo: {
         height: 45,
@@ -31,6 +34,8 @@ const styles = StyleSheet.create({
 
 const AuthHeader = () => 
 {
+    const navigation = useNavigation();
+
     return (
         <View style={ styles.container }>
             <Image 
@@ -41,7 +46,7 @@ const AuthHeader = () =>
                 <TouchableOpacity>
                     <Text style={ styles.privacyText }>PRIVACY</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={ () => navigation.navigate('Login') }>
                     <Text style={ styles.signInText }>SIGN IN</Text>
                 </TouchableOpacity>
             </View>

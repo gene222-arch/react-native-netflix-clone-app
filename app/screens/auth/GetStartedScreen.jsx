@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react'
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import WelcomeScreen from './get-started-carousel/WelcomeScreen';
 import UnlimitedMoviesScreen from './get-started-carousel/UnlimitedMoviesScreen';
 import NoPeskyContractsScreen from './get-started-carousel/NoPeskyContractsScreen';
@@ -7,11 +7,10 @@ import { StyleSheet } from 'react-native';
 import { Button, Overlay } from 'react-native-elements';
 import Colors from './../../constants/Colors';
 import View from '../../components/View';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../constants/Dimensions';
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 import AuthHeader from './../../components/AuthHeader';
 import { useFocusEffect } from '@react-navigation/core';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import Text from './../../components/Text';
 import InputEmail from './get-started-carousel/InputEmail';
 
 
@@ -28,11 +27,14 @@ const styles = StyleSheet.create({
     carousel: {
         flex: 1
     },
+    carouselContainer: {
+        backgroundColor: 'transparent'
+    },
     getStarted: {
         padding: 25
     },  
     renderItemContainer: {
-        height: '80%',
+        height: '70%',
         width: '100%'
     }
 });
@@ -42,6 +44,7 @@ const GetStartedScreen = () =>
     const carousel = useRef(null);
 
     const [ showOverlay, setShowOverlay ] = useState(false);
+    const [ activeSlideIndex, setActiveSlideIndex ] = useState(0);
 
     const onUnloadUnlockPortrait = async () => await ScreenOrientation.unlockAsync();
 
@@ -88,6 +91,26 @@ const GetStartedScreen = () =>
                 layoutCardOffset={ 18 }
                 style={ styles.carousel }
                 pagingEnabled
+                enableSnap
+                contentContainerCustomStyle={ styles.carouselContainer }
+                onSnapToItem={ (index) => setActiveSlideIndex(index) }
+            />
+            <Pagination
+                dotsLength={ 3 } // also based on number of sildes you want
+                activeDotIndex={ activeSlideIndex }
+                containerStyle={{ backgroundColor: "#000000"  }}
+                dotStyle={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    marginHorizontal: 8,
+                    backgroundColor: "#FFF"
+                }}
+                inactiveDotStyle={{
+                    backgroundColor: "pink"
+                }}
+                inactiveDotOpacity={ 0.4 }
+                inactiveDotScale={ 0.8 }
             />
             <Button 
                 title='GET STARTED'
