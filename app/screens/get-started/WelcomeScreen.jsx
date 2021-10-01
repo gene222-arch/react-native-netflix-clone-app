@@ -2,7 +2,7 @@ import React from 'react'
 import View from './../../components/View';
 import Text from './../../components/Text';
 
-const GetStartedScreen = () => 
+const WelcomeScreen = () => 
 {
     return (
         <View>
@@ -11,4 +11,4 @@ const GetStartedScreen = () =>
     )
 }
 
-export default GetStartedScreen
+export default WelcomeScreen
