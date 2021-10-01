@@ -5,6 +5,7 @@ import View from '../../../components/View'
 import Colors from './../../../constants/Colors';
 import { Button } from 'react-native-elements';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     btn: {
@@ -51,6 +52,8 @@ const styles = StyleSheet.create({
 
 const InputEmail = ({ onPressCloseIcon }) => 
 {
+    const navigation = useNavigation();
+
     const [ email, setEmail ] = useState('');
     const [ hasError, setHasError ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState('');
@@ -78,6 +81,14 @@ const InputEmail = ({ onPressCloseIcon }) =>
         if (text.length && text.length >= 5 && text.match(isValid)) {
             setErrorMessage('');
             setHasError(false);
+        }
+    }
+
+    const handleClickSubmit = () => {
+        if (! hasError && email.length) {
+            navigation.navigate('Login', {
+                email
+            });
         }
     }
 
@@ -112,6 +123,7 @@ const InputEmail = ({ onPressCloseIcon }) =>
             <Button 
                 title='GET STARTED'
                 buttonStyle={ styles.btn }
+                onPress={ handleClickSubmit }
             />
         </View>
     )

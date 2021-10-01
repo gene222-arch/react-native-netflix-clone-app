@@ -17,7 +17,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import LoadingSpinner from './../../components/LoadingSpinner';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
+const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }) => 
 {
     const dispatch = useDispatch();
 
@@ -42,6 +42,13 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) =>
 
     useEffect(() => 
     {
+        if (route.params?.email) {
+            setCredentials({
+                ...credentials,
+                email: route.params.email
+            });
+        }
+
         onLoadLockToPortrait();
 
         return () => {
