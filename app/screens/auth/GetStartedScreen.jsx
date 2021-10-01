@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import Carousel from 'react-native-snap-carousel';
 import WelcomeScreen from './get-started-carousel/WelcomeScreen';
 import UnlimitedMoviesScreen from './get-started-carousel/UnlimitedMoviesScreen';
@@ -9,6 +9,9 @@ import Colors from './../../constants/Colors';
 import View from '../../components/View';
 import { DEVICE_WIDTH } from './../../constants/Dimensions';
 import AuthHeader from './../../components/AuthHeader';
+import { useFocusEffect } from '@react-navigation/core';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
 
 const styles = StyleSheet.create({
     btn: {
@@ -33,11 +36,27 @@ const GetStartedScreen = () =>
 {
     const carousel = useRef(null);
 
+    const onUnloadUnlockPortrait = async () => await ScreenOrientation.unlockAsync();
+
+    const onLoadLockToPortrait = async () => {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
+
     const entries = [
         <WelcomeScreen />,
         <UnlimitedMoviesScreen />,
         <NoPeskyContractsScreen />
     ];
+    
+    useFocusEffect(
+        useCallback(() => {
+            onLoadLockToPortrait();
+            
+            return () => {
+                onUnloadUnlockPortrait();
+            }
+        }, [])
+    )
 
     return (
         <View style={ styles.container }>
