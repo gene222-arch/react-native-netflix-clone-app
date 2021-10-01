@@ -1,8 +1,8 @@
 import React from 'react'
-import View from './../../../components/View';
-import Text from './../../../components/Text';
+import View from '../../../components/View';
+import Text from '../../../components/Text';
 import { StyleSheet } from 'react-native';
-import Colors from './../../../constants/Colors';
+import Colors from '../../../constants/Colors';
 
 const styles = StyleSheet.create({
     container: {
@@ -26,18 +26,18 @@ const styles = StyleSheet.create({
     }
 });
 
-const UnlimitedMovieScreen = () => 
+const NoPeskyContractsScreen = () => 
 {
     return (
         <View style={ styles.container }>
             <View></View>
             <View>
-                <Text style={ styles.text }>Unlimited</Text>
-                <Text style={ styles.text }>movies & more</Text>
-                <Text style={ styles.helperText }>Boredom is solved.</Text>
+                <Text style={ styles.text }>No pesky</Text>
+                <Text style={ styles.text }>contracts</Text>
+                <Text style={ styles.helperText }>Join today, cancel anytime.</Text>
             </View>
         </View>
     )
 }
 
-export default UnlimitedMovieScreen
+export default NoPeskyContractsScreen
