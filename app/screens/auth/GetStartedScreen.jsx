@@ -3,12 +3,11 @@ import Carousel from 'react-native-snap-carousel';
 import WelcomeScreen from './get-started-carousel/WelcomeScreen';
 import UnlimitedMoviesScreen from './get-started-carousel/UnlimitedMoviesScreen';
 import NoPeskyContractsScreen from './get-started-carousel/NoPeskyContractsScreen';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements/dist/buttons/Button';
 import Colors from './../../constants/Colors';
 import View from '../../components/View';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../constants/Dimensions';
-import AppBar from './../AppBar';
+import { DEVICE_WIDTH } from './../../constants/Dimensions';
 import AuthHeader from './../../components/AuthHeader';
 
 const styles = StyleSheet.create({
