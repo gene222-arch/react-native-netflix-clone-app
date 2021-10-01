@@ -71,8 +71,11 @@ export default (state = initialState, { type, payload }) =>
                             : category;
                 });
 
+            const newMovies = [ ...state.movies, { ...payload.movie, similar_movies: [] } ];
+
             return {
                 ...state,
+                movies: newMovies,
                 categories: newCategories,
                 isLoading: false,
                 errors

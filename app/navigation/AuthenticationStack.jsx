@@ -11,7 +11,7 @@ const AuthenticationStack = () =>
 {
     return (
         <Stack.Navigator 
-            initialRouteName='UnlimitedMoviesScreen' 
+            initialRouteName='Login' 
             screenOptions={{ 
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 ...TransitionPresets.SlideFromRightIOS
