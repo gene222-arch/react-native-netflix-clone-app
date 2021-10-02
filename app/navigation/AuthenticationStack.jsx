@@ -18,8 +18,7 @@ const defaultOptions = {
 const AuthenticationStack = () => 
 {
     return (
-        <Stack.Navigator  initialRouteName='GetStartedScreen' screenOptions={ TransitionScreenOptions }>
-            <Stack.Screen name='GetStartedScreen' component={ GetStartedScreen } options={ defaultOptions }/>
+        <Stack.Navigator initialRouteName='GetStartedScreen' screenOptions={ TransitionScreenOptions }>
             <Stack.Screen 
                 name='Login' 
                 component={ LoginScreen } options={ defaultOptions }
@@ -27,6 +26,7 @@ const AuthenticationStack = () =>
                     headerTitle: props => <AppLogo />
                 }}
             />
+            <Stack.Screen name='GetStartedScreen' component={ GetStartedScreen } options={ defaultOptions }/>
         </Stack.Navigator>
     );
 }

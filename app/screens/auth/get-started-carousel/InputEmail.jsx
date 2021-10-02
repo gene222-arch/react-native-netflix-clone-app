@@ -107,8 +107,8 @@ const InputEmail = ({ onPressCloseIcon }) =>
     useFocusEffect(
         useCallback(() => 
         {
-            if (! inputRef.current) {
-                inputRef.current.focus();
+            if (! inputRef?.current) {
+                inputRef?.current?.focus();
             }
 
             return () => {

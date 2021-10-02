@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, connect } from 'react-redux'
 import { Button, Text, CheckBox } from 'react-native-elements';
 import * as AUTH_ACTION from '../../redux/modules/auth/actions'
 import styles from './../../assets/stylesheets/loginScreen';
-import { View } from 'react-native';
+import { View, Keyboard } from 'react-native';
 import Colors from './../../constants/Colors';
 import { createStructuredSelector } from 'reselect';
 import { 
@@ -16,9 +16,12 @@ import StyledTextInput from './../../components/styled-components/StyledTextInpu
 import * as ScreenOrientation from 'expo-screen-orientation';
 import LoadingSpinner from './../../components/LoadingSpinner';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { useFocusEffect } from '@react-navigation/core';
 
 const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }) => 
 {
+    const inputEmailRef = useRef(null);
+    const inputPasswordRef = useRef(null);
     const dispatch = useDispatch();
 
     const [ isChecked, setIsChecked ] = useState(false);
@@ -59,6 +62,21 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
         }
     }, []);
 
+    useFocusEffect(
+        useCallback(() => {
+            if (route.params?.email.length) {
+                inputPasswordRef?.current?.focus();
+            } else {
+                inputEmailRef?.current?.focus();
+            }
+
+            return () => {
+                inputEmailRef.current = null;
+                inputPasswordRef.current = null;
+            }
+        }, [])
+    )
+
     if (AUTH.isLoading) {
         return <LoadingSpinner message='Signing In' />
     }
@@ -71,6 +89,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
             }
             <View style={ styles.formContainer }>
                 <StyledTextInput
+                    ref={ inputEmailRef }
                     placeholder='Email'
                     placeholderTextColor={ Colors.grey }
                     style={ [styles.inputContainerStyle, styles.email] }
@@ -81,6 +100,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
                 />
                 <View style={ styles.passwordContainer }>
                     <StyledTextInput
+                        ref={ inputPasswordRef }
                         placeholder='Password'
                         placeholderTextColor={ Colors.grey }
                         style={ [styles.inputContainerStyle, styles.password] }
