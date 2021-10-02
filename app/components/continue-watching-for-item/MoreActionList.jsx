@@ -58,6 +58,11 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
     const FILE_URI = `${ FileSystem.documentDirectory }${AUTH.id}${ AUTH_PROFILE.id }${ selectedVideo.id }.mp4`;
     const getMovieRatingDetails = selectedVideo.user_ratings[0];
 
+    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
+        id: selectedVideo?.id,
+        headerTitle: selectedVideo?.title
+    });
+
     const actionList = 
     [
         {
@@ -73,7 +78,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
             title: 'Episodes and Info', 
             iconType: 'feather',
             iconName: 'info',
-            onPress: () => console.log('Navigating to Episode and Info'),
+            onPress: () => handlePressNavigateToShowDetailScreen(),
             show: true,
         },
         { 
