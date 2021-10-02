@@ -134,6 +134,7 @@ function* logoutSaga()
         if (status === 'success') {
             yield call(SecureStoreInstance.removeAccessToken);
             yield put(ACTION.logoutSuccess());
+            RootNavigation.navigate('Login');
         }
     } catch ({ message }) {
         console.log(message)
