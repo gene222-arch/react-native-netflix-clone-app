@@ -105,8 +105,11 @@ const InputEmail = ({ onPressCloseIcon }) =>
     }
 
     useFocusEffect(
-        useCallback(() => {
-            inputRef.current.focus();
+        useCallback(() => 
+        {
+            if (! inputRef.current) {
+                inputRef.current.focus();
+            }
 
             return () => {
                 setEmail('');
@@ -133,7 +136,7 @@ const InputEmail = ({ onPressCloseIcon }) =>
                 ref={ (input) => { inputRef.current = input } }
                 placeholder='Email'
                 placeholderTextColor={ Colors.darkGrey }
-                style={[ styles.input, { borderColor: hasError ? Colors.netFlixRed : '' } ]}
+                style={[ styles.input, { borderColor: hasError ? Colors.netFlixRed : 'transparent' } ]}
                 value={ email }
                 onChangeText={ handleChangeEmail }
             />
@@ -142,6 +145,7 @@ const InputEmail = ({ onPressCloseIcon }) =>
                 title='GET STARTED'
                 buttonStyle={ styles.btn }
                 onPress={ handleClickSubmit }
+
             />
         </View>
     )
