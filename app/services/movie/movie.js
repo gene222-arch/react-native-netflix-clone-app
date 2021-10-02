@@ -49,6 +49,15 @@ export const findByIDAsync = async (id) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+
+export const findRandomlyAsync = async () => 
+{
+    return await axiosInstance()
+        .get(`/movies/random`)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
 export const incrementSearchCountAsync = async (id) => 
 {
     return await axiosInstance()

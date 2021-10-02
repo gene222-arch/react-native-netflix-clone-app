@@ -19,6 +19,7 @@ import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
+import * as MOVIE_API from './../../../services/movie/movie'
 
 const DEFAULT_FRONT_PAGE_PROPS = {
     id: '',
@@ -37,8 +38,16 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE_PROPS);
 
-    const onLoadSetFrontPage = () => {
-        setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
+    const onLoadSetFrontPage = async () => 
+    {
+        if (! MOVIE.movies.length) {
+            try {
+                const { data } = await MOVIE_API.findRandomlyAsync();
+                setFrontPage(data);
+            } catch ({ message }) {}
+        } else {
+            setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
+        }
     }    
 
     useEffect(() => 
@@ -95,7 +104,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
                     <View>
                         <ImageBackground 
                             source={{ 
-                                uri: frontPage?.poster_path
+                                uri: frontPage.poster_path
                             }}
                             style={ styles.homeFrontPage }
                         >
