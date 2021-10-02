@@ -222,7 +222,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
 
     const checkIfFileExists = () => 
     {
-        const fileExists = Boolean(AUTH_PROFILE.my_downloads.find(download => download?.movie?.id === selectedVideo.id));
+        const fileExists = Boolean(AUTH_PROFILE.my_downloads.find(download => download.movie.id === selectedVideo.id));
         
         !fileExists 
             ? setStatus('') 
@@ -245,7 +245,7 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
     useFocusEffect(
         useCallback(() => {
             checkIfFileExists();
-        }, [AUTH_PROFILE.recenly_watched_movies])
+        }, [AUTH_PROFILE.recenly_watched_movies, AUTH_PROFILE.my_downloads])
     )
 
     return (
