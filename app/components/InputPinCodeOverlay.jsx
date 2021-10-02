@@ -12,7 +12,7 @@ import * as WebBrowser from 'expo-web-browser';
 import Colors from './../constants/Colors';
 import * as SecureStoreInstance from './../utils/SecureStoreInstance'
 
-const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, hasError, onChangeText, onCancel }) => 
+const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, setIsVisible, hasError, onChangeText, onCancel }) => 
 {
     const handleClickForgotPinCode = async () => 
     {
@@ -22,6 +22,7 @@ const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, hasError, on
         const queryParams = `?token=${ accessToken }&profileId=${ profileId }`;
 
         await WebBrowser.openBrowserAsync(url + queryParams);
+        setIsVisible(false);
     }
 
     return (
