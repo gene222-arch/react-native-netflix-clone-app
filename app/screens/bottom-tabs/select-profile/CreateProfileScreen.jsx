@@ -43,7 +43,14 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
         setShowAvatars(false);
     } 
 
-    const handleClickBackButton = () => setShowAvatars(false);
+    const handleClickBackButton = () => 
+    {
+        setShowAvatars(false);
+        
+        if (! showAvatars) {
+            navigation.goBack();
+        }
+    }
 
     useEffect(() => {
         return () => {
