@@ -3,6 +3,7 @@ import { InteractionManager } from 'react-native'
 import VideoPlayerFullScreen from '../components/VideoPlayerFullScreen';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import LoadingSpinner from '../components/LoadingSpinner';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const DisplayVideoScreen = () => 
 {
@@ -12,10 +13,18 @@ const DisplayVideoScreen = () =>
     const [ shouldPlay, setShouldPlay ] = useState(false);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
+    const onUnloadUnlockLandscape = async () => await ScreenOrientation.unlockAsync();
+
+    const onLoadLockToLandscape = async () => {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+    }
+
     useFocusEffect(
-        useCallback(() => {
+        useCallback(() => 
+        {
             InteractionManager.runAfterInteractions(async () => 
             {
+                onLoadLockToLandscape();
                 try {   
                     const { id, title, videoUri } = route.params;
                     setUri(videoUri);
@@ -29,13 +38,12 @@ const DisplayVideoScreen = () =>
     
             return () => {
                 setUri(null);
+                onUnloadUnlockLandscape();
             }
         }, [route.params])
     )
 
-    if (! isInteractionsComplete) {
-        return <LoadingSpinner message='Loading' />
-    }
+    if (! isInteractionsComplete) return <LoadingSpinner message='Loading' />
 
     return (
         <VideoPlayerFullScreen 
