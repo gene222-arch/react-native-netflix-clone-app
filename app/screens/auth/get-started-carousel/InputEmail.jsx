@@ -136,7 +136,7 @@ const InputEmail = ({ onPressCloseIcon }) =>
                 ref={ (input) => { inputRef.current = input } }
                 placeholder='Email'
                 placeholderTextColor={ Colors.darkGrey }
-                style={[ styles.input, { borderColor: hasError ? Colors.netFlixRed : 'transparent' } ]}
+                style={[ styles.input, { borderColor: hasError ? Colors.netFlixRed : Colors.success } ]}
                 value={ email }
                 onChangeText={ handleChangeEmail }
             />

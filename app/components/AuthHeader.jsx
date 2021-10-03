@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: Platform.OS === 'android' ? StatusBar.currentHeight + 15 : 15,
         paddingHorizontal: 5,
+        backgroundColor: 'transparent'
     },
     logo: {
         height: 45,
@@ -20,7 +21,8 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     privacySignInContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        backgroundColor: 'transparent'
     },
     privacyText: {
         fontWeight: 'bold',

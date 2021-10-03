@@ -8,7 +8,6 @@ import { Button, Overlay } from 'react-native-elements';
 import Colors from './../../constants/Colors';
 import View from '../../components/View';
 import { DEVICE_WIDTH } from './../../constants/Dimensions';
-import AuthHeader from './../../components/AuthHeader';
 import { useFocusEffect } from '@react-navigation/core';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import InputEmail from './get-started-carousel/InputEmail';
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
     },
     carouselContainer: {
         backgroundColor: 'transparent',
-        height: 530
+        height: 625
     },
     getStarted: {
         padding: 25
@@ -81,7 +80,6 @@ const GetStartedScreen = () =>
             >
                 <InputEmail onPressCloseIcon={ handleToggleOverLay } />
             </Overlay>
-            <AuthHeader />
             <Carousel
                 ref={(c) => { carousel.current = c; }}
                 data={ entries }
