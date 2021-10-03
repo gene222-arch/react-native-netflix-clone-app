@@ -25,6 +25,7 @@ const DisplayVideoScreen = () =>
             InteractionManager.runAfterInteractions(async () => 
             {
                 onLoadLockToLandscape();
+
                 try {   
                     const { id, title, videoUri } = route.params;
                     setUri(videoUri);
@@ -32,7 +33,7 @@ const DisplayVideoScreen = () =>
                 } catch ({ message }) {
                     console.log(message);
                 }
-    
+
                 setIsInteractionsComplete(true);
             });
     

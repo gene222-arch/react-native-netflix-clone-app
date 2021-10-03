@@ -35,10 +35,16 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
     
     const genres = useMemo(() => frontPage?.genres.split(','), [ frontPage?.genres ]);
 
-    const handlePressNavigateToDisplayVideo = () => navigation.navigate('DisplayVideo', { 
-        videoUri: frontPage?.trailer_video_path, 
-        id: frontPage?.id 
-    });
+    const handlePressNavigateToDisplayVideo = () => {
+        navigation.navigate('DisplayVideoRoot', {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: frontPage.title,
+                videoUri: frontPage.video_preview_path, 
+                id: frontPage.id 
+            }
+        });
+    }
 
     const handleToggleAddToMyList = () => 
     {
