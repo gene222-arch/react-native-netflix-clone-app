@@ -64,7 +64,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
 
     useFocusEffect(
         useCallback(() => {
-            if (route.params?.email.length) {
+            if (Boolean(route.params?.email.length)) {
                 inputPasswordRef?.current?.focus();
             } else {
                 inputEmailRef?.current?.focus();
