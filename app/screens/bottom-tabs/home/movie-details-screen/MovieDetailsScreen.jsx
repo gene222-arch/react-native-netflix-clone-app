@@ -2,7 +2,6 @@ import React,{ useState, useEffect, useRef } from 'react'
 import { InteractionManager, FlatList } from 'react-native'
 import { useDispatch, connect, batch } from 'react-redux';
 import { Video } from 'expo-av'
-import * as FileSystem from 'expo-file-system'
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
 import * as MOVIE_ACTION from './../../../../redux/modules/movie/actions'
 import View from '../../../../components/View';
@@ -12,8 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import MovieDetailScreenLoader from '../../../../components/loading-skeletons/MovieDetailScreenLoader';
-import { getExtension } from '../../../../utils/file';
-import { ensureFileExists } from '../../../../utils/cacheImage';
 import ListHeader from './ListHeader';
 import { useNavigation } from '@react-navigation/native';
 
