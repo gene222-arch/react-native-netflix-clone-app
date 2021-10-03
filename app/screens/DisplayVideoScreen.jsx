@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { InteractionManager } from 'react-native'
 import VideoPlayerFullScreen from '../components/VideoPlayerFullScreen';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import LoadingSpinner from '../components/LoadingSpinner';
-import * as FileSystem from 'expo-file-system';
-import { ensureFileExists } from './../utils/cacheImage';
-import { getExtension } from './../utils/file';
 
 const DisplayVideoScreen = () => 
 {
