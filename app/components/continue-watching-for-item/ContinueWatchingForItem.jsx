@@ -10,16 +10,28 @@ import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike, handlePressRemoveRate,  handlePressRemove }) => 
 {
+    const navigation = useNavigation();
+
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
     const handlePressShowInfo = () => setShowInfo(! showInfo);
+
+    const handlePressPlayButton = () => navigation.navigate('DisplayVideoRoot', {
+        screen: 'DisplayVideoScreen',
+        params: {
+            title: movie?.title,
+            videoUri: movie?.video_path, 
+            id: movie?.id 
+        }
+    });
 
     useEffect(() => {
         return () => {
@@ -53,6 +65,7 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
                 size={ 50 }
                 color='#fff'
                 style={ styles.playIcon }
+                onPress={ handlePressPlayButton }
             />
             
             <View style={ styles.infoMoreContainer }>

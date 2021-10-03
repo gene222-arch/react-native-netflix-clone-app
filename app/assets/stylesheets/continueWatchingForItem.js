@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     playIcon: {
         position: 'absolute',
         top: '30%',
-        left: '25%',
+        left: '25%'
     },
     poster: {
         width: 125,
