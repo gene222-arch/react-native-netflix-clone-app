@@ -26,7 +26,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ movie, setMovie ] = useState(null);
-    const [ isMovieLiked, setIsMovieLiked ] = useState(Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === parseInt(movieId))));
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [ pages, setPages ] = useState([]);
     const [ selectedPage, setSelectedPage ] = useState('');
@@ -54,7 +53,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const handleClickChangeMovie = (selectedMovie) => 
     {
         setMovie(selectedMovie);
-        setIsMovieLiked(Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === selectedMovie.id)));
         
         navigations.setParams({
             headerTitle: selectedMovie.title
@@ -94,7 +92,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             const isLiked = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movieId));
     
             setMovie(movieDetails);
-            setIsMovieLiked(isLiked);
             setSimilarMovies(pageList_);
             setPages(totalPages);
             setSelectedPage(1);
