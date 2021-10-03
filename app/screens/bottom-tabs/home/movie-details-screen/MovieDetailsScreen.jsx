@@ -127,7 +127,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     aspectRatio: 16/9
                 }}
                 source={{ uri: movie.video_path }}
-                usePoster={ false }
+                usePoster={ !videoStatus?.isPlaying }
                 posterSource={{ uri: movie.wallpaper_path }}
                 posterStyle={{
                     width: '100%',
