@@ -6,10 +6,12 @@ import VideoPlayer from 'expo-video-player'
 import Text from './Text';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/core'
 
 
 const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) => 
 {
+    const isFocused = useIsFocused();
     const navigation = useNavigation();
     const video = useRef(null);
     const [ inFullscreen, setInFullscreen ] = useState(false);
@@ -51,7 +53,7 @@ const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) =>
     return (
         <VideoPlayer
             videoProps={{
-                shouldPlay,
+                shouldPlay: isFocused,
                 resizeMode: Video.RESIZE_MODE_CONTAIN,
                 source: { uri },
                 ref: video,
