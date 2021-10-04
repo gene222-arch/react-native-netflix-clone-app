@@ -21,6 +21,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
+    const [ lastUpadedAt, setLastUpdatedAt ] = useState('');
     const [ downloadedMovie, setDownloadedMovie ] = useState(null);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -69,6 +70,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     }
 
     const runAfterInteractions = () => {
+        setLastUpdatedAt(AUTH_PROFILE.my_downloads[0].downloaded_at);
         setIsInteractionsComplete(true);
     }
 
@@ -79,6 +81,16 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
             setVisible(false);
         }
     }, []);
+
+    useFocusEffect(
+        useCallback(() => 
+        {
+            setLastUpdatedAt(AUTH_PROFILE?.my_downloads[0]?.downloaded_at);
+            return () => {
+                setLastUpdatedAt('');
+            }
+        }, [])
+    )
 
     useFocusEffect(
         useCallback(() => {
@@ -123,7 +135,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
                         color='#fff'
                         style={ styles.lastUpdateIcon }
                     />
-                    <Text style={ styles.lastUpdateText }>Updated 7 hours ago</Text>
+                    <Text style={ styles.lastUpdateText }>Updated { lastUpadedAt }</Text>
                 </View>
             </View>
 
