@@ -49,8 +49,8 @@ const SelectProfileScreen = ({ AUTH }) =>
     const handleTogglePinCodeModal = (pinCode, id) => 
     {
         setShowPinCodeModal(! showPinCodeModal);
-        setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
-        setProfileId(!profileId ? id : '');
+        setSelectedProfilePinCode(pinCode);
+        setProfileId(id);
     }
 
     const handleClickCancel = () => 
@@ -59,6 +59,7 @@ const SelectProfileScreen = ({ AUTH }) =>
         setShowPinCodeModal(false);
         setSelectedProfilePinCode('');
         setProfileId('');
+        handleChangePin('');
     }
 
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
