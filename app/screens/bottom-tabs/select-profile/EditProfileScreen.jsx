@@ -19,11 +19,13 @@ import LoadingSpinner from './../../../components/LoadingSpinner';
 import StyledTextInput from './../../../components/styled-components/StyledTextInput';
 import AvatarList from './AvatarList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
     const dispatch = useDispatch();
     const { id } = route.params;
+    const navigation = useNavigation();
 
     const [ profile, setProfile ] = useState(AUTH.profiles.find(prof => prof.id === id));
     const [ showDeleteProfileDialog, setShowDeleteProfileDialog ] = useState(false);
@@ -33,7 +35,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const handlePressDeleteProfile = () => {
         dispatch(AUTH_ACTION.deleteProfileStart(id));
-        toggleDeleteProfileDialog();
+        navigation.goBack();
     }
 
     const handlePressChangeAvatar = (avatarUri) => {
@@ -43,7 +45,13 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
 
-    const handleClickBackButton = () => setShowAvatars(false);
+    const handleClickBackButton = () => {
+        setShowAvatars(false);
+
+        if (! showAvatars) {
+            navigation.goBack();
+        }
+    }
 
     useEffect(() => {
         return () => {
@@ -111,7 +119,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                     <View style={ styles.switchContainer }>
                         <Text style={ styles.switchLabel }>For Kids</Text>
                         <Switch  
-                            value={ profile.is_for_kids }
+                            value={ Boolean(profile.is_for_kids) }
                             onValueChange={ () => setProfile({ ...profile, is_for_kids: !profile.is_for_kids }) }
                             color={ Colors.grey }
                             style={ styles.switch }
