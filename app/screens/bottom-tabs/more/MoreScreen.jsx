@@ -90,8 +90,8 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const handleTogglePinCodeModal = (pinCode, id) => 
     {
         setShowPinCodeModal(! showPinCodeModal);
-        setSelectedProfilePinCode(!selectedProfilePinCode ? pinCode : '');
-        setProfileId(!profileId ? id : '');
+        setSelectedProfilePinCode(pinCode);
+        setProfileId(id);
     }
 
     const handleClickCancel = () => 
@@ -100,6 +100,7 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         setShowPinCodeModal(false);
         setSelectedProfilePinCode('');
         setProfileId('');
+        handleChangePin('');
     }
 
     const toggleSignOutDialog = () => setShowSignOutDialog(! showSignOutDialog);
