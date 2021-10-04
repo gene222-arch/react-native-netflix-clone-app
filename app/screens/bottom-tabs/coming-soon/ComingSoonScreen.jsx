@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { InteractionManager } from 'react-native'
 import { FlatList, Platform, StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/core'
 import { createStructuredSelector } from 'reselect';
 import { useDispatch, connect, batch } from 'react-redux';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
@@ -18,6 +19,7 @@ import ComingSoonScreenLoader from '../../../components/loading-skeletons/Coming
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
+    const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -27,7 +29,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     const handleOnScroll = useCallback((e) => {
         const offset = Math.round(e.nativeEvent.contentOffset.y / 500);
         setFocusedIndex(offset);
-    }, [setFocusedIndex]);
+    }, [focusedIndex]);
 
     const handlePressToggleRemindMe = (movieID, isReminded = false) => {
         batch(() => {
@@ -97,7 +99,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                                         movie={ item }
                                         shouldShowPoster={ focusedIndex !== index }
                                         shouldFocus={ focusedIndex === index }
-                                        shouldPlay={ focusedIndex === index }
+                                        shouldPlay={ focusedIndex === index && isFocused }
                                         handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
                                         handlePressInfo={ () => handlePressInfo(item.id) }
                                         isReminded={ Boolean(isReminded) }
