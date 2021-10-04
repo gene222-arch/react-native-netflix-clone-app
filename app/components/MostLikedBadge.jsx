@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { InteractionManager, ActivityIndicator, StyleSheet, View } from 'react-native'
 import { createStructuredSelector } from 'reselect';
 import { movieSelector } from './../redux/modules/movie/selectors';
@@ -7,19 +7,27 @@ import { Badge } from 'react-native-elements/dist/badge/Badge';
 import Text from './Text';
 import Colors from './../constants/Colors';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { useFocusEffect } from '@react-navigation/native';
 
 const MostLikedBadge = ({ MOVIE, movieId = 0 }) => 
 {
     const [ isMostLiked, setIsMostLiked ] = useState(false);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
-    useEffect(() => {
-        InteractionManager.runAfterInteractions(() => {
-            const isMovieMostLiked = MOVIE.most_liked_movies.find(({ id }) => id === movieId);
-            setIsMostLiked(isMovieMostLiked);
-            setIsInteractionsComplete(true);
-        })
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            InteractionManager.runAfterInteractions(() => {
+                const isMovieMostLiked = MOVIE.most_liked_movies.find(({ id }) => id === movieId);
+                setIsMostLiked(Boolean(isMovieMostLiked));
+                setIsInteractionsComplete(true);
+            });
+
+            return () => {
+                setIsMostLiked(false);
+                setIsInteractionsComplete(true);
+            }
+        }, [])
+    )
 
     if (! isInteractionsComplete) return <ActivityIndicator color='#FFF' />
 
