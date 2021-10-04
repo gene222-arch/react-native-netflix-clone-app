@@ -6,6 +6,7 @@ import MovieDescription from './MovieDescription';
 import ActionButton from './../../../../components/ActionButton';
 import PaginationPicker from './PaginationPicker';
 import styles from './../../../../assets/stylesheets/movieDetail';
+import Text from './../../../../components/Text';
 
 const ListHeader = ({ movie, videoStatus, handlePressPauseVideo, handlePressPlayVideo, hasLikedMovie, pages, selectedPage, handleChangePage  }) => {
     return (
@@ -18,11 +19,16 @@ const ListHeader = ({ movie, videoStatus, handlePressPauseVideo, handlePressPlay
             />
             <MovieDescription movie={ movie } />
             <ActionButton movie={ movie } />
-            <PaginationPicker 
-                pages={ pages }
-                selectedPage={ selectedPage } 
-                handleChangePage={ handleChangePage }
-            />
+            <Text style={ styles.similarMoviesText }>Similar Movies</Text>
+            {
+                pages.length > 1 && (
+                    <PaginationPicker 
+                        pages={ pages }
+                        selectedPage={ selectedPage } 
+                        handleChangePage={ handleChangePage }
+                    />
+                )
+            }
         </View>
     )
 }

@@ -70,6 +70,8 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     {
         const findMovie = MOVIE.movies.find(({ id }) => id === movieId);
 
+        console.log(MOVIE.movies.map(movie => movie.id))
+
         if (findMovie) 
         {
             const { similar_movies, ...movieDetails } = findMovie;    
@@ -116,7 +118,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         }
     }, []);
 
-    if (! isInteractionsComplete && !movie) return <MovieDetailScreenLoader />
+    if (! isInteractionsComplete || !movie) return <MovieDetailScreenLoader />
 
     return (
         <View style={ styles.container }>

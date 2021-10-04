@@ -80,6 +80,11 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.darkGrey,
         marginTop: 20
     },
+    similarMoviesText: {
+        marginTop: 10,
+        fontSize: 14,
+        fontWeight: 'bold'
+    },  
     year: {
         color: Colors.grey
     }

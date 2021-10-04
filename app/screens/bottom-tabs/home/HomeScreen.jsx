@@ -59,7 +59,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         });
 
         onLoadSetFrontPage();
-    }, [AUTH_PROFILE]);
+    }, [AUTH_PROFILE.id]);
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => 
