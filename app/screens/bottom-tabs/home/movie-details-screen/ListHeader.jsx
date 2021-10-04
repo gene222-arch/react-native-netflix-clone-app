@@ -19,9 +19,11 @@ const ListHeader = ({ movie, videoStatus, handlePressPauseVideo, handlePressPlay
             />
             <MovieDescription movie={ movie } />
             <ActionButton movie={ movie } />
-            <Text style={ styles.similarMoviesText }>Similar Movies</Text>
             {
-                pages.length > 1 && (
+                pages > 1 && <Text style={ styles.similarMoviesText }>Similar Movies</Text>
+            }
+            {
+                pages > 1 && (
                     <PaginationPicker 
                         pages={ pages }
                         selectedPage={ selectedPage } 
