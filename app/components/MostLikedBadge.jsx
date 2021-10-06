@@ -11,27 +11,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const MostLikedBadge = ({ MOVIE, movieId = 0 }) => 
 {
-    const [ isMostLiked, setIsMostLiked ] = useState(false);
-    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-
-    useFocusEffect(
-        useCallback(() => {
-            InteractionManager.runAfterInteractions(() => {
-                const isMovieMostLiked = MOVIE.most_liked_movies.find(({ id }) => id === movieId);
-                setIsMostLiked(Boolean(isMovieMostLiked));
-                setIsInteractionsComplete(true);
-            });
-
-            return () => {
-                setIsMostLiked(false);
-                setIsInteractionsComplete(true);
-            }
-        }, [])
-    )
-
-    if (! isInteractionsComplete) return <ActivityIndicator color='#FFF' />
-
-    return !isMostLiked 
+    return !Boolean(MOVIE.most_liked_movies.find(({ id }) => id === movieId)) 
         ? <Text></Text>
         : (
             <View style={ styles.badgeContainer }>

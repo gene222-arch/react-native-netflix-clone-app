@@ -70,7 +70,7 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
     }
 
     const runAfterInteractions = () => {
-        setLastUpdatedAt(AUTH_PROFILE.my_downloads[0].downloaded_at);
+        setLastUpdatedAt(AUTH_PROFILE.my_downloads[0]?.downloaded_at);
         setIsInteractionsComplete(true);
     }
 
@@ -128,15 +128,19 @@ const DownloadsScreen = ({ AUTH, AUTH_PROFILE }) =>
 
             <View style={ styles.headerContainer }>
                 <Text h4>Download's for you</Text>
-                <View style={ styles.lastUpdateContainer }>
-                    <FeatherIcon 
-                        name='clock'
-                        size={ 14 }
-                        color='#fff'
-                        style={ styles.lastUpdateIcon }
-                    />
-                    <Text style={ styles.lastUpdateText }>Updated { lastUpadedAt }</Text>
-                </View>
+                {
+                    Boolean(lastUpadedAt) && (
+                        <View style={ styles.lastUpdateContainer }>
+                            <FeatherIcon 
+                                name='clock'
+                                size={ 14 }
+                                color='#fff'
+                                style={ styles.lastUpdateIcon }
+                            />
+                            <Text style={ styles.lastUpdateText }>Last Updated { lastUpadedAt }</Text>
+                        </View>
+                    )
+                }
             </View>
 
             {
