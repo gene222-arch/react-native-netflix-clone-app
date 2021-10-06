@@ -42,12 +42,23 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
     const runAfterInteractions = () => 
     {
-        ComingSoonMovieCreatedEvent.listen(response => {
-            batch(() => {
-                dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
-                dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
-                dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
-            });
+        ComingSoonMovieCreatedEvent.listen(response => 
+        {
+            if (AUTH_PROFILE.is_for_kids && response.data.age_restriction <= 12) {
+                batch(() => {
+                    dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
+                    dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
+                    dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
+                });
+            }
+
+            if (! AUTH_PROFILE.is_for_kids) {
+                batch(() => {
+                    dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
+                    dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
+                    dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
+                });
+            }
         });
 
         dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));

@@ -64,14 +64,32 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => 
         {
-            MovieCreatedEvent.listen(response => dispatch(MOVIE_ACTION.createMovie({ movie: response.data })));
+            MovieCreatedEvent.listen(response => 
+            {
+                if (AUTH_PROFILE.is_for_kids && response.data.age_restriction <= 12) {
+                    dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
+                }
+
+                if (! AUTH_PROFILE.is_for_kids) {
+                    dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
+                }
+            });
 
             ComingSoonMovieReleasedEvent.listen(response => 
             {
-                batch(() => {
-                    dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
-                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-                });
+                if (AUTH_PROFILE.is_for_kids && response.data.age_restriction <= 12) {
+                    batch(() => {
+                        dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
+                        dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                    });
+                }
+
+                if (! AUTH_PROFILE.is_for_kids) {
+                    batch(() => {
+                        dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
+                        dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                    });
+                }
             });
             
             setIsInteractionsComplete(true);
