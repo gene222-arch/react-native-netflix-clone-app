@@ -138,18 +138,20 @@ export default (state = initialState, { type, payload }) =>
             const { movie } = payload;
             const movieIndex = loggedInProfile.recently_watched_movies.findIndex(({ id }) => id === movie.id);
 
+            let newLoggedInProfile = loggedInProfile;
+
             const movie_ = { ...movie, user_ratings: [] };
 
             if (movieIndex === -1) {
-                loggedInProfile.recently_watched_movies.unshift(movie_);
+                newLoggedInProfile.recently_watched_movies.unshift(movie_);
             }
             
             if (movieIndex !== -1) {
-                loggedInProfile.recently_watched_movies.splice(movieIndex, 1);
-                loggedInProfile.recently_watched_movies.unshift(movie_);
+                newLoggedInProfile.recently_watched_movies.splice(movieIndex, 1);
+                newLoggedInProfile.recently_watched_movies.unshift(movie_);
             }
 
-            newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? loggedInProfile : prof);
+            newProfiles = profiles.map(prof => (prof.id === newLoggedInProfile.id) ? newLoggedInProfile : prof);
 
             return { 
                 ...state,

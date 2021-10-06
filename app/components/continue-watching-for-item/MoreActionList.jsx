@@ -242,11 +242,9 @@ const MoreActionList = ({ AUTH, AUTH_PROFILE, selectedVideo, handlePressRemove, 
         }, [])
     )
 
-    useFocusEffect(
-        useCallback(() => {
-            checkIfFileExists();
-        }, [AUTH_PROFILE.recenly_watched_movies, AUTH_PROFILE.my_downloads])
-    )
+    useEffect(() => {
+        checkIfFileExists();
+    }, [AUTH_PROFILE.recently_watched_movies, AUTH_PROFILE.my_downloads])
 
     return (
         <View style={ styles.container }>
