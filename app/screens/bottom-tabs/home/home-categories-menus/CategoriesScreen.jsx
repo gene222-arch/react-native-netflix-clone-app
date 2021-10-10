@@ -39,10 +39,10 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
     {
         setSelectedCategory(selectedCategory);
 
-        // const movies = MOVIE.movies;
-        // const frontPageMovies = movies.filter(movie => movie.genres.split(',').includes(selectedCategory));
+        let movies = [ ...MOVIE.movies ];
+        movies = movies.filter(movie => movie.genres.split(',').includes(selectedCategory));
 
-        setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
+        setFrontPage(movies[Math.floor(Math.random() * (movies.length - 1))]);
 
         const newCategories = MOVIE.categories.map(category => 
         {
