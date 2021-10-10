@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar'
 import { TouchableOpacity, Modal } from 'react-native'
@@ -8,12 +8,13 @@ import View from './../../../../components/View';
 import Text from './../../../../components/Text';
 import { FlatList } from 'react-native';
 import categoriesConfig, { CATEGORY_NAMES } from './../../../../config/home.menu.category.list'
+import { useFocusEffect } from '@react-navigation/core';
 
 
-const CategoriesMenu = ({ isVisible, setIsVisible }) => 
+const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) => 
 {
     const navigation = useNavigation();
-    const [ selectedCategory, setSelectedCategory ] = useState('Home');
+    const [ selectedCategory, setSelectedCategory ] = useState(defaultCategory);
 
     const handlePressNavigateToMyList = () => 
     {
@@ -57,11 +58,13 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
         thrillerOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.THRILLER),
     });
 
-    useEffect(() => {
-        return () => {
-            setSelectedCategory('Home');
-        }
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            return () => {
+                setSelectedCategory('Home');
+            }
+        }, [])
+    )
 
     return (
         <View style={ styles.container }>

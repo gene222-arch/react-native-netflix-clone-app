@@ -28,16 +28,16 @@ const DEFAULT_FRONT_PAGE = {
 
 const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) => 
 {
-    const { categoryName } = route.params;
+    const { headerTitle } = route.params;
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
-    const [ selectedMainCategory, setSelectedMainCategory ] = useState(categoryName);
+    const [ selectedCategory, setSelectedCategory ] = useState(headerTitle);
     const [ categoryItems, setCategoryItems ] = useState([]);
 
     const handlePressChangeMainCategory = (selectedCategory) => 
     {
-        setSelectedMainCategory(selectedCategory);
+        setSelectedCategory(selectedCategory);
 
         // const movies = MOVIE.movies;
         // const frontPageMovies = movies.filter(movie => movie.genres.split(',').includes(selectedCategory));
@@ -61,7 +61,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
 
     const runAfterInteractions = () => 
     {
-        handlePressChangeMainCategory(categoryName);
+        handlePressChangeMainCategory(headerTitle);
         setIsInteractionsComplete(true);
     }
 
@@ -72,7 +72,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
             setCategoryItems([]);
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
-            setSelectedMainCategory('');
+            setSelectedCategory('');
         }
     }, []);
 
@@ -92,7 +92,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
                             style={ styles.homeFrontPage }
                         >
                             <NavBar 
-                                selectedMainCategory={ selectedMainCategory }
+                                selectedCategory={ selectedCategory }
                                 handlePressChangeMainCategory={ handlePressChangeMainCategory }
                             />
                             <FrontPageOptions frontPage={ frontPage }/>
