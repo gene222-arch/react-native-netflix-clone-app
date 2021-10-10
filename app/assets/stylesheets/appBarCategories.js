@@ -35,6 +35,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    selectedCategory: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: Colors.white,
+        paddingVertical: 20,
+        fontWeight: 'bold'
+    },
     xIcon: {
         padding: 20
     },

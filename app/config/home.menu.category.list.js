@@ -4,42 +4,51 @@ export const CATEGORY_NAMES =
 {
     HOME: 'Home',
     MY_LIST: 'My List',
-    AVAILABLE_FOR_DOWNLOAD: 'Available For Download',
-    ACTION: 'Action',
+    AVAILABLE_FOR_DOWNLOAD: 'Available For Downloads',
+    ANIMATION: 'Animation',
     ANIME: 'Anime',
+    ACTION: 'Action',
     CHILDREN_AND_FAMILY: 'Children and Family',
-    COMEDIES: 'Comedies',
-    CRITICALLY_ACCLAIMED: 'Critically Acclaimed',
-    DOCUMENTARIES: 'Documentaries',
-    DRAMAS: 'Dramas',
+    COMEDY: 'Comedy',
+    CRIME: 'Crime',
+    DOCUMENTARY: 'Documentary',
+    DRAMA: 'Drama',
     FANTASY: 'Fantasy',
-    HORROR: 'Horror'
+    HORROR: 'Horror',
+    HISTORY: 'History',
+    ROMANCE: 'Romance',
+    ROMANTICE_COMEDY: 'Romantic Comedy',
+    SPORTS: 'Sports',
+    SUSPENSE: 'Suspense',
+    THRILLER: 'Thriller',
+
 };
 
 export default ({ 
     homeOnPress, 
     myListOnPress, 
     availableForDownloadOnPress,
+    animationOnPress,
     animeOnPress,
     actionOnPress,
     childrenAndFamilyOnPress,
-    comediesOnPress,
-    criticallyAcclaimedOnPress,
-    documentariesOnPress,
+    comedyOnPress,
+    crimeOnPress,
+    documentaryOnPress,
     dramaOnPress,
     fantasyOnPress,
-    horrorOnPress
+    horrorOnPress,
+    historyOnPress,
+    romanceOnPress,
+    romanticComedyOnPress,
+    sportsOnPress,
+    suspenseOnPress,
+    thrillerOnPress
 }) => 
 {
     return [
         { 
             title: CATEGORY_NAMES.HOME,
-            customStyle: {
-                fontWeight: 'bold',
-                fontSize: 24,
-                color: Colors.white,
-                marginTop: 80,
-            },
             onPress: homeOnPress
         },
         { 
@@ -59,23 +68,27 @@ export default ({
             onPress: animeOnPress 
         },
         { 
+            title: CATEGORY_NAMES.ANIMATION,
+            onPress: animationOnPress
+        },
+        { 
             title: CATEGORY_NAMES.CHILDREN_AND_FAMILY,
             onPress: childrenAndFamilyOnPress 
         },
         { 
-            title: CATEGORY_NAMES.COMEDIES,
-            onPress: comediesOnPress 
+            title: CATEGORY_NAMES.COMEDY,
+            onPress: comedyOnPress 
         },
         { 
-            title: CATEGORY_NAMES.CRITICALLY_ACCLAIMED,
-            onPress: criticallyAcclaimedOnPress 
+            title: CATEGORY_NAMES.CRIME,
+            onPress: crimeOnPress 
         },
         { 
-            title: CATEGORY_NAMES.DOCUMENTARIES,
-            onPress: documentariesOnPress 
+            title: CATEGORY_NAMES.DOCUMENTARY,
+            onPress: documentaryOnPress 
         },
         { 
-            title: CATEGORY_NAMES.DRAMAS,
+            title: CATEGORY_NAMES.DRAMA,
             onPress: dramaOnPress 
         },
         { 
@@ -85,6 +98,30 @@ export default ({
         { 
             title: CATEGORY_NAMES.HORROR,
             onPress: horrorOnPress 
+        },
+        {
+            title: CATEGORY_NAMES.HISTORY,
+            onPress: historyOnPress
+        },
+        {
+            title: CATEGORY_NAMES.ROMANCE,
+            onPress: romanceOnPress
+        },
+        {
+            title: CATEGORY_NAMES.ROMANTICE_COMEDY,
+            onPress: romanticComedyOnPress
+        },
+        {
+            title: CATEGORY_NAMES.SPORTS,
+            onPress: sportsOnPress
+        },
+        {
+            title: CATEGORY_NAMES.SUSPENSE,
+            onPress: suspenseOnPress
+        },
+        {
+            title: CATEGORY_NAMES.THRILLER,
+            onPress: thrillerOnPress
         }
     ];
 }

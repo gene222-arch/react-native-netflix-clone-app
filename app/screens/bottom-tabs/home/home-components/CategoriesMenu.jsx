@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar'
 import { TouchableOpacity, Modal } from 'react-native'
@@ -13,18 +13,25 @@ import categoriesConfig, { CATEGORY_NAMES } from './../../../../config/home.menu
 const CategoriesMenu = ({ isVisible, setIsVisible }) => 
 {
     const navigation = useNavigation();
+    const [ selectedCategory, setSelectedCategory ] = useState('Home');
 
-    const handlePressNavigateToMyList = () => {
+    const handlePressNavigateToMyList = () => 
+    {
+        setSelectedCategory('My List');
         setIsVisible(false);
         navigation.navigate('MyListScreen', { headerTitle: 'Categories' });
     }
 
-    const handlePressCategoryOnChange = (category) => {
+    const handlePressCategoryOnChange = (category) => 
+    {
+        setSelectedCategory(category);
         setIsVisible(false);
         navigation.navigate('CategoriesScreen', { headerTitle: category });
     }
 
-    const handlePressHome = () => {
+    const handlePressHome = () => 
+    {
+        setSelectedCategory('Home');
         setIsVisible(false);
         navigation.navigate('Home');
     }
@@ -33,15 +40,28 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
         homeOnPress: handlePressHome,
         myListOnPress: handlePressNavigateToMyList,
         availableForDownloadOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.AVAILABLE_FOR_DOWNLOAD),
-        actionOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ACTION),
+        animationOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIME),
         animeOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIME),
+        actionOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ACTION),
         childrenAndFamilyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.CHILDREN_AND_FAMILY),
-        comediesOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.COMEDIES),
-        criticallyAcclaimedOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.CRITICALLY_ACCLAIMED),
-        dramaOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.DRAMAS),
+        comedyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.COMEDY),
+        crimeOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.CRIME),
+        dramaOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.DRAMA),
         fantasyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.FANTASY),
         horrorOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.HORROR),
+        historyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.HISTORY),
+        romanceOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ROMANCE),
+        romanticComedyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ROMANTICE_COMEDY),
+        sportsOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SUSPENSE),
+        suspenseOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SUSPENSE),
+        thrillerOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.THRILLER),
     });
+
+    useEffect(() => {
+        return () => {
+            setSelectedCategory('Home');
+        }
+    }, []);
 
     return (
         <View style={ styles.container }>
@@ -55,9 +75,13 @@ const CategoriesMenu = ({ isVisible, setIsVisible }) =>
                     <FlatList 
                         keyExtractor={ ({ title }) => title }
                         data={ menuList }
-                        renderItem={ ({ item }) => (
-                            <TouchableOpacity onPress={ item.onPress }>
-                                <Text style={ styles.categoriesTxt }> { item.title }</Text>
+                        renderItem={ ({ item: { onPress, title } }) => (
+                            <TouchableOpacity onPress={ onPress }>
+                                <Text style={
+                                    title === selectedCategory 
+                                        ? styles.selectedCategory
+                                        : styles.categoriesTxt
+                                }> { title }</Text>
                             </TouchableOpacity>
                         )}
                         showsHorizontalScrollIndicator={ false }
