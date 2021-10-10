@@ -19,6 +19,7 @@ import ComingSoonScreenLoader from '../../../components/loading-skeletons/Coming
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
+    const isForKids = Boolean(isForKids);
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -44,7 +45,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     {
         ComingSoonMovieCreatedEvent.listen(response => 
         {
-            if (AUTH_PROFILE.is_for_kids && response.data.age_restriction <= 12) {
+            if (isForKids && response.data.age_restriction <= 12) {
                 batch(() => {
                     dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
                     dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
@@ -52,7 +53,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                 });
             }
 
-            if (! AUTH_PROFILE.is_for_kids) {
+            if (! isForKids) {
                 batch(() => {
                     dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
                     dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
@@ -61,7 +62,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
             }
         });
 
-        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
+        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: isForKids }));
         
         setIsInteractionsComplete(true);
     }

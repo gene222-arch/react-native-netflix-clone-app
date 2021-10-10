@@ -22,10 +22,6 @@ const initialState = {
 
 export default (state = initialState, { type, payload }) => 
 {
-    const {
-        comingSoonMovies
-    } = state; 
-
     const isLoading = false;
     const errors = [];
 
@@ -47,9 +43,12 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case CREATE_COMING_SOON_MOVIE:
+            const newComingSoonMovie = payload.comingSoonMovie;
+            const newComingSoonMovies = !state.comingSoonMovies ? [ newComingSoonMovie ] : [ newComingSoonMovie, ...state.comingSoonMovies ];
+    
             return {
                 ...state,
-                comingSoonMovies: [ payload.comingSoonMovie, ...comingSoonMovies ], 
+                comingSoonMovies: newComingSoonMovies, 
                 isLoading,
                 errors
             }

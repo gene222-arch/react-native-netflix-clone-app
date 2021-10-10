@@ -140,6 +140,7 @@ const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
             <InputPinCodeOverlay 
                 profileId={ profileId }
                 isVisible={ showPinCodeModal }
+                setIsVisible={ setShowPinCodeModal }
                 pinCode={ pinCode }
                 hasError={ isInCorrectPin }
                 onChangeText={ handleChangePin }
