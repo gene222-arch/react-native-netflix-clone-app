@@ -40,7 +40,8 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
         setSelectedCategory(selectedCategory);
 
         let movies = [ ...MOVIE.movies ];
-        movies = movies.filter(movie => movie.genres.split(',').includes(selectedCategory));
+        
+        movies = movies.filter(movie => movie.genres.split(', ').includes(selectedCategory));
 
         setFrontPage(movies[Math.floor(Math.random() * (movies.length - 1))]);
 
@@ -48,7 +49,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
         {
             const filterMovies = category
                 .movies
-                .filter(({ genres }) => genres.split(',').includes(selectedCategory));
+                .filter(({ genres }) => genres.split(', ').includes(selectedCategory));
 
             return { 
                 ...category, 
