@@ -19,7 +19,7 @@ import ComingSoonScreenLoader from '../../../components/loading-skeletons/Coming
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
-    const isForKids = Boolean(isForKids);
+    const isForKids = Boolean(AUTH_PROFILE.is_for_kids);
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const navigation = useNavigation();
