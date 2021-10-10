@@ -4,7 +4,6 @@ export const CATEGORY_NAMES =
 {
     HOME: 'Home',
     MY_LIST: 'My List',
-    AVAILABLE_FOR_DOWNLOAD: 'Available For Downloads',
     ANIMATION: 'Animation',
     ANIME: 'Anime',
     ACTION: 'Action',
@@ -27,7 +26,6 @@ export const CATEGORY_NAMES =
 export default ({ 
     homeOnPress, 
     myListOnPress, 
-    availableForDownloadOnPress,
     animationOnPress,
     animeOnPress,
     actionOnPress,
@@ -54,10 +52,6 @@ export default ({
         { 
             title: CATEGORY_NAMES.MY_LIST,
             onPress: myListOnPress
-        },
-        { 
-            title: CATEGORY_NAMES.AVAILABLE_FOR_DOWNLOAD,
-            onPress: availableForDownloadOnPress 
         },
         { 
             title: CATEGORY_NAMES.ACTION,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Button } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar'
 import { TouchableOpacity, Modal } from 'react-native'
@@ -40,7 +40,6 @@ const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) =
     const menuList = categoriesConfig({
         homeOnPress: handlePressHome,
         myListOnPress: handlePressNavigateToMyList,
-        availableForDownloadOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.AVAILABLE_FOR_DOWNLOAD),
         animationOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIMATION),
         animeOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIME),
         actionOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ACTION),
