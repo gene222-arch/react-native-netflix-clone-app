@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
     },
     appBarSticky: {
     },
+    headerTitleText: {
+        fontSize: 20,
+        fontWeight: 'bold'
+    },  
     searchIcon: {
         marginRight: 30
     },

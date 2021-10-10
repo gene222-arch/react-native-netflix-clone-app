@@ -31,7 +31,7 @@ const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle 
             style={appBarStyles} 
             onLayout={({ nativeEvent }) => offsetY.current = nativeEvent.layout.y }
         >
-            { !showLogo && <Text h4>{ headerTitle }</Text> }
+            { !showLogo && <Text style={ styles.headerTitleText }>{ headerTitle }</Text> }
             {
                 showLogo && (
                     <Image 
