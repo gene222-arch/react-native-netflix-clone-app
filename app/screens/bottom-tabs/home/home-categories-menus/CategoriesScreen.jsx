@@ -14,6 +14,8 @@ import NavBar from './categories-components/NavBar';
 import ContinueWatchingFor from './../home-components/ContinueWatchingFor';
 import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import CategoriesScreenLoader from './../../../../components/loading-skeletons/CategoriesScreenLoader';
+import Text from '../../../../components/Text';
+import CategoriesScreenEmpty from '../../../../components/empty-data/CategoriesScreenEmpty';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -34,14 +36,18 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE);
     const [ selectedCategory, setSelectedCategory ] = useState(headerTitle);
     const [ categoryItems, setCategoryItems ] = useState([]);
+    const [ hasMovies, setHasMovies ] = useState(false);
 
     const handlePressChangeMainCategory = (selectedCategory) => 
     {
         setSelectedCategory(selectedCategory);
 
         let movies = [ ...MOVIE.movies ];
-        
         movies = movies.filter(movie => movie.genres.split(', ').includes(selectedCategory));
+
+        if (movies.length) {
+            setHasMovies(true);
+        }
 
         setFrontPage(movies[Math.floor(Math.random() * (movies.length - 1))]);
 
@@ -74,10 +80,13 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
             setSelectedCategory('');
+            setHasMovies(false);
         }
     }, []);
 
     if (! isInteractionsComplete) return <CategoriesScreenLoader />
+
+    if (! hasMovies) return <CategoriesScreenEmpty />
     
     return (
         <View style={ styles.container }>
