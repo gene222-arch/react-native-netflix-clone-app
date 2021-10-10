@@ -35,6 +35,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
 {
     const dispatch = useDispatch();
 
+    const isForKids = Boolean(AUTH_PROFILE.is_for_kids);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE_PROPS);
 
@@ -66,25 +67,25 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         {
             MovieCreatedEvent.listen(response => 
             {
-                if (AUTH_PROFILE.is_for_kids && response.data.age_restriction <= 12) {
+                if (isForKids && response.data.age_restriction <= 12) {
                     dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
                 }
 
-                if (! AUTH_PROFILE.is_for_kids) {
+                if (! isForKids) {
                     dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
                 }
             });
 
             ComingSoonMovieReleasedEvent.listen(response => 
             {
-                if (AUTH_PROFILE.is_for_kids && response.data.age_restriction <= 12) {
+                if (isForKids && response.data.age_restriction <= 12) {
                     batch(() => {
                         dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
                         dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                     });
                 }
 
-                if (! AUTH_PROFILE.is_for_kids) {
+                if (! isForKids) {
                     batch(() => {
                         dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
                         dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));

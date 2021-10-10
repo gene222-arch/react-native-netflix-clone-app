@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native'
 import Image from './../components/Image';
 import APP_MINI_LOGO from './../assets/app-mini-logo.png'
 import { useNavigation } from '@react-navigation/native';
+import * as WebBrowser from 'expo-web-browser';
 
 const styles = StyleSheet.create({
     container: {
@@ -38,6 +39,8 @@ const AuthHeader = () =>
 {
     const navigation = useNavigation();
 
+    const handlePressNavigate = async () => await WebBrowser.openBrowserAsync('http://192.168.1.10:3000/legal/privacy');
+
     return (
         <View style={ styles.container }>
             <Image 
@@ -45,7 +48,7 @@ const AuthHeader = () =>
                 style={ styles.logo }
             />
             <View style={ styles.privacySignInContainer }>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={ handlePressNavigate }>
                     <Text style={ styles.privacyText }>PRIVACY</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={ () => navigation.navigate('Login') }>
