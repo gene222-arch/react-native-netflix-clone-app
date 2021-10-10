@@ -7,7 +7,7 @@ import CategoriesMenu from './../../home-components/CategoriesMenu';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
-const NavBar = ({ selectedCategory, handlePressChangeMainCategory }) => 
+const NavBar = ({ selectedCategory }) => 
 {
     const [ showCategories, setShowCategories ] = useState(false);
 

@@ -41,7 +41,7 @@ const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) =
         homeOnPress: handlePressHome,
         myListOnPress: handlePressNavigateToMyList,
         availableForDownloadOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.AVAILABLE_FOR_DOWNLOAD),
-        animationOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIME),
+        animationOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIMATION),
         animeOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIME),
         actionOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ACTION),
         childrenAndFamilyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.CHILDREN_AND_FAMILY),

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { ImageBackground, InteractionManager, FlatList } from 'react-native'
@@ -16,6 +16,7 @@ import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import CategoriesScreenLoader from './../../../../components/loading-skeletons/CategoriesScreenLoader';
 import Text from '../../../../components/Text';
 import CategoriesScreenEmpty from '../../../../components/empty-data/CategoriesScreenEmpty';
+import { useFocusEffect } from '@react-navigation/core';
 
 
 const DEFAULT_FRONT_PAGE = {
@@ -45,9 +46,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
         let movies = [ ...MOVIE.movies ];
         movies = movies.filter(movie => movie.genres.split(', ').includes(selectedCategory));
 
-        if (movies.length) {
-            setHasMovies(true);
-        }
+        !movies.length ? setHasMovies(false) : setHasMovies(true);
 
         setFrontPage(movies[Math.floor(Math.random() * (movies.length - 1))]);
 
@@ -79,14 +78,28 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
             setCategoryItems([]);
             setFrontPage(DEFAULT_FRONT_PAGE);
             setIsInteractionsComplete(false);
-            setSelectedCategory('');
             setHasMovies(false);
         }
     }, []);
 
+    useFocusEffect(
+        useCallback(() => {
+            handlePressChangeMainCategory(headerTitle);
+
+            return () => {
+                setSelectedCategory('');
+            }
+        }, [headerTitle])
+    )
+
     if (! isInteractionsComplete) return <CategoriesScreenLoader />
 
-    if (! hasMovies) return <CategoriesScreenEmpty />
+    if (! hasMovies) return (
+        <>
+            <NavBar selectedCategory={ selectedCategory } />
+            <CategoriesScreenEmpty />
+        </>
+    )
     
     return (
         <View style={ styles.container }>
@@ -101,10 +114,7 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
                             source={{ uri: frontPage.poster_path }} 
                             style={ styles.homeFrontPage }
                         >
-                            <NavBar 
-                                selectedCategory={ selectedCategory }
-                                handlePressChangeMainCategory={ handlePressChangeMainCategory }
-                            />
+                            <NavBar selectedCategory={ selectedCategory } />
                             <FrontPageOptions frontPage={ frontPage }/>
                         </ImageBackground>   
                         <ContinueWatchingFor />
