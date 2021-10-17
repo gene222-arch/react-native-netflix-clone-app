@@ -22,7 +22,7 @@ const PROFILE_DEFAULT_PROPS = {
     id: '', 
     name: '', 
     is_for_kids: false,
-    avatar: null
+    avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
 };
 
 const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
@@ -33,7 +33,8 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
     const [ profile, setProfile ] = useState(PROFILE_DEFAULT_PROPS);
     const [ showAvatars, setShowAvatars ] = useState(false);
 
-    const handlePressCreateProfile = () => {
+    const handlePressCreateProfile = () => 
+    {
         Keyboard.dismiss();
         dispatch(AUTH_ACTION.createProfileStart(profile));
     }
@@ -70,15 +71,20 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
             />
             {
                 showAvatars
-                    ? <AvatarList setShowAvatars={ setShowAvatars } handlePress={ handlePressChangeAvatar } />
+                    ? (
+                        <AvatarList
+                            handlePress={ handlePressChangeAvatar } 
+                            profile={ profile } 
+                            setProfile={ setProfile } 
+                            setShowAvatars={ setShowAvatars }
+                        />
+                    )
                     : (
                         <View style={ styles.container }>    
                             <TouchableOpacity onPress={ () => setShowAvatars(true) }>
                                 <View style={ styles.imgContainer }>
                                     <Image 
-                                        source={{ 
-                                            uri: profile.avatar || 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png' 
-                                        }}
+                                        source={{ uri: profile.avatar }}
                                         style={ styles.image }
                                     />
                                     <FontAwesome5Icon 

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { InteractionManager, StyleSheet } from 'react-native';
+import { InteractionManager, StyleSheet, Platform } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native';
-import { Image } from 'react-native-expo-image-cache';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import View from '../../../components/View';
-import ProfileAppBar from './ProfileAppBar';
-import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker'
+import { Button } from 'react-native-elements';
+import Colors from './../../../constants/Colors';
+import ImageComponent from './../../../components/Image';
+import { Image } from 'react-native-expo-image-cache';
 
 const avatarList = [
     'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
@@ -17,10 +19,45 @@ const avatarList = [
     'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
 ];
 
-const AvatarList = ({ handlePress }) => 
+const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) => 
 {
+    const [ uploadAvatar, setUploadAvatar ] = useState(false);
     const [ avatars, setAvatars ] = useState([]);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+
+    const handlePressAllowAccessToImageLib = async () => 
+    {
+        setUploadAvatar(true);
+
+        try {
+            if (Platform.OS !== 'web') 
+            {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        } catch (error) {
+            
+        }
+    }
+
+    const handlePressChooseAvatar = async () => 
+    {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+    
+        if (! result.cancelled) {
+            setProfile({ ...profile, avatar: result.uri });
+            setShowAvatars(false);
+        }
+    };
+    
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
@@ -31,23 +68,43 @@ const AvatarList = ({ handlePress }) =>
         return () => {
             setAvatars([]);
             setIsInteractionsComplete(false);
+            setUploadAvatar(false);
         }
     }, [])
 
     if (! isInteractionsComplete) return <LoadingSpinner />
 
+    if (uploadAvatar) {
+        return (
+            <View style={ styles.uploadImgContainer }>
+                <ImageComponent source={{ uri: profile.avatar }} style={ styles.imgDefault } />
+                <Button 
+                    title='Choose an image' 
+                    buttonStyle={ styles.chooseImgBtn } 
+                    titleStyle={ styles.chooseBtnTitle } 
+                    onPress={ handlePressChooseAvatar }
+                />
+            </View>
+        )
+    }
+
     return (
-        <View>
-            <FlatList 
-                keyExtractor={ (item, index) => index.toString() }
-                data={ avatars }
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={ () => handlePress(item) }>
-                        <Image uri={ item } preview={{ uri: item }} style={ styles.img } />
-                    </TouchableOpacity>
-                )}
-                numColumns={ 3 }
-            />
+        <View style={ styles.container }>
+            <View>
+                <FlatList 
+                    keyExtractor={ (item, index) => index.toString() }
+                    data={ avatars }
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={ () => handlePress(item) }>
+                            <Image uri={ item } preview={{ uri: item }} style={ styles.img } />
+                        </TouchableOpacity>
+                    )}
+                    numColumns={ 3 }
+                />
+            </View>
+            <View>
+                <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ handlePressAllowAccessToImageLib } />
+            </View>
         </View>
     )
 }
@@ -55,11 +112,40 @@ const AvatarList = ({ handlePress }) =>
 export default AvatarList
 
 const styles = StyleSheet.create({
+    btn: {
+        backgroundColor: Colors.netFlixRed,
+        marginBottom: 5
+    },
+    chooseBtnTitle: {
+        textAlign: 'center',
+        width: '100%',
+        flex: 1
+    },
+    chooseImgBtn: {
+        backgroundColor: Colors.netFlixRed,
+        width: '100%'
+    },
+    container: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
     img: {
         width: 120,
         height: 120,
         borderRadius: 10,
         marginTop: 40,
         marginRight: 10
+    },
+    imgDefault: {
+        width: 120,
+        height: 120,
+        borderRadius: 10,
+        marginBottom: 20
+    },
+    uploadImgContainer: {
+        flex: 1,
+        alignItems: 'center',
+        marginTop: 40
     }
 });

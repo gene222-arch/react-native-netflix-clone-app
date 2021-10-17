@@ -61,17 +61,25 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
         }
     }, []);
 
-    if (showAvatars) return (
-        <View>
-            <ProfileAppBar  
-                isLoading={ AUTH.isLoading }
-                headerTitle='Edit Profile' 
-                onPress={ handlePressUpdateProfile } 
-                showSaveButton={ false }
-            />
-            <AvatarList handlePress={ handlePressChangeAvatar } />
-        </View>
-    )
+    if (showAvatars) 
+    {
+        return (
+            <>
+                <ProfileAppBar  
+                    isLoading={ AUTH.isLoading }
+                    headerTitle='Edit Profile' 
+                    onPress={ handlePressUpdateProfile } 
+                    showSaveButton={ false }
+                />
+                <AvatarList
+                    setShowAvatars={ setShowAvatars }
+                    handlePress={ handlePressChangeAvatar } 
+                    profile={ profile } 
+                    setProfile={ setProfile } 
+                />
+            </>
+        )
+    }
 
     return (
         <ScrollView>
