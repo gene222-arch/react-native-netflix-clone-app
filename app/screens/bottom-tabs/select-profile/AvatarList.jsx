@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { Button } from 'react-native-elements';
 import Colors from './../../../constants/Colors';
 import ImageComponent from './../../../components/Image';
+import * as AUTH_API from './../../../services/auth/auth'
 import { Image } from 'react-native-expo-image-cache';
 
 const avatarList = [
@@ -35,7 +36,7 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
                 if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
+                    setShowAvatars(true);
                 }
             }
         } catch (error) {
@@ -52,9 +53,32 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
             quality: 1,
         });
     
-        if (! result.cancelled) {
-            setProfile({ ...profile, avatar: result.uri });
-            setShowAvatars(false);
+        if (! result.cancelled) 
+        {
+            try {
+                const localUri = result.uri;
+                const filename = localUri.split('/').pop();
+              
+                const match = /\.(\w+)$/.exec(filename);
+                const type = match ? `image/${match[1]}` : `image`;
+              
+                const formData = new FormData();
+                formData.append('avatar', { uri: localUri, name: filename, type });
+    
+                const { data, status } = await AUTH_API.uploadAvatar(formData, {
+                    headers: {
+                        'content-type': 'multipart/form-data',
+                    }
+                });
+                
+                if (status === 'success') 
+                {
+                    setProfile({ ...profile, avatar: data });
+                    setShowAvatars(false);
+                }
+            } catch (error) {
+                
+            }
         }
     };
     

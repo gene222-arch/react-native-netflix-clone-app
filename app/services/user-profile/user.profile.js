@@ -19,7 +19,9 @@ export const findProfileByIdAsync = async (id) =>
 export const createProfileAsync = async (payload) => 
 {
     return await axiosInstance()
-        .post(`/user-profiles`, payload)
+        .post(`/user-profiles`, payload, {
+            'content-type': 'multipart/form-data'
+        })
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }

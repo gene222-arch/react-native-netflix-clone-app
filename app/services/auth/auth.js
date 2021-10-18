@@ -32,6 +32,14 @@ export const updateProfileAsync = async (payload) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+export const uploadAvatar = async (payload, config) => 
+{
+    return await axiosInstance()
+        .post(`/user-profiles/avatar-upload`, payload, config)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
 export const managePinCodeAsync = async ({ user_profile_id, pin_code }) => 
 {
     return await axiosInstance()

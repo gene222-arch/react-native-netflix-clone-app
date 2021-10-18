@@ -22,7 +22,8 @@ const PROFILE_DEFAULT_PROPS = {
     id: '', 
     name: '', 
     is_for_kids: false,
-    avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
+    avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png',
+    avatar_file: null
 };
 
 const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
@@ -33,8 +34,7 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
     const [ profile, setProfile ] = useState(PROFILE_DEFAULT_PROPS);
     const [ showAvatars, setShowAvatars ] = useState(false);
 
-    const handlePressCreateProfile = () => 
-    {
+    const handlePressCreateProfile = async () => {
         Keyboard.dismiss();
         dispatch(AUTH_ACTION.createProfileStart(profile));
     }
