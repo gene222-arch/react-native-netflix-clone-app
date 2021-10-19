@@ -27,9 +27,9 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
     const handlePressPlayButton = () => navigation.navigate('DisplayVideoRoot', {
         screen: 'DisplayVideoScreen',
         params: {
-            title: movie?.title,
-            videoUri: movie?.video_path, 
-            id: movie?.id 
+            title: movie.title,
+            videoUri: movie.video_path, 
+            id: movie.id 
         }
     });
 
