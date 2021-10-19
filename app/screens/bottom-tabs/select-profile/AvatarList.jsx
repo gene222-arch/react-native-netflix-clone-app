@@ -10,6 +10,7 @@ import ImageComponent from './../../../components/Image';
 import * as AUTH_API from './../../../services/auth/auth'
 import { Image } from 'react-native-expo-image-cache';
 import Text from '../../../components/Text';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const avatarList = [
     'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
@@ -29,59 +30,83 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
 
     const handlePressAllowAccessToImageLib = async () => 
     {
-        setUploadAvatar(true);
-
         try {
-            if (Platform.OS !== 'web') 
-            {
+            if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-                if (status !== 'granted') {
-                    setShowAvatars(true);
-                }
+                status !== 'denied' ? chooseAvatarFromMediaLib() : '';
             }
-        } catch (error) {
-            
-        }
+        } catch (error) {}
     }
 
-    const handlePressChooseAvatar = async () => 
+    const handlePressAllowTakePhoto = async () =>
     {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-    
-        if (! result.cancelled) 
-        {
-            try {
-                const localUri = result.uri;
-                const filename = localUri.split('/').pop();
-              
-                const match = /\.(\w+)$/.exec(filename);
-                const type = match ? `image/${match[1]}` : `image`;
-              
-                const formData = new FormData();
-                formData.append('avatar', { uri: localUri, name: filename, type });
-    
-                const { data, status } = await AUTH_API.uploadAvatar(formData, {
-                    headers: {
-                        'content-type': 'multipart/form-data',
-                    }
-                });
-                
-                if (status === 'success') 
-                {
-                    setProfile({ ...profile, avatar: data });
-                    setShowAvatars(false);
-                }
-            } catch (error) {
-                
+        try {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestCameraPermissionsAsync();
+                status !== 'denied' ? captureAvatar() : '';
             }
-        }
+
+        } catch (error) {}
+    }
+
+    const captureAvatar = async () => 
+    {
+        try {
+            const { cancelled, uri } = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1
+            });
+
+            if (! cancelled) {
+                uploadImage(uri);
+            }
+
+        } catch (error) {}
+    }
+
+    const chooseAvatarFromMediaLib = async () => 
+    {
+        try {
+            const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+            });
+        
+            if (! cancelled) {
+                uploadImage(uri);
+            }
+        } catch (error) {}
     };
+
+
+    const uploadImage = async (uri) =>
+    {
+        try {
+            const filename = uri.split('/').pop();
+          
+            const match = /\.(\w+)$/.exec(filename);
+            const type = match ? `image/${match[1]}` : `image`;
+          
+            const formData = new FormData();
+            formData.append('avatar', { uri, name: filename, type });
+
+            const { data, status } = await AUTH_API.uploadAvatar(formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                }
+            });
+            
+            if (status === 'success') {
+                setProfile({ ...profile, avatar: data });
+                setShowAvatars(false);
+            }
+
+        } catch (error) {}
+    }
     
 
     useEffect(() => {
@@ -99,17 +124,40 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
 
     if (! isInteractionsComplete) return <LoadingSpinner />
 
-    if (uploadAvatar) {
+    if (! uploadAvatar) {
         return (
-            <View style={ styles.uploadImgContainer }>
-                <ImageComponent source={{ uri: profile.avatar }} style={ styles.imgDefault } />
+            <>
+                <View style={ styles.uploadImgContainer }>
+                    <ImageComponent source={{ uri: profile.avatar }} style={ styles.imgDefault } />
+                </View>
                 <Button 
-                    title='Choose an image' 
+                    title='Choose an image'
                     buttonStyle={ styles.chooseImgBtn } 
-                    titleStyle={ styles.chooseBtnTitle } 
-                    onPress={ handlePressChooseAvatar }
+                    titleStyle={ styles.btnTitle } 
+                    onPress={ handlePressAllowAccessToImageLib }
+                    icon={
+                        <FeatherIcon 
+                            name='image'
+                            size={ 24 }
+                            color={ Colors.dark }
+                        />
+                    }
                 />
-            </View>
+                <Text></Text>
+                <Button 
+                    title='Take a photo' 
+                    buttonStyle={ styles.takeAPhotoBtn } 
+                    titleStyle={ styles.btnTitle } 
+                    onPress={ handlePressAllowTakePhoto }
+                    icon={
+                        <FeatherIcon 
+                            name='aperture'
+                            size={ 24 }
+                            color={ Colors.netFlixRed }
+                        />
+                    }
+                />
+            </>
         )
     }
 
@@ -145,7 +193,7 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
                     </>
                 }
             />
-            <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ handlePressAllowAccessToImageLib } />
+            <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ () => setUploadAvatar(true) } />
         </View>
     )
 }
@@ -157,14 +205,12 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.netFlixRed,
         marginBottom: 5
     },
-    chooseBtnTitle: {
+    btnTitle: {
         textAlign: 'center',
-        width: '100%',
-        flex: 1
+        paddingHorizontal: 10
     },
     chooseImgBtn: {
-        backgroundColor: Colors.netFlixRed,
-        width: '100%'
+        backgroundColor: Colors.netFlixRed
     },
     container: {
         flex: 1,
@@ -197,9 +243,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 10
     },
+    takeAPhotoBtn: {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: Colors.white
+    },
     uploadImgContainer: {
-        flex: 1,
         alignItems: 'center',
-        marginTop: 40
+        marginTop: 40,
+        width: '100%'
     }
 });
