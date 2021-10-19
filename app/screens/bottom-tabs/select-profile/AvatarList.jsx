@@ -131,11 +131,13 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
                             profile.previous_avatar && (
                                 <>
                                     <Text h4 style={ styles.lastAvatarText }>Last Avatar</Text>
-                                    <Image 
-                                        uri={ profile.previous_avatar } 
-                                        preview={{ uri: profile.previous_avatar }} 
-                                        style={ styles.previousAvatar } 
-                                    />
+                                    <TouchableOpacity onPress={ () => handlePress(profile.previous_avatar) }>
+                                        <Image 
+                                            uri={ profile.previous_avatar } 
+                                            preview={{ uri: profile.previous_avatar }} 
+                                            style={ styles.previousAvatar } 
+                                        />
+                                    </TouchableOpacity>
                                 </>
                             )
                         }
