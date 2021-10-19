@@ -34,10 +34,10 @@ const {
 function* addToRecentWatchesSaga(payload)  
 {
     try {
-        const { user_profile_id, movie } = payload;
+        const { user_profile_id, movie, duration_in_millis } = payload;
 
         yield put(ACTION.addToRecentWatchesSuccess(payload));
-        yield call(RECENTLY_WATCHED_MOVIE_API.createAsync, { movie_id: movie.id, user_profile_id });
+        yield call(RECENTLY_WATCHED_MOVIE_API.createAsync, { movie_id: movie.id, user_profile_id, duration_in_millis });
     } catch ({ message }) {
         yield put(ACTION.addToRecentWatchesFailed({ message }));
     }

@@ -20,6 +20,7 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
 
     const [ showInfo, setShowInfo ] = useState(false);
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
+    const moviePositionMillisIndicator = (movie.last_played_position_millis / movie.duration_in_millis) * 92.5;
 
     const handlePressShowMoreOptions = () => setShowMoreOptions(! showMoreOptions);
 
@@ -75,7 +76,7 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
                     color='red'
                     width={ 3 }
                     style={{ 
-                        width: '92.5%'
+                        width: `${ moviePositionMillisIndicator }%`
                     }}
                 />
             </View>

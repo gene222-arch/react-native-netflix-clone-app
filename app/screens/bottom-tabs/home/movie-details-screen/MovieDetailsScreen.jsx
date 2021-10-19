@@ -37,7 +37,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         videoRef.current.playAsync();
         
         batch(() => {
-            dispatch(AUTH_ACTION.addToRecentWatchesStart({ movie, user_profile_id: AUTH_PROFILE.id }));
+            dispatch(AUTH_ACTION.addToRecentWatchesStart({ movie, user_profile_id: AUTH_PROFILE.id, duration_in_millis: videoStatus.durationMillis }));
             dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId }))
         });
     }
