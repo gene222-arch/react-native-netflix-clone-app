@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     },
     takeAPhotoBtn: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
+        borderWidth: 1.5,
         borderColor: Colors.white
     },
     uploadImgContainer: {
