@@ -11,6 +11,7 @@ import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
+import { Divider } from 'react-native-elements';
 
 
 const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike, handlePressRemoveRate,  handlePressRemove }) => 
@@ -62,6 +63,22 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
                 uri={ movie.poster_path }
                 style={ styles.poster }
             />
+
+            <View 
+                style={{ 
+                    width: '92.5%',
+                    backgroundColor: '#FFF'
+                }}
+            >
+                <Divider
+                    orientation="horizontal"
+                    color='red'
+                    width={ 3 }
+                    style={{ 
+                        width: '92.5%'
+                    }}
+                />
+            </View>
 
             <MaterialCommunityIcon 
                 name='play-circle-outline'

@@ -47,7 +47,7 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
         if (hasLastPlayedPositionMillis) {
             dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ movieId, positionMillis, user_profile_id: AUTH_PROFILE.id }));
         }
-
+        
         navigation.goBack();
     };
 

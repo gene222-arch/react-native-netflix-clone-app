@@ -6,6 +6,13 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: 10,
     },
+    divider: {
+        width: '92.5%'
+    },
+    dividerContainer: {
+        width: '92.5%',
+        backgroundColor: '#FFF'
+    },
     infoMoreContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
