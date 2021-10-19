@@ -31,8 +31,7 @@ const DisplayVideoScreen = () =>
 
                 setUri(videoUri);
 
-                if ('lastPlayedPositionMillis' in route.params) 
-                {
+                if ('lastPlayedPositionMillis' in route.params) {
                     setHasLastPlayedPositionMillis(true);
                     setLastPlayedPositionMillis(parseInt(route.params.lastPlayedPositionMillis));
                 }

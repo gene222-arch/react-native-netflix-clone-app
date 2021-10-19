@@ -42,11 +42,11 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
 
         setInFullscreen(false);
 
+        await ScreenOrientation.unlockAsync();
+
         if (hasLastPlayedPositionMillis) {
             dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ movieId, positionMillis, user_profile_id: AUTH_PROFILE.id }));
         }
-
-        await ScreenOrientation.unlockAsync();
 
         navigation.goBack();
     };
