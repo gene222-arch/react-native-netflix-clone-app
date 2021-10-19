@@ -50,6 +50,9 @@ const {
     UPDATE_AUTHENTICATED_PROFILE_START,
     UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
     UPDATE_AUTHENTICATED_PROFILE_FAILED,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_SUCCESS,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED,
     VIEW_DOWNLOADS_START,
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED,
@@ -127,6 +130,7 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
         case UPDATE_AUTHENTICATED_PROFILE_START:
+        case UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START:
         case VIEW_DOWNLOADS_START:
             return { 
                 ...state, 
@@ -493,6 +497,33 @@ export default (state = initialState, { type, payload }) =>
                 isLoading,
                 errors
             }
+        
+        case UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_SUCCESS:
+
+            const recentlyWatchedMovies_ = loggedInProfile
+                .recently_watched_movies.map(movie => 
+                {
+                    return movie.id === payload.movieId 
+                        ? {
+                            ...movie,
+                            last_played_position_millis: payload.positionMillis
+                        } 
+                        : movie
+                });
+
+            newProfiles = profiles.map(prof => {
+                return (prof.id === loggedInProfile.id) 
+                    ? { ...prof, recently_watched_movies: recentlyWatchedMovies_ } 
+                    : prof;
+            });
+
+            return {
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
 
         case VIEW_DOWNLOADS_SUCCESS: 
             newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? { ...prof, has_new_downloads: false } : prof);
@@ -537,6 +568,7 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_ADD_TO_MY_LIST_FAILED:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:
         case UPDATE_AUTHENTICATED_PROFILE_FAILED:
+        case UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED:
         case VIEW_DOWNLOADS_FAILED:
             return {
                 ...state,

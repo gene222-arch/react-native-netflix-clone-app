@@ -7,14 +7,23 @@ import Text from './Text';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/core'
+import * as AUTH_ACTION from './../redux/modules/auth/actions'
+import { useDispatch, connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../redux/modules/auth/selectors';
 
 
-const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) => 
+const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositionMillis, lastPlayedPositionMillis }) => 
 {
     const isFocused = useIsFocused();
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
     const video = useRef(null);
     const [ inFullscreen, setInFullscreen ] = useState(false);
+    const [ videoStatus, setVideoStatus ] = useState(null);
+    const [ isLoaded, setIsLoaded ] = useState(false);
+    const [ positionMillis, setPositionMillis ] = useState(0);
 
     const onEnterFullScreen = async () => 
     {
@@ -29,26 +38,31 @@ const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) =>
     {
         setStatusBarHidden(false);
 
-        setShouldPlay(false);
-
         video?.current?.pauseAsync();
+
+        setInFullscreen(false);
+
+        if (hasLastPlayedPositionMillis) {
+            dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ movieId, positionMillis, user_profile_id: AUTH_PROFILE.id }));
+        }
+
+        await ScreenOrientation.unlockAsync();
 
         navigation.goBack();
     };
 
-    const unLockOrientation = async () => await ScreenOrientation.unlockAsync();
+    useEffect(() => {
+        onEnterFullScreen();
 
-    useFocusEffect(
-        useCallback(() => {
-            onEnterFullScreen();
-
-            return () => {
-                video.current = null;
-                unLockOrientation();
-                setInFullscreen(false);
-            }
-        }, [])
-    );
+        return () => 
+        {
+            video.current = null;
+            setInFullscreen(false);
+            setIsLoaded(false);
+            setVideoStatus(null);
+            setPositionMillis(0);
+        }
+    }, [])
 
     return (
         <VideoPlayer
@@ -57,6 +71,7 @@ const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) =>
                 resizeMode: Video.RESIZE_MODE_CONTAIN,
                 source: { uri },
                 ref: video,
+                status: videoStatus
             }}
             icon={{
                 play: <Text style={{ color: '#FFF' }}>PLAY</Text>,
@@ -74,9 +89,26 @@ const VideoPlayerFullScreen = ({ uri, shouldPlay, setShouldPlay }) =>
                 height: inFullscreen ? DEVICE_WIDTH : 160,
                 width: inFullscreen ? DEVICE_HEIGHT : 320,
             }}
-            
+            playbackCallback={status => 
+            {
+                setPositionMillis(parseInt(status.positionMillis));
+
+                if (! isLoaded) 
+                {
+                    setVideoStatus(() => ({
+                        ...status,
+                        positionMillis: lastPlayedPositionMillis
+                    }));
+
+                    setIsLoaded(true);
+                }
+            }}
         />
     )
 }
 
-export default VideoPlayerFullScreen
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(VideoPlayerFullScreen)

@@ -24,14 +24,17 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
 
     const handlePressShowInfo = () => setShowInfo(! showInfo);
 
-    const handlePressPlayButton = () => navigation.navigate('DisplayVideoRoot', {
-        screen: 'DisplayVideoScreen',
-        params: {
-            title: movie.title,
-            videoUri: movie.video_path, 
-            id: movie.id 
-        }
-    });
+    const handlePressPlayButton = () => {
+        navigation.navigate('DisplayVideoRoot', {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: movie.title,
+                videoUri: movie.video_path, 
+                id: movie.id,
+                lastPlayedPositionMillis: movie.last_played_position_millis
+            }
+        });
+    }
 
     useEffect(() => {
         return () => {

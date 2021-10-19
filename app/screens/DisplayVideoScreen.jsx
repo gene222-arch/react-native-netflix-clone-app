@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { InteractionManager } from 'react-native'
 import VideoPlayerFullScreen from '../components/VideoPlayerFullScreen';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
@@ -10,8 +10,9 @@ const DisplayVideoScreen = () =>
     const route = useRoute();
     
     const [ uri, setUri ] = useState(null);
-    const [ shouldPlay, setShouldPlay ] = useState(false);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+    const [ lastPlayedPositionMillis, setLastPlayedPositionMillis ] = useState(0);
+    const [ hasLastPlayedPositionMillis, setHasLastPlayedPositionMillis ] = useState(false);
 
     const onUnloadUnlockLandscape = async () => await ScreenOrientation.unlockAsync();
 
@@ -19,38 +20,45 @@ const DisplayVideoScreen = () =>
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
     }
 
-    useFocusEffect(
-        useCallback(() => 
+    useEffect(() => 
+    {
+        InteractionManager.runAfterInteractions(async () => 
         {
-            InteractionManager.runAfterInteractions(async () => 
-            {
-                onLoadLockToLandscape();
+            onLoadLockToLandscape();
 
-                try {   
-                    const { id, title, videoUri } = route.params;
-                    setUri(videoUri);
-                    setShouldPlay(true);
-                } catch ({ message }) {
-                    console.log(message);
+            try {
+                const { videoUri } = route.params;
+
+                setUri(videoUri);
+
+                if ('lastPlayedPositionMillis' in route.params) 
+                {
+                    setHasLastPlayedPositionMillis(true);
+                    setLastPlayedPositionMillis(parseInt(route.params.lastPlayedPositionMillis));
                 }
 
                 setIsInteractionsComplete(true);
-            });
-    
-            return () => {
-                setUri(null);
-                onUnloadUnlockLandscape();
-            }
-        }, [route.params])
-    )
+            } catch ({ message }) {}
 
+        });
+
+        return () => {
+            onUnloadUnlockLandscape();
+            setUri(null);
+            setIsInteractionsComplete(false);
+            setLastPlayedPositionMillis(0);
+            setHasLastPlayedPositionMillis(false);
+        }
+    }, [route.params])
+ 
     if (! isInteractionsComplete) return <LoadingSpinner message='Loading' />
 
     return (
-        <VideoPlayerFullScreen 
+        <VideoPlayerFullScreen
             uri={ uri }
-            shouldPlay={ shouldPlay }
-            setShouldPlay={ setShouldPlay }
+            movieId={ route.params.id }
+            hasLastPlayedPositionMillis={ hasLastPlayedPositionMillis }
+            lastPlayedPositionMillis={ lastPlayedPositionMillis }
         />
     )
 }

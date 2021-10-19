@@ -32,6 +32,14 @@ export const updateAsync = async (payload) =>
         .catch(error => Promise.reject(error.response.data));
 }
 
+export const updatePositionMillisAsync = async (payload) => 
+{
+    return await axiosInstance()
+        .put(`/recently-watched-movies/position-millis`, payload)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data));
+}
+
 export const destroyAsync = async (payload) => 
 {
     return await axiosInstance()

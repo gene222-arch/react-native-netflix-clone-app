@@ -49,6 +49,9 @@ const {
     UPDATE_AUTHENTICATED_PROFILE_START,
     UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
     UPDATE_AUTHENTICATED_PROFILE_FAILED,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_SUCCESS,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED,
     VIEW_DOWNLOADS_START,
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED,
@@ -313,6 +316,23 @@ export const updateAuthenticatedProfileSuccess = (payload) => ({
 
 export const updateAuthenticatedProfileFailed = (payload) => ({
     type: UPDATE_AUTHENTICATED_PROFILE_FAILED,
+    payload
+});
+
+
+/** Update recently watched at position millis */
+export const updateRecentlyWatchedAtPositionMillisStart = (payload) => ({
+    type: UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
+    payload
+});
+
+export const updateRecentlyWatchedAtPositionMillisSuccess = (payload) => ({
+    type: UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_SUCCESS,
+    payload
+});
+
+export const updateRecentlyWatchedAtPositionMillisFailed = (payload) => ({
+    type: UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED,
     payload
 });
 

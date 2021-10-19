@@ -25,6 +25,7 @@ const {
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_ADD_TO_MY_LIST_START,
     UPDATE_AUTHENTICATED_PROFILE_START,
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
     VIEW_DOWNLOADS_START
 } = ACTION_TYPES;
 
@@ -170,9 +171,6 @@ function* removeToMyDownloadsSaga(payload)
     }
 }
 
-/**
- * Yet to implement
- */
 function* removeToRecentWatchesSaga(payload)  
 {
     try {
@@ -227,6 +225,18 @@ function* updateAuthenticatedProfileSaga(payload)
         yield call(AUTH_API.updateProfileAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.updateAuthenticatedProfileFailed({ message }));
+    }
+}
+
+function* updateRecentlyWatchedAtPositionMillisSaga(payload)
+{
+    try {
+        const { movieId: movie_id, user_profile_id, positionMillis: last_played_position_millis } = payload;
+
+        yield put(ACTION.updateRecentlyWatchedAtPositionMillisSuccess(payload));
+        yield call(RECENTLY_WATCHED_MOVIE_API.updatePositionMillisAsync, { movie_id, user_profile_id, last_played_position_millis });
+    } catch ({ message }) {
+        yield put(ACTION.updateRecentlyWatchedAtPositionMillisFailed({ message }));
     }
 }
 
@@ -370,6 +380,14 @@ function* updateAuthenticatedProfileWatcher()
     }
 }
 
+function* updateRecentlyWatchedAtPositionMillisWatcher()
+{
+    while (true) {
+        const { payload } = yield take(UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START);
+        yield call(updateRecentlyWatchedAtPositionMillisSaga, payload);
+    }
+}
+
 function* viewDownloadsWatcher()
 {
     while (true) {
@@ -399,6 +417,7 @@ export default function* ()
         toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher(),
         updateAuthenticatedProfileWatcher(),
+        updateRecentlyWatchedAtPositionMillisWatcher(),
         viewDownloadsWatcher()
     ]);
 }
