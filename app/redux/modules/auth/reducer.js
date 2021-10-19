@@ -70,6 +70,7 @@ const PROFILE_DEFAULT_PROPS = {
     name: '',
     email: '',
     avatar: null,
+    previous_avatar: null,
     is_for_kids: false,
     is_profiled_locked: false,
     pin_code: '',
@@ -487,7 +488,7 @@ export default (state = initialState, { type, payload }) =>
             });
 
             return {
-                ...state,
+                ...state,   
                 profiles: newProfiles,
                 isLoading,
                 errors

@@ -9,6 +9,7 @@ import Colors from './../../../constants/Colors';
 import ImageComponent from './../../../components/Image';
 import * as AUTH_API from './../../../services/auth/auth'
 import { Image } from 'react-native-expo-image-cache';
+import Text from '../../../components/Text';
 
 const avatarList = [
     'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
@@ -114,21 +115,35 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
 
     return (
         <View style={ styles.container }>
-            <View>
-                <FlatList 
-                    keyExtractor={ (item, index) => index.toString() }
-                    data={ avatars }
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={ () => handlePress(item) }>
-                            <Image uri={ item } preview={{ uri: item }} style={ styles.img } />
-                        </TouchableOpacity>
-                    )}
-                    numColumns={ 3 }
-                />
-            </View>
-            <View>
-                <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ handlePressAllowAccessToImageLib } />
-            </View>
+            <FlatList 
+                contentContainerStyle={ styles.contentContainer }
+                keyExtractor={ (item, index) => index.toString() }
+                data={ avatars }
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={ () => handlePress(item) }>
+                        <Image uri={ item } preview={{ uri: item }} style={ styles.img } />
+                    </TouchableOpacity>
+                )}
+                numColumns={ 3 }
+                ListHeaderComponent={ 
+                    <>
+                        {
+                            profile.previous_avatar && (
+                                <>
+                                    <Text h4 style={ styles.lastAvatarText }>Last Avatar</Text>
+                                    <Image 
+                                        uri={ profile.previous_avatar } 
+                                        preview={{ uri: profile.previous_avatar }} 
+                                        style={ styles.previousAvatar } 
+                                    />
+                                </>
+                            )
+                        }
+                        <Text h4 style={ styles.defaulAvatarsListText }>Default Lists</Text>
+                    </>
+                }
+            />
+            <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ handlePressAllowAccessToImageLib } />
         </View>
     )
 }
@@ -154,11 +169,15 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-between'
     },
+    defaulAvatarsListText: {
+        paddingHorizontal: 5,
+        paddingVertical: 10
+    },
     img: {
         width: 120,
         height: 120,
         borderRadius: 10,
-        marginTop: 40,
+        marginBottom: 40,
         marginRight: 10
     },
     imgDefault: {
@@ -166,6 +185,15 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 10,
         marginBottom: 20
+    },
+    lastAvatarText:{
+        paddingHorizontal: 5
+    },
+    previousAvatar: {
+        width: 120,
+        height: 120,
+        borderRadius: 10,
+        marginTop: 10
     },
     uploadImgContainer: {
         flex: 1,

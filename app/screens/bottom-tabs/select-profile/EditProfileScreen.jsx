@@ -39,7 +39,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
     }
 
     const handlePressChangeAvatar = (avatarUri) => {
-        setProfile({ ...profile, avatar: avatarUri });
+        setProfile({ ...profile, previous_avatar: profile.avatar, avatar: avatarUri });
         setShowAvatars(false);
     } 
 
