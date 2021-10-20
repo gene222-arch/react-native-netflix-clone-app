@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 const getAuth = state => state.auth; 
+const getUser = state => state.auth.auth.user; 
 const getAuthProfile = state => {
 
     const { auth: { profiles, profile } } = state;
@@ -17,6 +18,8 @@ const getProfiles = state => state.auth.profiles;
 export const authProfileSelector = createSelector(getAuthProfile, authProfile => authProfile);
 
 export const authSelector = createSelector(getAuth, auth => auth);
+
+export const userSelector = createSelector(getUser, user => user);
 
 export const selectAuthErrorMessages = createSelector(getErrorMessages, errors => errors);  
 

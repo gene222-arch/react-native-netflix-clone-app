@@ -17,9 +17,9 @@ const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle 
     const navigation = useNavigation();
     const offsetY = useRef(0);
 
-    const navigatoToSearchScreen = () => navigation.navigate('Search');
+    const navigateToSearchScreen = () => navigation.navigate('Search');
 
-    const navigateToAccountScreen = () => navigation.navigate('More');
+    const navigateToProfilesAndMoreScreen = () => navigation.navigate('ProfilesAndMore');
 
     const appBarStyles = {
         ...styles.appBarContainer,
@@ -41,7 +41,7 @@ const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle 
                 )
             }
             <View style={ styles.searchIconContainer }>
-                <TouchableOpacity onPress={ navigatoToSearchScreen }>
+                <TouchableOpacity onPress={ navigateToSearchScreen }>
                     <FeatherIcon 
                         name='search'
                         size={ 34 }
@@ -53,7 +53,7 @@ const AppBar = ({ AUTH_PROFILE, showAvatar = true, showLogo = true, headerTitle 
                 </TouchableOpacity>
                 {
                     showAvatar && (
-                        <TouchableOpacity onPress={ navigateToAccountScreen }>
+                        <TouchableOpacity onPress={ navigateToProfilesAndMoreScreen }>
                             <Avatar
                                 source={{
                                     uri: AUTH_PROFILE.avatar,

@@ -18,7 +18,7 @@ import Echo from '../../../utils/echo'
 import InputPinCodeOverlay from '../../../components/InputPinCodeOverlay';
 
 
-const moreOptions = ({ onPressSignOut, onPressMyList }) =>
+const moreOptions = ({ onPressSignOut, onPressMyList, onPressAppSettings }) =>
 [
     {
         id: 1,
@@ -32,7 +32,7 @@ const moreOptions = ({ onPressSignOut, onPressMyList }) =>
         name: 'App Settings',
         Icon: null,
         bottomDivider: false,
-        onPress: () => console.log('Clicked')
+        onPress: () => onPressAppSettings()
     },
     {
         id: 3,
@@ -103,8 +103,6 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         handleChangePin('');
     }
 
-    const toggleSignOutDialog = () => setShowSignOutDialog(! showSignOutDialog);
-
     const handlePressSignOut = async () => {
         batch(() => {
             dispatch(TOAST_ACTION.createToastMessageStart({
@@ -117,11 +115,16 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         (await Echo()).disconnect();
     }
 
+    const toggleSignOutDialog = () => setShowSignOutDialog(! showSignOutDialog);
+
     const handlePressMyList = () => navigation.navigate('MyListScreen', { headerTitle: 'My List' });
 
-    const moreOptions_ = { 
+    const handlePressAppSettings = () => navigation.navigate('AppSettingsScreen', { headerTitle: 'App Settings' });
+
+    const moreOptionsHandler = { 
         onPressSignOut: toggleSignOutDialog, 
-        onPressMyList: handlePressMyList 
+        onPressMyList: handlePressMyList,
+        onPressAppSettings: handlePressAppSettings
     };
 
     useEffect(() => {
@@ -202,7 +205,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
             
             <View style={ styles.lists }>
                 {
-                    moreOptions(moreOptions_)
+                    moreOptions(moreOptionsHandler)
                         .map(({ id, name, Icon, bottomDivider, onPress }) => (
                             <DisplayOption 
                                 key={ id }

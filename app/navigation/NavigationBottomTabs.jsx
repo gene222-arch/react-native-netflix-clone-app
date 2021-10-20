@@ -103,7 +103,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
             <Tab.Screen name='Search' component={ SearchTab } options={ hideTabScreen } />
             <Tab.Screen name='Coming soon' component={ ComingSoonTab } options={ COMING_SOON_OPTIONS } />
             <Tab.Screen name='Downloads' component={ DownloadsTab } options={ DOWNLOAD_OPTIONS } />
-            <Tab.Screen name='More' component={ ProfilesAndMoreStack } options={ hideTabScreen }/>
+            <Tab.Screen name='ProfilesAndMore' component={ ProfilesAndMoreStack } options={ hideTabScreen }/>
             <Tab.Screen name='DisplayVideoRoot' component={ DisplayVideoTab } options={ hideTabScreen }/>
         </Tab.Navigator>
     );
