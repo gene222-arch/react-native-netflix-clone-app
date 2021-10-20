@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { InteractionManager } from 'react-native'
 import View from './View';
 import { StyleSheet } from 'react-native'
 import * as AUTH_ACTION from '../redux/modules/auth/actions'
@@ -9,6 +10,7 @@ import { batch, connect, useDispatch } from 'react-redux';
 import MaterialButton from './styled-components/MaterialButton';
 import FeatherButton from './styled-components/FeatherButton';
 import FontAwesomeButton from './styled-components/FontAwesomeButton';
+import * as Sharing from 'expo-sharing';
 
 
 const styles = StyleSheet.create({
@@ -26,11 +28,8 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 {
     const dispatch = useDispatch();
 
-    const isMovieLiked = (
-        modelType === 'Movie' 
-            ? Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id))
-            : Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id))
-    );
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+    const [ isMovieLiked, setIsMovieLiked ] = useState(false);
 
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
@@ -69,6 +68,26 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 
     const handlePressTabShare = () => console.log('Shared');
 
+
+    useEffect(() => 
+    {
+        InteractionManager.runAfterInteractions(() => 
+        {
+            const isLiked = (
+                modelType === 'Movie' 
+                    ? Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movie.id))
+                    : Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id))
+            );
+
+            setIsMovieLiked(isLiked);
+            setIsInteractionsComplete(true);
+        });
+
+        return () => {
+            setIsInteractionsComplete(false);   
+            setIsMovieLiked(false);
+        }
+    }, [AUTH_PROFILE.liked_movies, AUTH_PROFILE.liked_coming_soon_movies]);
 
     return (
         <View style={ styles.container }>
