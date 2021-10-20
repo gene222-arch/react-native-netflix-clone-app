@@ -18,9 +18,10 @@ import Echo from '../../../utils/echo'
 import InputPinCodeOverlay from '../../../components/InputPinCodeOverlay';
 import * as WebBrowser from 'expo-web-browser';
 import * as SecureStoreInstance from './../../../utils/SecureStoreInstance'
+import ENV from './../../../../env';
 
 
-const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressAppSettings }) =>
+const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressAppSettings, onPressHelp }) =>
 [
     {
         id: 1,
@@ -48,7 +49,7 @@ const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressApp
         name: 'Help',
         Icon: null,
         bottomDivider: false,
-        onPress: () => console.log('Clicked')
+        onPress: () => onPressHelp()
     },
     {
         id: 5,
@@ -131,6 +132,15 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         (await Echo()).disconnect();
     }
 
+    const handlePressHelp = async () => 
+    {
+        try {
+            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/help`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const toggleSignOutDialog = () => setShowSignOutDialog(! showSignOutDialog);
 
     const handlePressMyList = () => navigation.navigate('MyListScreen', { headerTitle: 'My List' });
@@ -142,6 +152,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         onPressMyList: handlePressMyList,
         onPressAccount: handlePressAccountSettings,
         onPressAppSettings: handlePressAppSettings,
+        onPressHelp: handlePressHelp
     };
 
     useEffect(() => {

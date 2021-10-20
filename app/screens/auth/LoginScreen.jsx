@@ -3,7 +3,7 @@ import { useDispatch, connect } from 'react-redux'
 import { Button, Text, CheckBox } from 'react-native-elements';
 import * as AUTH_ACTION from '../../redux/modules/auth/actions'
 import styles from './../../assets/stylesheets/loginScreen';
-import { View, Keyboard } from 'react-native';
+import { View } from 'react-native';
 import Colors from './../../constants/Colors';
 import { createStructuredSelector } from 'reselect';
 import { 
@@ -15,8 +15,10 @@ import { TouchableOpacity } from 'react-native';
 import StyledTextInput from './../../components/styled-components/StyledTextInput';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import LoadingSpinner from './../../components/LoadingSpinner';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import { useFocusEffect } from '@react-navigation/core';
+import * as WebBrowser from 'expo-web-browser';
+import ENV from './../../../env';
+
 
 const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }) => 
 {
@@ -41,6 +43,15 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
 
     const onLoadLockToPortrait = async () => {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
+
+    const handlePressHelp = async () => 
+    {
+        try {
+            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/help`);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => 
@@ -137,7 +148,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
                     checked={ isChecked }
                     checkedColor={ Colors.grey }
                 />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={ handlePressHelp }>
                     <Text style={ styles.needHelp }>Need help?</Text>
                 </TouchableOpacity>
             </View>
