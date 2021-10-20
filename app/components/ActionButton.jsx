@@ -70,7 +70,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     const handlePressTabShare = async () => 
     {
         try {
-            const downloadPath = FileSystem.documentDirectory + `${movie.title.replace(' ', '')}${ movie.id }.jpg`;
+            const downloadPath = FileSystem.documentDirectory + `${ modelType }${ movie.id }.jpg`;
 
             const { exists } = await FileSystem.getInfoAsync(downloadPath);
             let localUri = null;
