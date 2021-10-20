@@ -43,7 +43,6 @@ const HomeCategory = ({ title, categorizedMovies }) =>
                     keyExtractor={(item, index) => index.toString() }
                     data={ categorizedMovies }
                     renderItem={({ item }) => <DisplayMovieImage item={ item } onPressImage={ () => handlePressImage(item) } /> }
-                    maxToRenderPerBatch={ 3 }
                     horizontal
                     style={ styles.categoryContainer }
                     showsHorizontalScrollIndicator={ false }
