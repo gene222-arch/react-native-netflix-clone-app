@@ -71,7 +71,7 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
             <View 
                 style={{ 
                     width: '92.5%',
-                    backgroundColor: '#FFF' 
+                    backgroundColor: Colors.grey 
                 }}
             >
                 <Divider
@@ -87,7 +87,7 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
             <View style={ styles.playIconContainer }>
                 <FontAwesome5Icon 
                     name='play'
-                    size={ 20 }
+                    size={ 30 }
                     color={ Colors.netFlixRed }
                     onPress={ handlePressPlayButton }
                 />
