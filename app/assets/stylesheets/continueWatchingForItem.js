@@ -22,10 +22,15 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 5,
         borderBottomLeftRadius: 5
     },
-    playIcon: {
+    playIconContainer: {
         position: 'absolute',
         top: '30%',
-        left: '25%'
+        left: 42,
+        padding: 10,
+        borderRadius: 8,
+        backgroundColor: 'rgba(0, 0, 0, .5)',
+        borderWidth: 1,
+        borderColor: Colors.white
     },
     poster: {
         width: 125,

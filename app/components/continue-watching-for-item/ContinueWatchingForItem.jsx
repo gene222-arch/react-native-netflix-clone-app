@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
 import { Divider } from 'react-native-elements';
-
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Colors from './../../constants/Colors';
 
 const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike, handlePressRemoveRate,  handlePressRemove }) => 
 {
@@ -59,16 +60,18 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
 
             <Info selectedShow={ movie } isVisible={ showInfo } setIsVisible={ setShowInfo } />
 
-            <Image 
-                preview={{ uri: movie.poster_path }}
-                uri={ movie.poster_path }
-                style={ styles.poster }
-            />
+            <TouchableOpacity onPress={ handlePressPlayButton }>
+                <Image 
+                    preview={{ uri: movie.poster_path }}
+                    uri={ movie.poster_path }
+                    style={ styles.poster }
+                />
+            </TouchableOpacity>
 
             <View 
                 style={{ 
                     width: '92.5%',
-                    backgroundColor: '#FFF'
+                    backgroundColor: '#FFF' 
                 }}
             >
                 <Divider
@@ -80,14 +83,15 @@ const ContinueWatchingForItem = ({ movie, handleToggleLike, handleToggleDisLike,
                     }}
                 />
             </View>
-
-            <MaterialCommunityIcon 
-                name='play-circle-outline'
-                size={ 50 }
-                color='#fff'
-                style={ styles.playIcon }
-                onPress={ handlePressPlayButton }
-            />
+            
+            <View style={ styles.playIconContainer }>
+                <FontAwesome5Icon 
+                    name='play'
+                    size={ 20 }
+                    color={ Colors.netFlixRed }
+                    onPress={ handlePressPlayButton }
+                />
+            </View>
             
             <View style={ styles.infoMoreContainer }>
                 <TouchableOpacity onPress={ handlePressShowInfo }>
