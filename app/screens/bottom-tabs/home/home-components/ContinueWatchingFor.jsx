@@ -8,7 +8,6 @@ import View from '../../../../components/View';
 import Text from '../../../../components/Text';
 import styles from './../../../../assets/stylesheets/continueWatchingForItem';
 import ContinueWatchingForItem from './../../../../components/continue-watching-for-item/ContinueWatchingForItem';
-import { cacheImage } from '../../../../utils/cacheImage';
 import TextLoader from './../../../../components/loading-skeletons/TextLoader';
 
 
@@ -57,7 +56,11 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
     }));
 
     if (! recently_watched_movies.length) {
-        return <Text h4>Your recently watched movie's will be shown here.</Text>
+        return (
+            <View style={ styles.emptyRecentWatchesContainer }>
+                <Text h4 style={ styles.emptyRecentWatchesText }>Your recently watched movie's will be shown here.</Text>
+            </View>
+        )
     }
 
     return (

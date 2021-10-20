@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
         width: '92.5%',
         backgroundColor: '#FFF'
     },
+    emptyRecentWatchesContainer: {
+        padding: 40
+    },
+    emptyRecentWatchesText: {
+        textAlign: 'center'
+    },
     infoMoreContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
