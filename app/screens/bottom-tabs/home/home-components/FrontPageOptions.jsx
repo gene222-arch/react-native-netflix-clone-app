@@ -22,7 +22,7 @@ const Genre = ({ genres }) =>
     return (
         genres.map((genre, index) => (
             <Text key={ index } style={ styles.tagItem }>
-                { (genres.length - 1) !== index ? `${ genre }  · ` : genre }
+                { genre }
             </Text>
         ))
     )

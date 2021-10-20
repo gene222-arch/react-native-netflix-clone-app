@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     tabContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        padding: 30,
-        paddingTop: 10,
+        paddingHorizontal: 30,
+        marginTop: 10,
         backgroundColor: 'transparent'
     },
     tabItem: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     tagItem: {
-        fontSize: 12
+        fontSize: 13
     },
     topMenuContainer: {
         backgroundColor: 'transparent'
