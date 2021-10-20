@@ -11,6 +11,8 @@ import MaterialButton from './styled-components/MaterialButton';
 import FeatherButton from './styled-components/FeatherButton';
 import FontAwesomeButton from './styled-components/FontAwesomeButton';
 import Colors from './../constants/Colors';
+import * as FileSystem from 'expo-file-system'
+import * as Sharing from 'expo-sharing';
 
 
 const styles = StyleSheet.create({
@@ -68,8 +70,33 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     const handlePressTabShare = async () => 
     {
         try {
-            console.log(res);
-        } catch (error) {}
+            const downloadPath = FileSystem.documentDirectory + `${movie.title.replace(' ', '')}${ movie.id }.jpg`;
+
+            const { exists } = await FileSystem.getInfoAsync(downloadPath);
+            let localUri = null;
+
+            if (! exists) {
+                const { uri } = await FileSystem.downloadAsync(movie.wallpaper_path, downloadPath);
+                localUri = uri;
+            }
+
+            if (exists) {
+                localUri = downloadPath;
+            }
+
+            if (! (await Sharing.isAvailableAsync())) {
+                alert('Sharing is not available');
+                return;
+            }
+
+            await Sharing.shareAsync(localUri, {
+                mimeType: 'image/jpeg',
+                dialogTitle: movie.title,
+                UTI: 'image/jpeg'
+            });
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     useEffect(() => 
