@@ -11,7 +11,7 @@ const StackNavAvatar = ({ AUTH_PROFILE }) =>
 {
     const navigation = useNavigation();
 
-    const navigateToAccountScreen = () => navigation.navigate('More');
+    const navigateToAccountScreen = () => navigation.navigate('ProfilesAndMore');
     
     return (
         <TouchableOpacity onPress={ navigateToAccountScreen }>

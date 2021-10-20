@@ -20,6 +20,9 @@ const DefaultSearchList = ({ movies = [], handlePressDisplayShowInfo }) =>
                         onPress={ () => handlePressDisplayShowInfo(item) }
                     />
                 )}
+                showsHorizontalScrollIndicator={ false }
+                showsVerticalScrollIndicator={ false }
+                maxToRenderPerBatch={ 5 }
             />
         </View>
     )

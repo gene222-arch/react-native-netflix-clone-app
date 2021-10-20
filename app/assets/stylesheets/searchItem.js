@@ -11,10 +11,8 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        height: 80,
-        width: 100,
-        resizeMode: 'cover',
-        aspectRatio: 16/9,
+        height: 100,
+        resizeMode: 'contain',
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
     },
