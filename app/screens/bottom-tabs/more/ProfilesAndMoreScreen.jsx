@@ -16,9 +16,11 @@ import DisplayOption from '../../../components/more-screen-display-option/Displa
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Echo from '../../../utils/echo'
 import InputPinCodeOverlay from '../../../components/InputPinCodeOverlay';
+import * as WebBrowser from 'expo-web-browser';
+import * as SecureStoreInstance from './../../../utils/SecureStoreInstance'
 
 
-const moreOptions = ({ onPressSignOut, onPressMyList, onPressAppSettings }) =>
+const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressAppSettings }) =>
 [
     {
         id: 1,
@@ -39,7 +41,7 @@ const moreOptions = ({ onPressSignOut, onPressMyList, onPressAppSettings }) =>
         name: 'Account',
         Icon: null,
         bottomDivider: false,
-        onPress: () => console.log('Clicked')
+        onPress: () => onPressAccount()
     },
     {
         id: 4,
@@ -70,6 +72,20 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
+
+    const handlePressAccountSettings = async () => 
+    {
+        try {
+            const accessToken = await SecureStoreInstance.getAccessToken();
+
+            const url = `http://192.168.1.10:3000`;
+            const queryParams = `?token=${ accessToken }&profileId=${ AUTH_PROFILE.id }&path=home`;
+    
+            await WebBrowser.openBrowserAsync(url + queryParams);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleChangePin = (pin) => 
     {
@@ -124,7 +140,8 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const moreOptionsHandler = { 
         onPressSignOut: toggleSignOutDialog, 
         onPressMyList: handlePressMyList,
-        onPressAppSettings: handlePressAppSettings
+        onPressAccount: handlePressAccountSettings,
+        onPressAppSettings: handlePressAppSettings,
     };
 
     useEffect(() => {
