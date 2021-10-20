@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: 10,
     },
+    continueWatchingForHeader: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingLeft: 10
+    },  
     divider: {
         width: '92.5%'
     },

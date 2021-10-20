@@ -68,7 +68,7 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
             {
                 AUTH.isLoading 
                     ? <TextLoader />
-                    : <Text h4>Continue Watching For { name }</Text>
+                    : <Text style={ styles.continueWatchingForHeader }>Continue Watching For { name.toUpperCase() }</Text>
             }
 
             <FlatList 

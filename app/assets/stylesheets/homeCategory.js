@@ -6,7 +6,10 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     categoryTitle: {
-        paddingLeft: 10
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingLeft: 10,
+        marginBottom: 5
     },
     image: {
         width: 125,
