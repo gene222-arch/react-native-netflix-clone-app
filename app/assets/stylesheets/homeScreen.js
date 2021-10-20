@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         width: '100%',
         padding: 10,
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        marginBottom: 5
     },
     tagItem: {
         fontSize: 13
