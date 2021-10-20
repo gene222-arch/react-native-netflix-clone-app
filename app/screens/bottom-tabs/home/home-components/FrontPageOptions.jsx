@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { TouchableOpacity, ToastAndroid } from 'react-native'
+import { TouchableOpacity, ToastAndroid, StatusBar } from 'react-native'
 import { Button } from 'react-native-elements'
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';
@@ -14,6 +14,8 @@ import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import Info from './../../../../components/continue-watching-for-item/Info';
 import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
+import Colors from './../../../../constants/Colors';
+import { useIsFocused } from '@react-navigation/core';
 
 const Genre = ({ genres }) => 
 {
@@ -26,7 +28,7 @@ const Genre = ({ genres }) =>
     )
 }
 
-const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) => 
+const FrontPageOptions = ({ AUTH_PROFILE, frontPage, route }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();

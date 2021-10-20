@@ -20,6 +20,7 @@ import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.mov
 import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import * as MOVIE_API from './../../../services/movie/movie'
+import { useIsFocused } from '@react-navigation/core';
 
 const DEFAULT_FRONT_PAGE_PROPS = {
     id: '',
@@ -33,6 +34,7 @@ const DEFAULT_FRONT_PAGE_PROPS = {
 
 const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
+    const isFocused = useIsFocused();
     const dispatch = useDispatch();
 
     const isForKids = Boolean(AUTH_PROFILE.is_for_kids);
@@ -109,6 +111,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
     return (
         <View>
+            { isFocused && <StatusBar backgroundColor='rgba(0, 0, 0, .5)' /> } 
             <FlatList
                 keyExtractor={ (item, index) => index.toString() }
                 data={ MOVIE.categories }

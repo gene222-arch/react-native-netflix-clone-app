@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     frontPageOptions: {
         alignItems: 'center',
-        backgroundColor: 'transparent'
+        backgroundColor: 'rgba(0, 0, 0, .5)'
     },
     homeFrontPage: {
         width: '100%',

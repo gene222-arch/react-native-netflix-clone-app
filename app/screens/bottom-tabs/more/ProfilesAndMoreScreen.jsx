@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, connect, batch } from 'react-redux'
-import { FlatList, TouchableOpacity } from 'react-native'
+import { FlatList, TouchableOpacity} from 'react-native'
 import * as AUTH_ACTION from '../../../redux/modules/auth/actions'
 import * as TOAST_ACTION from '../../../redux/modules/toast/actions'
 import styles from '../../../assets/stylesheets/moreScreen';
@@ -19,6 +19,9 @@ import InputPinCodeOverlay from '../../../components/InputPinCodeOverlay';
 import * as WebBrowser from 'expo-web-browser';
 import * as SecureStoreInstance from './../../../utils/SecureStoreInstance'
 import ENV from './../../../../env';
+import { useIsFocused } from '@react-navigation/core';
+import { StatusBar } from 'expo-status-bar';
+import Colors from './../../../constants/Colors';
 
 
 const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressAppSettings, onPressHelp }) =>
@@ -62,6 +65,7 @@ const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressApp
 
 const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) => 
 {
+    const isFocused = useIsFocused();
     const navigation = useNavigation();
     const dispatch = useDispatch();
     
@@ -168,6 +172,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
 
     return (
         <View style={ styles.container }>
+            { isFocused && <StatusBar backgroundColor={ Colors.darkMode } /> }
             <InputPinCodeOverlay 
                 profileId={ profileId }
                 isVisible={ showPinCodeModal }
