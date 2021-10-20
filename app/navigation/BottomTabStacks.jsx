@@ -171,26 +171,6 @@ export const DownloadsTab = () =>
     );
 }
 
-const AccountSoonStack = createStackNavigator();
-
-export const MoreTab = () => 
-{
-    const MORE_SCREEN_OPTIONS = ({ route }) => ({
-        headerLeft: props => <StackNavBackButton { ...props } />,
-        headerTitle: 'Profiles & More'
-    });
-    
-    return (
-        <AccountSoonStack.Navigator initialRouteName='More'>
-            <AccountSoonStack.Screen 
-                name='More' 
-                component={ MoreScreen } 
-                options={ MORE_SCREEN_OPTIONS }
-            />
-        </AccountSoonStack.Navigator>
-    );
-}
-
 const DisplayVideoStack = createStackNavigator();
 
 export const DisplayVideoTab = () => 

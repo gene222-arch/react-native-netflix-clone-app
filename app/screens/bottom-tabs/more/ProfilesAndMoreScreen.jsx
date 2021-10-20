@@ -3,19 +3,19 @@ import { useDispatch, connect, batch } from 'react-redux'
 import { FlatList, TouchableOpacity } from 'react-native'
 import * as AUTH_ACTION from '../../../redux/modules/auth/actions'
 import * as TOAST_ACTION from '../../../redux/modules/toast/actions'
-import styles from './../../../assets/stylesheets/moreScreen';
+import styles from '../../../assets/stylesheets/moreScreen';
 import ProfilePhotoItem from '../../../components/profile-photo-item/ProfilePhotoItem';
-import View from './../../../components/View';
+import View from '../../../components/View';
 import { Overlay, Button } from 'react-native-elements';
-import Text from './../../../components/Text';
+import Text from '../../../components/Text';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createStructuredSelector } from 'reselect';
-import { authSelector, authProfileSelector, selectOrderedProfiles } from './../../../redux/modules/auth/selectors';
+import { authSelector, authProfileSelector, selectOrderedProfiles } from '../../../redux/modules/auth/selectors';
 import { useNavigation } from '@react-navigation/native';
-import DisplayOption from './../../../components/more-screen-display-option/DisplayOption';
+import DisplayOption from '../../../components/more-screen-display-option/DisplayOption';
 import LoadingSpinner from '../../../components/LoadingSpinner'
-import Echo from './../../../utils/echo'
-import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
+import Echo from '../../../utils/echo'
+import InputPinCodeOverlay from '../../../components/InputPinCodeOverlay';
 
 
 const moreOptions = ({ onPressSignOut, onPressMyList }) =>
@@ -57,7 +57,7 @@ const moreOptions = ({ onPressSignOut, onPressMyList }) =>
     }
 ];
 
-const MoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) => 
+const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) => 
 {
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -224,4 +224,4 @@ const mapStateToProps = createStructuredSelector({
     ORDERED_PROFILES: selectOrderedProfiles
 });
 
-export default connect(mapStateToProps)(MoreScreen)
+export default connect(mapStateToProps)(ProfilesAndMoreScreen)

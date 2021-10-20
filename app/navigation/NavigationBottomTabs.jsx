@@ -13,6 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { navigationSelector } from './../redux/modules/navigation/selectors';
 import { connect } from 'react-redux';
 import { comingSoonMoviesSelector } from './../redux/modules/coming-soon/selectors';
+import ProfilesAndMoreStack from './ProfilesAndMoreStack';
 
 
 const Tab = createBottomTabNavigator();
@@ -102,7 +103,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
             <Tab.Screen name='Search' component={ SearchTab } options={ hideTabScreen } />
             <Tab.Screen name='Coming soon' component={ ComingSoonTab } options={ COMING_SOON_OPTIONS } />
             <Tab.Screen name='Downloads' component={ DownloadsTab } options={ DOWNLOAD_OPTIONS } />
-            <Tab.Screen name='More' component={ MoreTab } options={ hideTabScreen }/>
+            <Tab.Screen name='More' component={ ProfilesAndMoreStack } options={ hideTabScreen }/>
             <Tab.Screen name='DisplayVideoRoot' component={ DisplayVideoTab } options={ hideTabScreen }/>
         </Tab.Navigator>
     );

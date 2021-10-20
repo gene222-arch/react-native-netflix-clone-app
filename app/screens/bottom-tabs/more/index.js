@@ -1,3 +1,3 @@
-import MoreScreen from './MoreScreen';
+import MoreScreen from './ProfilesAndMoreScreen';
 
 export default MoreScreen
