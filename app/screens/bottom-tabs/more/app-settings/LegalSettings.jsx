@@ -1,7 +1,6 @@
 import React from 'react'
 import View from './../../../../components/View';
-import Text from './../../../../components/Text';
-import { ListItem, Icon } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 import { StyleSheet } from 'react-native'
 import Colors from './../../../../constants/Colors';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -10,7 +9,7 @@ import { userSelector, authProfileSelector } from './../../../../redux/modules/a
 import { connect } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 
-const AboutSettings = ({ AUTH_PROFILE, USER }) => 
+const AboutSettings = () => 
 {
     const handlePressPrivacy = async () => 
     {
