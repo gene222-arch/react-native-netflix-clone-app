@@ -139,7 +139,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const handlePressHelp = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/help`);
+            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/help`);
         } catch (error) {
             console.log(error);
         }
