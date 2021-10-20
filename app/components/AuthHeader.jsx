@@ -6,6 +6,7 @@ import Image from './../components/Image';
 import APP_MINI_LOGO from './../assets/app-mini-logo.png'
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
+import ENV from './../../env';
 
 const styles = StyleSheet.create({
     container: {
@@ -39,7 +40,7 @@ const AuthHeader = () =>
 {
     const navigation = useNavigation();
 
-    const handlePressNavigate = async () => await WebBrowser.openBrowserAsync('http://192.168.1.10:3000/legal/privacy');
+    const handlePressNavigate = async () => await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/privacy`);
 
     return (
         <View style={ styles.container }>

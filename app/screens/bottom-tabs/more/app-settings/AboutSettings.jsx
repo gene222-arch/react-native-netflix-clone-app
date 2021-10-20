@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
 import * as SecureStoreInstance from './../../../../utils/SecureStoreInstance'
 import { useNavigation } from '@react-navigation/native';
+import ENV from './../../../../../env';
 
 const AboutSettings = ({ AUTH_PROFILE, USER }) => 
 {
@@ -19,11 +20,9 @@ const AboutSettings = ({ AUTH_PROFILE, USER }) =>
     {
         try {
             const accessToken = await SecureStoreInstance.getAccessToken();
-
-            const url = `http://192.168.1.10:3000`;
             const queryParams = `?token=${ accessToken }&profileId=${ AUTH_PROFILE.id }&path=home`;
     
-            await WebBrowser.openBrowserAsync(url + queryParams);
+            await WebBrowser.openBrowserAsync(ENV.WEB_APP_URL + queryParams);
         } catch (error) {
             console.log(error);
         }

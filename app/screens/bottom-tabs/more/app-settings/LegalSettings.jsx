@@ -8,13 +8,14 @@ import { createStructuredSelector } from 'reselect';
 import { userSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import * as WebBrowser from 'expo-web-browser';
+import ENV from './../../../../../env';
 
 const AboutSettings = () => 
 {
     const handlePressPrivacy = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync('http://192.168.1.10:3000/legal/privacy');
+            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/privacy`);
         } catch (error) {
             console.log(error);
         }
@@ -23,7 +24,7 @@ const AboutSettings = () =>
     const handlePressCookies = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync('http://192.168.1.10:3000/legal/terms-and-conditions');
+            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/terms-and-conditions`);
         } catch (error) {
             console.log(error);
         }
@@ -32,7 +33,7 @@ const AboutSettings = () =>
     const handlePressTermsAndConditions = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync('http://192.168.1.10:3000/legal/terms-and-conditions');
+            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/terms-and-conditions`);
         } catch (error) {
             console.log(error);
         }

@@ -11,6 +11,7 @@ import Text from './Text';
 import * as WebBrowser from 'expo-web-browser';
 import Colors from './../constants/Colors';
 import * as SecureStoreInstance from './../utils/SecureStoreInstance'
+import ENV from './../../env';
 
 const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, setIsVisible, hasError, onChangeText, onCancel }) => 
 {
@@ -18,7 +19,7 @@ const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, setIsVisible
     {
         const accessToken = await SecureStoreInstance.getAccessToken();
 
-        const url = `http://192.168.1.10:3000/settings/lock/${ profileId }`;
+        const url = `${ ENV.WEB_APP_URL }/settings/lock/${ profileId }`;
         const queryParams = `?token=${ accessToken }&profileId=${ profileId }`;
 
         await WebBrowser.openBrowserAsync(url + queryParams);
