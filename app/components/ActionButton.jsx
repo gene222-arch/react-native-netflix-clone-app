@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { InteractionManager } from 'react-native'
+import { InteractionManager, ActivityIndicator } from 'react-native'
 import View from './View';
 import { StyleSheet } from 'react-native'
 import * as AUTH_ACTION from '../redux/modules/auth/actions'
@@ -10,7 +10,7 @@ import { batch, connect, useDispatch } from 'react-redux';
 import MaterialButton from './styled-components/MaterialButton';
 import FeatherButton from './styled-components/FeatherButton';
 import FontAwesomeButton from './styled-components/FontAwesomeButton';
-import * as Sharing from 'expo-sharing';
+import Colors from './../constants/Colors';
 
 
 const styles = StyleSheet.create({
@@ -30,8 +30,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isMovieLiked, setIsMovieLiked ] = useState(false);
-
-    const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
+    const [ isReminded, setIsReminded ] = useState(false);
 
     const handlePressAddToMyList = () => 
     {
@@ -66,8 +65,12 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
         });
     }
 
-    const handlePressTabShare = () => console.log('Shared');
-
+    const handlePressTabShare = async () => 
+    {
+        try {
+            console.log(res);
+        } catch (error) {}
+    }
 
     useEffect(() => 
     {
@@ -79,6 +82,10 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                     : Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id))
             );
 
+            const isMovieAddedToReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies
+                    .find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
+
+            setIsReminded(isMovieAddedToReminded);
             setIsMovieLiked(isLiked);
             setIsInteractionsComplete(true);
         });
@@ -87,7 +94,18 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
             setIsInteractionsComplete(false);   
             setIsMovieLiked(false);
         }
-    }, [AUTH_PROFILE.liked_movies, AUTH_PROFILE.liked_coming_soon_movies]);
+    }, [AUTH_PROFILE.liked_movies, AUTH_PROFILE.liked_coming_soon_movies, AUTH_PROFILE.reminded_coming_soon_movies]);
+
+    
+    if (! isInteractionsComplete) {
+        return (
+            <View style={ styles.container }>
+                <ActivityIndicator color={ Colors.white } />
+                <ActivityIndicator color={ Colors.white } />
+                <ActivityIndicator color={ Colors.white } />
+            </View>
+        )
+    }
 
     return (
         <View style={ styles.container }>
