@@ -15,8 +15,6 @@ const ListHeader = ({ comingSoonMovie }) =>
 {
     const [ selectedTabCategory, setSelectedTabCategory ] = useState(1);
 
-    const handlePressSimilarShow = (recommendedSimilarShow) => navigation.push('TrailerInfo', { comingSoonMovie: recommendedSimilarShow });
-
     useEffect(() => {
         return () => {
             setSelectedTabCategory(1);
@@ -44,12 +42,7 @@ const ListHeader = ({ comingSoonMovie }) =>
 
             {
                 !selectedTabCategory
-                    ? (
-                        <MoreLikeThis 
-                            comingSoonMovie={ comingSoonMovie }
-                            handlePressSimilarShow={ handlePressSimilarShow }
-                        />
-                    )
+                    ? <MoreLikeThis comingSoonMovie={ comingSoonMovie } />
                     : <TrailersAndMore trailers={ comingSoonMovie.trailers } />
             }
         </View>

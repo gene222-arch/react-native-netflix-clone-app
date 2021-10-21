@@ -9,11 +9,16 @@ import { createStructuredSelector } from 'reselect';
 import { comingSoonMoviesSelector } from './../../../../redux/modules/coming-soon/selectors';
 import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
+import { useNavigation } from '@react-navigation/native';
 
-const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie, handlePressSimilarShow }) => 
+const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie }) => 
 {
+    const navigation = useNavigation();
+
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ similarComingSoonMovies, setSimilarComingSoonMovies ] = useState([]);
+
+    const handlePressSimilarShow = (id) => navigation.push('TrailerInfo', { id });
 
     const filterViaLevenshteinAlgo = useCallback(e => {
 
@@ -64,7 +69,7 @@ const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie, handlePressSimilarSh
                 data={ similarComingSoonMovies }
                 numColumns={ 3 }
                 renderItem={ ({ item }) => (
-                    <TouchableOpacity onPress={ () => handlePressSimilarShow(item) }>
+                    <TouchableOpacity onPress={ () => handlePressSimilarShow(item.id) }>
                         <Image 
                             preview={{ uri: item.poster_path }}
                             uri={ item.poster_path }

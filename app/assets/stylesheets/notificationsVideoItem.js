@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingLeft: 15
+        paddingLeft: 10,
+        marginTop: 15
     },
     infoContainer: {
         alignItems: 'center'
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: -140,
-        marginRight: 60
+        marginRight: 40
     },
     remindMeInfoText: {
         color: Colors.grey,
