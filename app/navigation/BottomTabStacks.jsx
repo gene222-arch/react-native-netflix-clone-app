@@ -73,7 +73,12 @@ export const HomeTab = ({ navigation }) =>
             <HomeStack.Screen 
                 name='MovieDetailScreen' 
                 component={ MovieDetailsScreen } 
-                options={({ route }) => ({ headerTitle: route.params.headerTitle })}
+                options={({ route }) => ({ 
+                    headerTitle: props => <AppBar showLogo={ false } headerTitle={ '' } />,
+                    headerStyle: {
+                        backgroundColor: '#000'
+                    }, 
+                })}
             />
             <HomeStack.Screen 
                 name='MyListScreen'

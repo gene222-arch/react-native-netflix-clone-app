@@ -10,10 +10,13 @@ const NotificationItem = ({ item }) =>
 {
     const navigation = useNavigation();
 
-    const handlePress = () => navigation.navigate('TrailerInfo', { id: item.movie_id });
+    const handlePress = () => navigation.navigate('MovieDetailScreen', { 
+        id: item.movie_id,
+        headerTitle: item.movie.title
+    });
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ handlePress }>
             <View style={ styles.container }>
                 <Image 
                     uri={ item.movie.wallpaper_path }
