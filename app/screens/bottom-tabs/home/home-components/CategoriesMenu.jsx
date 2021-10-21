@@ -52,7 +52,7 @@ const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) =
         historyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.HISTORY),
         romanceOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ROMANCE),
         romanticComedyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ROMANTICE_COMEDY),
-        sportsOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SUSPENSE),
+        sportsOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SPORTS),
         suspenseOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SUSPENSE),
         thrillerOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.THRILLER),
     });

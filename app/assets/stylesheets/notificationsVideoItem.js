@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 10
     },
-    poster: {
-        width: '100%',
-        height: 70,
+    titleLogo: {
+        width: 315,
+        height: 60,
         marginTop: 5,
         resizeMode: 'contain'
     },

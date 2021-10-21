@@ -10,10 +10,12 @@ const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressI
 {
     return (
         <View style={ styles.comingSoonVideoContainer }>
-            <Image 
-                uri={ movie.title_logo_path }
-                style={ styles.poster }
-            />
+            <View>
+                <Image 
+                    uri={ movie.title_logo_path }
+                    style={ styles.titleLogo }
+                />
+            </View>
             <View style={ styles.remindMeInfoContainer }>
                 <TouchableOpacity onPress={ handlePressToggleRemindMe }>
                     <View style={ styles.remindMeContainer }>
