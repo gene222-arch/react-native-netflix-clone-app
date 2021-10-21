@@ -506,7 +506,8 @@ export default (state = initialState, { type, payload }) =>
                     return movie.id === payload.movieId 
                         ? {
                             ...movie,
-                            last_played_position_millis: payload.positionMillis
+                            last_played_position_millis: payload.positionMillis,
+                            duration_in_millis: payload.duration_in_millis
                         } 
                         : movie
                 });

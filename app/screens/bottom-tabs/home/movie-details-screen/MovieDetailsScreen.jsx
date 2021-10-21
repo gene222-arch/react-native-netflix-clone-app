@@ -107,7 +107,8 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
                 movieId, 
                 positionMillis: videoStatus?.positionMillis, 
-                user_profile_id: AUTH_PROFILE.id 
+                user_profile_id: AUTH_PROFILE.id,
+                duration_in_millis: videoStatus?.durationMillis
             }));
         }
 
