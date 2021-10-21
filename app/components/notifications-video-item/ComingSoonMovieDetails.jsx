@@ -6,7 +6,7 @@ import styles from './../../assets/stylesheets/notificationsVideoItem';
 const DisplayGenres = ({ genreLength, genreName, index }) => {
     return (
         <Text style={ styles.tags }>
-            { (genreLength - 1) === index ? genreName : `${ genreName }  ·  ` }
+            { genreLength === index ? genreName : `${ genreName }  ·  ` }
         </Text>
     )
 }
@@ -23,7 +23,7 @@ const ComingSoonMovieDetails = ({ movie }) =>
                 movie.genres.split(',').map((genre, index) => (
                     <DisplayGenres 
                         key={ index } 
-                        genreLength={ movie.genres.length }
+                        genreLength={ movie.genres.split(',').length - 1 }
                         genreName={ genre }
                         index={ index }
                     />

@@ -36,7 +36,7 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
                 source={{ uri: movie.video_trailer_path }}
                 posterSource={{ uri: movie.poster_path }}
                 posterStyle={ styles.posterStyle}
-                usePoster={ !shouldPlay }
+                usePoster={ shouldShowPoster }
                 shouldPlay={ shouldPlay && isFocused }
                 resizeMode='contain'
                 useNativeControls
