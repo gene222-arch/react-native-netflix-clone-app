@@ -11,6 +11,9 @@ import * as AUTH_API from './../../../services/auth/auth'
 import { Image } from 'react-native-expo-image-cache';
 import Text from '../../../components/Text';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { createStructuredSelector } from 'reselect';
+import { authSelector } from './../../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
 const avatarList = [
     'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
@@ -22,7 +25,7 @@ const avatarList = [
     'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
 ];
 
-const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) => 
+const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) => 
 {
     const [ uploadAvatar, setUploadAvatar ] = useState(false);
     const [ avatars, setAvatars ] = useState([]);
@@ -193,12 +196,20 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
                     </>
                 }
             />
-            <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ () => setUploadAvatar(true) } />
+            {
+                AUTH.auth.subscription_details.type === 'Premium' && (
+                    <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ () => setUploadAvatar(true) } />
+                )
+            }
         </View>
     )
 }
 
-export default AvatarList
+const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector
+});
+
+export default connect(mapStateToProps)(AvatarList)
 
 const styles = StyleSheet.create({
     btn: {
