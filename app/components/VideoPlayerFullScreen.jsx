@@ -24,12 +24,13 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ isLoaded, setIsLoaded ] = useState(false);
     const [ positionMillis, setPositionMillis ] = useState(0);
+    const [ durationMillis, setDurationMillis ] = useState(0);
 
     const onEnterFullScreen = async () => 
     {
         setStatusBarHidden(true);
 
-        setInFullscreen(true);
+        setInFullscreen(true);  
 
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
     }
@@ -45,7 +46,12 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
         await ScreenOrientation.unlockAsync();
 
         if (hasLastPlayedPositionMillis) {
-            dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ movieId, positionMillis, user_profile_id: AUTH_PROFILE.id }));
+            dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
+                movieId, 
+                positionMillis, 
+                user_profile_id: AUTH_PROFILE.id,
+                duration_in_millis: durationMillis
+            }));
         }
         
         navigation.goBack();
@@ -95,6 +101,7 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
 
                 if (! isLoaded) 
                 {
+                    setDurationMillis(status.durationMillis);
                     setVideoStatus(() => ({
                         ...status,
                         positionMillis: lastPlayedPositionMillis
