@@ -5,8 +5,10 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Image } from 'react-native-expo-image-cache';
 import Colors from './../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const NotificationItem = ({ item }) => 
+
+const NotificationItem = ({ item, isReminded = false }) => 
 {
     const navigation = useNavigation();
 
@@ -24,7 +26,22 @@ const NotificationItem = ({ item }) =>
                     style={ styles.img }
                 />
                 <View style={ styles.movieDescriptionContainer }>
-                    <Text style={ styles.movieNotifTypeText }>{ item.type }</Text>
+                    <Text style={ styles.movieNotifTypeText }>
+                        {
+                            !isReminded ? item.type 
+                            : (
+                                <>
+                                    <FontAwesome5 
+                                        name='bell'
+                                        size={ 16 }
+                                        color='#FFD700'
+                                        solid
+                                    />
+                                    { `  Reminder: ${ item.type }` }
+                                </>
+                            )
+                        }
+                    </Text>
                     <Text style={ styles.releasedAtText }>{ item.movie.title }</Text>
                     <Text style={ styles.releasedAtText }>{ item.created_at }</Text>
                 </View>

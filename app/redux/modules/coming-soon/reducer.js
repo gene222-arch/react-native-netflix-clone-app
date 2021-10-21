@@ -56,7 +56,7 @@ export default (state = initialState, { type, payload }) =>
         case DELETE_COMING_SOON_MOVIE_BY_ID:
             return {
                 ...state,
-                comingSoonMovies: comingSoonMovies.filter(({ id }) => id !== payload.id), 
+                comingSoonMovies: state.comingSoonMovies.filter(({ id }) => id !== payload.id), 
                 isLoading,
                 errors
             }
