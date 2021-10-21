@@ -29,7 +29,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     const [ focusedIndex, setFocusedIndex ] = useState(0);
 
     const handleOnScroll = useCallback((e) => {
-        const offset = Math.round(e.nativeEvent.contentOffset.y / 500);
+        const offset = Math.round(e.nativeEvent.contentOffset.y / 410);
         setFocusedIndex(offset);
     }, [focusedIndex]);
 
