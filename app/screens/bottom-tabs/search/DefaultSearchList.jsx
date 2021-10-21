@@ -9,7 +9,7 @@ const DefaultSearchList = ({ movies = [], handlePressDisplayShowInfo }) =>
 {
     return (
         <View style={{ flex: 1 }}>
-            <Text h4 style={ styles.searchHeaderTitle }>Top Researches</Text>
+            <Text h4 style={ styles.searchHeaderTitle }>Top Searches</Text>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ movies }
@@ -22,7 +22,6 @@ const DefaultSearchList = ({ movies = [], handlePressDisplayShowInfo }) =>
                 )}
                 showsHorizontalScrollIndicator={ false }
                 showsVerticalScrollIndicator={ false }
-                maxToRenderPerBatch={ 5 }
             />
         </View>
     )

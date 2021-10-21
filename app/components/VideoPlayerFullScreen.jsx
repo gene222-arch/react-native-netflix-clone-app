@@ -53,7 +53,6 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
                 duration_in_millis: durationMillis
             }));
         }
-        
         navigation.goBack();
     };
 

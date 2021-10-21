@@ -172,7 +172,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
 
     return (
         <View style={ styles.container }>
-            { isFocused && <StatusBar backgroundColor={ Colors.darkMode } /> }
+            { isFocused && <StatusBar backgroundColor={ Colors.dark } /> }
             <InputPinCodeOverlay 
                 profileId={ profileId }
                 isVisible={ showPinCodeModal }

@@ -22,7 +22,7 @@ const list =
         component: AboutSettings
     },
     {
-        title: 'Trips',
+        title: 'Legal',
         component: LegalSettings
     }
 ];

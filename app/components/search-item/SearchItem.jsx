@@ -21,8 +21,8 @@ const SearchItem = ({ uri, title, onPress }) =>
                     <Text style={ styles.title }>{ title }</Text>
                     <Ionicon 
                         name='play-circle-outline'
-                        size={ 35 }
-                        color='#fff'
+                        size={ 30 }
+                        color='#FFFFFF'
                     />
                 </View>
             </View>

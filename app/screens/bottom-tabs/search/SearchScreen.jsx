@@ -28,8 +28,9 @@ const DisplayList = ({ isLoading = false, searchInput = '', filteredMovies, defa
     )
 }
 
-const SearchScreen = ({ AUTH_PROFILE, MOVIE }) => 
+const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) => 
 {
+    console.log(route);
     const dispatch = useDispatch();
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
@@ -50,12 +51,12 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
         setSearchInput(textInput);
         
         if (! textInput) {
-            setMovies(MOVIE.topSearches);
+            setMovies(MOVIE.movies);
         }
         else {  
             textInput = textInput.toLowerCase();
 
-            const filteredList = MOVIE.topSearches.filter(({ title, authors, genres }) => {
+            const filteredList = MOVIE.movies.filter(({ title, authors, genres }) => {
                 const authorsExists = authors.split(',').find(author => author.indexOf(textInput) !== -1);
                 const genresExists = genres.split(',').find(genre => genre.indexOf(textInput) !== -1);
                 
@@ -88,6 +89,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 setShow(null);
                 setIsVisibleMovieInfo(false);
                 setIsInteractionsComplete(false);
+                setMovies(MOVIE.topSearches);
             }
         }, [])
     );
@@ -105,7 +107,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 handleOnCancel={ handleOnCancel }
             />
             <DisplayList 
-                isLoading={ !isInteractionsComplete }
+                isLoading={ !isInteractionsComplete || MOVIE.isLoading }
                 filteredMovies={ movies }
                 defaultMovies={ MOVIE.topSearches } 
                 searchInput={ searchInput }

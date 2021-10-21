@@ -7,18 +7,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginVertical: 5,
+        marginVertical: 2.5,
+        backgroundColor: Colors.darkMode
     },
     image: {
-        flex: 1,
-        height: 100,
-        resizeMode: 'contain',
+        height: 72.5,
+        width: 125,
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
     },
     title: {
         flex: 1,
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        color: Colors.grey,
+        fontSize: 12.5
     },
     titlePlayIconContainer: {
         flex: 1,
