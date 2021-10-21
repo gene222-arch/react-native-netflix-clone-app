@@ -19,13 +19,6 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
             video.current = null;
         } catch ({ message }) {}
     } 
-    
-    // useEffect(() => {
-    //     onChangeSourceRestartVideo();
-    //     return () => {
-    //         video.current = null;
-    //     }
-    // }, []);
 
     useFocusEffect(
         useCallback(() => {
