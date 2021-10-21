@@ -3,6 +3,7 @@ import View from './../../../../components/View';
 import Text from './../../../../components/Text';
 import Image from './../../../../components/Image';
 import styles from './../../../../assets/stylesheets/trailerInfo';
+import { Badge } from 'react-native-elements';
 
 
 const ShowInfo = ({ comingSoonMovie }) => 
@@ -19,7 +20,7 @@ const ShowInfo = ({ comingSoonMovie }) =>
             />
             <View style={ styles.yearDuration }>
                 <Text style={ styles.yearDurationText }>{ created_at }</Text>
-                <Text style={ styles.ageRestrictionText }>{ age_restriction }+</Text>
+                <Badge status='warning' value={ `${ age_restriction }+` } textStyle={ styles.ageRestrictionText } />
                 <Text style={ styles.yearDurationText }>{ duration_in_minutes } m</Text>
             </View>
             <Text h4 style={ styles.additionalTrailerText }>{ additional_trailer || 'New Trailer To Be Announce' }</Text>

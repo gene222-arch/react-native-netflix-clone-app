@@ -8,12 +8,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     ageRestrictionText: {
-        color: Colors.grey,
-        marginTop: 10,
-        padding: 2,
-        paddingHorizontal: 10,
-        backgroundColor: Colors.darkGrey,
-        borderRadius: 2
+        color: Colors.dark
     },
     directorDesc: {
         fontWeight: 'bold'
@@ -112,11 +107,11 @@ const styles = StyleSheet.create({
         width: '45%',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 10
     },
     yearDurationText: {
-        color: Colors.grey,
-        marginTop: 10,
+        color: Colors.grey
     }
 });
 
