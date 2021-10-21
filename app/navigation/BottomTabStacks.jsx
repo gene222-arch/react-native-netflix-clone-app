@@ -19,6 +19,8 @@ import CreateProfileScreen from './../screens/bottom-tabs/select-profile/CreateP
 import ManageProfilesScreen from './../screens/bottom-tabs/select-profile/ManageProfilesScreen';
 import EditProfileScreen from './../screens/bottom-tabs/select-profile/EditProfileScreen';
 import DisplayVideoScreen from './../screens/DisplayVideoScreen';
+import NotificationsScreen from './../screens/bottom-tabs/coming-soon/NotificationsScreen';
+import Colors from './../constants/Colors';
 
 const DEFAULT_OPTIONS = {
     headerShown: false,
@@ -141,6 +143,16 @@ export const ComingSoonTab = () =>
                 name='ComingSoon' 
                 component={ ComingSoonScreen } 
                 options={ DEFAULT_OPTIONS }
+            />
+            <ComingSoonStack.Screen 
+                name='NotificationsScreen' 
+                component={ NotificationsScreen }
+                options={{ 
+                    headerTitle: 'Notifications',
+                    headerStyle: {
+                        backgroundColor: Colors.dark
+                    }
+                }}
             />
             <ComingSoonStack.Screen 
                 name='TrailerInfo'

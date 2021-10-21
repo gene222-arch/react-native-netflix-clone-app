@@ -53,6 +53,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
     const COMING_SOON_OPTIONS = useCallback(({ route }) => 
     {
         const tabBarBadgeNumber = COMING_SOON_MOVIE.totalUpcomingMovies;
+        const focusedRouteName = getFocusedRouteNameFromRoute(route);
 
         const options = {
             tabBarIcon: (({ color }) => (
@@ -62,7 +63,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
                     color={ color }
                 />
             )),
-            tabBarVisible: getFocusedRouteNameFromRoute(route) !== 'TrailerInfo'
+            tabBarVisible: focusedRouteName === 'ComingSoon'
         };
 
         if (tabBarBadgeNumber) {
@@ -92,7 +93,7 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
     });
 
     const hideTabScreen = {
-        tabBarButton: () => <View style={{ width:0, height:0 }}></View>,
+        tabBarButton: () => <View style={{ width: 0, height: 0 }}></View>,
         tabBarVisible: false
     };
 

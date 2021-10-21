@@ -120,7 +120,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                                 )
                             }}
                             ListHeaderComponent={ 
-                                <NotificationHeader />
+                                isInteractionsComplete && <NotificationHeader />
                             }
                         />
                     )

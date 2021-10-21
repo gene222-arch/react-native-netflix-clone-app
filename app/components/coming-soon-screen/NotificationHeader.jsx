@@ -13,7 +13,7 @@ const NotificationHeader = () =>
     const handlePressNavigateToNotifList = () => navigation.navigate('NotificationsScreen');
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ handlePressNavigateToNotifList }>
             <View style={ styles.container }>
                 <View style={ styles.notifBellContainer }>
                     <FeatherIcon 
