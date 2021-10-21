@@ -8,11 +8,21 @@ import PaginationPicker from './PaginationPicker';
 import styles from './../../../../assets/stylesheets/movieDetail';
 import Text from './../../../../components/Text';
 
-const ListHeader = ({ movie, videoStatus, handlePressPauseVideo, handlePressPlayVideo, hasLikedMovie, pages, selectedPage, handleChangePage  }) => {
+const ListHeader = ({ 
+    movie, 
+    videoStatus, 
+    handlePressPauseVideo, 
+    handlePressPlayVideo,  
+    isRecentlyWatched,
+    pages, 
+    selectedPage, 
+    handleChangePage  
+}) => {
     return (
         <View style={ styles.movieContainer }>
             <Header movie={ movie } />
             <PlayDownloadButton
+                isRecentlyWatched={ isRecentlyWatched }
                 videoStatus={ videoStatus }
                 handlePressPauseVideo={ handlePressPauseVideo }
                 handlePressPlayVideo={ handlePressPlayVideo }

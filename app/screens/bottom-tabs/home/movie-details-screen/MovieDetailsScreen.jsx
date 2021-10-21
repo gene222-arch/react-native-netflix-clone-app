@@ -13,7 +13,7 @@ import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import MovieDetailScreenLoader from '../../../../components/loading-skeletons/MovieDetailScreenLoader';
 import ListHeader from './ListHeader';
 import { useNavigation } from '@react-navigation/native';
-
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const PER_PAGE = 3;
 
@@ -32,12 +32,33 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const [ pageIndex, setPageIndex ] = useState(0);
     const [ defaultPageList, setDefaultPageList ] = useState([]);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
+    const [ isRecentlyWatched, setIsRecentlyWatched ] = useState(false);
+    const [ lastPlayedPositionMillis, setLastPlayedPositionMillis ] = useState(0);
+    const [ isFullscreen, setIsFullscreen ] = useState(true);
 
-    const handlePressPlayVideo = () => {
+    const handlePressPlayVideo = () => 
+    {
+        onLoadLockToLandscape();
+
+        videoRef.current?.presentFullscreenPlayer();
+
+        setIsFullscreen(true);
+
+        if (isRecentlyWatched) {
+            videoRef.current?.setPositionAsync(lastPlayedPositionMillis);
+        }
+
         videoRef.current.playAsync();
         
-        batch(() => {
-            dispatch(AUTH_ACTION.addToRecentWatchesStart({ movie, user_profile_id: AUTH_PROFILE.id, duration_in_millis: videoStatus.durationMillis }));
+        batch(() => 
+        {
+            dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
+                movie, 
+                user_profile_id: AUTH_PROFILE.id, 
+                duration_in_millis: videoStatus.durationMillis,
+                last_played_position_millis: videoStatus.positionMillis
+            }));
+
             dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId }))
         });
     }
@@ -66,6 +87,35 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         setDefaultPageList(newMovies);
     }
 
+    const onUnloadUnlockLandscape = async () => {
+        try {
+            await ScreenOrientation.unlockAsync();
+        } catch (error) {
+            
+        }
+    }
+
+    const onLoadLockToLandscape = async () => {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+    }
+
+    const handleFullscreenUpdate = e => 
+    {
+        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) {
+            setIsFullscreen(false);
+            handlePressPauseVideo();
+            dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
+                movieId, 
+                positionMillis: videoStatus?.positionMillis, 
+                user_profile_id: AUTH_PROFILE.id 
+            }));
+        }
+
+        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT) {
+            setIsFullscreen(true);
+        }
+    }
+
     const runAfterInteractions = () => 
     {
         const findMovie = MOVIE.movies.find(({ id }) => id === movieId);
@@ -88,8 +138,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     similarMovies_.slice(index, index + PER_PAGE)
                 );
             }
-
-            const isLiked = Boolean(AUTH_PROFILE.liked_movies.find(({ movie_id }) => movie_id === movieId));
     
             setMovie(movieDetails);
             setSimilarMovies(pageList_);
@@ -104,7 +152,10 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     useEffect(() => {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
-        return () => {
+        return () => 
+        {
+            onUnloadUnlockLandscape();
+
             setMovie(null);
             setSimilarMovies([]);
             setPages([]);
@@ -112,9 +163,31 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             setSelectedPage(1);
             setVideoStatus(null);
             setIsInteractionsComplete(false);
+            setIsRecentlyWatched(false);
+            setLastPlayedPositionMillis(0);
             videoRef.current = null;
         }
     }, []);
+
+    useEffect(() => 
+    {
+        if (! isFullscreen) {
+            onUnloadUnlockLandscape();
+        }
+    }, [isFullscreen]);
+
+    useEffect(() => {
+        const findMovieInRecents = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === movieId);
+
+        if (! findMovieInRecents) {
+            setIsRecentlyWatched(false);
+        }
+
+        if (findMovieInRecents) {
+            setIsRecentlyWatched(true);
+            setLastPlayedPositionMillis(findMovieInRecents.last_played_position_millis);
+        }
+    }, [AUTH_PROFILE.recently_watched_movies]);
 
     if (! isInteractionsComplete || !movie) return <MovieDetailScreenLoader />
 
@@ -136,6 +209,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 useNativeControls
                 resizeMode='contain'
                 onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
+                onFullscreenUpdate={ handleFullscreenUpdate }
             />
 
             <FlatList 
@@ -150,6 +224,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                         handlePressPlayVideo={ handlePressPlayVideo }
                         handlePressPauseVideo={ handlePressPauseVideo }
                         pages={ pages }
+                        isRecentlyWatched={ isRecentlyWatched }
                         selectedPage={ selectedPage }
                         handleChangePage={ handleChangePage }
                     />

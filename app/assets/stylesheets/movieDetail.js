@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingHorizontal: 5
     },  
+    loadingStyle: {
+        color: Colors.dark
+    },
     movieContainer: {
     },
     moviePoster: {
