@@ -6,6 +6,7 @@ import * as MOVIE_NOTIFICATION_API from './../../../services/movie/movie.notific
 import { createStructuredSelector } from 'reselect';
 import { movieSelector } from './../../../redux/modules/movie/selectors';
 import { connect } from 'react-redux';
+import NotificationsScreenLoader from './../../../components/loading-skeletons/NotificationsScreenLoader';
 
 const NotificationsScreen = ({ MOVIE }) => 
 {
@@ -32,6 +33,8 @@ const NotificationsScreen = ({ MOVIE }) =>
             setIsInteractionsComplete(true);
         });    
     }, [MOVIE.movies]);
+
+    if (! isInteractionsComplete) return <NotificationsScreenLoader />
 
     return (
         <View style={ styles.container }>
