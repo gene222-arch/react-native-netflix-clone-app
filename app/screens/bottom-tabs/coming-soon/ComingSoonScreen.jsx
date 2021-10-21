@@ -16,6 +16,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movie.created.event'
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import ComingSoonScreenLoader from '../../../components/loading-skeletons/ComingSoonScreenLoader';
+import NotificationHeader from '../../../components/coming-soon-screen/NotificationHeader';
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
@@ -118,6 +119,9 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                                     />
                                 )
                             }}
+                            ListHeaderComponent={ 
+                                <NotificationHeader />
+                            }
                         />
                     )
             }
