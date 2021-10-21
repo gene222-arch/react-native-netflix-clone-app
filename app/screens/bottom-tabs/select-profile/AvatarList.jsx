@@ -124,7 +124,7 @@ const AvatarList = ({ handlePress, profile, setProfile, setShowAvatars }) =>
 
     if (! isInteractionsComplete) return <LoadingSpinner />
 
-    if (! uploadAvatar) {
+    if (uploadAvatar) {
         return (
             <>
                 <View style={ styles.uploadImgContainer }>

@@ -27,6 +27,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
+    const [ profileNumberLimit, setProfileNumberLimit ] = useState(2);
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -64,12 +65,30 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
 
+    const onLoadSetProfileNumberLimit = () => 
+    {
+        let limit = 2;
+
+        switch (AUTH.auth.subscription_details.type) 
+        {
+            case 'Premium':
+                limit = 5;
+                break;
+            case 'Standard':
+                limit = 4;
+        }
+
+        setProfileNumberLimit(limit);
+    }
+
     useEffect(() => 
     {
         USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
             dispatch(AUTH_ACTION.updateUserProfile(response.data));
             setSelectedProfilePinCode(response.data.pin_code);
         });
+
+        onLoadSetProfileNumberLimit();
 
         return () => {
             USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen();
@@ -124,7 +143,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                     keyExtractor={ (item, index) => index.toString() }
                     data={[ ...AUTH.profiles, { id: '' } ]}
                     numColumns={ 2 }
-                    renderItem={ ({ item, index }) => index !== 5 && (
+                    renderItem={ ({ item, index }) => index !== profileNumberLimit && (
                         <DisplayProfile
                             key={ index }
                             profile={ item }
