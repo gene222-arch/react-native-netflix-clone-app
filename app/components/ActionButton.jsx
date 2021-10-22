@@ -32,26 +32,24 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isMovieLiked, setIsMovieLiked ] = useState(false);
-    const [ isReminded, setIsReminded ] = useState(false);
+    const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
     const handlePressAddToMyList = () => 
     {
         const movieExistsInMyList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id);
 
-        const message = !movieExistsInMyList
-            ? 'Added to My List'
-            : 'Removed to My List';
+        const message = !movieExistsInMyList ? 'Added to My List' : 'Removed to My List';
 
         batch(() => {
             dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
-            dispatch(TOAST_ACTION.createToastMessageStart({ message }));
+            !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message }));
         });
     }
 
     const handlePressToggleRemindMe = () => {
         batch(() => {
             dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID: movie.id }));
-            !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
+            dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
         });
     }
 
@@ -100,7 +98,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     }
 
     useEffect(() => 
-    {
+    {``
         InteractionManager.runAfterInteractions(() => 
         {
             const isLiked = (
@@ -109,10 +107,6 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                     : Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id))
             );
 
-            const isMovieAddedToReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies
-                    .find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
-
-            setIsReminded(isMovieAddedToReminded);
             setIsMovieLiked(isLiked);
             setIsInteractionsComplete(true);
         });
@@ -121,7 +115,12 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
             setIsInteractionsComplete(false);   
             setIsMovieLiked(false);
         }
-    }, [AUTH_PROFILE.liked_movies, AUTH_PROFILE.liked_coming_soon_movies, AUTH_PROFILE.reminded_coming_soon_movies]);
+    }, [
+        AUTH_PROFILE.liked_movies, 
+        AUTH_PROFILE.liked_coming_soon_movies, 
+        AUTH_PROFILE.reminded_coming_soon_movies,
+        AUTH_PROFILE.my_lists
+    ]);
 
     
     if (! isInteractionsComplete) {
