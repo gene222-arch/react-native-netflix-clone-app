@@ -1,22 +1,45 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Badge } from 'react-native-elements';
 import Colors from './../constants/Colors';
+import { InteractionManager } from 'react-native'
 
-const genres = [
+const maturedGenres = [
     'violence', 
     'steamy', 
     'gory'
 ];
 
-const WarningGenreBadge = ({ genre = ''}) => 
+const WarningGenreBadge = ({ genres = [] }) => 
 {
-    let status = 'danger';
-    genre = genre.toLowerCase();
+    const [ maturedGenresSelected, setMaturedGenresSelected ] = useState([]);
+    const [ isForMatured, setIsForMatured ] = useState(false);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
-    return genres.includes(genre) && (
+    let status = 'error';
+
+
+    useEffect(() => 
+    {
+        InteractionManager.runAfterInteractions(() => {
+            const hasMaturedGenres = genres.filter(genre => maturedGenres.includes(genre));
+            console.log(genres)
+            console.log(hasMaturedGenres)
+            setMaturedGenresSelected(hasMaturedGenres);
+            setIsForMatured(Boolean(hasMaturedGenres.length));
+            setIsInteractionsComplete(true);
+        });
+
+        return () => {
+            setIsForMatured(false);
+            setIsInteractionsComplete(false);
+            setMaturedGenresSelected([]);
+        }
+    }, []);
+
+    return isForMatured && (
         <Badge 
             status={ status } 
-            value={ genre } 
+            value={ maturedGenresSelected[0].replace(maturedGenresSelected[0][0], maturedGenresSelected[0][0].toUpperCase()) } 
             textStyle={{ 
                 color: Colors.white, 
                 fontWeight: '700' 

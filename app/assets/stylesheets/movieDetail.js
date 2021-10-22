@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     movieTitleInfo: {
-        width: DEVICE_WIDTH / 3,
+        width: DEVICE_WIDTH / 2.25,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
