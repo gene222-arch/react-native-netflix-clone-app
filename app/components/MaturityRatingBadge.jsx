@@ -5,7 +5,7 @@ import Colors from './../constants/Colors';
 const MaturityRatingBadge = ({ ageRestriction }) => 
 {
     let status = 'success';
-    let color = Colors.white;
+    let color = Colors.dark;
 
     if (ageRestriction >= 13 && ageRestriction < 16) {
         status = 'warning';
@@ -14,9 +14,10 @@ const MaturityRatingBadge = ({ ageRestriction }) =>
 
     if (ageRestriction >= 18) {
         status = 'error';
+        color = Colors.white;
     }
 
-    return <Badge status={ status } value={ `${ ageRestriction }+` } badgeStyle={{ color }} />
+    return <Badge status={ status } value={ `${ ageRestriction }+` } textStyle={{ color, fontWeight: '700' }} />
 }
 
 export default MaturityRatingBadge

@@ -33,7 +33,7 @@ const TrailerInfo = ({ COMING_SOON_MOVIE, route }) =>
     }
 
     return (
-        <View style={ styles.container }>
+        <View>
             <FlatList 
                 data={[]}
                 ListHeaderComponent={ <ListHeader comingSoonMovie={ comingSoonMovie }  /> }
