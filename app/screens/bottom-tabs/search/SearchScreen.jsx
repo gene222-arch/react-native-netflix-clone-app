@@ -30,7 +30,6 @@ const DisplayList = ({ isLoading = false, searchInput = '', filteredMovies, defa
 
 const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) => 
 {
-    console.log(route);
     const dispatch = useDispatch();
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
 
@@ -43,7 +42,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) =>
     const handlePressDisplayShowInfo = (show) => {
         setShow(show);
         setIsVisibleMovieInfo(true);
-        dispatch(MOVIE_ACTION.incrementMovieSearchCountStart({ movieId: show.id }));
+        setTimeout(() => dispatch(MOVIE_ACTION.incrementMovieSearchCountStart({ movieId: show.id })), 10)
     }
 
     const handleChangeSearchInput = (textInput) => 
@@ -107,7 +106,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) =>
                 handleOnCancel={ handleOnCancel }
             />
             <DisplayList 
-                isLoading={ !isInteractionsComplete || MOVIE.isLoading }
+                isLoading={ !isInteractionsComplete && MOVIE.isLoading }
                 filteredMovies={ movies }
                 defaultMovies={ MOVIE.topSearches } 
                 searchInput={ searchInput }
