@@ -32,16 +32,10 @@ const DisplayVideoScreen = () =>
                 const { videoUri, id, title } = route.params;
                 
                 const cacheFilePath = `${ FileSystem.documentDirectory }${ title }${ id }.mp4`;
-                
+        
                 const { exists }  = await ensureFileExists(cacheFilePath);
 
-                if (! exists) {
-                    setUri(videoUri);
-                }
-                
-                if (exists) {
-                    setUri(cacheFilePath);
-                }
+                !exists ? setUri(videoUri) : setUri(cacheFilePath);
 
                 if ('lastPlayedPositionMillis' in route.params) {
                     setHasLastPlayedPositionMillis(true);
