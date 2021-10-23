@@ -96,7 +96,9 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
             }}
             playbackCallback={status => 
             {
-                setPositionMillis(parseInt(status.positionMillis));
+                if (status.isPlaying) {
+                    setPositionMillis(parseInt(status.positionMillis));
+                }
 
                 if (! isLoaded) 
                 {

@@ -41,7 +41,6 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage, route }) =>
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
             params: {
-                title: frontPage.title,
                 videoUri: frontPage.video_preview_path, 
                 id: frontPage.id 
             }
