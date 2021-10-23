@@ -46,12 +46,14 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
         await ScreenOrientation.unlockAsync();
 
         if (hasLastPlayedPositionMillis) {
-            dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
-                movieId, 
-                positionMillis, 
-                user_profile_id: AUTH_PROFILE.id,
-                duration_in_millis: durationMillis
-            }));
+            setTimeout(() => {
+                dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
+                    movieId, 
+                    positionMillis, 
+                    user_profile_id: AUTH_PROFILE.id,
+                    duration_in_millis: durationMillis
+                }));
+            }, 10);
         }
         navigation.goBack();
     };
