@@ -4,6 +4,8 @@ import VideoPlayerFullScreen from '../components/VideoPlayerFullScreen';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import LoadingSpinner from '../components/LoadingSpinner';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import * as FileSystem from 'expo-file-system'
+import { ensureFileExists } from './../utils/cacheImage';
 
 const DisplayVideoScreen = () => 
 {
@@ -27,9 +29,19 @@ const DisplayVideoScreen = () =>
             onLoadLockToLandscape();
 
             try {
-                const { videoUri } = route.params;
+                const { videoUri, id, title } = route.params;
+                
+                const cacheFilePath = `${ FileSystem.documentDirectory }${ title }${ id }.mp4`;
+                
+                const { exists }  = await ensureFileExists(cacheFilePath);
 
-                setUri(videoUri);
+                if (! exists) {
+                    setUri(videoUri);
+                }
+                
+                if (exists) {
+                    setUri(cacheFilePath);
+                }
 
                 if ('lastPlayedPositionMillis' in route.params) {
                     setHasLastPlayedPositionMillis(true);
@@ -37,6 +49,10 @@ const DisplayVideoScreen = () =>
                 }
 
                 setIsInteractionsComplete(true);
+
+                if (! exists) {
+                    await FileSystem.downloadAsync(videoUri, cacheFilePath);
+                }
             } catch ({ message }) {}
 
         });

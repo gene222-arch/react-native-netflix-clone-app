@@ -76,7 +76,8 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
                 resizeMode: Video.RESIZE_MODE_CONTAIN,
                 source: { uri },
                 ref: video,
-                status: videoStatus
+                status: videoStatus,
+                
             }}
             icon={{
                 play: <Text style={{ color: '#FFF' }}>PLAY</Text>,
