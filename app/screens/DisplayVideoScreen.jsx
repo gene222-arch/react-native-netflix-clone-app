@@ -27,8 +27,6 @@ const DisplayVideoScreen = () =>
     {
         InteractionManager.runAfterInteractions(async () => 
         {
-            onLoadLockToLandscape();
-
             try {
                 const { videoUri, id, title } = route.params;
                 
@@ -60,8 +58,12 @@ const DisplayVideoScreen = () =>
             setHasLastPlayedPositionMillis(false);
         }
     }, [route.params])
- 
-    if (! isInteractionsComplete) return <LoadingSpinner message='Loading' />
+
+    if (! isInteractionsComplete) 
+    {
+        onLoadLockToLandscape();
+        return <LoadingSpinner message='Loading' />
+    }
 
     return (
         <VideoPlayerFullScreen
