@@ -27,6 +27,7 @@ const avatarList = [
 
 const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) => 
 {
+    const [ isLoading, setIsLoading ] = useState(false);
     const [ uploadAvatar, setUploadAvatar ] = useState(false);
     const [ avatars, setAvatars ] = useState([]);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
@@ -88,6 +89,7 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
 
     const uploadImage = async (uri) =>
     {
+        setIsLoading(true);
         try {
             const filename = uri.split('/').pop();
           
@@ -109,6 +111,7 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
             }
 
         } catch (error) {}
+        setIsLoading(false);
     }
     
 
@@ -122,10 +125,11 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
             setAvatars([]);
             setIsInteractionsComplete(false);
             setUploadAvatar(false);
+            setIsLoading(false);
         }
     }, [])
 
-    if (! isInteractionsComplete) return <LoadingSpinner />
+    if (! isInteractionsComplete || isLoading) return <LoadingSpinner message='Uploading image...' />
 
     if (uploadAvatar) {
         return (
