@@ -36,7 +36,9 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
     const handlePressToggleRemindMe = (movieID, isReminded = false) => {
         batch(() => {
             dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
-            !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
+            setTimeout(() => {
+                !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
+            }, 10);
         });
     }
 
