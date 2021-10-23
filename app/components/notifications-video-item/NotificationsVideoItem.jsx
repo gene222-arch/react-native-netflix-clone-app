@@ -1,16 +1,19 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { Video } from 'expo-av';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import View from './../View';
 import ComingSoonMovieDetails from './ComingSoonMovieDetails';
 import ComingSoonMovieButtons from './ComingSoonMovieButtons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/core';
-
+import * as ScreenOrientation from 'expo-screen-orientation'
 
 const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPlay, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
 {
     const isFocused = useIsFocused();
     const video = useRef(null);
+
+    const [ isFullscreen, setIsFullscreen ] = useState(false);
+
 
     const onChangeSourceRestartVideo = async () => {
         try {
@@ -20,6 +23,29 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
         } catch ({ message }) {}
     } 
 
+    const onUnloadUnlockLandscape = async () => {
+        try {
+            await ScreenOrientation.unlockAsync();
+        } catch (error) {
+            
+        }
+    }
+    
+    const onLoadLockToLandscape = async () => {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+    }
+    
+    const handleFullscreenUpdate = e => 
+    {
+        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) {
+            setIsFullscreen(false);
+        }
+
+        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT) {
+            setIsFullscreen(true);
+        }
+    }
+
     useFocusEffect(
         useCallback(() => {
             return () => {
@@ -27,6 +53,17 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
             }
         }, [])
     )
+
+    useEffect(() => {
+        if (! isFullscreen) {
+            onUnloadUnlockLandscape();
+        }
+
+        if (isFullscreen) {
+            onLoadLockToLandscape();
+            video.current?.presentFullscreenPlayer();    
+        }
+    }, [isFullscreen])
 
     return (
         <View style={{ ...styles.container, opacity: shouldFocus ? 1 : 0.25 }}>
@@ -40,6 +77,7 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
                 shouldPlay={ shouldPlay && isFocused }
                 resizeMode='contain'
                 useNativeControls
+                onFullscreenUpdate={ handleFullscreenUpdate }
             />
 
             <ComingSoonMovieButtons 
