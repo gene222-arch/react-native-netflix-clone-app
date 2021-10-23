@@ -19,23 +19,27 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
 {   
     const navigation = useNavigation();
 
-    const handlePressPlay = () => navigation.navigate('DisplayVideoRoot', {
-        screen: 'DisplayVideoScreen',
-        params: {
-            title: selectedShow?.title,
-            videoUri: selectedShow?.video_path, 
-            id: selectedShow?.id 
-        }
-    });
+    const handlePressPlay = () => {
+        navigation.navigate('DisplayVideoRoot', {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: selectedShow?.title,
+                videoUri: selectedShow?.video_path, 
+                id: selectedShow?.id 
+            }
+        });
+    }
     
-    const handlePressPreview = () => navigation.navigate('DisplayVideoRoot', {
-        screen: 'DisplayVideoScreen',
-        params: {
-            title: selectedShow?.title,
-            videoUri: selectedShow?.video_preview_path, 
-            id: selectedShow?.id 
-        }
-    });
+    const handlePressPreview = () => {
+        navigation.navigate('DisplayVideoRoot', {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: selectedShow?.title,
+                videoUri: selectedShow?.video_preview_path, 
+                id: selectedShow?.id 
+            }
+        });
+    }
 
     const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
         id: selectedShow?.id,

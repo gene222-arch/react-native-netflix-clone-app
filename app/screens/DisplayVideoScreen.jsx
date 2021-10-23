@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { InteractionManager } from 'react-native'
 import VideoPlayerFullScreen from '../components/VideoPlayerFullScreen';
-import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useRoute, useNavigation } from '@react-navigation/native';
 import LoadingSpinner from '../components/LoadingSpinner';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as FileSystem from 'expo-file-system'
@@ -9,6 +9,7 @@ import { ensureFileExists } from './../utils/cacheImage';
 
 const DisplayVideoScreen = () => 
 {
+    const navigation = useNavigation();
     const route = useRoute();
     
     const [ uri, setUri ] = useState(null);

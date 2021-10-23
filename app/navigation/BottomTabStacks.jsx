@@ -198,6 +198,11 @@ export const DisplayVideoTab = () =>
                 name='DisplayVideoScreen' 
                 component={ DisplayVideoScreen } 
                 options={ DEFAULT_OPTIONS }
+                initialParams={{ 
+                    id: '',
+                    videoUri: null,
+                    title: ''
+                }}
             />
         </DisplayVideoStack.Navigator>
     );
