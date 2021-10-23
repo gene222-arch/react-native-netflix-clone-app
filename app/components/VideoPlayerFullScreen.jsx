@@ -39,6 +39,8 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
     {
         setStatusBarHidden(false);
 
+        video?.current?.unloadAsync();
+
         video?.current?.pauseAsync();
 
         setInFullscreen(false);
