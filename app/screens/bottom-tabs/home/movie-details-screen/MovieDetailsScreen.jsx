@@ -59,7 +59,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 last_played_position_millis: videoStatus.positionMillis
             }));
 
-            dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId }))
+            dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId }));
         });
     }
 

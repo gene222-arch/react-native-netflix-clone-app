@@ -26,7 +26,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                 title: selectedShow?.title,
                 videoUri: selectedShow?.video_path, 
                 id: selectedShow?.id,
-                lastPlayedPositionMillis: selectedShow?.last_played_position_millis
+                lastPlayedPositionMillis: selectedShow?.last_played_position_millis || 0
             }
         });
     }

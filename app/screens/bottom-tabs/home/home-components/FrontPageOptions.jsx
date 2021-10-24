@@ -4,18 +4,16 @@ import { Button } from 'react-native-elements'
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';
 import styles from './../../../../assets/stylesheets/homeScreen';
-import { getCachedFile } from './../../../../utils/cacheImage';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, batch } from 'react-redux';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
+import * as MOVIE_ACTION from './../../../../redux/modules/movie/actions'
 import Info from './../../../../components/continue-watching-for-item/Info';
-import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
-import Colors from './../../../../constants/Colors';
-import { useIsFocused } from '@react-navigation/core';
+
 
 const Genre = ({ genres }) => 
 {
@@ -37,12 +35,32 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage, route }) =>
     
     const genres = useMemo(() => frontPage?.genres.split(','), [ frontPage?.genres ]);
 
-    const handlePressNavigateToDisplayVideo = () => {
+    const handlePressNavigateToDisplayVideo = () => 
+    {
+        setTimeout(() => {
+            batch(() => {
+                dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
+                    movie: frontPage, 
+                    user_profile_id: AUTH_PROFILE.id, 
+                    duration_in_millis: frontPage.duration_in_minutes * 60000,
+                    last_played_position_millis: frontPage.last_played_position_millis || 0
+                }));
+    
+                dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId: frontPage.id }));
+            });
+        }, 100);
+
+        const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === frontPage.id);
+
+        
+
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
             params: {
-                videoUri: frontPage.video_preview_path, 
-                id: frontPage.id 
+                videoUri: frontPage.video_path, 
+                id: frontPage.id,
+                title: frontPage.title,
+                lastPlayedPositionMillis: !recentWatch ? (frontPage.last_played_position_millis || 0) : recentWatch.last_played_position_millis
             }
         });
     }
