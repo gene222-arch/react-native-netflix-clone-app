@@ -25,7 +25,8 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
             params: {
                 title: selectedShow?.title,
                 videoUri: selectedShow?.video_path, 
-                id: selectedShow?.id 
+                id: selectedShow?.id,
+                lastPlayedPositionMillis: selectedShow?.last_played_position_millis
             }
         });
     }
