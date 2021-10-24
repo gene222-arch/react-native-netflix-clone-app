@@ -11,6 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
+    "plugins": [
+      ["expo-notifications", {
+        "icon": "./app/assets/logotop.png",
+        "color": "#121212",
+        "sounds": ["./app/assets/iphone.wav"],
+        "mode": "production"
+      }]
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -24,6 +32,8 @@
     },
     "android": {
       "userInterfaceStyle": "dark",
+      "useNextNotificationsApi": true,
+      "permissions": ["RECEIVE_BOOT_COMPLETED"],
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/netflix-icon.png",
         "backgroundColor": "#000000"
