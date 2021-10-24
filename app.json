@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "netflix-clone-app",
-    "slug": "netflix-clone-app",
+    "name": "Flicklify",
+    "slug": "flicklify",
+    "privacy": "public",
+    "description": "Movie Streaming Application",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./app/assets/netflix-icon.png",
@@ -13,14 +15,16 @@
     },
     "plugins": [
       [
-        "expo-notifications", 
+        "expo-notifications",
         {
           "icon": "./app/assets/logotop.png",
           "color": "#121212",
-          "sounds": ["./app/assets/iphone.wav"],
+          "sounds": [
+            "./app/assets/iphone.wav"
+          ],
           "mode": "production"
         }
-    ]
+      ]
     ],
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -36,7 +40,9 @@
     "android": {
       "userInterfaceStyle": "dark",
       "useNextNotificationsApi": true,
-      "permissions": ["RECEIVE_BOOT_COMPLETED"],
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/netflix-icon.png",
         "backgroundColor": "#000000"
@@ -44,7 +50,6 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
-    },
-    "description": ""
+    }
   }
 }

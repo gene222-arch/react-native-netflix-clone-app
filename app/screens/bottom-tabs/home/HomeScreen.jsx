@@ -77,8 +77,6 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => 
         {
-            NOTIFICATION_UTIL.schedulePushNotification('asdasd', 'asdasd');
-            
             MovieCreatedEvent.listen(response => 
             {
                 if (isForKids && response.data.age_restriction <= 12) {

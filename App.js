@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { ActivityIndicator } from 'react-native';
 import { Provider } from 'react-redux';
@@ -19,8 +19,19 @@ Notifications.setNotificationHandler({
 
 const App = () => 
 {    
+	const notificationListener = useRef();
+
 	useEffect(() => {
 		NOTIFICATION_UTIL.registerForPushNotificationsAsync();
+
+		notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+			console.log(notification);
+		});
+
+		return () => {
+			Notifications.cancelAllScheduledNotificationsAsync();
+			Notifications.removeNotificationSubscription(notificationListener.current);
+		}
 	}, []);
 
 	return (
