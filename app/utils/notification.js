@@ -2,16 +2,21 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native'
 
-export const schedulePushNotification = ({ title, body, data }) => 
+export const schedulePushNotification = async (title, body) => 
 {
-	await Notifications.scheduleNotificationAsync({
-		content: {
-			title,
-			body,
-			data: { data },
-		},
-	  	trigger: { seconds: 2 },
-	});
+	try {
+		await Notifications.scheduleNotificationAsync({
+			content: {
+				title, 
+				body,
+				trigger: {
+					seconds: 2
+				},
+			}
+		});
+	} catch (error) {
+		
+	}
 }
 
 export const registerForPushNotificationsAsync = async () => 

@@ -18,7 +18,7 @@ Notifications.setNotificationHandler({
 });
 
 const App = () => 
-{
+{    
 	useEffect(() => {
 		NOTIFICATION_UTIL.registerForPushNotificationsAsync();
 	}, []);

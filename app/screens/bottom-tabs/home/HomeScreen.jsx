@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
+import React, { useState, useEffect } from 'react'
 import { FlatList, Platform, StatusBar } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
 import View from './../../../components/View';
@@ -21,6 +20,7 @@ import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import * as MOVIE_API from './../../../services/movie/movie'
 import { useIsFocused } from '@react-navigation/core';
+import * as NOTIFICATION_UTIL from './../../../utils/notification'
 
 const DEFAULT_FRONT_PAGE_PROPS = {
     id: '',
@@ -53,6 +53,16 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         }
     }    
 
+    const notify = (movie) => 
+    {
+        const isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id);
+
+        const title = !isReminded ? 'Release' : 'Reminder'
+        const message = !isReminded ? `${ movie.title } is Released!` : `Reminding that ${ movie.title } is Released! 📣`;
+
+        NOTIFICATION_UTIL.schedulePushNotification(title, message);
+    }
+
     useEffect(() => 
     {
         batch(() => {
@@ -67,6 +77,8 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => 
         {
+            NOTIFICATION_UTIL.schedulePushNotification('asdasd', 'asdasd');
+            
             MovieCreatedEvent.listen(response => 
             {
                 if (isForKids && response.data.age_restriction <= 12) {
@@ -81,17 +93,13 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
             ComingSoonMovieReleasedEvent.listen(response => 
             {
                 if (isForKids && response.data.age_restriction <= 12) {
-                    batch(() => {
-                        dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
-                        dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-                    });
+                    notify(response.data);
+                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                 }
 
                 if (! isForKids) {
-                    batch(() => {
-                        dispatch(TOAST_ACTION.createToastMessageStart({ message: `Released ${ response.data.title }` }));
-                        dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
-                    });
+                    notify(response.data);
+                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                 }
             });
             
