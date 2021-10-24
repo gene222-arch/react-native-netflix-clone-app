@@ -19,14 +19,17 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
 {   
     const navigation = useNavigation();
 
-    const handlePressPlay = () => {
+    const handlePressPlay = () => 
+    {
+        const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === selectedShow?.id);
+
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
             params: {
                 title: selectedShow?.title,
                 videoUri: selectedShow?.video_path, 
                 id: selectedShow?.id,
-                lastPlayedPositionMillis: selectedShow?.last_played_position_millis || 0
+                lastPlayedPositionMillis: !recentWatch ? (selectedShow?.last_played_position_millis || 0) : recentWatch.last_played_position_millis
             }
         });
     }

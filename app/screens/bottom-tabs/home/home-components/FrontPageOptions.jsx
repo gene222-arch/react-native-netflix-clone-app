@@ -52,8 +52,6 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage, route }) =>
 
         const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === frontPage.id);
 
-        
-
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
             params: {
