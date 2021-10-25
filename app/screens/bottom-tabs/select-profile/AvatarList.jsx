@@ -14,6 +14,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
+import * as ALERT_UTIL from './../../../utils/alert'
+import * as Permissions from 'expo-permissions';
 
 const avatarList = [
     'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
@@ -35,9 +37,13 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
     const handlePressAllowAccessToImageLib = async () => 
     {
         try {
-            if (Platform.OS !== 'web') {
+            if (Platform.OS !== 'web') 
+            {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                status !== 'denied' ? chooseAvatarFromMediaLib() : '';
+                
+                status !== 'denied' 
+                    ? chooseAvatarFromMediaLib() 
+                    : ALERT_UTIL.okAlert('', `We need image library's permission to make this work`);
             }
         } catch (error) {}
     }
@@ -45,9 +51,13 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
     const handlePressAllowTakePhoto = async () =>
     {
         try {
-            if (Platform.OS !== 'web') {
+            if (Platform.OS !== 'web') 
+            {
                 const { status } = await ImagePicker.requestCameraPermissionsAsync();
-                status !== 'denied' ? captureAvatar() : '';
+
+                status !== 'denied' 
+                    ? captureAvatar() 
+                    : ALERT_UTIL.okAlert('', `We need image library's permission to make this work`);
             }
 
         } catch (error) {}
@@ -86,7 +96,6 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
         } catch (error) {}
     };
 
-
     const uploadImage = async (uri) =>
     {
         setIsLoading(true);
@@ -107,7 +116,6 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile, setShowAvatars }) 
             
             if (status === 'success') {
                 setProfile({ ...profile, avatar: data });
-                setShowAvatars(false);
             }
 
         } catch (error) {}
