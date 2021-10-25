@@ -75,8 +75,7 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
                         <AvatarList
                             handlePress={ handlePressChangeAvatar } 
                             profile={ profile } 
-                            setProfile={ setProfile } 
-                            setShowAvatars={ setShowAvatars }
+                            setProfile={ setProfile }
                         />
                     )
                     : (

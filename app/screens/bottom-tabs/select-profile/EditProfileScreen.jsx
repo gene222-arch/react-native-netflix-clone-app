@@ -73,7 +73,6 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                     showSaveButton={ false }
                 />
                 <AvatarList
-                    setShowAvatars={ setShowAvatars }
                     handlePress={ handlePressChangeAvatar } 
                     profile={ profile } 
                     setProfile={ setProfile } 
