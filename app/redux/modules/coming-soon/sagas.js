@@ -1,15 +1,19 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
+import * as NOTIFICATION_UTIL from './../../../utils/notification'
 import * as API from './../../../services/movie/coming.soon.movies'
 import { 
     getComingSoonMoviesSuccess, 
     getComingSoonMoviesFailed,
     incrementComingSoonMovieViewsSuccess,
-    incrementComingSoonMovieViewsFailed
+    incrementComingSoonMovieViewsFailed,
+    notifyMovieReleaseSuccess,
+    notifyMovieReleaseFailed
 } from './actions'
 
 const {
     GET_COMING_SOON_MOVIES_START,
+    NOTIFY_MOVIE_RELEASE_START,
     INCREMENT_COMING_SOON_MOVIE_VIEWS_START
 } = ACTION_TYPES;
 
@@ -35,6 +39,24 @@ function* incrementComingSoonMovieViewsSaga()
     }
 }
 
+function* notifyMovieReleaseSaga(payload)  
+{
+    try {
+        const { title, isReminded } = payload;
+
+        if (isReminded) {
+            yield call(NOTIFICATION_UTIL.remindedMovieReleaseNotification, title);
+        }
+
+        if (! isReminded) {
+            yield call(NOTIFICATION_UTIL.movieReleaseNotification, title);
+        }
+
+        yield put(notifyMovieReleaseSuccess());
+    } catch ({ message }) {
+        yield put(notifyMovieReleaseFailed({ message }));
+    }
+}
 
 /** Watchers or Observers */
 function* getComingSoonMoviesWatcher()
@@ -53,12 +75,21 @@ function* incrementComingSoonMovieViewsWatcher()
     }
 }
 
+function* notifyMovieReleaseWatcher()
+{
+    while (true) {
+        const { payload } = yield take(NOTIFY_MOVIE_RELEASE_START);
+        yield call(notifyMovieReleaseSaga, payload);
+    }
+}
+
 
 export default function* ()
 {
     yield all([
         getComingSoonMoviesWatcher(),
-        incrementComingSoonMovieViewsWatcher()
+        incrementComingSoonMovieViewsWatcher(),
+        notifyMovieReleaseWatcher()
     ]);
 }
 

@@ -10,7 +10,10 @@ const {
     VIEW_COMING_SOON_MOVIES,
     INCREMENT_COMING_SOON_MOVIE_VIEWS_START,
     INCREMENT_COMING_SOON_MOVIE_VIEWS_SUCCESS,
-    INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED,
+    NOTIFY_MOVIE_RELEASE_START,
+    NOTIFY_MOVIE_RELEASE_SUCCESS,
+    NOTIFY_MOVIE_RELEASE_FAILED,
 } = ACTION_TYPES;
 
 /** 
@@ -69,4 +72,20 @@ export const incrementComingSoonMovieViewsFailed = (payload) => ({
     payload
 });
 
+/** 
+ * Notify movie release
+ */
+ export const notifyMovieReleaseStart = (payload) => ({
+    type: NOTIFY_MOVIE_RELEASE_START,
+    payload
+});
 
+export const notifyMovieReleaseSuccess = (payload) => ({
+    type: NOTIFY_MOVIE_RELEASE_SUCCESS,
+    payload
+});
+
+export const notifyMovieReleaseFailed = (payload) => ({
+    type: NOTIFY_MOVIE_RELEASE_FAILED,
+    payload
+});

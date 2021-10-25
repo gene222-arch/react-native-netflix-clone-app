@@ -17,7 +17,6 @@ import * as MovieCreatedEvent from './../../../events/movie.created.event'
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
-import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import * as MOVIE_API from './../../../services/movie/movie'
 import { useIsFocused } from '@react-navigation/core';
 import * as NOTIFICATION_UTIL from './../../../utils/notification'
@@ -53,14 +52,19 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         }
     }    
 
-    const notify = (movie) => 
+    const notify = async (movie) => 
     {
-        const isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id);
+        const movieId = parseInt(movie.id);
+        const movieTitle = movie.title;
 
-        const title = !isReminded ? 'Release' : 'Reminder'
-        const message = !isReminded ? `${ movie.title } is Released!` : `Reminding that ${ movie.title } is Released! 📣`;
+        const isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movieId);
 
-        NOTIFICATION_UTIL.schedulePushNotification(title, message);
+        console.log(`Reminded: ${isReminded}`);
+
+        batch(() => {
+            dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: movieId }));
+            dispatch(COMING_SOON_MOVIE_ACTION.notifyMovieReleaseStart({ title: movieTitle, isReminded }));
+        });
     }
 
     useEffect(() => 
@@ -92,12 +96,10 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
             {
                 if (isForKids && response.data.age_restriction <= 12) {
                     notify(response.data);
-                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                 }
 
                 if (! isForKids) {
                     notify(response.data);
-                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                 }
             });
             

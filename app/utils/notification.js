@@ -10,7 +10,11 @@ export const schedulePushNotification = async (title, body) =>
 				title,
 				body
 			},
-			trigger: { seconds: 2 }	
+			trigger: { 
+				seconds: 2,
+				repeats: false,
+				channelId: 'default'
+			}	
 		})
 		.then(res => res)
 		.catch(err => err);

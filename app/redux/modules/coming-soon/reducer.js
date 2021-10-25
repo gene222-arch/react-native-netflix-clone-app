@@ -10,7 +10,10 @@ const {
     VIEW_COMING_SOON_MOVIES,
     INCREMENT_COMING_SOON_MOVIE_VIEWS_START,
     INCREMENT_COMING_SOON_MOVIE_VIEWS_SUCCESS,
-    INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED
+    INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED,
+    NOTIFY_MOVIE_RELEASE_START,
+    NOTIFY_MOVIE_RELEASE_SUCCESS,
+    NOTIFY_MOVIE_RELEASE_FAILED,
 } = ACTION_TYPES;
 
 const initialState = {
@@ -29,6 +32,7 @@ export default (state = initialState, { type, payload }) =>
     {
         case GET_COMING_SOON_MOVIES_START:
         case INCREMENT_COMING_SOON_MOVIE_VIEWS_START:
+        case NOTIFY_MOVIE_RELEASE_START:
             return { 
                 ...state, 
                 isLoading: true
@@ -38,6 +42,13 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 comingSoonMovies: payload.comingSoonMovies,
+                isLoading,
+                errors
+            }
+
+        case NOTIFY_MOVIE_RELEASE_SUCCESS:
+            return {
+                ...state,
                 isLoading,
                 errors
             }
@@ -81,6 +92,7 @@ export default (state = initialState, { type, payload }) =>
                 isLoading
             }
 
+        case NOTIFY_MOVIE_RELEASE_FAILED:
         case INCREMENT_COMING_SOON_MOVIE_VIEWS_FAILED:
         case GET_COMING_SOON_MOVIES_FAILED:
             return { 
