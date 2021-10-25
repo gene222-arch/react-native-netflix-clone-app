@@ -117,10 +117,20 @@ function* loginSaga(payload)
         const { data } = yield call(LOGIN_API.loginAsync, payload);
 
         const { access_token, data: auth } = data;
-        const {  profiles, ...user } = auth;
+        const {  profiles, ...userDetails } = auth;
+        const loginSuccessData = { 
+            auth: { 
+                ...userDetails, 
+                user: {
+                    ...userDetails.user,
+                    password: payload.password
+                } 
+            }, 
+            profiles 
+        };
 
         yield call(SecureStoreInstance.storeAccessToken, access_token);
-        yield put(ACTION.loginSuccess({ auth: user, profiles })); 
+        yield put(ACTION.loginSuccess(loginSuccessData)); 
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.loginFailed({ message }));    

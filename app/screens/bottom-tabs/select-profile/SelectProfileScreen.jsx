@@ -17,7 +17,7 @@ import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import { useFocusEffect } from '@react-navigation/core';
 
 
-const SelectProfileScreen = ({ AUTH }) => 
+const SelectProfileScreen = ({ AUTH, AUTH_USER }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -28,6 +28,8 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
     const [ profileNumberLimit, setProfileNumberLimit ] = useState(2);
+
+    const onLoadRelogin = () => dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -83,6 +85,7 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     useEffect(() => 
     {
+        onLoadRelogin();
         USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
             dispatch(AUTH_ACTION.updateUserProfile(response.data));
             setSelectedProfilePinCode(response.data.pin_code);

@@ -70,6 +70,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
             setCredentials(AUTH.credentials);
             onUnloadUnlockPortrait();
             setShowPassword(false);
+            dispatch(AUTH_ACTION.clearErrorProperty());
         }
     }, []);
 
