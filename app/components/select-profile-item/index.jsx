@@ -12,20 +12,20 @@ const style = StyleSheet.create({
     }
 })
 
-const DisplayProfile = ({ networkState, profile, handlePressSelectProfile, index }) => 
+const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile }) => 
 {
     if (profile.id) {
         return (
             <SelectProfileItem 
                 item={ profile } 
                 handlePressSelectProfile={ handlePressSelectProfile } 
-                hasInternetConnection={ networkState.isConnected }
+                hasInternetConnection={ isClickable }
                 imageStyle={ style.img }
             />
         )
     }
 
-    return <AddProfile hasInternetConnection={ networkState.isConnected } />
+    return <AddProfile hasInternetConnection={ isClickable } />
 }
 
 const mapStateToProps = createStructuredSelector({

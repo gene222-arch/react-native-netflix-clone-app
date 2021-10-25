@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Image, TouchableOpacity, FlatList } from 'react-native'
+import { Image, TouchableOpacity, FlatList, InteractionManager } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import styles from './../../../assets/stylesheets/selectProfile';
@@ -36,28 +36,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
     const [ profileNumberLimit, setProfileNumberLimit ] = useState(2);
     const [ networkState, setNetworkState ] = useState(NETWORK_DEFAULT_PROPS);
-
-    const onLoadRelogin = async () => 
-    {
-        try {
-            const network = await Network.getNetworkStateAsync();
-            setNetworkState(network);
-
-            if (network.isConnected && network.isInternetReachable) {
-                dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
-            } 
-
-            if (! network.isConnected) {
-                ALERT_UTIL.okAlert('Connection Error', 'There`s a problem with your internet connection');
-            }
-    
-            if (! network.isInternetReachable) {
-                ALERT_UTIL.okAlert('Connection Error', 'No signal')
-            }
-        } catch (error) {
-            console.log(message);
-        }
-    }
+    const [ isButtonClickable, setIsButtonClickable ] = useState(false);
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -103,7 +82,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
             alert("Internet connection not reachable")
         }
 
-        if (networkState.isConnected && networkState.isInternetReachable) {
+        if (isButtonClickable) {
             (! item.is_profile_locked)
                 ? selectProfile(item.id)
                 : handleTogglePinCodeModal(item.pin_code, item.id);
@@ -130,14 +109,38 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
 
     useEffect(() => 
     {
-        USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
-            dispatch(AUTH_ACTION.updateUserProfile(response.data));
-            setSelectedProfilePinCode(response.data.pin_code);
+        InteractionManager.runAfterInteractions(async () => 
+        {
+            const network = await Network.getNetworkStateAsync();
+            setNetworkState(network);
+
+            if (AUTH.auth.is_subscription_expired) {
+                ALERT_UTIL.okAlert('Subscription', 'Your subscribtion has expired');
+            }
+
+            if (! network.isConnected) {
+                ALERT_UTIL.okAlert('Connection Error', 'There`s a problem with your internet connection');
+            }
+    
+            if (! network.isInternetReachable) {
+                ALERT_UTIL.okAlert('Connection Error', 'No signal')
+            }
+
+            if (network.isConnected && network.isInternetReachable) 
+            {
+                const isClickable = network.isConnected || network.isInternetReachable || !AUTH.auth.is_subscription_expired;
+                setIsButtonClickable(isClickable);
+                
+                dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
+
+                USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
+                    dispatch(AUTH_ACTION.updateUserProfile(response.data));
+                    setSelectedProfilePinCode(response.data.pin_code);
+                });
+        
+                onLoadSetProfileNumberLimit();
+            } 
         });
-
-        onLoadRelogin();
-
-        onLoadSetProfileNumberLimit();
 
         return () => {
             USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen();
@@ -146,6 +149,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
             setIsInCorrectPin(false);
             setProfileId('');
             handleChangePin('');
+            setIsButtonClickable(false);
         }
     }, []);
 
@@ -176,12 +180,15 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                     source={NAV_LOGO}
                     style={ styles.appLogoImg }
                 />
-                <TouchableOpacity onPress={ handlePressManageProfiles } disabled={ !networkState.isConnected || !networkState.isInternetReachable }>
+                <TouchableOpacity 
+                    onPress={ handlePressManageProfiles } 
+                    disabled={ !isButtonClickable }
+                >
                     <FontAwesome5 
                         name='pen'
                         size={ 24 }
                         color='#FFF'
-                        style={{ opacity: !networkState.isConnected || !networkState.isInternetReachable ? 0.3 : 1 }}
+                        style={{ opacity: !isButtonClickable ? 0.3 : 1 }}
                     />
                 </TouchableOpacity>
             </View>
@@ -195,10 +202,10 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                     numColumns={ 2 }
                     renderItem={ ({ item, index }) => index !== profileNumberLimit && (
                         <DisplayProfile
-                            networkState={ networkState }
                             profile={ item }
                             handlePressSelectProfile={ () => handlePressSelectProfile(item)}
                             index={ index }
+                            isClickable={ isButtonClickable }
                         />
                     )}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
