@@ -7,9 +7,10 @@ import styles from './../../assets/stylesheets/selectProfile';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Colors from './../../constants/Colors';
 
-const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle }) => {
+const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, hasInternetConnection }) => 
+{
     return (
-        <View style={ styles.profile }>
+        <View style={{ ...styles.profile, opacity: !hasInternetConnection ? 0.3 : 1 }}>
             <TouchableOpacity onPress={ handlePressSelectProfile }>
                 <Image 
                     source={{

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Image, TouchableOpacity, FlatList, Keyboard } from 'react-native'
+import { Image, TouchableOpacity, FlatList } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import styles from './../../../assets/stylesheets/selectProfile';
@@ -14,8 +14,15 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
 import * as USER_PROFILE_PIN_CODE_UPDATED_EVENT from './../../../events/user.profile.pin.code.updated.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
+import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
+import * as ALERT_UTIL from './../../../utils/alert'
 
+const NETWORK_DEFAULT_PROPS = {
+    isConnected: false,
+    isInternetReachable: false,
+    type: ''
+};
 
 const SelectProfileScreen = ({ AUTH, AUTH_USER }) => 
 {
@@ -28,8 +35,29 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
     const [ profileNumberLimit, setProfileNumberLimit ] = useState(2);
+    const [ networkState, setNetworkState ] = useState(NETWORK_DEFAULT_PROPS);
 
-    const onLoadRelogin = () => dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
+    const onLoadRelogin = async () => 
+    {
+        try {
+            const network = await Network.getNetworkStateAsync();
+            setNetworkState(network);
+
+            if (network.isConnected && network.isInternetReachable) {
+                dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
+            } 
+
+            if (! network.isConnected) {
+                ALERT_UTIL.okAlert('Connection Error', 'There`s a problem with your internet connection');
+            }
+    
+            if (! network.isInternetReachable) {
+                ALERT_UTIL.okAlert('Connection Error', 'No signal')
+            }
+        } catch (error) {
+            console.log(message);
+        }
+    }
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -65,6 +93,23 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
         handleChangePin('');
     }
 
+    const handlePressSelectProfile = (item) => 
+    {
+        if (! networkState.isConnected) {
+            alert("There's no internet connection")
+        }
+
+        if (! networkState.isInternetReachable) {
+            alert("Internet connection not reachable")
+        }
+
+        if (networkState.isConnected && networkState.isInternetReachable) {
+            (! item.is_profile_locked)
+                ? selectProfile(item.id)
+                : handleTogglePinCodeModal(item.pin_code, item.id);
+        }
+    }
+
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
 
     const onLoadSetProfileNumberLimit = () => 
@@ -85,11 +130,12 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
 
     useEffect(() => 
     {
-        onLoadRelogin();
         USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
             dispatch(AUTH_ACTION.updateUserProfile(response.data));
             setSelectedProfilePinCode(response.data.pin_code);
         });
+
+        onLoadRelogin();
 
         onLoadSetProfileNumberLimit();
 
@@ -130,11 +176,12 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                     source={NAV_LOGO}
                     style={ styles.appLogoImg }
                 />
-                <TouchableOpacity onPress={ handlePressManageProfiles }>
+                <TouchableOpacity onPress={ handlePressManageProfiles } disabled={ !networkState.isConnected || !networkState.isInternetReachable }>
                     <FontAwesome5 
                         name='pen'
                         size={ 24 }
                         color='#FFF'
+                        style={{ opacity: !networkState.isConnected || !networkState.isInternetReachable ? 0.3 : 1 }}
                     />
                 </TouchableOpacity>
             </View>
@@ -148,13 +195,9 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                     numColumns={ 2 }
                     renderItem={ ({ item, index }) => index !== profileNumberLimit && (
                         <DisplayProfile
-                            key={ index }
+                            networkState={ networkState }
                             profile={ item }
-                            handlePressSelectProfile={ 
-                                () => !item.is_profile_locked
-                                    ? selectProfile(item.id)
-                                    : handleTogglePinCodeModal(item.pin_code, item.id) 
-                            }
+                            handlePressSelectProfile={ () => handlePressSelectProfile(item)}
                             index={ index }
                         />
                     )}

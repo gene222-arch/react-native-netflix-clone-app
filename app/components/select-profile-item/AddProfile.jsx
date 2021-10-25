@@ -7,13 +7,13 @@ import Colors from './../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 
 
-const AddProfile = () => 
+const AddProfile = ({ hasInternetConnection }) => 
 {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity onPress={ () => navigation.navigate('CreateProfile') }>
-            <View>
+        <TouchableOpacity onPress={ () => navigation.navigate('CreateProfile') } disabled={ !hasInternetConnection }>
+            <View style={{ opacity: !hasInternetConnection ? 0.3 : 1 }}>
                 <FontAwesome5Icon 
                     name='plus-circle'
                     size={ 60 }
