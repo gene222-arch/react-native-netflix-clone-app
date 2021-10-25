@@ -4,24 +4,38 @@ import { Platform } from 'react-native'
 
 export const schedulePushNotification = async (title, body) => 
 {
-	try {
-		await Notifications.scheduleNotificationAsync({
+	await Notifications
+		.scheduleNotificationAsync({
 			content: {
-				title, 
-				body,
-				trigger: {
-					seconds: 2
-				},
-			}
-		});
-	} catch (error) {
-		
-	}
+				title,
+				body
+			},
+			trigger: { seconds: 2 }	
+		})
+		.then(res => res)
+		.catch(err => err);
 }
+
+export const remindedMovieReleaseNotification = (title) => 
+{
+	const notifTitle = "Reminder 🔔";
+	const body = `${ title } is Released`;
+	
+	schedulePushNotification(notifTitle, body);
+}
+
+
+export const movieReleaseNotification = (title) => 
+{
+	const notifTitle = "Release 📣";
+	const body = `${ title } is Released`;
+	
+	schedulePushNotification(notifTitle, body);
+}
+
 
 export const registerForPushNotificationsAsync = async () => 
 {
-	const GRANTED = 'granted';
 	let token;
 
 	if (Constants.isDevice) 
@@ -29,12 +43,12 @@ export const registerForPushNotificationsAsync = async () =>
 		const { status: existingStatus } = await Notifications.getPermissionsAsync();
 		let finalStatus = existingStatus;
 
-		if (existingStatus !== GRANTED) {
+		if (existingStatus !== 'granted') {
 			const { status } = await Notifications.requestPermissionsAsync();
 			finalStatus = status;
 		}
 
-		if (finalStatus !== GRANTED) {
+		if (finalStatus !== 'granted') {
 			alert('Failed to get push token for push notification!');
 			return;
 		}

@@ -12,7 +12,7 @@ const { persistor, store } = configureStore();
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
 		shouldShowAlert: true,
-		shouldPlaySound: true,
+		shouldPlaySound: false,
 		shouldSetBadge: true,
 	}),
 });
@@ -26,7 +26,7 @@ const App = () =>
 
 		notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
 			console.log(notification);
-		});
+		});	
 
 		return () => {
 			Notifications.cancelAllScheduledNotificationsAsync();
