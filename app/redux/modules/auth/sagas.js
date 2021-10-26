@@ -7,6 +7,7 @@ import * as MY_DOWNLOADS_API from './../../../services/movie/my.downloads'
 import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
 import * as ACTION from './actions'
+import * as SERVER_EXPO_NOTIF from './../../../services/expo-notifications/server.expo.notification'
 
 const {
     ADD_TO_RECENT_WATCHES_START,
@@ -129,8 +130,10 @@ function* loginSaga(payload)
             profiles 
         };
 
+        const expoToken = yield call(SecureStoreInstance.getExpoNotificationToken)
         yield call(SecureStoreInstance.storeAccessToken, access_token);
         yield put(ACTION.loginSuccess(loginSuccessData)); 
+        yield call(SERVER_EXPO_NOTIF.subscribe, { expo_token: expoToken });
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.loginFailed({ message }));    
@@ -140,11 +143,13 @@ function* loginSaga(payload)
 function* logoutSaga()  
 {
     try {
+        yield call(SERVER_EXPO_NOTIF.unsubscribe);
         const { status } = yield call(LOGIN_API.logoutAsync);
         
         if (status === 'success') {
-            yield call(SecureStoreInstance.removeAccessToken);
             yield put(ACTION.logoutSuccess());
+            yield call(SecureStoreInstance.removeExpoNotificationToken);
+            yield call(SecureStoreInstance.removeAccessToken);
             RootNavigation.navigate('Login');
         }
     } catch ({ message }) {

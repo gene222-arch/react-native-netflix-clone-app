@@ -107,8 +107,8 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
                     style={ [styles.inputContainerStyle, styles.email] }
                     value={ credentials.email }
                     onChangeText={ text => handleChange({ name: 'email', text }) }
-                    error={ AUTH_HAS_ERROR_MESSAGE.email }
-                    helperText={ AUTH_ERROR_MESSAGE.email }
+                    error={ AUTH_HAS_ERROR_MESSAGE?.email }
+                    helperText={ AUTH_ERROR_MESSAGE?.email }
                 />
                 <View style={ styles.passwordContainer }>
                     <StyledTextInput
@@ -119,8 +119,8 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
                         value={ credentials.password }
                         onChangeText={ text => handleChange({ name: 'password', text }) }
                         secureTextEntry={ !showPassword }
-                        error={ AUTH_HAS_ERROR_MESSAGE.password }
-                        helperText={ AUTH_ERROR_MESSAGE.password }
+                        error={ AUTH_HAS_ERROR_MESSAGE?.password }
+                        helperText={ AUTH_ERROR_MESSAGE?.password }
                     />
                 </View>
             </View>

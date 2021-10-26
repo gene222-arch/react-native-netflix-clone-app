@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native'
+import * as SecureStoreInstance from './SecureStoreInstance'
 
 export const schedulePushNotification = async (title, body) => 
 {
@@ -13,7 +14,7 @@ export const schedulePushNotification = async (title, body) =>
 			trigger: { 
 				seconds: 2,
 				repeats: false,
-				channelId: 'default'
+				channelId: 'movie-release-channel'
 			}	
 		})
 		.then(res => res)
@@ -40,37 +41,46 @@ export const movieReleaseNotification = (title) =>
 
 export const registerForPushNotificationsAsync = async () => 
 {
-	let token;
+	try {
+		let token;
 
-	if (Constants.isDevice) 
-	{
-		const { status: existingStatus } = await Notifications.getPermissionsAsync();
-		let finalStatus = existingStatus;
-
-		if (existingStatus !== 'granted') {
-			const { status } = await Notifications.requestPermissionsAsync();
-			finalStatus = status;
-		}
-
-		if (finalStatus !== 'granted') {
-			alert('Failed to get push token for push notification!');
-			return;
-		}
-
-		token = (await Notifications.getExpoPushTokenAsync()).data;
-	} else {
-		alert('Must use physical device for Push Notifications');
-	}
-
-	if (Platform.OS === 'android') {
-		Notifications.setNotificationChannelAsync('default', 
+		if (Constants.isDevice) 
 		{
-			name: 'default',
-			importance: Notifications.AndroidImportance.MAX,
-			vibrationPattern: [0, 250, 250, 250],
-			lightColor: '#FF231F7C',
-		});
-	}
+			const { status: existingStatus } = await Notifications.getPermissionsAsync();
+			let finalStatus = existingStatus;
+	
+			if (existingStatus !== 'granted') {
+				const { status } = await Notifications.requestPermissionsAsync();
+				finalStatus = status;
+			}
+	
+			if (finalStatus !== 'granted') {
+				alert('Failed to get push token for push notification!');
+				return;
+			}
+	
+			token = (await Notifications.getExpoPushTokenAsync()).data;
+		
+			await SecureStoreInstance.storeExpoNotificationToken(token);
+		} else {
+			alert('Must use physical device for Push Notifications');
+		}
+	
+		if (Platform.OS === 'android') 
+		{
+			Notifications.setNotificationChannelAsync('movie-release-channel', 
+			{
+				name: 'Movie Release',
+				importance: Notifications.AndroidImportance.MAX,
+				vibrationPattern: [0, 250, 250, 250],
+				lightColor: '#FF231F7C',
+				sound: true
+			});
+		}
+	
+		return token;
 
-	return token;
+	} catch (error) {
+		
+	}
 }

@@ -1,18 +1,20 @@
 import axiosInstance from '../../utils/axiosInstance'
 
+const BASE_URL = '/exponent/devices';
+
 export const subscribe = async (payload) => 
 {
     return await axiosInstance()
-        .get('/exponent/devices/subscribe')
-        .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data));
+        .post(`${ BASE_URL }/subscribe`, payload)
+        .then(response => response)
+        .catch(error => console.log(error.response));
 }
 
 
 export const unsubscribe = async (payload) => 
 {
     return await axiosInstance()
-        .get('/exponent/devices/unsubscribe')
-        .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data));
+        .post(`${ BASE_URL }/unsubscribe`)
+        .then(response => console.log('UNSUBSCRIBED SUCCESSFULLY'))
+        .catch(error => console.log(error.response));
 }
