@@ -53,23 +53,6 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
         }
     }    
 
-    const notify = (movie) => 
-    {
-        const movieId = parseInt(movie.id);
-        const movieTitle = movie.title;
-
-        const isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movieId);
-
-        console.log(`Reminded: ${isReminded}`);
-
-        batch(() => {
-        //     dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: movieId }));
-            if (AUTH.isAuthenticated) {
-                dispatch(COMING_SOON_MOVIE_ACTION.notifyMovieReleaseStart({ title: movieTitle, isReminded }));
-            }
-        });
-    }
-
     useEffect(() => 
     {
         batch(() => {
@@ -98,11 +81,11 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
             ComingSoonMovieReleasedEvent.listen(response => 
             {
                 if (isForKids && response.data.age_restriction <= 12) {
-                    notify(response.data);
+                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                 }
 
                 if (! isForKids) {
-                    notify(response.data);
+                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
                 }
             });
             
