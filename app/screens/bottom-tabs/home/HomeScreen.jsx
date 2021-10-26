@@ -14,12 +14,12 @@ import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
-import { authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { authProfileSelector, authSelector } from './../../../redux/modules/auth/selectors';
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
 import * as MOVIE_API from './../../../services/movie/movie'
 import { useIsFocused } from '@react-navigation/core';
-import * as NOTIFICATION_UTIL from './../../../utils/notification'
+
 
 const DEFAULT_FRONT_PAGE_PROPS = {
     id: '',
@@ -31,7 +31,7 @@ const DEFAULT_FRONT_PAGE_PROPS = {
     title_logo_path: null
 };
 
-const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
+const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) => 
 {
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
@@ -39,6 +39,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const isForKids = Boolean(AUTH_PROFILE.is_for_kids);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ frontPage, setFrontPage ] = useState(DEFAULT_FRONT_PAGE_PROPS);
+
 
     const onLoadSetFrontPage = async () => 
     {
@@ -52,7 +53,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         }
     }    
 
-    const notify = async (movie) => 
+    const notify = (movie) => 
     {
         const movieId = parseInt(movie.id);
         const movieTitle = movie.title;
@@ -62,8 +63,10 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
         console.log(`Reminded: ${isReminded}`);
 
         batch(() => {
-            dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: movieId }));
-            dispatch(COMING_SOON_MOVIE_ACTION.notifyMovieReleaseStart({ title: movieTitle, isReminded }));
+        //     dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: movieId }));
+            if (AUTH.isAuthenticated) {
+                dispatch(COMING_SOON_MOVIE_ACTION.notifyMovieReleaseStart({ title: movieTitle, isReminded }));
+            }
         });
     }
 
@@ -79,7 +82,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
     }, [AUTH_PROFILE.id]);
 
     useEffect(() => {
-        InteractionManager.runAfterInteractions(() => 
+        InteractionManager.runAfterInteractions(async () => 
         {
             MovieCreatedEvent.listen(response => 
             {
@@ -152,6 +155,7 @@ const HomeScreen = ({ AUTH_PROFILE, MOVIE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector,
     MOVIE: movieSelector
 });
