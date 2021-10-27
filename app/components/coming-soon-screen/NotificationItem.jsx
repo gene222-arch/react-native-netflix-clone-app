@@ -6,16 +6,29 @@ import { Image } from 'react-native-expo-image-cache';
 import Colors from './../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../redux/modules/auth/selectors';
+import * as AUTH_ACTION from './../../redux/modules/auth/actions';
+import { connect, useDispatch } from 'react-redux';
 
 
-const NotificationItem = ({ item, isReminded = false }) => 
+const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false }) => 
 {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const handlePress = () => navigation.navigate('MovieDetailScreen', { 
-        id: item.movie_id,
-        headerTitle: item.movie.title
-    });
+    const handlePress = () => 
+    {
+        dispatch(AUTH_ACTION.markRemindedMovieAsReadStart({ 
+            coming_soon_movie_id: item.coming_soon_movie_id, 
+            user_profile_id: AUTH_PROFILE.id 
+        }));
+
+        navigation.navigate('MovieDetailScreen', { 
+            id: item.movie_id,
+            headerTitle: item.movie.title
+        });
+    }
 
     return (
         <TouchableOpacity onPress={ handlePress }>
@@ -50,7 +63,11 @@ const NotificationItem = ({ item, isReminded = false }) =>
     )
 }
 
-export default NotificationItem
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(NotificationItem)
 
 const styles = StyleSheet.create({
     container: {

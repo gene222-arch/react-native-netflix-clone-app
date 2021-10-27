@@ -49,8 +49,8 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
                     if (item.released_details) {
                         isReminded = AUTH_PROFILE
                             .reminded_coming_soon_movies
-                            .find(({ coming_soon_movie_id }) => {
-                                return (coming_soon_movie_id === item.released_details.coming_soon_movie_id);
+                            .find(({ coming_soon_movie_id, read_at }) => {
+                                return (coming_soon_movie_id === item.released_details.coming_soon_movie_id) && !read_at;
                             });
                     }
 
