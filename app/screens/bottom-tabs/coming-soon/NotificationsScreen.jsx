@@ -45,16 +45,20 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 renderItem={ ({ item }) => 
                 {
                     let isReminded = false;
+                    let isRead = false;
 
-                    if (item.released_details) {
+                    if (item.released_details) 
+                    {
                         isReminded = AUTH_PROFILE
                             .reminded_coming_soon_movies
-                            .find(({ coming_soon_movie_id, read_at }) => {
-                                return (coming_soon_movie_id === item.released_details.coming_soon_movie_id) && !read_at;
-                            });
+                            .find(({ coming_soon_movie_id }) => coming_soon_movie_id === item.released_details.coming_soon_movie_id);
+                        
+                        if (isReminded) {
+                            isRead = isReminded.read_at && AUTH_PROFILE.id === isReminded.user_profile_id;
+                        }
                     }
 
-                    return <NotificationItem item={ item } isReminded={ isReminded } />
+                    return <NotificationItem item={ item } isReminded={ isReminded } isRead={ isRead } />
                 }}
                 maxToRenderPerBatch={ 5 }
                 showsHorizontalScrollIndicator={ false }

@@ -94,7 +94,7 @@ function* markRemindedMovieAsReadSaga(payload)
 {
     try {
         yield call(REMIND_ME_API.markAsReadAsync, payload);
-        yield put(ACTION.markRemindedMovieAsReadSuccess());
+        yield put(ACTION.markRemindedMovieAsReadSuccess(payload));
     } catch ({ message }) {
         yield put(ACTION.markRemindedMovieAsReadFailed({ message }));
     }

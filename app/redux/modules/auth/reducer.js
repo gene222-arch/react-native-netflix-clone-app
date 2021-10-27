@@ -338,8 +338,30 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case MARK_REMINDED_MOVIE_AS_READ_SUCCESS: 
+
+            const remindedComingSoonMovies = loggedInProfile
+                .reminded_coming_soon_movies
+                .map(movie => movie.coming_soon_movie_id === payload.coming_soon_movie_id 
+                    ? ({
+                        ...movie,
+                        read_at: new Date()
+                    })
+                    : movie
+                );
+
+            newProfiles = profiles.map(profile => 
+                profile.id === payload.user_profile_id 
+                    ? 
+                        ({
+                            ...profile,
+                            reminded_coming_soon_movies: remindedComingSoonMovies
+                        })
+                    : profile
+            )
+
             return {
                 ...state,
+                profiles: newProfiles,
                 errors,
                 isLoading
             }

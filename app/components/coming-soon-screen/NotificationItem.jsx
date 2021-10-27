@@ -12,17 +12,19 @@ import * as AUTH_ACTION from './../../redux/modules/auth/actions';
 import { connect, useDispatch } from 'react-redux';
 
 
-const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false }) => 
+const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false, isRead = false }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
     const handlePress = () => 
     {
-        dispatch(AUTH_ACTION.markRemindedMovieAsReadStart({ 
-            coming_soon_movie_id: item.coming_soon_movie_id, 
-            user_profile_id: AUTH_PROFILE.id 
-        }));
+        if (isReminded) {
+            dispatch(AUTH_ACTION.markRemindedMovieAsReadStart({ 
+                coming_soon_movie_id: item.released_details.coming_soon_movie_id, 
+                user_profile_id: AUTH_PROFILE.id 
+            }));
+        }
 
         navigation.navigate('MovieDetailScreen', { 
             id: item.movie_id,
@@ -39,20 +41,21 @@ const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false }) =>
                     style={ styles.img }
                 />
                 <View style={ styles.movieDescriptionContainer }>
-                    <Text style={ styles.movieNotifTypeText }>
+                    <Text style={{ ...styles.movieNotifTypeText, color: `${ isRead ? '#FFF' : Colors.grey }` }}>
                         {
-                            !isReminded ? item.type 
-                            : (
-                                <>
-                                    <FontAwesome5 
-                                        name='bell'
-                                        size={ 16 }
-                                        color='#FFD700'
-                                        solid
-                                    />
-                                    { `  Reminder: ${ item.type }` }
-                                </>
-                            )
+                            !isReminded 
+                                ? item.type 
+                                : (
+                                    <>
+                                        <FontAwesome5 
+                                            name='bell'
+                                            size={ 16 }
+                                            color='#FFD700'
+                                            solid
+                                        />
+                                        { `  Reminder: ${ item.type }` }
+                                    </>
+                                )
                         }
                     </Text>
                     <Text style={ styles.releasedAtText }>{ item.movie.title }</Text>
