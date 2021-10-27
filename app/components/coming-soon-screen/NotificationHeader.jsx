@@ -18,10 +18,18 @@ const NotificationHeader = ({ AUTH_PROFILE }) =>
 
     const handlePressNavigateToNotifList = () => navigation.navigate('NotificationsScreen');
 
+    const onLoadSetBadgeCount = () =>
+    {
+        const unreadNotifCount = AUTH_PROFILE
+            .reminded_coming_soon_movies
+            .filter(({ read_at, is_released }) => !Boolean(read_at) && Boolean(is_released)).length;
+
+        setNotifCount(unreadNotifCount);
+    }
+
     useEffect(() => 
     {
-        const unreadNotifCount = AUTH_PROFILE.reminded_coming_soon_movies.filter(({ read_at }) => !read_at).length;
-        setNotifCount(unreadNotifCount);
+        onLoadSetBadgeCount();
 
         return () => {
             setNotifCount(0);
