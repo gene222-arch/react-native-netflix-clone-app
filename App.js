@@ -20,6 +20,7 @@ Notifications.setNotificationHandler({
 const App = () => 
 {    
 	const notificationListener = useRef();
+	const responseListener = useRef();
 
 	useEffect(() => {
 		NOTIFICATION_UTIL.registerForPushNotificationsAsync();
@@ -28,9 +29,14 @@ const App = () =>
 			console.log(notification);
 		});	
 
+		responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+			console.log(response);
+		});
+
 		return () => {
 			Notifications.cancelAllScheduledNotificationsAsync();
 			Notifications.removeNotificationSubscription(notificationListener.current);
+			Notifications.removeNotificationSubscription(responseListener.current);
 		}
 	}, []);
 

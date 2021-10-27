@@ -68,6 +68,7 @@ export const registerForPushNotificationsAsync = async () =>
 	
 		if (Platform.OS === 'android') 
 		{
+			/** Channel ID must match server side(Laravel) api expo channel id */
 			Notifications.setNotificationChannelAsync('movie-release-channel', 
 			{
 				name: 'Movie Release',
