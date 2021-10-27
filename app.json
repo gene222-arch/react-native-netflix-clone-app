@@ -6,10 +6,10 @@
     "description": "Movie Streaming Application",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./app/assets/netflix-icon.png",
+    "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./app/assets/app-splash-screen.png",
+      "image": "./app/assets/splash-screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -17,7 +17,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./app/assets/logotop.png",
+          "icon": "./app/assets/notification-logo.png",
           "color": "#121212",
           "sounds": [
             "./app/assets/iphone.wav"
@@ -30,7 +30,7 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "app/assets/*"
     ],
     "ios": {
       "userInterfaceStyle": "dark",
@@ -44,7 +44,7 @@
         "RECEIVE_BOOT_COMPLETED"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/netflix-icon.png",
+        "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#000000"
       }
     },
