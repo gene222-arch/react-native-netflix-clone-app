@@ -41,7 +41,7 @@ const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false, isRead = fal
                     style={ styles.img }
                 />
                 <View style={ styles.movieDescriptionContainer }>
-                    <Text style={{ ...styles.movieNotifTypeText, color: `${ isRead ? '#FFF' : Colors.grey }` }}>
+                    <Text style={{ ...styles.movieNotifTypeText, color: `${ !isRead ? '#FFF' : Colors.grey }` }}>
                         {
                             !isReminded 
                                 ? item.type 

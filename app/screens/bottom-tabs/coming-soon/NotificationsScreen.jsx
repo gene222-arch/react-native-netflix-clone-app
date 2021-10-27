@@ -45,7 +45,7 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
                 renderItem={ ({ item }) => 
                 {
                     let isReminded = false;
-                    let isRead = false;
+                    let isRead = true;
 
                     if (item.released_details) 
                     {
@@ -54,7 +54,8 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
                             .find(({ coming_soon_movie_id }) => coming_soon_movie_id === item.released_details.coming_soon_movie_id);
                         
                         if (isReminded) {
-                            isRead = isReminded.read_at && AUTH_PROFILE.id === isReminded.user_profile_id;
+                            isRead = Boolean(isReminded.read_at) && AUTH_PROFILE.id === isReminded.user_profile_id;
+                            console.log(AUTH_PROFILE.id === isReminded.user_profile_id);
                         }
                     }
 
