@@ -55,7 +55,6 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
                         
                         if (isReminded) {
                             isRead = Boolean(isReminded.read_at) && AUTH_PROFILE.id === isReminded.user_profile_id;
-                            console.log(AUTH_PROFILE.id === isReminded.user_profile_id);
                         }
                     }
 
