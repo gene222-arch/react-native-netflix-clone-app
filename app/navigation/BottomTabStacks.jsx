@@ -20,7 +20,7 @@ import ManageProfilesScreen from './../screens/bottom-tabs/select-profile/Manage
 import EditProfileScreen from './../screens/bottom-tabs/select-profile/EditProfileScreen';
 import DisplayVideoScreen from './../screens/DisplayVideoScreen';
 import NotificationsScreen from './../screens/bottom-tabs/coming-soon/NotificationsScreen';
-import Colors from './../constants/Colors';
+
 
 const DEFAULT_OPTIONS = {
     headerShown: false,
@@ -142,6 +142,19 @@ export const ComingSoonTab = () =>
         }
     };
 
+    const notifScreenOptions = {
+        headerStyle: {
+            backgroundColor: '#000'
+        },
+        headerTitle: props => (
+            <AppBar
+                showLogo={ false }
+                headerTitle='Notifications'
+                { ...props }
+            />
+        )
+    };
+
     return (
         <ComingSoonStack.Navigator initialRouteName='ComingSoon'>
             <ComingSoonStack.Screen 
@@ -152,12 +165,7 @@ export const ComingSoonTab = () =>
             <ComingSoonStack.Screen 
                 name='NotificationsScreen' 
                 component={ NotificationsScreen }
-                options={{ 
-                    headerTitle: 'Notifications',
-                    headerStyle: {
-                        backgroundColor: Colors.dark
-                    }
-                }}
+                options={ notifScreenOptions }
             />
             <ComingSoonStack.Screen 
                 name='TrailerInfo'
