@@ -7,6 +7,7 @@ import configureStore from './app/redux/store';
 import Navigation from './app/navigation/index';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as NOTIFICATION_UTIL from './app/utils/notification'
+import * as RootNavigation from './app/navigation/RootNavigation'
 const { persistor, store } = configureStore();
 
 Notifications.setNotificationHandler({
@@ -22,19 +23,16 @@ const App = () =>
 	const notificationListener = useRef();
 	const responseListener = useRef();
 
-	useEffect(() => {
+	const handleNotifReceivedListener = ({ notification: { request } }) => console.log(request);
+	const handleNotifResponseReceivedListener = ({ notification: { request } }) => console.log(request);
+
+	useEffect(() => 
+	{
 		NOTIFICATION_UTIL.registerForPushNotificationsAsync();
-
-		notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-			console.log(notification);
-		});	
-
-		responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-			console.log(response);
-		});
+		notificationListener.current = Notifications.addNotificationReceivedListener(handleNotifReceivedListener);	
+		responseListener.current = Notifications.addNotificationResponseReceivedListener(handleNotifResponseReceivedListener);
 
 		return () => {
-			Notifications.cancelAllScheduledNotificationsAsync();
 			Notifications.removeNotificationSubscription(notificationListener.current);
 			Notifications.removeNotificationSubscription(responseListener.current);
 		}
