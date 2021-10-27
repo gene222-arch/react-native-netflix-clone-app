@@ -23,8 +23,8 @@ const App = () =>
 	const notificationListener = useRef();
 	const responseListener = useRef();
 
-	const handleNotifReceivedListener = ({ notification: { request } }) => console.log(request);
-	const handleNotifResponseReceivedListener = ({ notification: { request } }) => console.log(request);
+	const handleNotifReceivedListener = (notification) => console.log(notification);
+	const handleNotifResponseReceivedListener = (notification) => console.log(notification);
 
 	useEffect(() => 
 	{
