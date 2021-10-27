@@ -19,7 +19,7 @@ const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false, isRead = fal
 
     const handlePress = () => 
     {
-        if (isReminded) {
+        if (isReminded && !isRead) {
             dispatch(AUTH_ACTION.markRemindedMovieAsReadStart({ 
                 coming_soon_movie_id: item.released_details.coming_soon_movie_id, 
                 user_profile_id: AUTH_PROFILE.id 
