@@ -3,6 +3,7 @@ import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
+import * as REMIND_ME_API from './../../../services/movie/remind.me'
 import * as MY_DOWNLOADS_API from './../../../services/movie/my.downloads'
 import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
@@ -18,6 +19,7 @@ const {
     LOGIN_START,
     LOGOUT_START,
     MANAGE_PIN_CODE_START,
+    MARK_REMINDED_MOVIE_AS_READ_START,
     RATE_SHOW_START,
     RATE_RECENTLY_WATCHED_MOVIE_START,
     REMOVE_TO_MY_DOWNLOADS_START,
@@ -85,6 +87,16 @@ function* managePinCodeSaga(payload)
         yield call(AUTH_API.managePinCodeAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.managePinCodeFailed({ message }));
+    }
+}
+
+function* markRemindedMovieAsReadSaga(payload)  
+{
+    try {
+        yield call(REMIND_ME_API.markAsReadAsync, payload);
+        yield put(ACTION.markRemindedMovieAsReadSuccess());
+    } catch ({ message }) {
+        yield put(ACTION.markRemindedMovieAsReadFailed({ message }));
     }
 }
 
@@ -330,6 +342,14 @@ function* managePinCodeWatcher()
     }
 }
 
+function* markRemindedMovieAsReadWatcher()
+{
+    while (true) {
+        const { payload } = yield take(MARK_REMINDED_MOVIE_AS_READ_START);
+        yield call(markRemindedMovieAsReadSaga, payload);
+    }
+}
+
 function* rateShowWatcher()
 {
     while (true) {
@@ -424,6 +444,7 @@ export default function* ()
         loginWatcher(),
         logoutWatcher(),
         managePinCodeWatcher(),
+        markRemindedMovieAsReadWatcher(),
         rateShowWatcher(),
         rateRecentlyWatchedMovieWatcher(),
         removeToMyDownloadsWatcher(),

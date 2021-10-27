@@ -22,6 +22,9 @@ const {
     MANAGE_PIN_CODE_START,
     MANAGE_PIN_CODE_SUCCESS,
     MANAGE_PIN_CODE_FAILED,
+    MARK_REMINDED_MOVIE_AS_READ_START,
+    MARK_REMINDED_MOVIE_AS_READ_SUCCESS,
+    MARK_REMINDED_MOVIE_AS_READ_FAILED,
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
@@ -169,6 +172,22 @@ export const managePinCodeSuccess = (payload) => ({
 
 export const managePinCodeFailed = (payload) => ({
     type: MANAGE_PIN_CODE_FAILED,
+    payload
+});
+
+/** Mark reminded movie as read */
+export const markRemindedMovieAsReadStart = (payload) => ({
+    type: MARK_REMINDED_MOVIE_AS_READ_START,
+    payload
+});
+
+export const markRemindedMovieAsReadSuccess = (payload) => ({
+    type: MARK_REMINDED_MOVIE_AS_READ_SUCCESS,
+    payload
+});
+
+export const markRemindedMovieAsReadFailed = (payload) => ({
+    type: MARK_REMINDED_MOVIE_AS_READ_FAILED,
     payload
 });
 

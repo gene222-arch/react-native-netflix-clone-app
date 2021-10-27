@@ -23,6 +23,9 @@ const {
     MANAGE_PIN_CODE_START,
     MANAGE_PIN_CODE_SUCCESS,
     MANAGE_PIN_CODE_FAILED,
+    MARK_REMINDED_MOVIE_AS_READ_START,
+    MARK_REMINDED_MOVIE_AS_READ_SUCCESS,
+    MARK_REMINDED_MOVIE_AS_READ_FAILED,
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
@@ -122,6 +125,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGIN_START:
         case LOGOUT_START:
         case MANAGE_PIN_CODE_START:
+        case MARK_REMINDED_MOVIE_AS_READ_START:
         case RATE_SHOW_START:
         case RATE_RECENTLY_WATCHED_MOVIE_START:
         case REMOVE_TO_MY_DOWNLOADS_START:
@@ -331,6 +335,13 @@ export default (state = initialState, { type, payload }) =>
                 profiles: newProfiles,
                 isLoading,
                 errors
+            }
+
+        case MARK_REMINDED_MOVIE_AS_READ_SUCCESS: 
+            return {
+                ...state,
+                errors,
+                isLoading
             }
 
         case DOWNLOAD_VIDEO_SUCCESS:
@@ -561,6 +572,7 @@ export default (state = initialState, { type, payload }) =>
         case DELETE_PROFILE_FAILED:
         case DOWNLOAD_VIDEO_FAILED:
         case MANAGE_PIN_CODE_FAILED:
+        case MARK_REMINDED_MOVIE_AS_READ_FAILED:
         case SELECT_PROFILE_FAILED:
         case RATE_SHOW_FAILED:
         case RATE_RECENTLY_WATCHED_MOVIE_FAILED:
