@@ -13,6 +13,8 @@ import { authProfileSelector } from './../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
 import MostLikedBadge from './../MostLikedBadge';
+import MaturityRatingBadge from '../MaturityRatingBadge';
+import WarningGenreBadge from '../WarningGenreBadge';
 
 
 const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
@@ -78,7 +80,8 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                             </View>
                             <View style={ styles.basicDetail }>
                                 <Text style={ styles.yearAgeSeason }>{ selectedShow?.year_of_release }</Text>
-                                <Text style={ styles.yearAgeSeason }>{ selectedShow?.age_restriction }+</Text>
+                                <MaturityRatingBadge ageRestriction={ selectedShow?.age_restriction } />
+                                <WarningGenreBadge genres={ selectedShow?.genres.split(',').map(genre => genre.trim().toLowerCase()) } />
                             </View>
                             <Text style={ styles.plot }>{ selectedShow?.plot.slice(0, 250).concat('...') }</Text>
                             <MostLikedBadge movieId={ selectedShow?.id } />

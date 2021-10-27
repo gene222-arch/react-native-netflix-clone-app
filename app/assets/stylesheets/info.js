@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
     basicDetail: {
         flexDirection: 'row',
         backgroundColor: Colors.darkGrey,
+        justifyContent: 'space-between',
+        width: 150
     },
     container: {
         backgroundColor: 'rgba(0, 0, 0, .8)',
@@ -78,7 +80,6 @@ const styles = StyleSheet.create({
     },
     yearAgeSeason: {
         color: Colors.grey,
-        paddingRight: 10,
         paddingBottom: 10
     },
     episodeAndMovieInfoContainer: {

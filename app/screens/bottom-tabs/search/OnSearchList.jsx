@@ -10,7 +10,7 @@ const OnSearchList = ({ movies, handlePressDisplayShowInfo }) =>
 {
     return (
         <View style={{ flex: 1 }}>
-            <Text h4 style={ styles.searchHeaderTitle }>TV Shows and Movies</Text>
+            <Text h4 style={ styles.searchHeaderTitle }>Movies</Text>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ movies }
