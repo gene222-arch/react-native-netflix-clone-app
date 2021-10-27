@@ -45,7 +45,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) =>
         setTimeout(() => dispatch(MOVIE_ACTION.incrementMovieSearchCountStart({ movieId: show.id })), 10)
     }
 
-    const handleChangeSearchInput = (textInput) => 
+    const handleChangeSearchInput = useCallback((textInput) => 
     {
         setSearchInput(textInput);
         
@@ -55,16 +55,34 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) =>
         else {  
             textInput = textInput.toLowerCase();
 
-            const filteredList = MOVIE.movies.filter(({ title, authors, genres }) => {
-                const authorsExists = authors.split(',').find(author => author.indexOf(textInput) !== -1);
-                const genresExists = genres.split(',').find(genre => genre.indexOf(textInput) !== -1);
-                
-                return title.toLowerCase().indexOf(textInput) !== -1 || authorsExists || genresExists;
-            });             
+            let filteredList = [];
+
+            const filterByTitles = MOVIE.movies
+                .filter(({ title }) => title.toLowerCase().indexOf(textInput) !== -1)
+                .sort((movieOne, movieTwo) => 
+                {
+                    const titleOne = movieOne.title.toLowerCase();
+                    const titleTwo = movieTwo.title.toLowerCase();
+
+                    if (titleOne < titleTwo) return -1;
+
+                    if (titleTwo > titleOne) return 1;
+
+                    return 0;
+                });
+
+            const filterByAuthors = MOVIE.movies.filter(({ authors }) => authors.split(',').find(author => author.indexOf(textInput) !== -1));
+            const filterByGenres = MOVIE.movies.filter(({ genres }) => genres.split(',').find(genre => genre.indexOf(textInput) !== -1));
+
+            filteredList = [
+                ...filterByTitles,
+                ...filterByAuthors,
+                ...filterByGenres
+            ];
 
             setMovies(filteredList);
         }
-    }
+    }, [searchInput])
 
     const handleOnCancel = () => {
         setSearchInput('');
