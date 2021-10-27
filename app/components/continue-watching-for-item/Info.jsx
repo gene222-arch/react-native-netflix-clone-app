@@ -26,14 +26,15 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
     const handlePressPlay = () => 
     {
         const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === selectedShow?.id);
-        const lastPlayedPositionMillis = !recentWatch ? (selectedShow?.last_played_position_millis || 0) : recentWatch.last_played_position_millis;
+        const lastPlayedPositionMillis = !recentWatch ? 0 : recentWatch.last_played_position_millis;
+        const durationInMillis = !recentWatch ? (frontPage.duration_in_minutes * 60000) : recentWatch.duration_in_millis;
 
         setTimeout(() => 
         {
             dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
                 movie: selectedShow, 
                 user_profile_id: AUTH_PROFILE.id, 
-                duration_in_millis: selectedShow.duration_in_minutes * 60000,
+                duration_in_millis: durationInMillis,
                 last_played_position_millis: lastPlayedPositionMillis
             }));
         }, 10);
