@@ -10,7 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector } from './../../redux/modules/auth/selectors';
-import { connect } from 'react-redux';
+import * as AUTH_ACTION from './../../redux/modules/auth/actions';
+import { connect, useDispatch } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
 import MostLikedBadge from './../MostLikedBadge';
 import MaturityRatingBadge from '../MaturityRatingBadge';
@@ -19,11 +20,23 @@ import WarningGenreBadge from '../WarningGenreBadge';
 
 const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
 {   
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     const handlePressPlay = () => 
     {
         const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === selectedShow?.id);
+        const lastPlayedPositionMillis = !recentWatch ? (selectedShow?.last_played_position_millis || 0) : recentWatch.last_played_position_millis;
+
+        setTimeout(() => 
+        {
+            dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
+                movie: selectedShow, 
+                user_profile_id: AUTH_PROFILE.id, 
+                duration_in_millis: selectedShow.duration_in_minutes * 60000,
+                last_played_position_millis: lastPlayedPositionMillis
+            }));
+        }, 10);
 
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
@@ -31,7 +44,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                 title: selectedShow?.title,
                 videoUri: selectedShow?.video_path, 
                 id: selectedShow?.id,
-                lastPlayedPositionMillis: !recentWatch ? (selectedShow?.last_played_position_millis || 0) : recentWatch.last_played_position_millis
+                lastPlayedPositionMillis
             }
         });
     }
