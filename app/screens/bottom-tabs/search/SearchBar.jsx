@@ -25,7 +25,7 @@ const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel }) =>
 
     return (
         <Input
-            placeholder='Search for a movie, genre, author etc..'
+            placeholder='Search for a movie, genre, author, etc..'
             value={ searchInput }
             onChangeText={ onChangeText }
             placeholderTextColor={ Colors.grey }
