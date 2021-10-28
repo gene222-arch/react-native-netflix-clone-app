@@ -20,7 +20,7 @@ const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) =
     {
         setSelectedCategory('My List');
         setIsVisible(false);
-        navigation.navigate('MyListScreen', { headerTitle: 'Categories' });
+        navigation.navigate('MyListScreen', { headerTitle: 'My List' });
     }
 
     const handlePressCategoryOnChange = (category) => 

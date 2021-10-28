@@ -6,7 +6,6 @@ import DownloadsScreen from '../screens/bottom-tabs/downloads';
 import MoreDownloadsScreen from '../screens/bottom-tabs/downloads/MoreDownloadsScreen';
 import SearchScreen from '../screens/bottom-tabs/search';
 import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
-import MoreScreen from '../screens/bottom-tabs/more'
 import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
 import AppBar from './../screens/AppBar';
 import CategoriesScreen from './../screens/bottom-tabs/home/home-categories-menus/CategoriesScreen';
@@ -14,7 +13,6 @@ import StackNavBackButton from './../components/stack-app-bar/StackNavBackButton
 import StackNavAvatar from './../components/stack-app-bar/StackNavAvatar';
 import SelectProfileScreen from './../screens/bottom-tabs/select-profile/SelectProfileScreen';
 import TrailerInfo from './../screens/bottom-tabs/coming-soon/TrailerInfo';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import CreateProfileScreen from './../screens/bottom-tabs/select-profile/CreateProfileScreen';
 import ManageProfilesScreen from './../screens/bottom-tabs/select-profile/ManageProfilesScreen';
 import EditProfileScreen from './../screens/bottom-tabs/select-profile/EditProfileScreen';
@@ -84,7 +82,7 @@ export const HomeTab = ({ navigation }) =>
                 name='MyListScreen'
                 component={ MyListScreen }
                 options={({ route }) => ({
-                    headerTitle: props => <AppBar showAvatar={ false } showLogo={ false } headerTitle={ route.params.headerTitle } />,
+                    headerTitle: props => <AppBar showLogo={ false } headerTitle={ route.params.headerTitle } />,
                     headerStyle: {
                         backgroundColor: '#000'
                     },

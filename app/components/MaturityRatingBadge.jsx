@@ -12,6 +12,11 @@ const MaturityRatingBadge = ({ ageRestriction }) =>
         color = Colors.dark;
     }
 
+    if (ageRestriction >= 16 && ageRestriction < 18) {
+        status = 'warning';
+        color = Colors.dark;
+    }
+
     if (ageRestriction >= 18) {
         status = 'error';
         color = Colors.white;

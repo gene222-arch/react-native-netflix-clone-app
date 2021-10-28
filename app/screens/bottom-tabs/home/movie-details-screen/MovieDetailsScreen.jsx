@@ -217,7 +217,13 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ defaultPageList }
                 ListHeaderComponentStyle={ styles.listHeaderComponent }
-                renderItem={ ({ item }) => <EpisodeItem movie={ item } onPress={ () => handleClickChangeMovie(item) } />}
+                renderItem={ ({ item }) => (
+                    <EpisodeItem 
+                        number={ 1 + 1 } 
+                        movie={ item } 
+                        onPress={ () => handleClickChangeMovie(item) } 
+                    />
+                )}
                 ListHeaderComponent={
                     <ListHeader 
                         movie={ movie }

@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.darkMode
     },
     image: {
-        height: 72.5,
-        width: 125,
+        height: 90,
+        width: 150,
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
     },

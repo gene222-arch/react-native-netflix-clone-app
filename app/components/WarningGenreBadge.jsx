@@ -22,8 +22,6 @@ const WarningGenreBadge = ({ genres = [] }) =>
     {
         InteractionManager.runAfterInteractions(() => {
             const hasMaturedGenres = genres.filter(genre => maturedGenres.includes(genre));
-            console.log(genres)
-            console.log(hasMaturedGenres)
             setMaturedGenresSelected(hasMaturedGenres);
             setIsForMatured(Boolean(hasMaturedGenres.length));
             setIsInteractionsComplete(true);

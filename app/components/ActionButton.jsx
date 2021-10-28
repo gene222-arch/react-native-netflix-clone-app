@@ -119,7 +119,8 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
         AUTH_PROFILE.liked_movies, 
         AUTH_PROFILE.liked_coming_soon_movies, 
         AUTH_PROFILE.reminded_coming_soon_movies,
-        AUTH_PROFILE.my_lists
+        AUTH_PROFILE.my_lists,
+        movie
     ]);
 
     

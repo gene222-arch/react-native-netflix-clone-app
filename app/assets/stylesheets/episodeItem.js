@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { DEVICE_WIDTH } from '../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
     container: {
         marginVertical: 10,
         paddingHorizontal: 5,
+        width: DEVICE_WIDTH
     },
     duration: {
         color: Colors.grey,
@@ -15,10 +17,11 @@ const styles = StyleSheet.create({
         marginVertical: 15
     },
     posterImg: {
-        height: 75,
-        aspectRatio: 16/9,
-        resizeMode: 'cover',
-        borderRadius: 5
+        height: 95,
+        width: 150,
+        resizeMode: 'contain',
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
     },
     title: {
         fontWeight: 'bold'
@@ -27,8 +30,9 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     titleContainer: {
-        flex: 1,
-        padding: 5
+        textAlign: 'left',
+        padding: 5,
+        marginLeft: 15
     }
 });
 

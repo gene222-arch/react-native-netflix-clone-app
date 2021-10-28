@@ -95,7 +95,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
     {
         let limit = 2;
 
-        switch (AUTH.auth.subscription_details.type) 
+        switch (AUTH.auth.subscription_details?.type) 
         {
             case 'Premium':
                 limit = 5;
