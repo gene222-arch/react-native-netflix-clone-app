@@ -1,5 +1,6 @@
 import React from 'react'
 import { FlatList } from 'react-native';
+import { DEVICE_WIDTH } from '../../constants/Dimensions';
 import StyledSkeletonContent from '../styled-components/StyledSkeletonContent';
 
 const skeletonList = () => 
@@ -10,11 +11,11 @@ const skeletonList = () =>
     while(count !== 0) {
         loaders.push(
             <StyledSkeletonContent 
-                containerStyle={{ flex: 1 }}
+                containerStyle={{ flex: 1, width: DEVICE_WIDTH }}
                 layout={[
                     { 
-                        key: 'key', 
-                        width: 125,
+                        key: `key-${count}`, 
+                        width: 118,
                         height: 170,
                         margin: 5
                     },

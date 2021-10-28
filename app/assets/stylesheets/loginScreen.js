@@ -1,11 +1,13 @@
 import { StyleSheet } from 'react-native';
+import { DEVICE_HEIGHT } from '../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 5
+        padding: 5,
+        height: DEVICE_HEIGHT
     },
     checkbox: {
         marginRight: 10

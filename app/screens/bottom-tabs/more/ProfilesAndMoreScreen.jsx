@@ -215,7 +215,6 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
                         />
                     )}
                     horizontal
-                    contentContainerStyle={ styles.profileContainerContent }
                 />
             </View>
             

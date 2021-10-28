@@ -30,10 +30,11 @@ const styles = StyleSheet.create({
         opacity: .3
     },
     profileContainer: {
+
     },
     profilesContainer: {
         marginTop: 70,
-        paddingHorizontal: 60
+        paddingHorizontal: 40
     },
     profileImg: {
         width: 120,

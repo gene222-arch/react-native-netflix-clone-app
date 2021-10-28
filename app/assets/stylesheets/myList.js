@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { DEVICE_WIDTH } from '../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        width: DEVICE_WIDTH
     },
     listContainer: {
         flexDirection : 'row', 

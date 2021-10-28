@@ -35,10 +35,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    profileContainerContent: {
-        flex: 1,
-        justifyContent: 'center'
-    },
     signOutDialog: {
         backgroundColor: Colors.darkGrey,
         width: DEVICE_WIDTH / 1.15,

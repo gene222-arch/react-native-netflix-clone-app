@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     profilesContainer: {
         marginTop: 70,
-        paddingHorizontal: 60
+        paddingHorizontal: 40
     },
     lockIcon: {
         textAlign: 'center',

@@ -51,13 +51,18 @@ const DisplayVideoScreen = () =>
         });
 
         return () => {
-            onUnloadUnlockLandscape();
             setUri(null);
             setIsInteractionsComplete(false);
             setLastPlayedPositionMillis(0);
             setHasLastPlayedPositionMillis(false);
         }
     }, [route.params])
+
+    useFocusEffect(useCallback(() => {
+        return () => {
+            onUnloadUnlockLandscape();
+        }
+    }, []))
 
     if (! isInteractionsComplete) 
     {

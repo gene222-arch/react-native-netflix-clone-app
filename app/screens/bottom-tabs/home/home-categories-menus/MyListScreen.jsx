@@ -10,6 +10,7 @@ import ShowInfo from './../../../../components/continue-watching-for-item/Info';
 import MyListScreenLoader from '../../../../components/loading-skeletons/MyListScreenLoader';
 import { Image } from 'react-native-expo-image-cache';
 import { useFocusEffect } from '@react-navigation/core';
+import MyListScreenEmpty from './../../../../components/empty-data/MyListScreenEmpty';
 
 
 const MyListScreen = ({ AUTH_PROFILE }) => 
@@ -37,9 +38,9 @@ const MyListScreen = ({ AUTH_PROFILE }) =>
         }, [])
     )
 
-    if (! isInteractionsComplete) {
-        return <MyListScreenLoader />
-    }
+    if (! isInteractionsComplete) return <MyListScreenLoader />
+
+    if (! AUTH_PROFILE.my_lists.length) return <MyListScreenEmpty />
 
     return (
         <View style={ styles.container }>

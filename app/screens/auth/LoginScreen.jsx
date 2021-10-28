@@ -70,7 +70,6 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
             setCredentials(AUTH.credentials);
             onUnloadUnlockPortrait();
             setShowPassword(false);
-            dispatch(AUTH_ACTION.clearErrorProperty());
         }
     }, []);
 
@@ -85,6 +84,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
             return () => {
                 inputEmailRef.current = null;
                 inputPasswordRef.current = null;
+                dispatch(AUTH_ACTION.clearErrorProperty());
             }
         }, [])
     )
