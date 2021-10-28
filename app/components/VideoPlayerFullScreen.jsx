@@ -28,11 +28,11 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
 
     const onEnterFullScreen = async () => 
     {
-        setStatusBarHidden(true);
-
         setInFullscreen(true);  
 
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+
+        setStatusBarHidden(true);
     }
 
     const onExitFullScreen = async () => 

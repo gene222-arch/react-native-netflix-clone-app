@@ -36,8 +36,9 @@ const styles = StyleSheet.create({
     playIconContainer: {
         position: 'absolute',
         top: 50,
-        left: 28,
+        left: 26,
         padding: 20,
+        paddingHorizontal: 22,
         borderRadius: 50,
         backgroundColor: 'rgba(0, 0, 0, .5)',
         borderWidth: 1,
