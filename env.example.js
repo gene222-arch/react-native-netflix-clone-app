@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 
-const HOST = '192.168.1.10';
+const HOST = '192.168.1.11';
 
 const DEVELOPMENT_MODE_API_URL = `http://${HOST}:8000/api`;
 const DEVELOPMENT_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
@@ -8,7 +8,7 @@ const STAGING_MODE_API_URL = `http://${HOST}:8000/api`;
 const STAGING_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
 const PRODUCTION_MODE_API_URL = `http://${HOST}:8000/api`;
 const PRODUCTION_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
-const WEB_APP_URL = 'http://192.168.1.10:3000';
+const WEB_APP_URL = 'http://192.168.1.11:3000';
 
 const PUSHER_CONFIG = 
 {
