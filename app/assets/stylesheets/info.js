@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: Colors.darkGrey,
         justifyContent: 'space-between',
-        width: 150
+        width: 130
     },
     container: {
         backgroundColor: 'rgba(0, 0, 0, .8)',

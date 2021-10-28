@@ -7,7 +7,7 @@ import { StyleSheet } from 'react-native';
 import { Button, Overlay } from 'react-native-elements';
 import Colors from './../../constants/Colors';
 import View from '../../components/View';
-import { DEVICE_WIDTH } from './../../constants/Dimensions';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../constants/Dimensions';
 import { useFocusEffect } from '@react-navigation/core';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import InputEmail from './get-started-carousel/InputEmail';
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     },
     container: {
         width: '100%',
+        height: DEVICE_HEIGHT
     },  
     carousel: {
         flex: 1
@@ -96,7 +97,7 @@ const GetStartedScreen = () =>
             <Pagination
                 dotsLength={ 3 } // also based on number of sildes you want
                 activeDotIndex={ activeSlideIndex }
-                containerStyle={{ backgroundColor: "#000000"  }}
+                containerStyle={{ backgroundColor: "#000000" }}
                 dotStyle={{
                     width: 10,
                     height: 10,

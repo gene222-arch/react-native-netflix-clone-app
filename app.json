@@ -48,10 +48,6 @@
         "backgroundColor": "#000000"
       }
     },
-  "androidNavigationBar": {
-    "barStyle": "dark-content",
-    "backgroundColor": "transparent"
-  },
     "web": {
       "favicon": "./app/assets/favicon.png"
     }
