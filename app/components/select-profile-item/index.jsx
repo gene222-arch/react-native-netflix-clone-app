@@ -19,7 +19,7 @@ const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile }) =>
             <SelectProfileItem 
                 item={ profile } 
                 handlePressSelectProfile={ handlePressSelectProfile } 
-                hasInternetConnection={ isClickable }
+                isClickable={ isClickable }
                 imageStyle={ style.img }
             />
         )

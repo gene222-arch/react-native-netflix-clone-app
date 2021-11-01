@@ -37,7 +37,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
     const [ profileNumberLimit, setProfileNumberLimit ] = useState(2);
     const [ networkState, setNetworkState ] = useState(NETWORK_DEFAULT_PROPS);
-    const [ isButtonClickable, setIsButtonClickable ] = useState(false);
+    const [ isClickable, setIsClickable ] = useState(false);
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -83,7 +83,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
             alert("Internet connection not reachable")
         }
 
-        if (isButtonClickable) {
+        if (isClickable) {
             (! item.is_profile_locked)
                 ? selectProfile(item.id)
                 : handleTogglePinCodeModal(item.pin_code, item.id);
@@ -130,7 +130,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
             if (network.isConnected && network.isInternetReachable) 
             {
                 const isClickable = network.isConnected && network.isInternetReachable && !AUTH.subscription_details.is_expired;
-                setIsButtonClickable(isClickable);
+                setIsClickable(isClickable);
                 
                 dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
 
@@ -156,7 +156,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
             setIsInCorrectPin(false);
             setProfileId('');
             handleChangePin('');
-            setIsButtonClickable(false);
+            setIsClickable(false);
         }
     }, []);
 
@@ -189,13 +189,13 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                 />
                 <TouchableOpacity 
                     onPress={ handlePressManageProfiles } 
-                    disabled={ !isButtonClickable }
+                    disabled={ !isClickable }
                 >
                     <FontAwesome5 
                         name='pen'
                         size={ 24 }
                         color='#FFF'
-                        style={{ opacity: !isButtonClickable ? 0.3 : 1 }}
+                        style={{ opacity: !isClickable ? 0.3 : 1 }}
                     />
                 </TouchableOpacity>
             </View>
@@ -212,7 +212,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                             profile={ item }
                             handlePressSelectProfile={ () => handlePressSelectProfile(item)}
                             index={ index }
-                            isClickable={ isButtonClickable }
+                            isClickable={ isClickable }
                         />
                     )}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
