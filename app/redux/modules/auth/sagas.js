@@ -130,7 +130,7 @@ function* loginSaga(payload)
         const { data } = yield call(LOGIN_API.loginAsync, payload);
 
         const { access_token, data: auth } = data;
-        const {  profiles, ...userDetails } = auth;
+        const {  profiles, subscription_details, ...userDetails } = auth;
         const loginSuccessData = { 
             auth: { 
                 ...userDetails, 
@@ -139,7 +139,8 @@ function* loginSaga(payload)
                     password: payload.password
                 } 
             }, 
-            profiles 
+            profiles,
+            subscription_details 
         };
 
         const expoToken = yield call(SecureStoreInstance.getExpoNotificationToken)

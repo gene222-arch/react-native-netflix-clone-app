@@ -13,6 +13,7 @@ import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
 import * as USER_PROFILE_PIN_CODE_UPDATED_EVENT from './../../../events/user.profile.pin.code.updated.event'
+import * as SUBSCRIBED_SUCCESSFULLY_EVENT from './../../../events/subscribed.successfully.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
@@ -95,7 +96,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
     {
         let limit = 2;
 
-        switch (AUTH.auth.subscription_details?.type) 
+        switch (AUTH.subscription_details?.type) 
         {
             case 'Premium':
                 limit = 5;
@@ -114,7 +115,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
             const network = await Network.getNetworkStateAsync();
             setNetworkState(network);
 
-            if (AUTH.auth.is_subscription_expired) {
+            if (AUTH.subscription_details.is_expired) {
                 ALERT_UTIL.okAlert('Subscription', 'Your subscribtion has expired');
             }
 
@@ -128,7 +129,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
 
             if (network.isConnected && network.isInternetReachable) 
             {
-                const isClickable = network.isConnected || network.isInternetReachable || !AUTH.auth.is_subscription_expired;
+                const isClickable = network.isConnected && network.isInternetReachable && !AUTH.subscription_details.is_expired;
                 setIsButtonClickable(isClickable);
                 
                 dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
@@ -136,6 +137,12 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                 USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
                     dispatch(AUTH_ACTION.updateUserProfile(response.data));
                     setSelectedProfilePinCode(response.data.pin_code);
+                });
+
+                SUBSCRIBED_SUCCESSFULLY_EVENT.listen(response => {
+                    dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                        subscription_details: response.data
+                    }));
                 });
         
                 onLoadSetProfileNumberLimit();
