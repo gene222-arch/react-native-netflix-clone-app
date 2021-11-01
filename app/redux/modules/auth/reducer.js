@@ -60,6 +60,7 @@ const {
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED,
     UPDATE_USER_PROFILE,
+    UPDATE_SUBSCRIPTION_DETAILS,
     CLEAR_ERRORS_PROPERTY
 } = ACTION_TYPES;
 
@@ -96,6 +97,20 @@ const DEFAULT_ERROR_MESSAGE_PROPS = {
     avatar: '',
 }
 
+const SUBSCRIPTION_DETAILS_DEFAULT_PROPS = {
+    id: '',
+    user_id: '',
+    type: '',
+    cost: '',
+    is_first_subscription: false,
+    is_cancelled: false,
+    is_expired: false,
+    subscribed_at: null,
+    expired_at: null,
+    cancelled_at: null,
+    status: 'subscribed'
+};
+
 const initialState = {
     auth: null,
     credentials: CREDENTIALS_DEFAULT_PROPS,
@@ -103,7 +118,8 @@ const initialState = {
     profiles: [],
     isAuthenticated: false,
     isLoading: false,
-    errors: DEFAULT_ERROR_MESSAGE_PROPS
+    errors: DEFAULT_ERROR_MESSAGE_PROPS,
+    subscription_details: SUBSCRIPTION_DETAILS_DEFAULT_PROPS
 }
 
 export default (state = initialState, { type, payload }) => 
@@ -293,7 +309,8 @@ export default (state = initialState, { type, payload }) =>
                 profiles: payload.profiles.map(profile => ({ ...PROFILE_DEFAULT_PROPS, ...profile })),
                 isAuthenticated: true,
                 isLoading,
-                errors
+                errors,
+                subscription_details: payload.subscription_details
             }
 
         case LOGIN_FAILED:
@@ -556,6 +573,18 @@ export default (state = initialState, { type, payload }) =>
                 profiles: newProfiles,
                 isLoading,
                 errors
+            }
+
+
+        case UPDATE_SUBSCRIPTION_DETAILS:
+            return {
+                ...state,
+                isLoading,
+                errors,
+                subscription_details: {
+                    ...state.subscription_details,
+                    ...payload.subscription_details
+                }
             }
 
 

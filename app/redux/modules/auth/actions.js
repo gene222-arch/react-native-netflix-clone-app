@@ -59,7 +59,8 @@ const {
     VIEW_DOWNLOADS_SUCCESS,
     VIEW_DOWNLOADS_FAILED,
     UPDATE_USER_PROFILE,
-    CLEAR_ERRORS_PROPERTY
+    CLEAR_ERRORS_PROPERTY,
+    UPDATE_SUBSCRIPTION_DETAILS
 } = ACTION_TYPES;
 
 
@@ -374,6 +375,11 @@ export const viewDownloadsFailed = (payload) => ({
 
 export const updateUserProfile = (payload) => ({
     type: UPDATE_USER_PROFILE,
+    payload
+});
+
+export const updateSubscriptionDetails = (payload) => ({
+    type: UPDATE_SUBSCRIPTION_DETAILS,
     payload
 });
 
