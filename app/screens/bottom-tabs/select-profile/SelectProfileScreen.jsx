@@ -139,7 +139,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                     setSelectedProfilePinCode(response.data.pin_code);
                 });
 
-                SUBSCRIBED_SUCCESSFULLY_EVENT.listen(response => {
+                SUBSCRIBED_SUCCESSFULLY_EVENT.listen(AUTH.auth.user.id, response => {
                     dispatch(AUTH_ACTION.updateSubscriptionDetails({
                         subscription_details: response.data
                     }));
@@ -151,6 +151,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
 
         return () => {
             USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen(AUTH.auth.user.id);
+            SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(AUTH.auth.user.id);
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
