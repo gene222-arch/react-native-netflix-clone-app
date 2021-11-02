@@ -134,7 +134,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                 
                 dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
 
-                USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(response => {
+                USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(AUTH.auth.user.id, response => {
                     dispatch(AUTH_ACTION.updateUserProfile(response.data));
                     setSelectedProfilePinCode(response.data.pin_code);
                 });
@@ -150,7 +150,7 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
         });
 
         return () => {
-            USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen();
+            USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen(AUTH.auth.user.id);
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
