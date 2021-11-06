@@ -14,6 +14,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
 import * as USER_PROFILE_PIN_CODE_UPDATED_EVENT from './../../../events/user.profile.pin.code.updated.event'
 import * as SUBSCRIBED_SUCCESSFULLY_EVENT from './../../../events/subscribed.successfully.event'
+import * as SUBSCRIBER_PROFILE_CREATED_EVENT from './../../../events/subscriber.profile.created.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
@@ -25,10 +26,11 @@ const NETWORK_DEFAULT_PROPS = {
     type: ''
 };
 
-const SelectProfileScreen = ({ AUTH, AUTH_USER }) => 
+const SelectProfileScreen = ({ AUTH }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const authenticatedUserId = AUTH.auth.user.id;
 
     const [ profileId, setProfileId ] = useState('');
     const [ pinCode, setPinCode ] = useState('');
@@ -134,24 +136,31 @@ const SelectProfileScreen = ({ AUTH, AUTH_USER }) =>
                 
                 dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
 
-                USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(AUTH.auth.user.id, response => {
+                USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(authenticatedUserId, response => {
                     dispatch(AUTH_ACTION.updateUserProfile(response.data));
                     setSelectedProfilePinCode(response.data.pin_code);
                 });
 
-                SUBSCRIBED_SUCCESSFULLY_EVENT.listen(AUTH.auth.user.id, response => {
+                SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => {
                     dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                        subscription_details: response.data
+                    }));
+                });
+
+                SUBSCRIBER_PROFILE_CREATED_EVENT.listen(authenticatedUserId, response => {
+                    dispatch(AUTH_ACTION.createProfileStart({
                         subscription_details: response.data
                     }));
                 });
         
                 onLoadSetProfileNumberLimit();
-            } 
+            }
         });
 
         return () => {
-            USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen(AUTH.auth.user.id);
-            SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(AUTH.auth.user.id);
+            USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen(authenticatedUserId);
+            SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
+            SUBSCRIBER_PROFILE_CREATED_EVENT.unListen(authenticatedUserId);
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
