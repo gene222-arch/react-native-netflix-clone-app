@@ -150,21 +150,27 @@ const SelectProfileScreen = ({ AUTH }) =>
                 });
 
                 SUBSCRIBER_PROFILE_CREATED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.broadcastCreateProfile({
-                        profile: response.data
-                    }));
+                    if (response.platform === 'web') {
+                        dispatch(AUTH_ACTION.broadcastCreateProfile({
+                            profile: response.data
+                        }));
+                    }
                 });
 
                 SUBSCRIBER_PROFILE_UPDATED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.broadcastUpdateProfile({
-                        profile: response.data
-                    }));
+                    if (response.platform === 'web') {
+                        dispatch(AUTH_ACTION.broadcastUpdateProfile({
+                            profile: response.data
+                        }));
+                    }
                 });
 
                 SUBSCRIBER_PROFILE_DELETED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.broadcastDeleteProfileById({
-                        id: response.data.id
-                    }));
+                    if (response.platform === 'web') {
+                        dispatch(AUTH_ACTION.broadcastDeleteProfileById({
+                            id: response.data.id
+                        }));
+                    }
                 });
         
                 onLoadSetProfileNumberLimit();
