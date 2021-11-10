@@ -4,6 +4,9 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     ADD_TO_RECENT_WATCHES_SUCCESS,
     ADD_TO_RECENT_WATCHES_FAILED,
+    BROADCAST_CREATE_PROFILE,
+    BROADCAST_DELETE_PROFILE_BY_ID,
+    BROADCAST_UPDATE_PROFILE,
     CREATE_PROFILE_START,
     CREATE_PROFILE_SUCCESS,
     CREATE_PROFILE_FAILED,
@@ -77,6 +80,21 @@ export const addToRecentWatchesSuccess = (payload) => ({
 
 export const addToRecentWatchesFailed = (payload) => ({
     type: ADD_TO_RECENT_WATCHES_FAILED,
+    payload
+});
+
+export const broadcastCreateProfile = (payload) => ({
+    type: BROADCAST_CREATE_PROFILE,
+    payload
+});
+
+export const broadcastDeleteProfileById = (payload) => ({
+    type: BROADCAST_DELETE_PROFILE_BY_ID,
+    payload
+});
+
+export const broadcastUpdateProfile = (payload) => ({
+    type: BROADCAST_UPDATE_PROFILE,
     payload
 });
 

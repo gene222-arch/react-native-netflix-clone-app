@@ -5,6 +5,9 @@ const {
     ADD_TO_RECENT_WATCHES_START,
     ADD_TO_RECENT_WATCHES_SUCCESS,
     ADD_TO_RECENT_WATCHES_FAILED,
+    BROADCAST_CREATE_PROFILE,
+    BROADCAST_DELETE_PROFILE_BY_ID,
+    BROADCAST_UPDATE_PROFILE,
     CREATE_PROFILE_START,
     CREATE_PROFILE_SUCCESS,
     CREATE_PROFILE_FAILED,
@@ -179,6 +182,44 @@ export default (state = initialState, { type, payload }) =>
             newProfiles = profiles.map(prof => (prof.id === newLoggedInProfile.id) ? newLoggedInProfile : prof);
 
             return { 
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
+        case BROADCAST_CREATE_PROFILE:
+            newProfiles = [...state.profiles, {
+                ...PROFILE_DEFAULT_PROPS,
+                ...payload.profile,
+            }];
+
+            return {
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
+        case BROADCAST_UPDATE_PROFILE:
+            const payloadProfile = payload.profile;
+            newProfiles = profiles.map(profile => (
+                profile.id === payload.profile.id 
+                    ? ({ ...profile, ...payloadProfile }) 
+                    : profile
+            ));
+
+            return {
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
+        case BROADCAST_DELETE_PROFILE_BY_ID:
+            newProfiles = profiles.filter(({ id }) => id !== payload.id)
+
+            return {
                 ...state,
                 profiles: newProfiles,
                 isLoading,
