@@ -15,6 +15,8 @@ import NAV_LOGO from './../../../assets/logotop.png'
 import * as USER_PROFILE_PIN_CODE_UPDATED_EVENT from './../../../events/user.profile.pin.code.updated.event'
 import * as SUBSCRIBED_SUCCESSFULLY_EVENT from './../../../events/subscribed.successfully.event'
 import * as SUBSCRIBER_PROFILE_CREATED_EVENT from './../../../events/subscriber.profile.created.event'
+import * as SUBSCRIBER_PROFILE_UPDATED_EVENT from './../../../events/subscriber.profile.updated.event'
+import * as SUBSCRIBER_PROFILE_DELETED_EVENT from './../../../events/subscriber.profile.deleted.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
@@ -148,8 +150,20 @@ const SelectProfileScreen = ({ AUTH }) =>
                 });
 
                 SUBSCRIBER_PROFILE_CREATED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.createProfileStart({
-                        subscription_details: response.data
+                    dispatch(AUTH_ACTION.broadcastCreateProfile({
+                        profile: response.data
+                    }));
+                });
+
+                SUBSCRIBER_PROFILE_UPDATED_EVENT.listen(authenticatedUserId, response => {
+                    dispatch(AUTH_ACTION.broadcastUpdateProfile({
+                        profile: response.data
+                    }));
+                });
+
+                SUBSCRIBER_PROFILE_DELETED_EVENT.listen(authenticatedUserId, response => {
+                    dispatch(AUTH_ACTION.broadcastDeleteProfileById({
+                        id: response.data.id
                     }));
                 });
         
@@ -161,6 +175,8 @@ const SelectProfileScreen = ({ AUTH }) =>
             USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_CREATED_EVENT.unListen(authenticatedUserId);
+            SUBSCRIBER_PROFILE_UPDATED_EVENT.unListen(authenticatedUserId);
+            SUBSCRIBER_PROFILE_DELETED_EVENT.unListen(authenticatedUserId);
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
