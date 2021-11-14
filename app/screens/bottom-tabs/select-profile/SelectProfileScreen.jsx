@@ -34,6 +34,8 @@ const SelectProfileScreen = ({ AUTH }) =>
     const navigation = useNavigation();
     const authenticatedUserId = AUTH.auth.user.id;
 
+    console.log(AUTH.auth.user);
+
     const [ profileId, setProfileId ] = useState('');
     const [ pinCode, setPinCode ] = useState('');
     const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
@@ -136,7 +138,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 const isClickable = network.isConnected && network.isInternetReachable && !AUTH.subscription_details.is_expired;
                 setIsClickable(isClickable);
                 
-                dispatch(AUTH_ACTION.loginStart({ email: AUTH.auth.user.email, password: AUTH.auth.user.password, remember_me: false }));
+                dispatch(AUTH_ACTION.showSubscriberStart());
 
                 USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(authenticatedUserId, response => {
                     dispatch(AUTH_ACTION.updateUserProfile(response.data));

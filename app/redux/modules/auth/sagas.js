@@ -227,11 +227,9 @@ function* showSubscriberSaga()
     try {
         const { data } = yield call(USER_API.showSubscriberAsync);
         const { profiles, subscription_details, ...restUser } = data;
-
+        
         const subscriberData = { 
-            auth: {
-                user: restUser
-            }, 
+            auth: restUser, 
             profiles,
             subscription_details 
         };

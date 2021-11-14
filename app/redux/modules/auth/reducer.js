@@ -521,7 +521,12 @@ export default (state = initialState, { type, payload }) =>
         case SHOW_SUBSCRIBER_SUCCESS:
             return { 
                 ...state, 
-                auth: payload.auth,
+                auth: {
+                    user: {
+                        ...payload.auth.user,
+                        password: state.auth.user.password
+                    }
+                },
                 profiles: payload.profiles.map(profile => ({ ...PROFILE_DEFAULT_PROPS, ...profile })),
                 isAuthenticated: true,
                 isLoading,
