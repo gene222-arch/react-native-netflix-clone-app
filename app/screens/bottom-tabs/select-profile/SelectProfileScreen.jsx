@@ -168,7 +168,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 SUBSCRIBER_PROFILE_DELETED_EVENT.listen(authenticatedUserId, response => {
                     if (response.platform === 'web') {
                         dispatch(AUTH_ACTION.broadcastDeleteProfileById({
-                            id: response.data.id
+                            id: response.data.profileId
                         }));
                     }
                 });
