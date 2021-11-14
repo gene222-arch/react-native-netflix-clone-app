@@ -3,6 +3,7 @@ import ACTION_TYPES from './action.types'
 import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
+import * as USER_API from './../../../services/User'
 import * as REMIND_ME_API from './../../../services/movie/remind.me'
 import * as MY_DOWNLOADS_API from './../../../services/movie/my.downloads'
 import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
@@ -18,13 +19,13 @@ const {
     DOWNLOAD_VIDEO_START,
     LOGIN_START,
     LOGOUT_START,
-    MANAGE_PIN_CODE_START,
     MARK_REMINDED_MOVIE_AS_READ_START,
     RATE_SHOW_START,
     RATE_RECENTLY_WATCHED_MOVIE_START,
     REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
+    SHOW_SUBSCRIBER_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_ADD_TO_MY_LIST_START,
     UPDATE_AUTHENTICATED_PROFILE_START,
@@ -221,6 +222,27 @@ function* selectProfileSaga(payload)
     }
 }
 
+function* showSubscriberSaga()  
+{
+    try {
+        const { data } = yield call(USER_API.showSubscriberAsync);
+        const { profiles, subscription_details, ...restUser } = data;
+
+        const subscriberData = { 
+            auth: {
+                user: restUser
+            }, 
+            profiles,
+            subscription_details 
+        };
+
+        yield put(ACTION.showSubscriberSuccess(subscriberData)); 
+    } catch ({ message }) {
+        yield put(ACTION.showSubscriberFailed({ message }));    
+    }
+}
+
+
 function* toggleAddToMyListSaga(payload)
 {
     try {
@@ -392,6 +414,15 @@ function* selectProfileWatcher()
     }
 }
 
+function* showSubscriberWatcher()
+{
+    while (true) {
+        yield take(SHOW_SUBSCRIBER_START);
+        yield call(showSubscriberSaga);
+    }
+}
+
+
 function* toggleAddToMyListWatcher()
 {
     while (true) {
@@ -451,6 +482,7 @@ export default function* ()
         removeToMyDownloadsWatcher(),
         removeToRecentWatchesWatcher(),
         selectProfileWatcher(),
+        showSubscriberWatcher(),
         toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher(),
         updateAuthenticatedProfileWatcher(),

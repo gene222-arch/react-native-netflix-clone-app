@@ -47,6 +47,9 @@ const {
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
+    SHOW_SUBSCRIBER_START,
+    SHOW_SUBSCRIBER_SUCCESS,
+    SHOW_SUBSCRIBER_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -150,6 +153,7 @@ export default (state = initialState, { type, payload }) =>
         case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
+        case SHOW_SUBSCRIBER_START:
         case TOGGLE_ADD_TO_MY_LIST_START:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
         case UPDATE_AUTHENTICATED_PROFILE_START:
@@ -514,6 +518,17 @@ export default (state = initialState, { type, payload }) =>
                 errors
             }
 
+        case SHOW_SUBSCRIBER_SUCCESS:
+            return { 
+                ...state, 
+                auth: payload.auth,
+                profiles: payload.profiles.map(profile => ({ ...PROFILE_DEFAULT_PROPS, ...profile })),
+                isAuthenticated: true,
+                isLoading,
+                errors,
+                subscription_details: payload.subscription_details
+            }
+
         case TOGGLE_ADD_TO_MY_LIST_SUCCESS:
 
             const currentMyList = loggedInProfile.my_lists;
@@ -666,6 +681,7 @@ export default (state = initialState, { type, payload }) =>
         case MANAGE_PIN_CODE_FAILED:
         case MARK_REMINDED_MOVIE_AS_READ_FAILED:
         case SELECT_PROFILE_FAILED:
+        case SHOW_SUBSCRIBER_FAILED:
         case RATE_SHOW_FAILED:
         case RATE_RECENTLY_WATCHED_MOVIE_FAILED:
         case REMOVE_TO_MY_DOWNLOADS_FAILED:

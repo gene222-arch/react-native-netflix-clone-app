@@ -46,6 +46,9 @@ const {
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
+    SHOW_SUBSCRIBER_START,
+    SHOW_SUBSCRIBER_SUCCESS,
+    SHOW_SUBSCRIBER_FAILED,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_SUCCESS,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED,
@@ -306,6 +309,22 @@ export const selectProfileSuccess = (payload) => ({
 
 export const selectProfileFailed = (payload) => ({
     type: SELECT_PROFILE_FAILED,
+    payload
+});
+
+/** Show subscriber */
+export const showSubscriberStart = (payload) => ({
+    type: SHOW_SUBSCRIBER_START,
+    payload
+});
+
+export const showSubscriberSuccess = (payload) => ({
+    type: SHOW_SUBSCRIBER_SUCCESS,
+    payload
+});
+
+export const showSubscriberFailed = (payload) => ({
+    type: SHOW_SUBSCRIBER_FAILED,
     payload
 });
 
