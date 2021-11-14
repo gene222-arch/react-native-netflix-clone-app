@@ -6,7 +6,8 @@ const DEVELOPMENT_MODE_API_URL = `http://${HOST}:8000/api`;
 const DEVELOPMENT_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
 const PRODUCTION_MODE_API_URL = "";
 const PRODUCTION_MODE_BROADCAST_URL = "";
-const WEB_APP_URL = `http://${ HOST }:3000`;
+const DEVELOPMENT_MODE_WEB_APP_URL = `http://${ HOST }:3000`;
+const PRODUCTION_MODE_WEB_APP_URL = "";
 
 const PUSHER_CONFIG = 
 {
@@ -26,19 +27,19 @@ const ENVIRONMENT_VARIABLES =
         DEVELOPMENT_MODE_API_URL,
         DEVELOPMENT_MODE_BROADCAST_URL,
         PUSHER_CONFIG,
-        WEB_APP_URL
+        DEVELOPMENT_MODE_WEB_APP_URL
     },
     staging: {
         PRODUCTION_MODE_API_URL,
         PRODUCTION_MODE_BROADCAST_URL,
         PUSHER_CONFIG,
-        WEB_APP_URL
+        DEVELOPMENT_MODE_WEB_APP_URL
     },
     production: {
         PRODUCTION_MODE_API_URL,
         PRODUCTION_MODE_BROADCAST_URL,
         PUSHER_CONFIG,
-        WEB_APP_URL
+        PRODUCTION_MODE_WEB_APP_URL
     }
 };
 

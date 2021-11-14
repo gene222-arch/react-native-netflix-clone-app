@@ -83,10 +83,9 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         try {
             const accessToken = await SecureStoreInstance.getAccessToken();
 
-            const url = `http://192.168.1.10:3000`;
             const queryParams = `?token=${ accessToken }&profileId=${ AUTH_PROFILE.id }&path=home`;
     
-            await WebBrowser.openBrowserAsync(url + queryParams);
+            await WebBrowser.openBrowserAsync(ENV.DEVELOPMENT_MODE_WEB_APP_URL + queryParams);
         } catch (error) {
             console.log(error);
         }
@@ -139,7 +138,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const handlePressHelp = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/help`);
+            await WebBrowser.openBrowserAsync(`${ ENV.DEVELOPMENT_MODE_WEB_APP_URL }/legal/help`);
         } catch (error) {
             console.log(error);
         }
