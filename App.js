@@ -7,7 +7,6 @@ import configureStore from './app/redux/store';
 import Navigation from './app/navigation/index';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as NOTIFICATION_UTIL from './app/utils/notification'
-import * as RootNavigation from './app/navigation/RootNavigation'
 const { persistor, store } = configureStore();
 
 Notifications.setNotificationHandler({

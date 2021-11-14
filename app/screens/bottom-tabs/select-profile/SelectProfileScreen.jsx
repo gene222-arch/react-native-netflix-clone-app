@@ -34,8 +34,6 @@ const SelectProfileScreen = ({ AUTH }) =>
     const navigation = useNavigation();
     const authenticatedUserId = AUTH.auth.user.id;
 
-    console.log(AUTH.auth.user);
-
     const [ profileId, setProfileId ] = useState('');
     const [ pinCode, setPinCode ] = useState('');
     const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
