@@ -239,7 +239,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                     keyExtractor={ (item, index) => index.toString() }
                     data={[ ...AUTH.profiles, { id: '' } ]}
                     numColumns={ 2 }
-                    renderItem={ ({ item, index }) => index !== profileNumberLimit && (
+                    renderItem={ ({ item, index }) => (index !== profileNumberLimit) && (
                         <DisplayProfile
                             profile={ item }
                             handlePressSelectProfile={ () => handlePressSelectProfile(item)}

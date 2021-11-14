@@ -209,7 +209,7 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile }) =>
                 }
             />
             {
-                AUTH.auth.subscription_details.type === 'Premium' && (
+                AUTH.subscription_details.type === 'Premium' && (
                     <Button title='Upload An Avatar' buttonStyle={ styles.btn } onPress={ () => setUploadAvatar(true) } />
                 )
             }
