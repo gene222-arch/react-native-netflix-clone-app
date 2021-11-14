@@ -6,7 +6,7 @@ export const listen = async (userId, callback) =>
 {
     return await Echo().then(res => {
         return res
-                .private(`subscribed.profile.created.${ userId }`)
+                .private(`subscriber.profile.created.${ userId }`)
                 .listen(EVENT_NAME, callback)
                 .error(err => {
                     console.log(err)
@@ -14,4 +14,4 @@ export const listen = async (userId, callback) =>
         })
 }
 
-export const unListen = async (userId) => (await Echo()).leave(`subscribed.profile.created.${ userId }`);
+export const unListen = async (userId) => (await Echo()).leave(`subscriber.profile.created.${ userId }`);
