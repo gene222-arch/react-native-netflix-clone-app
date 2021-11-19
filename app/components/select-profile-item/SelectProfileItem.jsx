@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native';
 import styles from './../../assets/stylesheets/selectProfile';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Colors from './../../constants/Colors';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClickable }) => 
 {
@@ -19,6 +20,16 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClick
                     style={[ styles.profileImg, imageStyle ]}
                 />
                 <Text h5 style={ styles.profileName }>{ item.name.toUpperCase() }</Text>
+                {
+                    Boolean(item.is_for_kids) && (
+                        <MaterialIcons 
+                            name='child-care'
+                            size={ 14 }
+                            color={ Colors.grey }
+                            style={ styles.forKidsIcon }
+                        />
+                    )
+                }
                 {
                     Boolean(item.is_profile_locked) && (
                         <FeatherIcon 

@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
     container: {
         marginTop: StatusBar.currentHeight + 10,
     },
+    forKidsIcon: {
+        textAlign: 'center'
+    },  
     header: {
         flexDirection: 'row',
         alignItems: 'center',
