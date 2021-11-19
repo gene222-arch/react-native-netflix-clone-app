@@ -178,7 +178,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     }, [isFullscreen]);
 
     useEffect(() => {
-        const findMovieInRecents = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === movieId);
+        const findMovieInRecents = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === parseInt(movieId));
 
         if (! findMovieInRecents) {
             setIsRecentlyWatched(false);

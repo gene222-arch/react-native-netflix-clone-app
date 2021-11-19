@@ -61,10 +61,12 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
         });
     }
 
-    const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
-        id: selectedShow?.id,
-        headerTitle: selectedShow?.title
-    });
+    const handlePressNavigateToShowDetailScreen = () => {
+        navigation.navigate('MovieDetailScreen', { 
+            id: selectedShow?.id,
+            headerTitle: selectedShow?.title
+        });
+    }
 
     return (
         <BottomSheet
