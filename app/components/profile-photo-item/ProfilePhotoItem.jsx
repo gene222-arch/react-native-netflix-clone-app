@@ -6,6 +6,7 @@ import Image from './../Image';
 import Colors from './../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) => 
 {
@@ -26,6 +27,16 @@ const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) =>
                 >
                     { `${ profile?.name.slice(0, 6) }...`.toUpperCase() }
                 </Text>
+                {
+                    Boolean(profile.is_for_kids) && (
+                        <MaterialIcons 
+                            name='child-care'
+                            size={ 14 }
+                            color={ Colors.grey }
+                            style={ styles.forKidsIcon }
+                        />
+                    )
+                }
                 {
                     Boolean(profile.is_profile_locked) && (
                         <FeatherIcon 

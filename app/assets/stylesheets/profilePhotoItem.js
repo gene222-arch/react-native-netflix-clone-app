@@ -4,6 +4,9 @@ const styles = StyleSheet.create({
     container: {
         marginHorizontal: 10
     },
+    forKidsIcon: {
+        textAlign: 'center'
+    },  
     selectedImg: {
         width: 70,
         height: 70
