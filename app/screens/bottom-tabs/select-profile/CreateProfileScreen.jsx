@@ -68,6 +68,7 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
                 headerTitle='Create Profile' 
                 onPress={ handlePressCreateProfile } 
                 onBackArrowClick={ handleClickBackButton }
+                showSaveButton={ !showAvatars }
             />
             {
                 showAvatars
