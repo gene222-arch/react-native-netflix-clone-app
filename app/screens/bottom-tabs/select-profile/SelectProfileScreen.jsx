@@ -143,12 +143,6 @@ const SelectProfileScreen = ({ AUTH }) =>
                     setSelectedProfilePinCode(response.data.pin_code);
                 });
 
-                SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.updateSubscriptionDetails({
-                        subscription_details: response.data
-                    }));
-                });
-
                 SUBSCRIBER_PROFILE_CREATED_EVENT.listen(authenticatedUserId, response => {
                     if (response.platform === 'web') {
                         dispatch(AUTH_ACTION.broadcastCreateProfile({
@@ -172,14 +166,11 @@ const SelectProfileScreen = ({ AUTH }) =>
                         }));
                     }
                 });
-        
-                onLoadSetProfileNumberLimit();
             }
         });
 
         return () => {
             USER_PROFILE_PIN_CODE_UPDATED_EVENT.unListen(authenticatedUserId);
-            SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_CREATED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_UPDATED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_DELETED_EVENT.unListen(authenticatedUserId);
@@ -191,6 +182,21 @@ const SelectProfileScreen = ({ AUTH }) =>
             setIsClickable(false);
         }
     }, []);
+
+    useEffect(() => 
+    {
+        onLoadSetProfileNumberLimit();
+        
+        SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => {
+            dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                subscription_details: response.data
+            }));
+        });
+
+        return () => {
+            SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
+        }
+    }, [AUTH.subscription_details]);
 
     useFocusEffect(
         useCallback(() => {
