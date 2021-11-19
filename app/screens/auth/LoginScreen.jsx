@@ -48,7 +48,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
     const handlePressHelp = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/help`);
+            await WebBrowser.openBrowserAsync(`${ ENV.DEVELOPMENT_MODE_WEB_APP_URL }/help`);
         } catch (error) {
             console.log(error);
         }

@@ -4,8 +4,10 @@ const HOST = '192.168.1.33';
 
 const DEVELOPMENT_MODE_API_URL = `http://${HOST}:8000/api`;
 const DEVELOPMENT_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
+
 const PRODUCTION_MODE_API_URL = "";
 const PRODUCTION_MODE_BROADCAST_URL = "";
+
 const DEVELOPMENT_MODE_WEB_APP_URL = `http://${ HOST }:3000`;
 const PRODUCTION_MODE_WEB_APP_URL = "";
 

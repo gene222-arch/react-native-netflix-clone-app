@@ -19,7 +19,7 @@ const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, setIsVisible
     {
         const accessToken = await SecureStoreInstance.getAccessToken();
 
-        const url = `${ ENV.WEB_APP_URL }/settings/lock/${ profileId }`;
+        const url = `${ ENV.DEVELOPMENT_MODE_WEB_APP_URL }/settings/lock/${ profileId }`;
         const queryParams = `?token=${ accessToken }&profileId=${ profileId }`;
 
         await WebBrowser.openBrowserAsync(url + queryParams);
