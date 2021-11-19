@@ -69,8 +69,9 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                 <ProfileAppBar  
                     isLoading={ AUTH.isLoading }
                     headerTitle='Edit Profile' 
-                    onPress={ handlePressUpdateProfile } 
                     showSaveButton={ false }
+                    onPress={ handlePressUpdateProfile } 
+                    onBackArrowClick={ handleClickBackButton }
                 />
                 <AvatarList
                     handlePress={ handlePressChangeAvatar } 
