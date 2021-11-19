@@ -17,11 +17,8 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const onLoadFetchMovieNotifications = async () => 
     {
         try {
-            const result = await MOVIE_NOTIFICATION_API.fetchAllAsync();
-
-            if (result) {
-                setNotifications(result.data);
-            }
+            const { data } = await MOVIE_NOTIFICATION_API.fetchAllAsync(AUTH_PROFILE.is_for_kids);
+            setNotifications(data);
         } catch ({ message }) {
             console.log(message);
         }
