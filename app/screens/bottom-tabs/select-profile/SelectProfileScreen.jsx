@@ -128,11 +128,11 @@ const SelectProfileScreen = ({ AUTH }) =>
             setNetworkState(network);
 
             if (AUTH.subscription_details.is_cancelled) {
-                ALERT_UTIL.okAlert('Subscription', 'Your subscribtion has been cancelled');
+                ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
             }
 
             if (AUTH.subscription_details.is_expired) {
-                ALERT_UTIL.okAlert('Subscription', 'Your subscribtion has expired');
+                ALERT_UTIL.okAlert('Subscription', 'Your subscription has expired');
             }
 
             if (! network.isConnected) {
