@@ -26,7 +26,7 @@ const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile, profil
         )
     }
 
-    return Boolean(profileCountToDisable) && <AddProfile hasInternetConnection={ isClickable } />
+    return !Boolean(profileCountToDisable) && <AddProfile hasInternetConnection={ isClickable } />
 }
 
 const mapStateToProps = createStructuredSelector({

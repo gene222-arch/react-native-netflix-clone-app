@@ -117,7 +117,13 @@ const SelectProfileScreen = ({ AUTH }) =>
                 break;
         }
 
-        dispatch(AUTH_ACTION.setProfileCountToDisable({ profileCount: Math.abs(profileCountToDisable_) }));
+        if (Math.sign(profileCountToDisable_) === -1) {
+            dispatch(AUTH_ACTION.setProfileCountToDisable({ profileCount: Math.abs(profileCountToDisable_) }));
+        }
+
+        if (Math.sign(profileCountToDisable_) !== -1) {
+            dispatch(AUTH_ACTION.setProfileCountToDisable({ profileCount: 0 }));
+        }
     }
 
     useEffect(() => 
