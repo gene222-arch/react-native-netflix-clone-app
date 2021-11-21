@@ -106,8 +106,10 @@ const SelectProfileScreen = ({ AUTH }) =>
             case 'Premium':
                 limit = 5;
                 break;
+
             case 'Standard':
                 limit = 4;
+                break;
         }
 
         setProfileNumberLimit(limit);
@@ -169,7 +171,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 });
 
                 SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.broadcastDeleteProfileById({
+                    dispatch(AUTH_ACTION.disableProfile({
                         profileIds: response.data.profileIds
                     }));
                 });
@@ -253,7 +255,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                     keyExtractor={ (item, index) => index.toString() }
                     data={[ ...AUTH.profiles, { id: '' } ]}
                     numColumns={ 2 }
-                    renderItem={ ({ item, index }) => (index !== profileNumberLimit) && (
+                    renderItem={ ({ item, index }) => (
                         <DisplayProfile
                             profile={ item }
                             handlePressSelectProfile={ () => handlePressSelectProfile(item)}

@@ -11,7 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClickable }) => 
 {
     return (
-        <View style={{ ...styles.profile, opacity: !isClickable ? 0.3 : 1 }}>
+        <View style={{ ...styles.profile, opacity: !isClickable || !item.enabled ? 0.3 : 1 }}>
             <TouchableOpacity onPress={ handlePressSelectProfile } disabled={ !isClickable }>
                 <Image 
                     source={{
@@ -36,6 +36,16 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClick
                             name='lock'
                             size={ 16 }
                             color={ Colors.grey }
+                            style={ styles.lockIcon }
+                        />
+                    )
+                }
+                   {
+                    Boolean(!item.enabled) && (
+                        <FeatherIcon 
+                            name='slash'
+                            size={ 16 }
+                            color={ Colors.error }
                             style={ styles.lockIcon }
                         />
                     )
