@@ -18,6 +18,7 @@ import * as SUBSCRIBER_PROFILE_CREATED_EVENT from './../../../events/subscriber.
 import * as SUBSCRIBER_PROFILE_UPDATED_EVENT from './../../../events/subscriber.profile.updated.event'
 import * as SUBSCRIBER_PROFILE_DELETED_EVENT from './../../../events/subscriber.profile.deleted.event'
 import * as SUBSCRIBER_PROFILE_DISABLED_EVENT from './../../../events/subscriber.profile.disabled.event'
+import * as SUBSCRIPTION_CANCELLED_EVENT from './../../../events/subscription.cancelled.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
@@ -187,6 +188,12 @@ const SelectProfileScreen = ({ AUTH }) =>
                         profileIds: response.data.profileIds
                     }));
                 });
+
+                SUBSCRIPTION_CANCELLED_EVENT.listen(authenticatedUserId, response => {
+                    dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                        subscription_details: response.data
+                    }));
+                });
             }
             else {
                 setIsClickable(false);
@@ -199,6 +206,7 @@ const SelectProfileScreen = ({ AUTH }) =>
             SUBSCRIBER_PROFILE_UPDATED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_DELETED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_DISABLED_EVENT.unListen(authenticatedUserId);
+            SUBSCRIPTION_CANCELLED_EVENT.unListen(authenticatedUserId);
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
@@ -211,6 +219,10 @@ const SelectProfileScreen = ({ AUTH }) =>
     useEffect(() => 
     {
         onLoadSetProfileNumberLimit();
+
+        if (!['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.type)) {
+            setIsClickable(false);
+        }
         
         SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => {
             dispatch(AUTH_ACTION.updateSubscriptionDetails({
