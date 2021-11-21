@@ -17,6 +17,7 @@ import * as SUBSCRIBED_SUCCESSFULLY_EVENT from './../../../events/subscribed.suc
 import * as SUBSCRIBER_PROFILE_CREATED_EVENT from './../../../events/subscriber.profile.created.event'
 import * as SUBSCRIBER_PROFILE_UPDATED_EVENT from './../../../events/subscriber.profile.updated.event'
 import * as SUBSCRIBER_PROFILE_DELETED_EVENT from './../../../events/subscriber.profile.deleted.event'
+import * as SUBSCRIBER_PROFILE_DISABLED_EVENT from './../../../events/subscriber.profile.disabled.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';

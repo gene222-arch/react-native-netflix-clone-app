@@ -86,6 +86,7 @@ const PROFILE_DEFAULT_PROPS = {
     previous_avatar: null,
     is_for_kids: false,
     is_profiled_locked: false,
+    enabled: 1,
     pin_code: '',
     my_downloads: [],
     recently_watched_movies: [],
