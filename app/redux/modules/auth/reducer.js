@@ -263,12 +263,13 @@ export default (state = initialState, { type, payload }) =>
                     : profile
             });
 
-            return {
-                ...state,
-                profiles: newProfiles,
-                isLoading,
-                errors
-            }
+        return {
+            ...state,
+            profileCountToDisable: 0,
+            profiles: newProfiles,
+            isLoading,
+            errors
+        }
 
         case RATE_SHOW_SUCCESS:
             const { model_type } = payload;

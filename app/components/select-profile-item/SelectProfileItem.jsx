@@ -12,7 +12,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClick
 {
     return (
         <View style={{ ...styles.profile, opacity: !isClickable || !item.enabled ? 0.3 : 1 }}>
-            <TouchableOpacity onPress={ handlePressSelectProfile } disabled={ !isClickable }>
+            <TouchableOpacity onPress={ handlePressSelectProfile } disabled={ !isClickable || !item.enabled}>
                 <Image 
                     source={{
                         uri: item.avatar
@@ -40,7 +40,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClick
                         />
                     )
                 }
-                   {
+                {
                     Boolean(!item.enabled) && (
                         <FeatherIcon 
                             name='slash'
