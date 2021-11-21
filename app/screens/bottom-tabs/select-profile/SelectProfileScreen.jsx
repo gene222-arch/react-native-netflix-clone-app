@@ -40,7 +40,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
-    const [ profileNumberLimit, setProfileNumberLimit ] = useState(2);
+    const [ profileCountToDisable, setProfileCountToDisable ] = useState(2);
     const [ networkState, setNetworkState ] = useState(NETWORK_DEFAULT_PROPS);
     const [ isClickable, setIsClickable ] = useState(false);
 
@@ -99,20 +99,25 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const onLoadSetProfileNumberLimit = () => 
     {
-        let limit = 2;
+        const totalActiveProfiles = AUTH.profiles.filter(({ enabled }) => enabled);
+        let profileCountToDisable_ = 0;
 
-        switch (AUTH.subscription_details?.type) 
+        switch (AUTH.subscription_details.type) 
         {
             case 'Premium':
-                limit = 5;
+                profileCountToDisable_ = (5 - totalActiveProfiles);
+                break;
+        
+            case 'Standard':
+                profileCountToDisable_ = (4 - totalActiveProfiles);
                 break;
 
-            case 'Standard':
-                limit = 4;
+            case 'Basic':
+                profileCountToDisable_ = (2 - totalActiveProfiles);
                 break;
         }
 
-        setProfileNumberLimit(limit);
+        setProfileCountToDisable(Math.abs(profileCountToDisable_));
     }
 
     useEffect(() => 
@@ -261,6 +266,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                             handlePressSelectProfile={ () => handlePressSelectProfile(item)}
                             index={ index }
                             isClickable={ isClickable }
+                            profileCountToDisable={ profileCountToDisable }
                         />
                     )}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}

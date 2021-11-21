@@ -654,8 +654,11 @@ export default (state = initialState, { type, payload }) =>
 
 
         case UPDATE_SUBSCRIPTION_DETAILS:
+            newProfiles = profiles.map(profile => ({ ...profile, enabled: 1 }));
+
             return {
                 ...state,
+                profiles: newProfiles,
                 isLoading,
                 errors,
                 subscription_details: {

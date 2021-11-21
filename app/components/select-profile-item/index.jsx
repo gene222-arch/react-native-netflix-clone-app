@@ -10,12 +10,10 @@ const style = StyleSheet.create({
     img: {
         opacity: 1
     }
-})
-let disabledProfiles = [];
+});
 
-const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile }) => 
+const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile, profileCountToDisable }) => 
 {
-    disabledProfiles = !profile.enabled ? [ ...disabledProfiles, profile ] : disabledProfiles;
 
     if (profile.id) {
         return (
@@ -28,7 +26,7 @@ const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile }) =>
         )
     }
 
-    return !Boolean(disabledProfiles.length) && <AddProfile hasInternetConnection={ isClickable } />
+    return Boolean(profileCountToDisable) && <AddProfile hasInternetConnection={ isClickable } />
 }
 
 const mapStateToProps = createStructuredSelector({
