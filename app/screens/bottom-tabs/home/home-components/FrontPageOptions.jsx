@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { TouchableOpacity, ToastAndroid, StatusBar } from 'react-native'
+import { TouchableOpacity, ToastAndroid } from 'react-native'
 import { Button } from 'react-native-elements'
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';
@@ -26,7 +26,7 @@ const Genre = ({ genres }) =>
     )
 }
 
-const FrontPageOptions = ({ AUTH_PROFILE, frontPage, route }) => 
+const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
