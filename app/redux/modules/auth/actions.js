@@ -16,6 +16,7 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
+    DISABLE_PROFILE,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
@@ -146,6 +147,11 @@ export const downloadVideoSuccess = (payload) => ({
 
 export const downloadVideoFailed = (payload) => ({
     type: DOWNLOAD_VIDEO_FAILED,
+    payload
+});
+
+export const disableProfile = (payload) => ({
+    type: DISABLE_PROFILE,
     payload
 });
 

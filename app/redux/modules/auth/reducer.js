@@ -17,6 +17,7 @@ const {
     DOWNLOAD_VIDEO_START,
     DOWNLOAD_VIDEO_SUCCESS,
     DOWNLOAD_VIDEO_FAILED,
+    DISABLE_PROFILE,
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
@@ -249,6 +250,20 @@ export default (state = initialState, { type, payload }) =>
             return {
                 ...state,
                 profiles: profiles.filter(({ id }) => id !== payload.profileID),
+                isLoading,
+                errors
+            }
+
+        case DISABLE_PROFILE:
+            newProfiles = profiles.map(profile => {
+                return payload.profileIds.includes(profile.id)
+                    ? ({ ...profile, enabled: 0 })
+                    : profile
+            });
+
+            return {
+                ...state,
+                profiles: newProfiles,
                 isLoading,
                 errors
             }
