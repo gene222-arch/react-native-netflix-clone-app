@@ -48,6 +48,7 @@ const {
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
+    SET_PROFILE_COUNT_TO_DISABLE,
     SHOW_SUBSCRIBER_START,
     SHOW_SUBSCRIBER_SUCCESS,
     SHOW_SUBSCRIBER_FAILED,
@@ -124,6 +125,7 @@ const initialState = {
     credentials: CREDENTIALS_DEFAULT_PROPS,
     profile: PROFILE_DEFAULT_PROPS,
     profiles: [],
+    profileCountToDisable: 0,
     isAuthenticated: false,
     isLoading: false,
     errors: DEFAULT_ERROR_MESSAGE_PROPS,
@@ -530,6 +532,14 @@ export default (state = initialState, { type, payload }) =>
                 ...state,
                 profile: profile_,
                 profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
+        case SET_PROFILE_COUNT_TO_DISABLE:
+            return {
+                ...state,
+                profileCountToDisable: payload.profileCount,
                 isLoading,
                 errors
             }

@@ -47,6 +47,7 @@ const {
     SELECT_PROFILE_START,
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
+    SET_PROFILE_COUNT_TO_DISABLE,
     SHOW_SUBSCRIBER_START,
     SHOW_SUBSCRIBER_SUCCESS,
     SHOW_SUBSCRIBER_FAILED,
@@ -315,6 +316,11 @@ export const selectProfileSuccess = (payload) => ({
 
 export const selectProfileFailed = (payload) => ({
     type: SELECT_PROFILE_FAILED,
+    payload
+});
+
+export const setProfileCountToDisable = (payload) => ({
+    type: SET_PROFILE_COUNT_TO_DISABLE,
     payload
 });
 

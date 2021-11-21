@@ -22,6 +22,7 @@ import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
 import * as ALERT_UTIL from './../../../utils/alert'
+import PopUpDialog from './../../../components/PopUpDialog';
 
 const NETWORK_DEFAULT_PROPS = {
     isConnected: false,
@@ -40,7 +41,6 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ showPinCodeModal, setShowPinCodeModal ] = useState(false);
     const [ selectedProfilePinCode, setSelectedProfilePinCode ] = useState('');
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
-    const [ profileCountToDisable, setProfileCountToDisable ] = useState(2);
     const [ networkState, setNetworkState ] = useState(NETWORK_DEFAULT_PROPS);
     const [ isClickable, setIsClickable ] = useState(false);
 
@@ -99,7 +99,7 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const onLoadSetProfileNumberLimit = () => 
     {
-        const totalActiveProfiles = AUTH.profiles.filter(({ enabled }) => enabled);
+        const totalActiveProfiles = AUTH.profiles.filter(({ enabled }) => enabled).length;
         let profileCountToDisable_ = 0;
 
         switch (AUTH.subscription_details.type) 
@@ -117,7 +117,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 break;
         }
 
-        setProfileCountToDisable(Math.abs(profileCountToDisable_));
+        dispatch(AUTH_ACTION.setProfileCountToDisable({ profileCount: Math.abs(profileCountToDisable_) }));
     }
 
     useEffect(() => 
@@ -211,7 +211,7 @@ const SelectProfileScreen = ({ AUTH }) =>
         return () => {
             SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
         }
-    }, [AUTH.subscription_details]);
+    }, [AUTH.subscription_details, AUTH.profileCountToDisable]);
 
     useFocusEffect(
         useCallback(() => {
@@ -231,6 +231,12 @@ const SelectProfileScreen = ({ AUTH }) =>
                 hasError={ isInCorrectPin }
                 onChangeText={ handleChangePin }
                 onCancel={ handleClickCancel }
+            />
+            <PopUpDialog 
+                textQuery={ `Please disable at least ${ AUTH.profileCountToDisable } profiles in order to continue your streaming.` }
+                textCancel=''
+                textConfirm=''
+                isVisible={ Boolean(AUTH.profileCountToDisable) }
             />
             <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Header */}
@@ -266,7 +272,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                             handlePressSelectProfile={ () => handlePressSelectProfile(item)}
                             index={ index }
                             isClickable={ isClickable }
-                            profileCountToDisable={ profileCountToDisable }
+                            profileCountToDisable={ AUTH.profileCountToDisable }
                         />
                     )}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
