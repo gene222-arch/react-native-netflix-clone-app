@@ -81,19 +81,9 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const handlePressSelectProfile = (item) => 
     {
-        if (! networkState.isConnected) {
-            alert("There's no internet connection")
-        }
-
-        if (! networkState.isInternetReachable) {
-            alert("Internet connection not reachable")
-        }
-
-        if (isClickable) {
-            (! item.is_profile_locked)
-                ? selectProfile(item.id)
-                : handleTogglePinCodeModal(item.pin_code, item.id);
-        }
+        !item.is_profile_locked
+            ? selectProfile(item.id)
+            : handleTogglePinCodeModal(item.pin_code, item.id);
     }
 
     const handlePressManageProfiles = () => navigation.navigate('ManageProfiles');
@@ -137,6 +127,10 @@ const SelectProfileScreen = ({ AUTH }) =>
             const network = await Network.getNetworkStateAsync();
             setNetworkState(network);
 
+            if (AUTH.subscription_details.is_cancelled) {
+                ALERT_UTIL.okAlert('Subscription', 'Your subscribtion has been cancelled');
+            }
+
             if (AUTH.subscription_details.is_expired) {
                 ALERT_UTIL.okAlert('Subscription', 'Your subscribtion has expired');
             }
@@ -149,10 +143,13 @@ const SelectProfileScreen = ({ AUTH }) =>
                 ALERT_UTIL.okAlert('Connection Error', 'No signal')
             }
 
-            if (network.isConnected && network.isInternetReachable) 
+            if (
+                network.isConnected && 
+                network.isInternetReachable && 
+                !['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.type)
+            ) 
             {
-                const isClickable = network.isConnected && network.isInternetReachable && !AUTH.subscription_details.is_expired;
-                setIsClickable(isClickable);
+                setIsClickable(true);
                 
                 dispatch(AUTH_ACTION.showSubscriberStart());
 
@@ -190,6 +187,9 @@ const SelectProfileScreen = ({ AUTH }) =>
                         profileIds: response.data.profileIds
                     }));
                 });
+            }
+            else {
+                setIsClickable(false);
             }
         });
 
