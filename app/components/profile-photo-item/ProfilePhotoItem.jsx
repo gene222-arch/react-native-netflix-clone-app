@@ -8,13 +8,13 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const ProfilePhotoItem = ({ profile, isSelected = false, onPress }) => 
+const ProfilePhotoItem = ({ profile, isSelected = false, isAccessible, onPress }) => 
 {
     return (
-        <TouchableOpacity onPress={ onPress } disabled={ !profile.enabled }>
+        <TouchableOpacity onPress={ onPress } disabled={ !profile.enabled && !isAccessible }>
             <View style={{ 
                 marginHorizontal: 10,
-                opacity: profile.enabled ? 1 : 0.3
+                opacity: profile.enabled && isAccessible ? 1 : 0.3
             }}>
                 <Image 
                     source={{ uri: profile?.avatar }}

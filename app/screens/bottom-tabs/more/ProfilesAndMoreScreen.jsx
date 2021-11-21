@@ -68,7 +68,8 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
     const isFocused = useIsFocused();
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    
+    const isAccountAccessible = !([ 'expired', 'cancelled', 'pending' ].includes(AUTH.subscription_details.type));
+
     const [ showSignOutDialog, setShowSignOutDialog ] = useState(false);
     const [ profileId, setProfileId ] = useState('');
     const [ pinCode, setPinCode ] = useState('');
@@ -211,6 +212,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
                                     ? selectProfile(item.id)
                                     : handleTogglePinCodeModal(item.pin_code, item.id) 
                             }
+                            isAccessible={ isAccountAccessible }
                         />
                     )}
                     horizontal
