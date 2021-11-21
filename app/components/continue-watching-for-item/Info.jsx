@@ -27,7 +27,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
     {
         const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === selectedShow?.id);
         const lastPlayedPositionMillis = !recentWatch ? 0 : recentWatch.last_played_position_millis;
-        const durationInMillis = !recentWatch ? (frontPage.duration_in_minutes * 60000) : recentWatch.duration_in_millis;
+        const durationInMillis = !recentWatch ? (selectedShow.duration_in_minutes * 60000) : recentWatch.duration_in_millis;
 
         setTimeout(() => 
         {
