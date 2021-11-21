@@ -43,6 +43,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ isInCorrectPin, setIsInCorrectPin ] = useState(false);
     const [ networkState, setNetworkState ] = useState(NETWORK_DEFAULT_PROPS);
     const [ isClickable, setIsClickable ] = useState(false);
+    const [ profileLimit, setProfileLimit ] = useState(false);
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -106,14 +107,17 @@ const SelectProfileScreen = ({ AUTH }) =>
         {
             case 'Premium':
                 profileCountToDisable_ = (5 - totalActiveProfiles);
+                setProfileLimit(5);
                 break;
         
             case 'Standard':
                 profileCountToDisable_ = (4 - totalActiveProfiles);
+                setProfileLimit(4);
                 break;
 
             case 'Basic':
                 profileCountToDisable_ = (2 - totalActiveProfiles);
+                setProfileLimit(2);
                 break;
         }
 
@@ -279,6 +283,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                             index={ index }
                             isClickable={ isClickable }
                             profileCountToDisable={ AUTH.profileCountToDisable }
+                            profileLimit={ profileLimit }
                         />
                     )}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}

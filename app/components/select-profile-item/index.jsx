@@ -12,9 +12,8 @@ const style = StyleSheet.create({
     }
 });
 
-const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile, profileCountToDisable }) => 
+const DisplayProfile = ({ AUTH, isClickable, profile, handlePressSelectProfile, profileCountToDisable, profileLimit }) => 
 {
-
     if (profile.id) {
         return (
             <SelectProfileItem 
@@ -26,7 +25,7 @@ const DisplayProfile = ({ isClickable, profile, handlePressSelectProfile, profil
         )
     }
 
-    return !Boolean(profileCountToDisable) && <AddProfile hasInternetConnection={ isClickable } />
+    return (!Boolean(profileCountToDisable) && profileLimit > AUTH.profiles.length) && <AddProfile hasInternetConnection={ isClickable } />
 }
 
 const mapStateToProps = createStructuredSelector({
