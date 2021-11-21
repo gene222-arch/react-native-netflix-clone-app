@@ -167,6 +167,12 @@ const SelectProfileScreen = ({ AUTH }) =>
                         }));
                     }
                 });
+
+                SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => {
+                    dispatch(AUTH_ACTION.broadcastDeleteProfileById({
+                        profileIds: response.data.profileIds
+                    }));
+                });
             }
         });
 
@@ -175,6 +181,7 @@ const SelectProfileScreen = ({ AUTH }) =>
             SUBSCRIBER_PROFILE_CREATED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_UPDATED_EVENT.unListen(authenticatedUserId);
             SUBSCRIBER_PROFILE_DELETED_EVENT.unListen(authenticatedUserId);
+            SUBSCRIBER_PROFILE_DISABLED_EVENT.unListen(authenticatedUserId);
             setShowPinCodeModal(false);
             setSelectedProfilePinCode('');
             setIsInCorrectPin(false);
