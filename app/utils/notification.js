@@ -77,6 +77,15 @@ export const registerForPushNotificationsAsync = async () =>
 				lightColor: '#FF231F7C',
 				sound: true
 			});
+
+			Notifications.setNotificationChannelAsync('subscription-expired-channel', 
+			{
+				name: 'Subscription Expiration',
+				importance: Notifications.AndroidImportance.MAX,
+				vibrationPattern: [0, 250, 250, 250],
+				lightColor: '#FF231F7C',
+				sound: true
+			});
 		}
 	
 		return token;
