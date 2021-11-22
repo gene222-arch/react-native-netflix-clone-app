@@ -69,18 +69,9 @@ export const registerForPushNotificationsAsync = async () =>
 		if (Platform.OS === 'android') 
 		{
 			/** Channel ID must match server side(Laravel) api expo channel id */
-			Notifications.setNotificationChannelAsync('movie-release-channel', 
+			Notifications.setNotificationChannelAsync('flicklify-channel', 
 			{
-				name: 'Movie Release',
-				importance: Notifications.AndroidImportance.MAX,
-				vibrationPattern: [0, 250, 250, 250],
-				lightColor: '#FF231F7C',
-				sound: true
-			});
-
-			Notifications.setNotificationChannelAsync('subscription-expired-channel', 
-			{
-				name: 'Subscription Expiration',
+				name: 'Flicklify Channel',
 				importance: Notifications.AndroidImportance.MAX,
 				vibrationPattern: [0, 250, 250, 250],
 				lightColor: '#FF231F7C',
