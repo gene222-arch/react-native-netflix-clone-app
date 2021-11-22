@@ -220,7 +220,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     {
         onLoadSetProfileNumberLimit();
 
-        if (['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.type)) {
+        if (['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status)) {
             setIsClickable(false);
         }
         

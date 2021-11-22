@@ -25,7 +25,9 @@ const DisplayProfile = ({ AUTH, isClickable, profile, handlePressSelectProfile, 
         )
     }
 
-    return (!Boolean(profileCountToDisable) && profileLimit > AUTH.profiles.length) && <AddProfile hasInternetConnection={ isClickable } />
+    return (!Boolean(profileCountToDisable) && profileLimit > AUTH.profiles.length) && 
+        !['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status) &&
+        <AddProfile hasInternetConnection={ isClickable } />
 }
 
 const mapStateToProps = createStructuredSelector({
