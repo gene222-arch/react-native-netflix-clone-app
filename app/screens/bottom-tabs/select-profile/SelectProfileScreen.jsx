@@ -4,7 +4,7 @@ import View from '../../../components/View';
 import Text from '../../../components/Text';
 import styles from './../../../assets/stylesheets/selectProfile';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
@@ -184,9 +184,12 @@ const SelectProfileScreen = ({ AUTH }) =>
                 });
 
                 SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.disableProfile({
-                        profileIds: response.data.profileIds
-                    }));
+                    batch(() => {
+                        dispatch(AUTH_ACTION.disableProfile({
+                            profileIds: response.data.profileIds
+                        }));
+                        dispatch(AUTH_ACTION.showSubscriberStart());
+                    });
                 });
 
                 SUBSCRIPTION_CANCELLED_EVENT.listen(authenticatedUserId, response => {
