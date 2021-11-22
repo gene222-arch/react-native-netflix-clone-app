@@ -81,7 +81,16 @@ export const registerForPushNotificationsAsync = async () =>
 			Notifications.setNotificationChannelAsync('subscription-expired-channel', 
 			{
 				name: 'Subscription Expiration',
-				importance: Notifications.AndroidImportance.HIGH,
+				importance: Notifications.AndroidImportance.MAX,
+				vibrationPattern: [0, 250, 250, 250],
+				lightColor: '#FF231F7C',
+				sound: true
+			});
+
+			Notifications.setNotificationChannelAsync('subscription-cancelled-channel', 
+			{
+				name: 'Subscription Cancelled',
+				importance: Notifications.AndroidImportance.MAX,
 				vibrationPattern: [0, 250, 250, 250],
 				lightColor: '#FF231F7C',
 				sound: true
