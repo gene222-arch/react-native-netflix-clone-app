@@ -260,7 +260,7 @@ export default (state = initialState, { type, payload }) =>
             newProfiles = profiles.map(profile => {
                 return payload.profileIds.includes(profile.id)
                     ? ({ ...profile, enabled: 0 })
-                    : profile
+                    : ({ ...profile, enabled: 1 })
             });
 
         return {

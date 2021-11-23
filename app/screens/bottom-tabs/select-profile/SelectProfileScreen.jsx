@@ -46,6 +46,8 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ isClickable, setIsClickable ] = useState(false);
     const [ profileLimit, setProfileLimit ] = useState(false);
 
+    const isNotSubscribed = ['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status);
+
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
     const handleChangePin = (pin) => 
@@ -121,38 +123,57 @@ const SelectProfileScreen = ({ AUTH }) =>
         }
     }
 
+    const onLoadCheckSubscriptionStatus = async (subscriptionDetails = null) => 
+    {
+        try {
+            const network = await Network.getNetworkStateAsync();
+            setNetworkState(network);
+
+            const subscriptionDetails_ = subscriptionDetails ?? AUTH.subscription_details;
+    
+            if (subscriptionDetails_.is_cancelled) {
+                ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
+                setIsClickable(false);
+
+                return;
+            }
+    
+            if (subscriptionDetails_.is_expired) {
+                ALERT_UTIL.okAlert('Subscription', 'Your subscription has expired');
+                setIsClickable(false);
+
+                return;
+            }
+    
+            if (! network.isConnected) {
+                ALERT_UTIL.okAlert('Connection Error', 'There`s a problem with your internet connection');
+                setIsClickable(false);
+
+                return;
+            }
+    
+            if (! network.isInternetReachable) {
+                ALERT_UTIL.okAlert('Connection Error', 'No signal');
+                setIsClickable(false);
+
+                return;
+            }
+
+            setIsClickable(true);
+
+            return true;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => 
     {
         InteractionManager.runAfterInteractions(async () => 
         {
-            const network = await Network.getNetworkStateAsync();
-            setNetworkState(network);
-
-            if (AUTH.subscription_details.is_cancelled) {
-                ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
-            }
-
-            if (AUTH.subscription_details.is_expired) {
-                ALERT_UTIL.okAlert('Subscription', 'Your subscription has expired');
-            }
-
-            if (! network.isConnected) {
-                ALERT_UTIL.okAlert('Connection Error', 'There`s a problem with your internet connection');
-            }
-    
-            if (! network.isInternetReachable) {
-                ALERT_UTIL.okAlert('Connection Error', 'No signal')
-            }
-
-            if (
-                network.isConnected && 
-                network.isInternetReachable && 
-                !['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.type)
-            ) 
+            if (onLoadCheckSubscriptionStatus()) 
             {
                 setIsClickable(true);
-                
-                dispatch(AUTH_ACTION.showSubscriberStart());
 
                 USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(authenticatedUserId, response => {
                     dispatch(AUTH_ACTION.updateUserProfile(response.data));
@@ -184,18 +205,17 @@ const SelectProfileScreen = ({ AUTH }) =>
                 });
 
                 SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => {
-                    batch(() => {
-                        dispatch(AUTH_ACTION.disableProfile({
-                            profileIds: response.data.profileIds
-                        }));
-                        dispatch(AUTH_ACTION.showSubscriberStart());
-                    });
+                    dispatch(AUTH_ACTION.disableProfile({
+                        profileIds: response.data.profileIds
+                    }));
+                    onLoadCheckSubscriptionStatus();
                 });
 
                 SUBSCRIPTION_CANCELLED_EVENT.listen(authenticatedUserId, response => {
                     dispatch(AUTH_ACTION.updateSubscriptionDetails({
                         subscription_details: response.data
                     }));
+                    onLoadCheckSubscriptionStatus(response.data);
                 });
             }
             else {
@@ -223,20 +243,24 @@ const SelectProfileScreen = ({ AUTH }) =>
     {
         onLoadSetProfileNumberLimit();
 
-        if (['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status)) {
+        if (isNotSubscribed) {
             setIsClickable(false);
         }
         
         SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => {
-            dispatch(AUTH_ACTION.updateSubscriptionDetails({
-                subscription_details: response.data
-            }));
+            batch(() => {
+                dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                    subscription_details: response.data
+                }));
+    
+                dispatch(AUTH_ACTION.showSubscriberStart());
+            });
         });
 
         return () => {
             SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
         }
-    }, [AUTH.subscription_details, AUTH.profileCountToDisable]);
+    }, [AUTH.subscription_details]);
 
     useFocusEffect(
         useCallback(() => {
@@ -261,7 +285,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 textQuery={ `Please disable at least ${ AUTH.profileCountToDisable } profiles in order to continue your streaming.` }
                 textCancel=''
                 textConfirm=''
-                isVisible={ Boolean(AUTH.profileCountToDisable) }
+                isVisible={ Boolean(AUTH.profileCountToDisable) && !isNotSubscribed }
             />
             <LoadingSpinner isLoading={ AUTH.isLoading } />
             {/* Header */}
