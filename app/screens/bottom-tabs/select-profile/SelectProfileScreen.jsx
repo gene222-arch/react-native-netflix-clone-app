@@ -129,7 +129,7 @@ const SelectProfileScreen = ({ AUTH }) =>
             const network = await Network.getNetworkStateAsync();
             setNetworkState(network);
 
-            const subscriptionDetails_ = subscriptionDetails ?? AUTH.subscription_details;
+            const subscriptionDetails_ = subscriptionDetails || AUTH.subscription_details;
     
             if (subscriptionDetails_.is_cancelled) {
                 ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
@@ -171,10 +171,10 @@ const SelectProfileScreen = ({ AUTH }) =>
     {
         InteractionManager.runAfterInteractions(async () => 
         {
+            dispatch(AUTH_ACTION.showSubscriberStart());
+
             if (onLoadCheckSubscriptionStatus()) 
             {
-                setIsClickable(true);
-
                 USER_PROFILE_PIN_CODE_UPDATED_EVENT.listen(authenticatedUserId, response => {
                     dispatch(AUTH_ACTION.updateUserProfile(response.data));
                     setSelectedProfilePinCode(response.data.pin_code);
