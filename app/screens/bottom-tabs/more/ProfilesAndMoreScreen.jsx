@@ -108,7 +108,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         }
     }
 
-    const handleTogglePinCodeModal = (pinCode, id) => 
+    const togglePinCodeModal = (pinCode, id) => 
     {
         setShowPinCodeModal(! showPinCodeModal);
         setSelectedProfilePinCode(pinCode);
@@ -142,6 +142,14 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
             await WebBrowser.openBrowserAsync(`${ ENV.DEVELOPMENT_MODE_WEB_APP_URL }/help`);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const handleClickProfile = (profile) => {
+        if (profile.enabled) {
+            (!profile.is_profile_locked)
+                ? selectProfile(profile.id)
+                : togglePinCodeModal(profile.pin_code, profile.id) 
         }
     }
 
@@ -207,11 +215,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
                             key={ index }
                             profile={ item }
                             isSelected={ AUTH_PROFILE.id === item.id }
-                            onPress={ 
-                                () => !item.is_profile_locked
-                                    ? selectProfile(item.id)
-                                    : handleTogglePinCodeModal(item.pin_code, item.id) 
-                            }
+                            onPress={ () => handleClickProfile(item) }
                             isAccessible={ isAccountAccessible }
                         />
                     )}

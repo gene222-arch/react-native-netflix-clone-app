@@ -11,7 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const ProfilePhotoItem = ({ profile, isSelected = false, isAccessible, onPress }) => 
 {
     return (
-        <TouchableOpacity onPress={ onPress } disabled={ !profile.enabled && !isAccessible }>
+        <TouchableOpacity onPress={ onPress } disabled={ !profile.enabled || !isAccessible }>
             <View style={{ 
                 marginHorizontal: 10,
                 opacity: profile.enabled && isAccessible ? 1 : 0.3
