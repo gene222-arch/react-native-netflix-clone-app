@@ -31,6 +31,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
     const [ profile, setProfile ] = useState(AUTH.profiles.find(prof => prof.id === id));
     const [ showDeleteProfileDialog, setShowDeleteProfileDialog ] = useState(false);
     const [ showAvatars, setShowAvatars ] = useState(false);
+    const [ showProfileCantBeRemove, setShowProfileCantBeRemove ] = useState(false);
 
     const handlePressUpdateProfile = () => dispatch(AUTH_ACTION.updateAuthenticatedProfileStart(profile));
 
@@ -44,7 +45,17 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
         setShowAvatars(false);
     } 
 
-    const toggleDeleteProfileDialog = () => setShowDeleteProfileDialog(!showDeleteProfileDialog);
+    const toggleDeleteProfileDialog = () => 
+    {    
+        if (profile.id === AUTH.profile.id) {
+            setShowProfileCantBeRemove(true);
+        }
+
+        if (profile.id !== AUTH.profile.id) {
+            setShowProfileCantBeRemove(false);
+            setShowDeleteProfileDialog(! showDeleteProfileDialog);
+        }
+    }
 
     const handleClickBackButton = () => {
         setShowAvatars(false);
@@ -95,6 +106,15 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
                 onBackdropPress={ toggleDeleteProfileDialog }
                 onPressCancel={ toggleDeleteProfileDialog }
                 onPressConfirm={ handlePressDeleteProfile }
+            />
+            <PopUpDialog 
+                textQuery="Profile is in used, thus cannot be deleted permanently."
+                textCancel=""
+                textConfirm="Ok"
+                isVisible={ showProfileCantBeRemove }
+                onBackdropPress={ () => 1 }
+                onPressCancel={ () => 1 }
+                onPressConfirm={ () => setShowProfileCantBeRemove(false) }
             />
             <ProfileAppBar
                 headerTitle='Edit Profile' 
