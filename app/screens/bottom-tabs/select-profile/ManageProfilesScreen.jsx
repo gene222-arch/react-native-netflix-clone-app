@@ -26,7 +26,7 @@ const ManageProfilesScreen = ({ AUTH }) =>
         <View style={ styles.container }>
             <View style={ styles.profilesContainer }>
                 <FlatList 
-                    data={ AUTH.profiles }
+                    data={ AUTH.profiles.filter(({ enabled }) => enabled) }
                     numColumns={ 2 }
                     renderItem={ ({ item }) => (
                         <View style={ styles.profileContainer }>
