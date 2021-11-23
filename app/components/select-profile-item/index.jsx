@@ -12,7 +12,7 @@ const style = StyleSheet.create({
     }
 });
 
-const DisplayProfile = ({ AUTH, isClickable, profile, handlePressSelectProfile, profileCountToDisable, profileLimit }) => 
+const DisplayProfile = ({ AUTH, isClickable, profile, handlePressSelectProfile, profileCountToDisable, profileLimit, availableProfile }) => 
 {
     if (profile.id) {
         return (
@@ -25,7 +25,7 @@ const DisplayProfile = ({ AUTH, isClickable, profile, handlePressSelectProfile, 
         )
     }
 
-    return (!Boolean(profileCountToDisable) && profileLimit > AUTH.profiles.length) && 
+    return (!Boolean(profileCountToDisable) && profileLimit > availableProfile) && 
         !['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status) &&
         <AddProfile hasInternetConnection={ isClickable } />
 }

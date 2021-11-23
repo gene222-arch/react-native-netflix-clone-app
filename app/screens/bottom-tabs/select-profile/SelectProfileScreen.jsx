@@ -47,6 +47,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     const [ profileLimit, setProfileLimit ] = useState(false);
 
     const isNotSubscribed = ['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status);
+    const availableProfile = AUTH.profiles.filter(({ enabled }) => enabled).length;
 
     const selectProfile = (id) => dispatch(AUTH_ACTION.selectProfileStart({ id }));
 
@@ -323,6 +324,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                             isClickable={ isClickable }
                             profileCountToDisable={ AUTH.profileCountToDisable }
                             profileLimit={ profileLimit }
+                            availableProfile={ availableProfile }
                         />
                     )}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
