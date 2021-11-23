@@ -75,7 +75,6 @@ function* deleteProfileSaga(payload)
         yield put(ACTION.deleteProfileSuccess({ profileID: payload }));
 
         yield call(AUTH_API.deleteProfileByIdAsync, payload);
-        RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.deleteProfileFailed({ message }));
     }

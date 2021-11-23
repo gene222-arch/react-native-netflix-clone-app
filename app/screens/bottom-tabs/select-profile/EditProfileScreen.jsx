@@ -20,6 +20,7 @@ import StyledTextInput from './../../../components/styled-components/StyledTextI
 import AvatarList from './AvatarList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
@@ -35,7 +36,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const handlePressDeleteProfile = () => {
         dispatch(AUTH_ACTION.deleteProfileStart(id));
-        navigation.goBack();
+        navigation.dispatch(StackActions.replace('SelectProfile', {params: {}}));
     }
 
     const handlePressChangeAvatar = (avatarUri) => {
