@@ -207,24 +207,20 @@ const SelectProfileScreen = ({ AUTH }) =>
 
                 SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => 
                 {
+                    dispatch(AUTH_ACTION.disableProfile({
+                        profileIds: response.data.profileIds
+                    }));
                     setIsClickable(true);
                     navigation.navigate('SelectProfile');
-                    setTimeout(() => {
-                        dispatch(AUTH_ACTION.disableProfile({
-                            profileIds: response.data.profileIds
-                        }));
-                    }, 10)
                 });
 
                 SUBSCRIPTION_CANCELLED_EVENT.listen(authenticatedUserId, response => 
                 {
+                    dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                        subscription_details: response.data
+                    }));
                     navigation.navigate('SelectProfile');
-                    onLoadCheckSubscriptionStatus(response.data);
-                    setTimeout(() => {
-                        dispatch(AUTH_ACTION.updateSubscriptionDetails({
-                            subscription_details: response.data
-                        }));
-                    }, 10)
+                    ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
                 });
             }
             else {
@@ -259,12 +255,11 @@ const SelectProfileScreen = ({ AUTH }) =>
         SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => 
         {
             batch(() => {
-                navigation.navigate('SelectProfile');
                 dispatch(AUTH_ACTION.updateSubscriptionDetails({
                     subscription_details: response.data
                 }));
-    
                 dispatch(AUTH_ACTION.showSubscriberStart());
+                navigation.navigate('SelectProfile');
             });
         });
 
