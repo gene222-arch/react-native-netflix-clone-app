@@ -267,9 +267,9 @@ function* toggleRemindMeOfComingShowSaga(payload)
 function* updateAuthenticatedProfileSaga(payload)
 {
     try {
+        yield call(AUTH_API.updateProfileAsync, payload);
         yield put(ACTION.updateAuthenticatedProfileSuccess({ profile: payload }));
         RootNavigation.navigate('SelectProfile');
-        yield call(AUTH_API.updateProfileAsync, payload);
     } catch ({ message }) {
         yield put(ACTION.updateAuthenticatedProfileFailed({ message }));
     }

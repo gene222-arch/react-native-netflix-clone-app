@@ -256,8 +256,10 @@ const SelectProfileScreen = ({ AUTH }) =>
             setIsClickable(false);
         }
         
-        SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => {
+        SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => 
+        {
             batch(() => {
+                navigation.navigate('SelectProfile');
                 dispatch(AUTH_ACTION.updateSubscriptionDetails({
                     subscription_details: response.data
                 }));
