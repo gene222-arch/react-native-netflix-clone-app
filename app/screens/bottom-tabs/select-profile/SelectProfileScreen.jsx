@@ -205,18 +205,26 @@ const SelectProfileScreen = ({ AUTH }) =>
                     }
                 });
 
-                SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.disableProfile({
-                        profileIds: response.data.profileIds
-                    }));
-                    onLoadCheckSubscriptionStatus();
+                SUBSCRIBER_PROFILE_DISABLED_EVENT.listen(authenticatedUserId, response => 
+                {
+                    setIsClickable(true);
+                    navigation.navigate('SelectProfile');
+                    setTimeout(() => {
+                        dispatch(AUTH_ACTION.disableProfile({
+                            profileIds: response.data.profileIds
+                        }));
+                    }, 10)
                 });
 
-                SUBSCRIPTION_CANCELLED_EVENT.listen(authenticatedUserId, response => {
-                    dispatch(AUTH_ACTION.updateSubscriptionDetails({
-                        subscription_details: response.data
-                    }));
+                SUBSCRIPTION_CANCELLED_EVENT.listen(authenticatedUserId, response => 
+                {
+                    navigation.navigate('SelectProfile');
                     onLoadCheckSubscriptionStatus(response.data);
+                    setTimeout(() => {
+                        dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                            subscription_details: response.data
+                        }));
+                    }, 10)
                 });
             }
             else {

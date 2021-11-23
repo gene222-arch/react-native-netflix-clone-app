@@ -47,11 +47,11 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const toggleDeleteProfileDialog = () => 
     {    
-        if (profile.id === AUTH.profile.id) {
+        if (id === AUTH.profile.id) {
             setShowProfileCantBeRemove(true);
         }
 
-        if (profile.id !== AUTH.profile.id) {
+        if (id !== AUTH.profile.id) {
             setShowProfileCantBeRemove(false);
             setShowDeleteProfileDialog(! showDeleteProfileDialog);
         }
