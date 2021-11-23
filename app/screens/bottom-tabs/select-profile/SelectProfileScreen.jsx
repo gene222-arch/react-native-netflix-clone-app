@@ -19,6 +19,7 @@ import * as SUBSCRIBER_PROFILE_UPDATED_EVENT from './../../../events/subscriber.
 import * as SUBSCRIBER_PROFILE_DELETED_EVENT from './../../../events/subscriber.profile.deleted.event'
 import * as SUBSCRIBER_PROFILE_DISABLED_EVENT from './../../../events/subscriber.profile.disabled.event'
 import * as SUBSCRIPTION_CANCELLED_EVENT from './../../../events/subscription.cancelled.event'
+import * as SUBSCRIPTION_EXPIRED_EVENT from './../../../events/subscription.expired.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
 import { useFocusEffect } from '@react-navigation/core';
@@ -262,9 +263,18 @@ const SelectProfileScreen = ({ AUTH }) =>
                 navigation.navigate('SelectProfile');
             });
         });
+        
+        SUBSCRIPTION_EXPIRED_EVENT.listen(authenticatedUserId, response => 
+        {
+            dispatch(AUTH_ACTION.updateSubscriptionDetails({
+                subscription_details: response.data
+            }));
+            navigation.navigate('SelectProfile');
+        });
 
         return () => {
             SUBSCRIBED_SUCCESSFULLY_EVENT.unListen(authenticatedUserId);
+            SUBSCRIPTION_EXPIRED_EVENT.unListen(authenticatedUserId);
         }
     }, [AUTH.subscription_details]);
 
