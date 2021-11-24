@@ -14,9 +14,6 @@ const {
     DELETE_PROFILE_START,
     DELETE_PROFILE_SUCCESS,
     DELETE_PROFILE_FAILED,
-    DOWNLOAD_VIDEO_START,
-    DOWNLOAD_VIDEO_SUCCESS,
-    DOWNLOAD_VIDEO_FAILED,
     DISABLE_PROFILE,
     LOGIN_START,
     LOGIN_SUCCESS,
@@ -39,9 +36,6 @@ const {
     CLEAR_RECENT_WATCHES_START,
     CLEAR_RECENT_WATCHES_SUCCESS,
     CLEAR_RECENT_WATCHES_FAILED,
-    REMOVE_TO_MY_DOWNLOADS_START,
-    REMOVE_TO_MY_DOWNLOADS_SUCCESS,
-    REMOVE_TO_MY_DOWNLOADS_FAILED,
     REMOVE_TO_RECENT_WATCHES_START,
     REMOVE_TO_RECENT_WATCHES_SUCCESS,
     REMOVE_TO_RECENT_WATCHES_FAILED,
@@ -64,9 +58,6 @@ const {
     UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
     UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_SUCCESS,
     UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED,
-    VIEW_DOWNLOADS_START,
-    VIEW_DOWNLOADS_SUCCESS,
-    VIEW_DOWNLOADS_FAILED,
     UPDATE_USER_PROFILE,
     UPDATE_SUBSCRIPTION_DETAILS,
     CLEAR_ERRORS_PROPERTY
@@ -90,13 +81,11 @@ const PROFILE_DEFAULT_PROPS = {
     is_profiled_locked: false,
     enabled: 1,
     pin_code: '',
-    my_downloads: [],
     recently_watched_movies: [],
     my_lists: [],
     reminded_coming_soon_movies: [],
     liked_movies: [],
-    liked_coming_soon_movies: [],
-    has_new_downloads: false,
+    liked_coming_soon_movies: []
 };
 
 const DEFAULT_ERROR_MESSAGE_PROPS = {
@@ -147,14 +136,12 @@ export default (state = initialState, { type, payload }) =>
         case CLEAR_RECENT_WATCHES_START:
         case CREATE_PROFILE_START:
         case DELETE_PROFILE_START:
-        case DOWNLOAD_VIDEO_START:
         case LOGIN_START:
         case LOGOUT_START:
         case MANAGE_PIN_CODE_START:
         case MARK_REMINDED_MOVIE_AS_READ_START:
         case RATE_SHOW_START:
         case RATE_RECENTLY_WATCHED_MOVIE_START:
-        case REMOVE_TO_MY_DOWNLOADS_START:
         case REMOVE_TO_RECENT_WATCHES_START:
         case SELECT_PROFILE_START:
         case SHOW_SUBSCRIBER_START:
@@ -162,7 +149,6 @@ export default (state = initialState, { type, payload }) =>
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START:
         case UPDATE_AUTHENTICATED_PROFILE_START:
         case UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START:
-        case VIEW_DOWNLOADS_START:
             return { 
                 ...state, 
                 isLoading: true,
@@ -448,24 +434,6 @@ export default (state = initialState, { type, payload }) =>
                 isLoading
             }
 
-        case DOWNLOAD_VIDEO_SUCCESS:
-            const updateProfileDownloads = profiles.map(prof => {
-                return (prof.id === payload.profile.id)
-                    ? { 
-                        ...prof, 
-                        my_downloads: [ ...prof.my_downloads, { movie_id: payload.movie.id, movie: payload.movie, uri: payload.downloaded_file_uri } ], 
-                        has_new_downloads: true 
-                    }
-                    : prof
-            });
-
-            return {
-                ...state,
-                profiles: updateProfileDownloads,
-                isLoading,
-                errors
-            }
-
         case CLEAR_RECENT_WATCHES_SUCCESS:
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id)
@@ -478,24 +446,6 @@ export default (state = initialState, { type, payload }) =>
                 profiles: newProfiles,
                 isLoading,
                 errors 
-            }
-
-        case REMOVE_TO_MY_DOWNLOADS_SUCCESS: 
-            let filteredMyDownloads = loggedInProfile
-                .my_downloads
-                .filter(({ movie_id }) => movie_id !== payload.showID);
-
-            newProfiles = profiles.map(prof => {
-                return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, my_downloads: filteredMyDownloads } 
-                    : prof;
-            });
-
-            return {
-                ...state,
-                profiles: newProfiles,
-                isLoading,
-                errors
             }
 
             
@@ -679,17 +629,6 @@ export default (state = initialState, { type, payload }) =>
                 }
             }
 
-
-        case VIEW_DOWNLOADS_SUCCESS: 
-            newProfiles = profiles.map(prof => (prof.id === loggedInProfile.id) ? { ...prof, has_new_downloads: false } : prof);
-
-            return {
-                ...state,
-                profiles: newProfiles,
-                isLoading,
-                errors
-            }
-
         case UPDATE_USER_PROFILE:
 
             newProfiles = profiles.map(prof => {
@@ -713,20 +652,17 @@ export default (state = initialState, { type, payload }) =>
         case CLEAR_RECENT_WATCHES_FAILED:
         case CREATE_PROFILE_FAILED:
         case DELETE_PROFILE_FAILED:
-        case DOWNLOAD_VIDEO_FAILED:
         case MANAGE_PIN_CODE_FAILED:
         case MARK_REMINDED_MOVIE_AS_READ_FAILED:
         case SELECT_PROFILE_FAILED:
         case SHOW_SUBSCRIBER_FAILED:
         case RATE_SHOW_FAILED:
         case RATE_RECENTLY_WATCHED_MOVIE_FAILED:
-        case REMOVE_TO_MY_DOWNLOADS_FAILED:
         case REMOVE_TO_RECENT_WATCHES_FAILED:
         case TOGGLE_ADD_TO_MY_LIST_FAILED:
         case TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_FAILED:
         case UPDATE_AUTHENTICATED_PROFILE_FAILED:
         case UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED:
-        case VIEW_DOWNLOADS_FAILED:
             return {
                 ...state,
                 isLoading,

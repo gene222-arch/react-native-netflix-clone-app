@@ -5,7 +5,6 @@ import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
 import * as USER_API from './../../../services/User'
 import * as REMIND_ME_API from './../../../services/movie/remind.me'
-import * as MY_DOWNLOADS_API from './../../../services/movie/my.downloads'
 import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
 import * as ACTION from './actions'
@@ -16,21 +15,18 @@ const {
     CLEAR_RECENT_WATCHES_START,
     CREATE_PROFILE_START,
     DELETE_PROFILE_START,
-    DOWNLOAD_VIDEO_START,
     LOGIN_START,
     LOGOUT_START,
     MARK_REMINDED_MOVIE_AS_READ_START,
     RATE_SHOW_START,
     RATE_RECENTLY_WATCHED_MOVIE_START,
-    REMOVE_TO_MY_DOWNLOADS_START,
     REMOVE_TO_RECENT_WATCHES_START,
     SELECT_PROFILE_START,
     SHOW_SUBSCRIBER_START,
     TOGGLE_REMIND_ME_OF_COMING_SOON_SHOW_START,
     TOGGLE_ADD_TO_MY_LIST_START,
     UPDATE_AUTHENTICATED_PROFILE_START,
-    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
-    VIEW_DOWNLOADS_START
+    UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START
 } = ACTION_TYPES;
 
 
@@ -171,34 +167,6 @@ function* logoutSaga()
     }
 }
 
-function* downloadVideoSaga(payload)  
-{
-    try {
-        yield put(ACTION.downloadVideoSuccess(payload));
-        yield call(MY_DOWNLOADS_API.createDownloadAsync, {
-            user_profile_id: payload.profile.id,
-            movie_id: payload.movie.id,
-            uri: payload.downloaded_file_uri
-        });
-    } catch ({ message }) {
-        yield put(ACTION.downloadVideoFailed({ message }));
-        console.log(message);
-    }
-}
-
-function* removeToMyDownloadsSaga(payload)  
-{
-    try {
-        const { movie_id, user_profile_id } = payload;
-        const ids = Array.isArray(movie_id) ? movie_id : [ movie_id ];
-
-        yield put(ACTION.removeToMyDownloadsSuccess({ showID: movie_id }));
-        yield call(MY_DOWNLOADS_API.deleteDownloadAsync, { ids, user_profile_id });
-    } catch ({ message }) {
-        yield put(ACTION.removeToMyDownloadsFailed({ message }));
-    }
-}
-
 function* removeToRecentWatchesSaga(payload)  
 {
     try {
@@ -287,15 +255,6 @@ function* updateRecentlyWatchedAtPositionMillisSaga(payload)
     }
 }
 
-function* viewDownloadsSaga()
-{
-    try {
-        yield put(ACTION.viewDownloadsSuccess());
-    } catch ({ message }) {
-        yield put(ACTION.viewDownloadsFailed({ message }));
-    }
-}
-
 /** Watchers or Observers */
 function* addToRecentWatchesWatcher()
 {
@@ -327,14 +286,6 @@ function* deleteProfileWatcher()
     while (true) {
         const { payload } = yield take(DELETE_PROFILE_START);
         yield call(deleteProfileSaga, payload);
-    }
-}
-
-function* downloadVideoWatcher()
-{
-    while (true) {
-        const { payload } = yield take(DOWNLOAD_VIDEO_START);
-        yield call(downloadVideoSaga, payload);
     }
 }
 
@@ -383,15 +334,6 @@ function* rateRecentlyWatchedMovieWatcher()
     while (true) {
         const { payload } = yield take(RATE_RECENTLY_WATCHED_MOVIE_START);
         yield call(rateRecentlyWatchedMovieSaga, payload);
-    }
-}
-
-
-function* removeToMyDownloadsWatcher()
-{
-    while (true) {
-        const { payload } = yield take(REMOVE_TO_MY_DOWNLOADS_START);
-        yield call(removeToMyDownloadsSaga, payload);
     }
 }
 
@@ -452,16 +394,6 @@ function* updateRecentlyWatchedAtPositionMillisWatcher()
     }
 }
 
-function* viewDownloadsWatcher()
-{
-    while (true) {
-        yield take(VIEW_DOWNLOADS_START);
-        yield call(viewDownloadsSaga);
-    }
-}
-
-
-
 export default function* ()
 {
     yield all([
@@ -469,22 +401,19 @@ export default function* ()
         clearRecentWatchesWatcher(),
         createProfileWatcher(),
         deleteProfileWatcher(),
-        downloadVideoWatcher(),
         loginWatcher(),
         logoutWatcher(),
         managePinCodeWatcher(),
         markRemindedMovieAsReadWatcher(),
         rateShowWatcher(),
         rateRecentlyWatchedMovieWatcher(),
-        removeToMyDownloadsWatcher(),
         removeToRecentWatchesWatcher(),
         selectProfileWatcher(),
         showSubscriberWatcher(),
         toggleAddToMyListWatcher(),
         toggleRemindMeOfComingShowWatcher(),
         updateAuthenticatedProfileWatcher(),
-        updateRecentlyWatchedAtPositionMillisWatcher(),
-        viewDownloadsWatcher()
+        updateRecentlyWatchedAtPositionMillisWatcher()
     ]);
 }
 
