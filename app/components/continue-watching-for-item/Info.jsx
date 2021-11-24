@@ -72,6 +72,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
         <BottomSheet
             isVisible={ isVisible }
             containerStyle={ styles.container }
+            modalProps={{ onRequestClose: () => { setIsVisible(false)}}}
         >
             <StatusBar backgroundColor='rgba(0, 0, 0, .8)' />
             <View style={ styles.posterContainer }>
