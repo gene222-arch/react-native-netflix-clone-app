@@ -1,14 +1,10 @@
 import React, { useCallback } from 'react'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import FeatherIcon from 'react-native-vector-icons/Feather'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-
-/** Screens */
-import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DownloadsTab, MoreTab, DisplayVideoTab } from './BottomTabStacks'
+import { SelectProfileTab, HomeTab, ComingSoonTab, SearchTab, DisplayVideoTab } from './BottomTabStacks'
 import Colors from './../constants/Colors';
 import View from './../components/View';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
-import DownloadsTabBarBadge from '../components/bottom-tabs-badges/DownloadsTabBarBadge';
 import { createStructuredSelector } from 'reselect';
 import { navigationSelector } from './../redux/modules/navigation/selectors';
 import { connect } from 'react-redux';
@@ -77,21 +73,6 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
         
     }, [COMING_SOON_MOVIE.totalUpcomingMovies]);
 
-    const DOWNLOAD_OPTIONS = ({
-        tabBarIcon: (({ color }) => (
-            <FeatherIcon 
-                name='download' 
-                size={ 24 } 
-                color={ color }  
-            />
-        )),
-        tabBarBadge: <DownloadsTabBarBadge />,
-        tabBarBadgeStyle: {
-            backgroundColor: 'transparent'
-        },
-        tabBarVisible: NAVIGATION.tabBarVisible
-    });
-
     const hideTabScreen = {
         tabBarButton: () => <View style={{ width: 0, height: 0 }}></View>,
         tabBarVisible: false
@@ -103,7 +84,6 @@ const NavigationBottomTabs = ({ COMING_SOON_MOVIE, NAVIGATION }) =>
             <Tab.Screen name='Home' component={ HomeTab } options={ HOME_TAB_OPTIONS } />
             <Tab.Screen name='Search' component={ SearchTab } options={ hideTabScreen } />
             <Tab.Screen name='Coming soon' component={ ComingSoonTab } options={ COMING_SOON_OPTIONS } />
-            <Tab.Screen name='Downloads' component={ DownloadsTab } options={ DOWNLOAD_OPTIONS } />
             <Tab.Screen name='ProfilesAndMore' component={ ProfilesAndMoreStack } options={ hideTabScreen }/>
             <Tab.Screen name='DisplayVideoRoot' component={ DisplayVideoTab } options={ hideTabScreen }/>
         </Tab.Navigator>

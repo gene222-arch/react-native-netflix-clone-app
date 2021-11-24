@@ -2,8 +2,6 @@ import React from 'react'
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack'
 import HomeScreen from '../screens/bottom-tabs/home';
 import MovieDetailsScreen from './../screens/bottom-tabs/home/movie-details-screen/index';
-import DownloadsScreen from '../screens/bottom-tabs/downloads';
-import MoreDownloadsScreen from '../screens/bottom-tabs/downloads/MoreDownloadsScreen';
 import SearchScreen from '../screens/bottom-tabs/search';
 import ComingSoonScreen from '../screens/bottom-tabs/coming-soon';
 import MyListScreen from './../screens/bottom-tabs/home/home-categories-menus/MyListScreen';
@@ -171,26 +169,6 @@ export const ComingSoonTab = () =>
                 options={ comingSoonOptions }
             />
         </ComingSoonStack.Navigator>
-    );
-}
-
-const DownloadsStack = createStackNavigator();
-
-export const DownloadsTab = () => 
-{
-    return (
-        <DownloadsStack.Navigator initialRouteName='Downloads'>
-            <DownloadsStack.Screen 
-                name='Downloads' 
-                component={ DownloadsScreen } 
-                options={ DEFAULT_OPTIONS }
-            />
-            <DownloadsStack.Screen 
-                name='MoreDownloads' 
-                component={ MoreDownloadsScreen } 
-                options={({ route }) => ({ headerTitle: route.params.headerTitle })}
-            />
-        </DownloadsStack.Navigator>
     );
 }
 
