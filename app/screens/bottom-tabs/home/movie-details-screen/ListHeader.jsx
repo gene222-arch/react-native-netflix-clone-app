@@ -1,7 +1,7 @@
 import React from 'react'
 import View from './../../../../components/View';
 import Header from './Header';
-import PlayDownloadButton from './PlayDownloadButton';
+import MovieDetailPlayButton from './MovieDetailPlayButton';
 import MovieDescription from './MovieDescription';
 import ActionButton from './../../../../components/ActionButton';
 import PaginationPicker from './PaginationPicker';
@@ -21,7 +21,7 @@ const ListHeader = ({
     return (
         <View style={ styles.movieContainer }>
             <Header movie={ movie } />
-            <PlayDownloadButton
+            <MovieDetailPlayButton
                 isRecentlyWatched={ isRecentlyWatched }
                 videoStatus={ videoStatus }
                 handlePressPauseVideo={ handlePressPauseVideo }
