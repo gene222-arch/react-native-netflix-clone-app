@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 
-const HOST = '192.168.1.11';
+const HOST = '192.168.1.10';
 
 const DEVELOPMENT_MODE_API_URL = `http://${HOST}:8000/api`;
 const DEVELOPMENT_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;

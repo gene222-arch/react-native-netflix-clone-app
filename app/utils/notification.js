@@ -95,6 +95,15 @@ export const registerForPushNotificationsAsync = async () =>
 				lightColor: '#FF231F7C',
 				sound: true
 			});
+
+			Notifications.setNotificationChannelAsync('update-subscription-channel', 
+			{
+				name: 'UnSubscribed User',
+				importance: Notifications.AndroidImportance.MAX,
+				vibrationPattern: [0, 250, 250, 250],
+				lightColor: '#FF231F7C',
+				sound: true
+			});
 		}
 	
 		return token;
