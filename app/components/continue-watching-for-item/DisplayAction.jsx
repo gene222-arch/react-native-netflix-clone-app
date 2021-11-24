@@ -18,7 +18,7 @@ const DisplayAction = ({ isLoading = false, actionType }) =>
                         type={ actionType.iconType } 
                         size={ 24 } 
                         color='#fff' 
-                        solid={ actionType.isSoli } 
+                        solid={ actionType.isSolid } 
                     />
                 )
             }

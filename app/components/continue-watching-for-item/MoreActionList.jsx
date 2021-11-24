@@ -65,12 +65,16 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
 
     return (
         <View style={ styles.container }>
-
             { isVisible && <StatusBar backgroundColor='rgba(0, 0, 0, .7)' /> }
-
-            <BottomSheet isVisible={ isVisible } containerStyle={ styles.bottomSheetContainer }>
+            <BottomSheet 
+                isVisible={ isVisible } 
+                containerStyle={ styles.bottomSheetContainer }
+                modalProps={{ onRequestClose: () => { setIsVisible(false)}}}
+            >
             {
-                actionList.map((action, index) => action.show && <DisplayAction key={ index } isLoading={ AUTH.isLoading } actionType={ action }/> )
+                actionList.map((action, index) => (
+                    action.show && <DisplayAction key={ index } isLoading={ AUTH.isLoading } actionType={ action }/> 
+                ))
             }
             </BottomSheet>
         </View>
