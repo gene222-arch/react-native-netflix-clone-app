@@ -25,10 +25,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'rgba(0, 0, 0, .8)',
     },
-    downloadBtn: {
-        width: '100%',
-        backgroundColor: Colors.darkGrey
-    },
     episodeAndInfoContainer: {
         flex: 1,
         backgroundColor: Colors.darkGrey,
@@ -60,7 +56,9 @@ const styles = StyleSheet.create({
     },
     previewBtn: {
         width: '100%',
-        backgroundColor: Colors.darkGrey
+        backgroundColor: Colors.darkGrey,
+        paddingHorizontal: 45,
+        paddingVertical: 5
     },
     showDetails: {
         backgroundColor: Colors.darkGrey,

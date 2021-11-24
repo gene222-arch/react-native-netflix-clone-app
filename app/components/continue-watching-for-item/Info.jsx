@@ -123,20 +123,6 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                     />
                     <Button
                         type='clear' 
-                        title='Download'
-                        icon={
-                            <FeatherIcon 
-                                name='download'
-                                size={ 26 }
-                                color='#fff'
-                            />
-                        }
-                        iconPosition='top'
-                        buttonStyle={ styles.downloadBtn }
-                        titleStyle={ styles.actionBtnTitle }
-                    />
-                    <Button
-                        type='clear' 
                         title='Preview'
                         icon={
                             <FeatherIcon 
