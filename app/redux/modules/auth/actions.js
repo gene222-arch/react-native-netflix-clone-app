@@ -13,9 +13,6 @@ const {
     DELETE_PROFILE_START,
     DELETE_PROFILE_SUCCESS,
     DELETE_PROFILE_FAILED,
-    DOWNLOAD_VIDEO_START,
-    DOWNLOAD_VIDEO_SUCCESS,
-    DOWNLOAD_VIDEO_FAILED,
     DISABLE_PROFILE,
     LOGIN_START,
     LOGIN_SUCCESS,
@@ -35,9 +32,6 @@ const {
     RATE_RECENTLY_WATCHED_MOVIE_START,
     RATE_RECENTLY_WATCHED_MOVIE_SUCCESS,
     RATE_RECENTLY_WATCHED_MOVIE_FAILED,
-    REMOVE_TO_MY_DOWNLOADS_START,
-    REMOVE_TO_MY_DOWNLOADS_SUCCESS,
-    REMOVE_TO_MY_DOWNLOADS_FAILED,
     REMOVE_TO_RECENT_WATCHES_START,
     REMOVE_TO_RECENT_WATCHES_SUCCESS,
     REMOVE_TO_RECENT_WATCHES_FAILED,
@@ -63,9 +57,6 @@ const {
     UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_START,
     UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_SUCCESS,
     UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED,
-    VIEW_DOWNLOADS_START,
-    VIEW_DOWNLOADS_SUCCESS,
-    VIEW_DOWNLOADS_FAILED,
     UPDATE_USER_PROFILE,
     CLEAR_ERRORS_PROPERTY,
     UPDATE_SUBSCRIPTION_DETAILS
@@ -132,22 +123,6 @@ export const deleteProfileSuccess = (payload) => ({
 
 export const deleteProfileFailed = (payload) => ({
     type: DELETE_PROFILE_FAILED,
-    payload
-});
-
-/** Downloads */
-export const downloadVideoStart = (payload) => ({
-    type: DOWNLOAD_VIDEO_START,
-    payload
-});
-
-export const downloadVideoSuccess = (payload) => ({
-    type: DOWNLOAD_VIDEO_SUCCESS,
-    payload
-});
-
-export const downloadVideoFailed = (payload) => ({
-    type: DOWNLOAD_VIDEO_FAILED,
     payload
 });
 
@@ -249,22 +224,6 @@ export const rateRecentlyWatchedMovieSuccess = (payload) => ({
 
 export const rateRecentlyWatchedMovieFailed = (payload) => ({
     type: RATE_RECENTLY_WATCHED_MOVIE_FAILED,
-    payload
-});
-
-/** Remove to my downloads */
-export const removeToMyDownloadsStart = (payload) => ({
-    type: REMOVE_TO_MY_DOWNLOADS_START,
-    payload
-});
-
-export const removeToMyDownloadsSuccess = (payload) => ({
-    type: REMOVE_TO_MY_DOWNLOADS_SUCCESS,
-    payload
-});
-
-export const removeToMyDownloadsFailed = (payload) => ({
-    type: REMOVE_TO_MY_DOWNLOADS_FAILED,
     payload
 });
 
@@ -402,23 +361,6 @@ export const updateRecentlyWatchedAtPositionMillisSuccess = (payload) => ({
 
 export const updateRecentlyWatchedAtPositionMillisFailed = (payload) => ({
     type: UPDATE_RECENTLY_WATCHED_AT_POSITION_MILLIS_FAILED,
-    payload
-});
-
-
-/** View downloads */
-export const viewDownloadsStart = (payload) => ({
-    type: VIEW_DOWNLOADS_START,
-    payload
-});
-
-export const viewDownloadsSuccess = (payload) => ({
-    type: VIEW_DOWNLOADS_SUCCESS,
-    payload
-});
-
-export const viewDownloadsFailed = (payload) => ({
-    type: VIEW_DOWNLOADS_FAILED,
     payload
 });
 
