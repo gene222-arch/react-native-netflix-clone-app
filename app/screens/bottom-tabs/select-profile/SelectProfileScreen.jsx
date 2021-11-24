@@ -270,7 +270,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 }));
                 dispatch(AUTH_ACTION.showSubscriberStart());
                 navigation.navigate('SelectProfile');
-                setIsClickable(true);
+                onLoadCheckSubscriptionStatus(response.data);
             });
         });
         
