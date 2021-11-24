@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
         padding: 20
     },
     switchContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 40
     },
     switchLabel: {
         fontSize: 18,
@@ -52,9 +54,8 @@ const styles = StyleSheet.create({
         alignItems: 'stretch'
     },
     switch: {
-        marginBottom: 20,
-        backgroundColor: 'rgba(255, 255, 255, .8)',
-        borderRadius: 5
+        backgroundColor: Colors.grey,
+        height: 25
     },
     deleteBtnTitle: {
         color: Colors.grey

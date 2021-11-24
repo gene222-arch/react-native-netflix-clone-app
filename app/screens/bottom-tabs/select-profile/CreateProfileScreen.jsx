@@ -107,7 +107,6 @@ const CreateProfileScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE 
                                 <Switch  
                                     value={ profile.is_for_kids }
                                     onValueChange={ () => setProfile({ ...profile, is_for_kids: !profile.is_for_kids }) }
-                                    color={ Colors.grey }
                                     style={ styles.switch }
                                 />
                             </View>

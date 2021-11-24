@@ -70,7 +70,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
             dispatch(AUTH_ACTION.clearErrorProperty());
             setShowDeleteProfileDialog(false);
             setShowAvatars(false);
-            setProfile(null);
+            setProfile(AUTH.profile);
         }
     }, []);
 
