@@ -1,25 +1,25 @@
 import Constants from 'expo-constants';
 
-const HOST = '192.168.1.11';
+const HOST = '';
 
-const DEVELOPMENT_MODE_API_URL = `http://${HOST}:8000/api`;
-const DEVELOPMENT_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
-const STAGING_MODE_API_URL = `http://${HOST}:8000/api`;
-const STAGING_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
-const PRODUCTION_MODE_API_URL = `http://${HOST}:8000/api`;
-const PRODUCTION_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
-const WEB_APP_URL = 'http://192.168.1.11:3000';
+const DEVELOPMENT_MODE_API_URL = ``;
+const DEVELOPMENT_MODE_BROADCAST_URL = ``;
+const STAGING_MODE_API_URL = ``;
+const STAGING_MODE_BROADCAST_URL = ``;
+const PRODUCTION_MODE_API_URL = ``;
+const PRODUCTION_MODE_BROADCAST_URL = ``;
+const WEB_APP_URL = '';
 
 const PUSHER_CONFIG = 
 {
     WS_PORT: 6001,
-    DRIVER: 'pusher',
-    APP_ID: 'IDukFb2MggByICNXro1nS',
-    APP_KEY: 'KEYukFb2MggByICNXro1nS',
-    APP_SECRET: 'SECRETukFb2MggByICNXro1nS',
-    APP_CLUSTER: 'mt1',
+    DRIVER: '',
+    APP_ID: '',
+    APP_KEY: '',
+    APP_SECRET: '',
+    APP_CLUSTER: '',
     HOST,
-    WEBSOCKET_HOST: `${HOST}:6001`
+    WEBSOCKET_HOST: ``
 }
 
 const ENVIRONMENT_VARIABLES = 
