@@ -29,9 +29,7 @@ const ListHeader = ({
             />
             <MovieDescription movie={ movie } />
             <ActionButton movie={ movie } />
-            {
-                pages > 1 && <Text style={ styles.similarMoviesText }>Similar Movies</Text>
-            }
+            <Text style={ styles.similarMoviesText }>Similar Movies</Text>
             {
                 pages > 1 && (
                     <PaginationPicker 
