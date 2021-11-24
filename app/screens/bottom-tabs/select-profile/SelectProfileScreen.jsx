@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Image, TouchableOpacity, FlatList, InteractionManager } from 'react-native'
+import { Image, TouchableOpacity, FlatList, InteractionManager, BackHandler } from 'react-native'
 import View from '../../../components/View';
 import Text from '../../../components/Text';
 import styles from './../../../assets/stylesheets/selectProfile';
@@ -249,8 +249,17 @@ const SelectProfileScreen = ({ AUTH }) =>
     {
         onLoadSetProfileNumberLimit();
 
-        if (isNotSubscribed) {
+        if (isNotSubscribed) 
+        {
             setIsClickable(false);
+
+            BackHandler
+                .addEventListener('hardwareBackPress', () => true)
+                .remove();
+        }
+
+        if (! isNotSubscribed) {
+            BackHandler.addEventListener('hardwareBackPress', () => true);
         }
         
         SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => 
