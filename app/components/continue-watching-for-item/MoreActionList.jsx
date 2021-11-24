@@ -32,7 +32,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             containerStyle: styles.moreActionHeaderContainer,
         },
         { 
-            title: 'Episodes and Info', 
+            title: 'Similar Movies and Info', 
             iconType: 'feather',
             iconName: 'info',
             onPress: () => handlePressNavigateToShowDetailScreen(),
