@@ -1,11 +1,9 @@
 import React from 'react'
 import { StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import View from '../View';
 import Text from './../Text';
 import Colors from './../../constants/Colors';
-import ActivityIndicatorWrapper from './../ActivityIndicatorWrapper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const styles = StyleSheet.create({

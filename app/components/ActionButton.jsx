@@ -38,13 +38,14 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 
     const handlePressAddToMyList = () => 
     {
-        if (!AUTH.isLoading) {
+        if (!AUTH.isLoading) 
+        {
+            setTimeout(() => {
+                dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
+            }, 10);
             setIsMovieAddedToList(!isMovieAddedToList);
             const message = !isMovieAddedToList ? 'Added to My List' : 'Removed to My List';
             ToastAndroid.show( message, ToastAndroid.SHORT);
-            setTimeout(() => {
-                dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
-            }, 100);
         }
     }
 
@@ -58,16 +59,14 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     const handlePressLike = () => 
     {
         if (! AUTH.isLoading) {
+            setTimeout(() => {
+                dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
+            }, 10);
             setIsMovieLiked(!isMovieLiked);
-
             const { other_movies, ...movieDetails } = movie;
             const rate = !isMovieLiked ? 'like' : '';
             const message = !isMovieLiked ? 'Liked' : 'Unrated';
-            
             ToastAndroid.show( message, ToastAndroid.SHORT);
-            setTimeout(() => {
-                dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
-            }, 100);
         }
     }
 
@@ -172,7 +171,6 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                 label='Like'
                 name={ 'thumbs-up' }
                 size={ 30 }
-                isLoading={ AUTH.isLoading }
                 onPress={ handlePressLike }
                 isSolid={ isMovieLiked }
             />
@@ -181,7 +179,6 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                 label='Share'
                 name={ 'share-2' }
                 size={ 30 }
-                isLoading={ AUTH.isLoading }
                 onPress={ handlePressTabShare }
             />
         </View>

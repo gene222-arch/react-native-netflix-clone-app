@@ -36,6 +36,7 @@ const SelectProfileScreen = ({ AUTH }) =>
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const route = useRoute();
     const authenticatedUserId = AUTH.auth.user.id;
 
     const [ profileId, setProfileId ] = useState('');
@@ -326,7 +327,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 textConfirm=''
                 isVisible={ Boolean(AUTH.profileCountToDisable) && !isNotSubscribed }
             />
-            <LoadingSpinner isLoading={ AUTH.isLoading && useRoute().name === 'SelectProfile' } />
+            <LoadingSpinner isLoading={ AUTH.isLoading && route.name === 'SelectProfile' } />
             {/* Header */}
             <View style={ styles.header }>
                 <Text></Text>
