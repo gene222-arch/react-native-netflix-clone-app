@@ -23,7 +23,6 @@ import { useIsFocused } from '@react-navigation/core';
 import { StatusBar } from 'expo-status-bar';
 import Colors from './../../../constants/Colors';
 
-
 const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressAppSettings, onPressHelp }) =>
 [
     {
@@ -63,7 +62,7 @@ const moreOptions = ({ onPressSignOut, onPressMyList, onPressAccount, onPressApp
     }
 ];
 
-const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) => 
+const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES }) => 
 {
     const isFocused = useIsFocused();
     const navigation = useNavigation();
@@ -178,6 +177,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
         }
     }, [AUTH_PROFILE]); 
 
+    console.log(focusedRouteName)
     return (
         <View style={ styles.container }>
             { isFocused && <StatusBar backgroundColor={ Colors.dark } /> }
@@ -190,7 +190,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES, }) =>
                 onChangeText={ handleChangePin }
                 onCancel={ handleClickCancel }
             />
-            <LoadingSpinner isLoading={ AUTH.isLoading } />
+            <LoadingSpinner isLoading={ AUTH.isLoading && isFocused } />
             {/* Sign out Dialog */}
             <Overlay isVisible={ showSignOutDialog } onBackdropPress={ toggleSignOutDialog } overlayStyle={ styles.signOutDialog }>
                 <Text style={ styles.signOutQuery }>Sign out from this account?</Text>

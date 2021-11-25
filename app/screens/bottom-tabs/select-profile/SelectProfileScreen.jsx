@@ -22,7 +22,7 @@ import * as SUBSCRIPTION_CANCELLED_EVENT from './../../../events/subscription.ca
 import * as SUBSCRIPTION_EXPIRED_EVENT from './../../../events/subscription.expired.event'
 import InputPinCodeOverlay from './../../../components/InputPinCodeOverlay';
 import * as Network from 'expo-network';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import * as ALERT_UTIL from './../../../utils/alert'
 import PopUpDialog from './../../../components/PopUpDialog';
 
@@ -37,6 +37,7 @@ const SelectProfileScreen = ({ AUTH }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const route = useRoute();
+    const isFocused = useIsFocused();
     const authenticatedUserId = AUTH.auth.user.id;
 
     const [ profileId, setProfileId ] = useState('');
@@ -327,7 +328,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 textConfirm=''
                 isVisible={ Boolean(AUTH.profileCountToDisable) && !isNotSubscribed }
             />
-            <LoadingSpinner isLoading={ AUTH.isLoading && route.name === 'SelectProfile' } />
+            <LoadingSpinner isLoading={ AUTH.isLoading && isFocused } />
             {/* Header */}
             <View style={ styles.header }>
                 <Text></Text>
