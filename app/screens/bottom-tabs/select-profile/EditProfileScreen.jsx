@@ -21,8 +21,9 @@ import AvatarList from './AvatarList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
+import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
-const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
+const EditProfileScreen = ({ AUTH, AUTH_PROFILE, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE }) => 
 {
     const dispatch = useDispatch();
     const { id } = route.params;
@@ -47,11 +48,11 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
     const toggleDeleteProfileDialog = () => 
     {    
-        if (id === AUTH.profile.id) {
+        if (parseInt(id) === AUTH_PROFILE.id) {
             setShowProfileCantBeRemove(true);
         }
 
-        if (id !== AUTH.profile.id) {
+        if (parseInt(id) !== AUTH_PROFILE.id) {
             setShowProfileCantBeRemove(false);
             setShowDeleteProfileDialog(! showDeleteProfileDialog);
         }
@@ -180,6 +181,7 @@ const EditProfileScreen = ({ AUTH, route, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MES
 
 const mapStateToProps = createStructuredSelector({
     AUTH: authSelector,
+    AUTH_PROFILE: authProfileSelector,
     AUTH_ERROR_MESSAGE: selectAuthErrorMessages,
     AUTH_HAS_ERROR_MESSAGE: selectAuthHasErrorMessages
 });

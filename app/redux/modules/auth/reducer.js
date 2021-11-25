@@ -233,7 +233,6 @@ export default (state = initialState, { type, payload }) =>
         case DELETE_PROFILE_SUCCESS: 
             return {
                 ...state,
-                profile: PROFILE_DEFAULT_PROPS,
                 profiles: profiles.filter(({ id }) => id !== payload.profileID),
                 isLoading,
                 errors
