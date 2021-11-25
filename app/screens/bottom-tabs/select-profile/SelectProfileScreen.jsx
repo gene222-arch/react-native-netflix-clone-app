@@ -170,7 +170,10 @@ const SelectProfileScreen = ({ AUTH }) =>
     }
 
     const addHardwareBackPress = () => {
-        BackHandler.addEventListener('hardwareBackPress', () => true);
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            navigation.goBack();
+            return true;
+        });
     }
 
     const removeHardwareBackPress = () => {
