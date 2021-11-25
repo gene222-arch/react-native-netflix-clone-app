@@ -17,10 +17,6 @@ import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 const DisplayList = ({ isLoading = false, searchInput = '', filteredMovies, defaultMovies, handlePressDisplayShowInfo }) => 
 {
-    if (isLoading) {
-        return <SearchScreenLoader key={ String(isLoading) } />
-    }
-
     return (
         !searchInput.length  
             ? <DefaultSearchList key={ String(isLoading) } movies={ defaultMovies } handlePressDisplayShowInfo={ handlePressDisplayShowInfo }/>
@@ -110,6 +106,8 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) =>
             }
         }, [])
     );
+
+    if (isInteractionsComplete) return <SearchScreenLoader />
 
     return (
         <View style={ styles.container }>
