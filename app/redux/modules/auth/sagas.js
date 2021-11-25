@@ -76,16 +76,6 @@ function* deleteProfileSaga(payload)
     }
 }
 
-function* managePinCodeSaga(payload)  
-{
-    try {
-        yield put(ACTION.managePinCodeSuccess(payload));
-        yield call(AUTH_API.managePinCodeAsync, payload);
-    } catch ({ message }) {
-        yield put(ACTION.managePinCodeFailed({ message }));
-    }
-}
-
 function* markRemindedMovieAsReadSaga(payload)  
 {
     try {
@@ -305,14 +295,6 @@ function* logoutWatcher()
     }
 }
 
-function* managePinCodeWatcher()
-{
-    while (true) {
-        const { payload } = yield take(RATE_SHOW_START);
-        yield call(managePinCodeSaga, payload);
-    }
-}
-
 function* markRemindedMovieAsReadWatcher()
 {
     while (true) {
@@ -403,7 +385,6 @@ export default function* ()
         deleteProfileWatcher(),
         loginWatcher(),
         logoutWatcher(),
-        managePinCodeWatcher(),
         markRemindedMovieAsReadWatcher(),
         rateShowWatcher(),
         rateRecentlyWatchedMovieWatcher(),

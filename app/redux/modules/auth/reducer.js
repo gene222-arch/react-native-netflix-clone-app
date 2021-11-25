@@ -21,9 +21,6 @@ const {
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
-    MANAGE_PIN_CODE_START,
-    MANAGE_PIN_CODE_SUCCESS,
-    MANAGE_PIN_CODE_FAILED,
     MARK_REMINDED_MOVIE_AS_READ_START,
     MARK_REMINDED_MOVIE_AS_READ_SUCCESS,
     MARK_REMINDED_MOVIE_AS_READ_FAILED,
@@ -138,7 +135,6 @@ export default (state = initialState, { type, payload }) =>
         case DELETE_PROFILE_START:
         case LOGIN_START:
         case LOGOUT_START:
-        case MANAGE_PIN_CODE_START:
         case MARK_REMINDED_MOVIE_AS_READ_START:
         case RATE_SHOW_START:
         case RATE_RECENTLY_WATCHED_MOVIE_START:
@@ -391,20 +387,6 @@ export default (state = initialState, { type, payload }) =>
                 errors: payload.message
             }
 
-        case MANAGE_PIN_CODE_SUCCESS:
-            newProfiles = profiles.map(prof => {
-                return (prof.id === payload.user_profile_id)
-                    ? { ...prof, pin_code: payload.pin_code, is_profiled_locked: payload.is_profiled_locked }
-                    : prof
-            });
-
-            return {
-                ...state,
-                profiles: newProfiles,
-                isLoading,
-                errors
-            }
-
         case MARK_REMINDED_MOVIE_AS_READ_SUCCESS: 
 
             const remindedComingSoonMovies = loggedInProfile
@@ -652,7 +634,6 @@ export default (state = initialState, { type, payload }) =>
         case CLEAR_RECENT_WATCHES_FAILED:
         case CREATE_PROFILE_FAILED:
         case DELETE_PROFILE_FAILED:
-        case MANAGE_PIN_CODE_FAILED:
         case MARK_REMINDED_MOVIE_AS_READ_FAILED:
         case SELECT_PROFILE_FAILED:
         case SHOW_SUBSCRIBER_FAILED:

@@ -20,9 +20,6 @@ const {
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILED,
-    MANAGE_PIN_CODE_START,
-    MANAGE_PIN_CODE_SUCCESS,
-    MANAGE_PIN_CODE_FAILED,
     MARK_REMINDED_MOVIE_AS_READ_START,
     MARK_REMINDED_MOVIE_AS_READ_SUCCESS,
     MARK_REMINDED_MOVIE_AS_READ_FAILED,
@@ -160,22 +157,6 @@ export const logoutSuccess = (payload) => ({
 
 export const logoutFailed = (payload) => ({
     type: LOGOUT_FAILED,
-    payload
-});
-
-/** Manage Pin Code */
-export const managePinCodeStart = (payload) => ({
-    type: MANAGE_PIN_CODE_START,
-    payload
-});
-
-export const managePinCodeSuccess = (payload) => ({
-    type: MANAGE_PIN_CODE_SUCCESS,
-    payload
-});
-
-export const managePinCodeFailed = (payload) => ({
-    type: MANAGE_PIN_CODE_FAILED,
     payload
 });
 
