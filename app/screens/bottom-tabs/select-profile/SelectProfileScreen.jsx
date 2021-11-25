@@ -169,6 +169,16 @@ const SelectProfileScreen = ({ AUTH }) =>
         }
     }
 
+    const addHardwareBackPress = () => {
+        BackHandler.addEventListener('hardwareBackPress', () => true);
+    }
+
+    const removeHardwareBackPress = () => {
+        BackHandler
+            .addEventListener('hardwareBackPress', () => true)
+            .remove();
+    }
+
     useEffect(() => 
     {
         InteractionManager.runAfterInteractions(async () => 
@@ -222,6 +232,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                     }));
                     ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
                     navigation.navigate('SelectProfile');
+                    removeHardwareBackPress();
                 });
             }
             else {
@@ -249,17 +260,13 @@ const SelectProfileScreen = ({ AUTH }) =>
     {
         onLoadSetProfileNumberLimit();
 
-        if (isNotSubscribed) 
-        {
+        if (isNotSubscribed) {
             setIsClickable(false);
-
-            BackHandler
-                .addEventListener('hardwareBackPress', () => true)
-                .remove();
+            removeHardwareBackPress();
         }
 
         if (! isNotSubscribed) {
-            BackHandler.addEventListener('hardwareBackPress', () => true);
+            addHardwareBackPress();
         }
         
         SUBSCRIBED_SUCCESSFULLY_EVENT.listen(authenticatedUserId, response => 
@@ -269,9 +276,11 @@ const SelectProfileScreen = ({ AUTH }) =>
                     subscription_details: response.data
                 }));
                 dispatch(AUTH_ACTION.showSubscriberStart());
-                onLoadCheckSubscriptionStatus(response.data);
-                navigation.navigate('SelectProfile');
             });
+
+            navigation.navigate('SelectProfile');
+            onLoadCheckSubscriptionStatus(response.data);
+            addHardwareBackPress();
         });
         
         SUBSCRIPTION_EXPIRED_EVENT.listen(authenticatedUserId, response => 
