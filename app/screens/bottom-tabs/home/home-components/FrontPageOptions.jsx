@@ -32,7 +32,8 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
     const navigation = useNavigation();
 
     const [ showMovieInfo, setShowMovieInfo ] = useState(false);
-    
+    const [ isMovieAddedToMyList, setIsMovieAddedToMyList ] = useState(false);
+
     const genres = useMemo(() => frontPage?.genres.split(','), [ frontPage?.genres ]);
 
     const handlePressNavigateToDisplayVideo = () => 
@@ -69,13 +70,19 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
     {
         dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie: frontPage, user_profile_id: AUTH_PROFILE.id }));
 
-        const movieExists = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === frontPage?.id);
-        const message = movieExists ? 'Removed from My List' : 'Added to My List';
-
+        const message = isMovieAddedToMyList ? 'Removed from My List' : 'Added to My List';
         ToastAndroid.show(message, ToastAndroid.SHORT);
     }
 
-    useEffect(() => {
+    const onLoadSetIsMovieAddedToMyList = () => {
+        const isAddedToList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === frontPage?.id);
+        setIsMovieAddedToMyList(isAddedToList);
+    }
+
+    useEffect(() => 
+    {
+        onLoadSetIsMovieAddedToMyList();
+
         return () => {
             setShowMovieInfo(false);
         }

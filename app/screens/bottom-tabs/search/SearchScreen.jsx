@@ -107,7 +107,7 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) =>
         }, [])
     );
 
-    if (isInteractionsComplete) return <SearchScreenLoader />
+    if (! isInteractionsComplete) return <SearchScreenLoader />
 
     return (
         <View style={ styles.container }>
