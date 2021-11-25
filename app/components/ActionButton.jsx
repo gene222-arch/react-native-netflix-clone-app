@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { InteractionManager, ActivityIndicator } from 'react-native'
+import { InteractionManager, ActivityIndicator, ToastAndroid } from 'react-native'
 import View from './View';
 import { StyleSheet } from 'react-native'
 import * as AUTH_ACTION from '../redux/modules/auth/actions'
@@ -32,18 +32,20 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isMovieLiked, setIsMovieLiked ] = useState(false);
+    const [ isMovieAddedToList, setIsMovieAddedToList ] = useState(false);
+
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
     const handlePressAddToMyList = () => 
     {
-        const movieExistsInMyList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id);
-
-        const message = !movieExistsInMyList ? 'Added to My List' : 'Removed to My List';
-
-        batch(() => {
-            dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
-            !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message }));
-        });
+        if (!AUTH.isLoading) {
+            setIsMovieAddedToList(!isMovieAddedToList);
+            const message = !isMovieAddedToList ? 'Added to My List' : 'Removed to My List';
+            ToastAndroid.show( message, ToastAndroid.SHORT);
+            setTimeout(() => {
+                dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
+            }, 100);
+        }
     }
 
     const handlePressToggleRemindMe = () => {
@@ -55,14 +57,18 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
 
     const handlePressLike = () => 
     {
-        const { other_movies, ...movieDetails } = movie;
-        const rate = !isMovieLiked ? 'like' : '';
-        const message = !isMovieLiked ? 'Liked' : 'Unrated';
-        
-        batch(() => {
-            dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
-            dispatch(TOAST_ACTION.createToastMessageStart({ message }));
-        });
+        if (! AUTH.isLoading) {
+            setIsMovieLiked(!isMovieLiked);
+
+            const { other_movies, ...movieDetails } = movie;
+            const rate = !isMovieLiked ? 'like' : '';
+            const message = !isMovieLiked ? 'Liked' : 'Unrated';
+            
+            ToastAndroid.show( message, ToastAndroid.SHORT);
+            setTimeout(() => {
+                dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
+            }, 100);
+        }
     }
 
     const handlePressTabShare = async () => 
@@ -107,6 +113,9 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                     : Boolean(AUTH_PROFILE.liked_coming_soon_movies.find(({ movie_id }) => movie_id === movie.id))
             );
 
+            const isAddedToList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id);
+
+            setIsMovieAddedToList(isAddedToList);
             setIsMovieLiked(isLiked);
             setIsInteractionsComplete(true);
         });
@@ -114,6 +123,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
         return () => {
             setIsInteractionsComplete(false);   
             setIsMovieLiked(false);
+            setIsMovieAddedToList(false);
         }
     }, [
         AUTH_PROFILE.liked_movies, 
@@ -150,7 +160,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                     : (
                         <MaterialButton 
                             label='My List'
-                            name={ AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === movie.id) ? 'check' : 'plus' }
+                            name={ isMovieAddedToList ? 'check' : 'plus' }
                             size={ 30 }
                             isLoading={ AUTH.isLoading }
                             onPress={ handlePressAddToMyList }

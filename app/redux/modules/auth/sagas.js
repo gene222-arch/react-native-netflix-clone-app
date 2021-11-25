@@ -90,9 +90,8 @@ function* rateShowSaga(payload)
 {
     try {
         const { movie, ...rest } = payload;
-
-        yield put(ACTION.rateShowSuccess(payload));
         yield call(AUTH_API.rateMovieAsync, { movie_id: movie.id, ...rest });
+        yield put(ACTION.rateShowSuccess(payload));
     } catch ({ message }) {
         yield put(ACTION.rateShowFailed({ message }));
     }

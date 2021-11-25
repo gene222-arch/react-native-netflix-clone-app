@@ -19,21 +19,16 @@ const styles = StyleSheet.create({
     }
 });
 
-const FeatherButton = ({ name, size, color = '#FFF', label = '', isLoading = false, onPress, iconStyle = {} }) => 
+const FeatherButton = ({ name, size, color = '#FFF', label = '', onPress, iconStyle = {} }) => 
 {
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
-                <ActivityIndicatorWrapper
-                    isLoading={ isLoading }
-                    component={
-                        <FeatherIcon 
-                            name={ name }
-                            size={ size }
-                            color={ color }
-                            style={ iconStyle }
-                        />
-                    }
+                <FeatherIcon 
+                    name={ name }
+                    size={ size }
+                    color={ color }
+                    style={ iconStyle }
                 />
                 <Text style={ styles.label }>{ label.toUpperCase() }</Text>
             </View>

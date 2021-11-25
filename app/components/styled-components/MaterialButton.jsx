@@ -5,7 +5,6 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import View from '../View';
 import Text from './../Text';
 import Colors from './../../constants/Colors';
-import ActivityIndicatorWrapper from './../ActivityIndicatorWrapper';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,20 +18,15 @@ const styles = StyleSheet.create({
     }
 });
 
-const MaterialButton = ({ name, size, color = '#FFF', label = 'Label', isLoading = false, onPress }) => 
+const MaterialButton = ({ name, size, color = '#FFF', label = 'Label', onPress }) => 
 {
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
-                <ActivityIndicatorWrapper
-                    isLoading={ isLoading }
-                    component={
-                        <MaterialCommunityIcon 
-                            name={ name }
-                            size={ size }
-                            color={ color }
-                        />
-                    }
+                <MaterialCommunityIcon 
+                    name={ name }
+                    size={ size }
+                    color={ color }
                 />
                 <Text style={ styles.label }>{ label.toUpperCase() }</Text>
             </View>

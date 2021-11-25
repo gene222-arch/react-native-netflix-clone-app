@@ -20,21 +20,16 @@ const styles = StyleSheet.create({
     }
 });
 
-const FontAwesomeButton = ({ name, size, color = '#FFF', label = 'Label', isSolid = false, isLoading = false, onPress }) => 
+const FontAwesomeButton = ({ name, size, color = '#FFF', label = 'Label', isSolid = false, onPress }) => 
 {
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
-                <ActivityIndicatorWrapper
-                    isLoading={ isLoading }
-                    component={
-                        <FontAwesome5 
-                            name={ name }
-                            size={ size }
-                            color={ color }
-                            solid={ isSolid }
-                        />
-                    }
+                <FontAwesome5 
+                    name={ name }
+                    size={ size }
+                    color={ color }
+                    solid={ isSolid }
                 />
                 <Text style={ styles.label }>{ label.toUpperCase() }</Text>
             </View>

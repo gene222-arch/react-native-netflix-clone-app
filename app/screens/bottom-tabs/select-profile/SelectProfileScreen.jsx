@@ -8,7 +8,7 @@ import { connect, useDispatch, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
@@ -326,7 +326,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 textConfirm=''
                 isVisible={ Boolean(AUTH.profileCountToDisable) && !isNotSubscribed }
             />
-            <LoadingSpinner isLoading={ AUTH.isLoading } />
+            <LoadingSpinner isLoading={ AUTH.isLoading && useRoute().name === 'SelectProfile' } />
             {/* Header */}
             <View style={ styles.header }>
                 <Text></Text>
