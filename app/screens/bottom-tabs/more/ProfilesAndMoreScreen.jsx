@@ -177,7 +177,6 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES }) =>
         }
     }, [AUTH_PROFILE]); 
 
-    console.log(focusedRouteName)
     return (
         <View style={ styles.container }>
             { isFocused && <StatusBar backgroundColor={ Colors.dark } /> }
