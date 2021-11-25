@@ -180,8 +180,7 @@ const SelectProfileScreen = ({ AUTH }) =>
 
     const removeHardwareBackPress = () => {
         BackHandler
-            .addEventListener('hardwareBackPress', () => true)
-            .remove();
+            .addEventListener('hardwareBackPress', () => false);
     }
 
     useEffect(() => 
