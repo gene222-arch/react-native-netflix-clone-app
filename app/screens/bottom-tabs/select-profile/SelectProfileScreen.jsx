@@ -220,8 +220,8 @@ const SelectProfileScreen = ({ AUTH }) =>
                     dispatch(AUTH_ACTION.updateSubscriptionDetails({
                         subscription_details: response.data
                     }));
-                    navigation.navigate('SelectProfile');
                     ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
+                    navigation.navigate('SelectProfile');
                 });
             }
             else {
@@ -269,8 +269,8 @@ const SelectProfileScreen = ({ AUTH }) =>
                     subscription_details: response.data
                 }));
                 dispatch(AUTH_ACTION.showSubscriberStart());
-                navigation.navigate('SelectProfile');
                 onLoadCheckSubscriptionStatus(response.data);
+                navigation.navigate('SelectProfile');
             });
         });
         
