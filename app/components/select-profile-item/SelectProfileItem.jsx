@@ -20,6 +20,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClick
                     style={[ styles.profileImg, imageStyle ]}
                 />
                 <Text h5 style={ styles.profileName }>{ item.name.toUpperCase() }</Text>
+                <View style={ styles.iconsContainer }>
                 {
                     Boolean(item.is_for_kids) && (
                         <MaterialIcons 
@@ -50,6 +51,7 @@ const SelectProfileItem = ({ item, handlePressSelectProfile, imageStyle, isClick
                         />
                     )
                 }
+                </View>
             </TouchableOpacity>
         </View>
     )

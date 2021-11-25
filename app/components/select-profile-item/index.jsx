@@ -26,8 +26,7 @@ const DisplayProfile = ({ AUTH, isClickable, profile, handlePressSelectProfile, 
     }
 
     return !Boolean(profileCountToDisable) && 
-        (profileLimit > availableProfile) && 
-        AUTH.profiles.length <= profileLimit &&
+        (profileLimit > availableProfile) &&
         !['expired', 'cancelled', 'pending'].includes(AUTH.subscription_details.status) &&
         <AddProfile hasInternetConnection={ isClickable } />
 }

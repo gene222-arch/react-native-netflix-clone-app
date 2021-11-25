@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight + 10,
     },
     forKidsIcon: {
-        textAlign: 'center'
+        textAlign: 'center',
+        marginRight: 5
     },  
     header: {
         flexDirection: 'row',
@@ -35,8 +36,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 10
     },
+    iconsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },  
     profile: {
-        marginBottom: 20,
+        marginBottom: 10,
     },
     profileImg: {
         width: 120,
@@ -50,12 +56,13 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     profilesContainer: {
-        marginTop: 70,
+        marginTop: 40,
         paddingHorizontal: 40
     },
     lockIcon: {
         textAlign: 'center',
-        marginTop: 5
+        marginTop: 5,
+        marginRight: 5
     },  
     whosWatchingText: {
         textAlign: 'center',
