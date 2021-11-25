@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '60%',
+        width: '70%',
         marginLeft: 30,
         marginTop: 10
     }
@@ -33,12 +33,13 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isMovieLiked, setIsMovieLiked ] = useState(false);
     const [ isMovieAddedToList, setIsMovieAddedToList ] = useState(false);
+    const [ isSharing, setIsSharing ] = useState(false);
 
     const isReminded = Boolean(AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id));
 
     const handlePressAddToMyList = () => 
     {
-        if (!AUTH.isLoading) 
+        if (! AUTH.isLoading) 
         {
             setTimeout(() => {
                 dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie, user_profile_id: AUTH_PROFILE.id }));
@@ -59,19 +60,24 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     const handlePressLike = () => 
     {
         if (! AUTH.isLoading) {
+            const { other_movies, ...movieDetails } = movie;
+            const message = !isMovieLiked ? 'Liked' : 'Unrated';
             setTimeout(() => {
-                dispatch(AUTH_ACTION.rateShowStart({ movie: movieDetails, rate, user_profile_id: AUTH_PROFILE.id, model_type: modelType }));
+                dispatch(AUTH_ACTION.rateShowStart({ 
+                    movie: movieDetails, 
+                    rate: !isMovieLiked ? 'like' : '', 
+                    user_profile_id: AUTH_PROFILE.id, 
+                    model_type: modelType 
+                }));
             }, 10);
             setIsMovieLiked(!isMovieLiked);
-            const { other_movies, ...movieDetails } = movie;
-            const rate = !isMovieLiked ? 'like' : '';
-            const message = !isMovieLiked ? 'Liked' : 'Unrated';
             ToastAndroid.show( message, ToastAndroid.SHORT);
         }
     }
 
     const handlePressTabShare = async () => 
     {
+        setIsSharing(true);
         try {
             const downloadPath = FileSystem.documentDirectory + `${ modelType }${ movie.id }.jpg`;
 
@@ -100,6 +106,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
         } catch (error) {
             alert(error.message);
         }
+        setIsSharing(false);
     }
 
     useEffect(() => 
@@ -123,6 +130,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
             setIsInteractionsComplete(false);   
             setIsMovieLiked(false);
             setIsMovieAddedToList(false);
+            setIsSharing(false);
         }
     }, [
         AUTH_PROFILE.liked_movies, 
@@ -152,7 +160,6 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                             label='Remind Me'
                             name={ !isReminded ? 'bell' : 'check' }
                             size={ 30 }
-                            isLoading={ AUTH.isLoading }
                             onPress={ handlePressToggleRemindMe }
                         />
                     )
@@ -161,7 +168,6 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                             label='My List'
                             name={ isMovieAddedToList ? 'check' : 'plus' }
                             size={ 30 }
-                            isLoading={ AUTH.isLoading }
                             onPress={ handlePressAddToMyList }
                         />
                     )
@@ -176,7 +182,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
             />
 
             <FeatherButton 
-                label='Share'
+                label={ `${ isSharing ? 'Sharing...' : 'Share' }` }
                 name={ 'share-2' }
                 size={ 30 }
                 onPress={ handlePressTabShare }
