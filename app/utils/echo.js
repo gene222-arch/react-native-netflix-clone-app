@@ -27,8 +27,9 @@ export default async () =>
 		authEndpoint,
 		cluster: ENV.PUSHER_CONFIG.APP_CLUSTER,
 		enableStats: false,
-		enabledTransports: ['ws'],
+		enabledTransports: ['ws', 'wss'],
 		forceTLS: false,
+		encrypted: true,
 		wsHost: ENV.PUSHER_CONFIG.HOST,
 		wsPort: ENV.PUSHER_CONFIG.WS_PORT,
     };
@@ -36,11 +37,8 @@ export default async () =>
     const pusherClient = new PusherNative(ENV.PUSHER_CONFIG.APP_KEY, config);
 
 	const echoConfig = {
-		auth,
-		authEndpoint,
 		broadcaster: ENV.PUSHER_CONFIG.DRIVER,
 		client: pusherClient,
-		encrypted: true,
 		host: ENV.PUSHER_CONFIG.WEBSOCKET_HOST,
 		...config
     };
