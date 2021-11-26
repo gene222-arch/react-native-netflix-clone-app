@@ -1,7 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native'
-import * as SecureStoreInstance from './SecureStoreInstance'
 
 export const schedulePushNotification = async (title, body) => 
 {
@@ -60,8 +59,6 @@ export const registerForPushNotificationsAsync = async () =>
 			}
 	
 			token = (await Notifications.getExpoPushTokenAsync()).data;
-		
-			await SecureStoreInstance.storeExpoNotificationToken(token);
 		} else {
 			alert('Must use physical device for Push Notifications');
 		}

@@ -9,6 +9,7 @@ import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watche
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
 import * as ACTION from './actions'
 import * as SERVER_EXPO_NOTIF from './../../../services/expo-notifications/server.expo.notification'
+import * as NOTIFICATION_UTIL from './../../../utils/notification'
 
 const {
     ADD_TO_RECENT_WATCHES_START,
@@ -128,10 +129,14 @@ function* loginSaga(payload)
             subscription_details 
         };
 
-        const expoToken = yield call(SecureStoreInstance.getExpoNotificationToken)
+        const expoToken = yield call(NOTIFICATION_UTIL.registerForPushNotificationsAsync);
+
+        if (expoToken) {
+            yield call(SERVER_EXPO_NOTIF.subscribe, { expo_token: expoToken });
+        }
+
         yield call(SecureStoreInstance.storeAccessToken, access_token);
         yield put(ACTION.loginSuccess(loginSuccessData)); 
-        yield call(SERVER_EXPO_NOTIF.subscribe, { expo_token: expoToken });
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.loginFailed({ message }));    
