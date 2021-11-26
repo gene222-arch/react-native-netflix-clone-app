@@ -3,10 +3,9 @@ import { InteractionManager, ActivityIndicator, ToastAndroid } from 'react-nativ
 import View from './View';
 import { StyleSheet } from 'react-native'
 import * as AUTH_ACTION from '../redux/modules/auth/actions'
-import * as TOAST_ACTION from '../redux/modules/toast/actions'
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from '../redux/modules/auth/selectors';
-import { batch, connect, useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import MaterialButton from './styled-components/MaterialButton';
 import FeatherButton from './styled-components/FeatherButton';
 import FontAwesomeButton from './styled-components/FontAwesomeButton';
