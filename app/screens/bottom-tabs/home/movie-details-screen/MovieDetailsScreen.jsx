@@ -117,7 +117,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         }
     }
 
-    const runAfterInteractions = () => 
+    const onLoadSetMovie = () => 
     {
         const findMovie = MOVIE.movies.find(({ id }) => id === movieId);
 
@@ -146,7 +146,10 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             setSelectedPage(1);
             setDefaultPageList(pageList_[0]);
         }
+    }
 
+    const runAfterInteractions = () => {
+        onLoadSetMovie();
         setIsInteractionsComplete(true);
     }
 
@@ -168,7 +171,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             setLastPlayedPositionMillis(0);
             videoRef.current = null;
         }
-    }, []);
+    }, [movieId]);
 
     useEffect(() => 
     {
