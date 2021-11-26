@@ -58,7 +58,7 @@ const NotificationItem = ({ AUTH_PROFILE, item, isReminded = false, isRead = fal
                                 )
                         }
                     </Text>
-                    <Text style={ styles.releasedAtText }>{ item.movie.title }</Text>
+                    <Text style={ styles.movieTitle }>{ item.movie.title }</Text>
                     <Text style={ styles.releasedAtText }>{ item.created_at }</Text>
                 </View>
             </View>
@@ -91,6 +91,12 @@ const styles = StyleSheet.create({
     movieNotifTypeText: {
         fontSize: 15,
         fontWeight: 'bold'
+    },
+    movieTitle: {
+        fontSize: 14,
+        color: Colors.grey,
+        flex: 1,
+        flexWrap: 'wrap'
     },
     releasedAtText: {
         fontSize: 14,
