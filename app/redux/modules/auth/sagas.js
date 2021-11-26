@@ -129,14 +129,15 @@ function* loginSaga(payload)
             subscription_details 
         };
 
-        const expoToken = yield call(NOTIFICATION_UTIL.registerForPushNotificationsAsync);
+        yield call(SecureStoreInstance.storeAccessToken, access_token);
+        yield put(ACTION.loginSuccess(loginSuccessData)); 
 
+        const expoToken = yield call(NOTIFICATION_UTIL.registerForPushNotificationsAsync);
+        
         if (expoToken) {
             yield call(SERVER_EXPO_NOTIF.subscribe, { expo_token: expoToken });
         }
 
-        yield call(SecureStoreInstance.storeAccessToken, access_token);
-        yield put(ACTION.loginSuccess(loginSuccessData)); 
         RootNavigation.navigate('SelectProfile');
     } catch ({ message }) {
         yield put(ACTION.loginFailed({ message }));    
