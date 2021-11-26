@@ -45,13 +45,20 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
     {
         let movies_ = [ ...MOVIE.movies ];
 
-        if (! movies_.length) {
+        if (! movies_.length) 
+        {
             try {
                 const { data } = await MOVIE_API.findRandomlyAsync(isForKids);
                 setFrontPage(data);
             } catch ({ message }) {}
-        } else {
-            movies_ = movies_.filter(({ age_restriction }) => isForKids ? age_restriction <= 12 : age_restriction > 0);
+        }
+
+        if (movies_.length) 
+        {
+            if (isForKids) {
+                movies_ = movies_.filter(({ age_restriction }) => isForKids ? age_restriction <= 12 : age_restriction > 0);
+            }
+
             setFrontPage(movies_[Math.floor(Math.random() * (movies_.length - 1))]);
         }
     }    
