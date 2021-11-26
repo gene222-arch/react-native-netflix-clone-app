@@ -1,5 +1,4 @@
 import ACTION_TYPES from './action.types';
-import movieAPI from './../../../services/data/movies';
 
 const {
     CREATE_MOVIE,

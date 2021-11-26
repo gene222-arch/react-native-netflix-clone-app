@@ -1,5 +1,4 @@
 import ACTION_TYPES from './action.types';
-import accountProfiles from './../../../services/data/accountProfiles';
 
 const {
     ADD_TO_RECENT_WATCHES_START,

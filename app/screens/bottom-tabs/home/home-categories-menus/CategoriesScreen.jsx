@@ -2,19 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { ImageBackground, InteractionManager, FlatList } from 'react-native'
-
-import { authSelector, authProfileSelector } from './../../../../redux/modules/auth/selectors';
-import categories_ from './../../../../services/data/categories';
 import View from './../../../../components/View';
 import HomeCategory from './../../../../components/home-category/HomeCategory';
 import styles from './../../../../assets/stylesheets/categories';
-import LoadingScreen from '../../../../components/LoadingScreen';
 import FrontPageOptions from './../home-components/FrontPageOptions';
 import NavBar from './categories-components/NavBar';
 import ContinueWatchingFor from './../home-components/ContinueWatchingFor';
 import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import CategoriesScreenLoader from './../../../../components/loading-skeletons/CategoriesScreenLoader';
-import Text from '../../../../components/Text';
 import CategoriesScreenEmpty from '../../../../components/empty-data/CategoriesScreenEmpty';
 import { useFocusEffect } from '@react-navigation/core';
 
@@ -29,7 +24,7 @@ const DEFAULT_FRONT_PAGE = {
     title_logo_path: null
 }
 
-const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) => 
+const CategoriesScreen = ({ MOVIE, route }) => 
 {
     const { headerTitle } = route.params;
 
@@ -126,8 +121,6 @@ const CategoriesScreen = ({ AUTH, AUTH_PROFILE, MOVIE, route }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
-    AUTH_PROFILE: authProfileSelector,
     MOVIE: movieSelector
 });
 
