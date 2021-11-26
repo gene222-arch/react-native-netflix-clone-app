@@ -43,13 +43,16 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
 
     const onLoadSetFrontPage = async () => 
     {
-        if (! MOVIE?.movies?.length) {
+        let movies_ = [ ...MOVIE.movies ];
+
+        if (! movies_.length) {
             try {
                 const { data } = await MOVIE_API.findRandomlyAsync(isForKids);
                 setFrontPage(data);
             } catch ({ message }) {}
         } else {
-            setFrontPage(MOVIE.movies[Math.floor(Math.random() * (MOVIE.movies.length - 1))]);
+            movies_ = movies_.filter(({ age_restriction }) => isForKids ? age_restriction <= 12 : age_restriction > 0);
+            setFrontPage(movies_[Math.floor(Math.random() * (movies_.length - 1))]);
         }
     }    
 
