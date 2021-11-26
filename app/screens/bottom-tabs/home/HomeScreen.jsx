@@ -45,7 +45,7 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
     {
         if (! MOVIE?.movies?.length) {
             try {
-                const { data } = await MOVIE_API.findRandomlyAsync();
+                const { data } = await MOVIE_API.findRandomlyAsync(isForKids);
                 setFrontPage(data);
             } catch ({ message }) {}
         } else {

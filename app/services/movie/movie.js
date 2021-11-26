@@ -50,10 +50,10 @@ export const findByIDAsync = async (id) =>
 }
 
 
-export const findRandomlyAsync = async () => 
+export const findRandomlyAsync = async (isForkids = false) => 
 {
     return await axiosInstance()
-        .get(`/movies/random`)
+        .get(`/movies/random?isForKids=${ isForkids }`)
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data));
 }
