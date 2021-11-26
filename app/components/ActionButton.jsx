@@ -165,7 +165,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                     ? (
                         <MaterialButton 
                             label='Remind Me'
-                            name={ !isReminded ? 'bell' : 'check' }
+                            name={ !isMovieReminded ? 'bell' : 'check' }
                             size={ 30 }
                             onPress={ handlePressToggleRemindMe }
                         />

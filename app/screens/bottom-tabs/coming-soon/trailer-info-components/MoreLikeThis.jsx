@@ -6,32 +6,40 @@ import styles from './../../../../assets/stylesheets/trailerInfo';
 import { levenshteinFuzzyMatched } from './../../../../utils/algorithm';
 import LoadingScreen from './../../../../components/LoadingScreen';
 import { createStructuredSelector } from 'reselect';
-import { comingSoonMoviesSelector } from './../../../../redux/modules/coming-soon/selectors';
 import { connect } from 'react-redux';
 import { Image } from 'react-native-expo-image-cache';
 import { useNavigation } from '@react-navigation/native';
+import { movieSelector } from './../../../../redux/modules/movie/selectors';
 
-const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie }) => 
+const MoreLikeThis = ({ MOVIE, comingSoonMovie }) => 
 {
     const navigation = useNavigation();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ similarComingSoonMovies, setSimilarComingSoonMovies ] = useState([]);
+    const [ similarMovies, setSimilarMovies ] = useState([]);
 
-    const handlePressSimilarShow = (id) => navigation.push('TrailerInfo', { id });
+    const handlePressSimilarShow = (item) => 
+    {
+        navigation.navigate('Home', {
+            screen: 'MovieDetailScreen',
+            params: {
+                headerTitle: item.title,
+                id: item.id 
+            }
+        });
+    }
 
-    const filterViaLevenshteinAlgo = useCallback(e => {
-
+    const filterViaLevenshteinAlgo = useCallback(e => 
+    {
         /** Remove the current show */
         let similarMovies = [];
-        let filteredMovies = COMING_SOON_MOVIE.comingSoonMovies.filter(({ id }) => id !== comingSoonMovie.id);
 
         /** Get the genre to filter */
         const genres = comingSoonMovie.genres.split(',');
         const primaryGenre = genres[0];
 
         /** Filter the genres of each show via Levenshtein algorithm */
-        filteredMovies.forEach(show => {
+        MOVIE.movies.forEach(show => {
             show
                 .genres
                 .split(',')
@@ -43,7 +51,7 @@ const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie }) =>
                 });
         });
 
-        setSimilarComingSoonMovies(similarMovies);
+        setSimilarMovies(similarMovies);
     }, []);
 
     useEffect(() => {
@@ -54,7 +62,7 @@ const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie }) =>
 
         return () => {
             setIsInteractionsComplete(false);
-            setSimilarComingSoonMovies([]);
+            setSimilarMovies([]);
         }
     }, []);
 
@@ -66,10 +74,10 @@ const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie }) =>
         <View style={ styles.moreLikeThisContainer }>
             <FlatList 
                 keyExtractor={ ({ id }) => id.toString() }
-                data={ similarComingSoonMovies }
+                data={ similarMovies }
                 numColumns={ 3 }
                 renderItem={ ({ item }) => (
-                    <TouchableOpacity onPress={ () => handlePressSimilarShow(item.id) }>
+                    <TouchableOpacity onPress={ () => handlePressSimilarShow(item) }>
                         <Image 
                             preview={{ uri: item.poster_path }}
                             uri={ item.poster_path }
@@ -91,7 +99,7 @@ const MoreLikeThis = ({ COMING_SOON_MOVIE, comingSoonMovie }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    COMING_SOON_MOVIE: comingSoonMoviesSelector
+    MOVIE: movieSelector
 });
 
 export default connect(mapStateToProps)(MoreLikeThis)
