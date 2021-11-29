@@ -1,8 +1,5 @@
-/** Libraries */
 import Echo from "laravel-echo"
 import PusherNative from 'pusher-js/react-native';
-
-/** Utils */
 import * as SecureStoreInstance from './SecureStoreInstance'
 import ENV from '../../env';
 
