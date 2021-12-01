@@ -238,7 +238,6 @@ const SelectProfileScreen = ({ AUTH }) =>
                         subscription_details: response.data
                     }));
                     navigation.navigate('SelectProfile');
-                    ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
                     removeHardwareBackPress();
                 });
             }
@@ -273,6 +272,7 @@ const SelectProfileScreen = ({ AUTH }) =>
         }
 
         if (! isNotSubscribed) {
+            setIsClickable(true);
             addHardwareBackPress();
         }
         
@@ -284,10 +284,6 @@ const SelectProfileScreen = ({ AUTH }) =>
                 }));
                 dispatch(AUTH_ACTION.showSubscriberStart());
             });
-
-            navigation.navigate('SelectProfile');
-            onLoadCheckSubscriptionStatus(response.data);
-            addHardwareBackPress();
         });
         
         SUBSCRIPTION_EXPIRED_EVENT.listen(authenticatedUserId, response => 
