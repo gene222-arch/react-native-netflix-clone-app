@@ -26,7 +26,7 @@ export default async () =>
 		enableStats: false,
 		enabledTransports: ['ws', 'wss'],
 		forceTLS: false,
-		encrypted: true,
+		encrypted: false,
 		wsHost: ENV.PUSHER_CONFIG.HOST,
 		wsPort: ENV.PUSHER_CONFIG.WS_PORT,
     };
