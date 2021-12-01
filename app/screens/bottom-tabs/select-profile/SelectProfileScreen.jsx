@@ -180,7 +180,8 @@ const SelectProfileScreen = ({ AUTH }) =>
         });
     }
 
-    const removeHardwareBackPress = () => {
+    const removeHardwareBackPress = () => 
+    {
         BackHandler
             .addEventListener('hardwareBackPress', () => false);
     }
@@ -236,8 +237,8 @@ const SelectProfileScreen = ({ AUTH }) =>
                     dispatch(AUTH_ACTION.updateSubscriptionDetails({
                         subscription_details: response.data
                     }));
-                    ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
                     navigation.navigate('SelectProfile');
+                    ALERT_UTIL.okAlert('Subscription', 'Your subscription has been cancelled');
                     removeHardwareBackPress();
                 });
             }
