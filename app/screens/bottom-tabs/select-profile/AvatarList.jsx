@@ -15,17 +15,7 @@ import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import { connect } from 'react-redux';
 import * as ALERT_UTIL from './../../../utils/alert'
-import * as Permissions from 'expo-permissions';
-
-const avatarList = [
-    'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
-    'https://mir-s3-cdn-cf.behance.net/project_modules/disp/1bdc9a33850498.56ba69ac2ba5b.png',
-    'https://noirflix.netlify.app/imgs/icon3.png',  
-    'https://mir-s3-cdn-cf.behance.net/project_modules/disp/64623a33850498.56ba69ac2a6f7.png',
-    'https://mir-s3-cdn-cf.behance.net/project_modules/disp/c7906d33850498.56ba69ac353e1.png',
-    'https://mir-s3-cdn-cf.behance.net/project_modules/disp/e70b1333850498.56ba69ac32ae3.png',
-    'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png'
-];
+import avatarUris from './../../../services/app-avatar-uris/avatar.uris';
 
 const AvatarList = ({ AUTH, handlePress, profile, setProfile }) => 
 {
@@ -125,7 +115,7 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile }) =>
 
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
-            setAvatars(avatarList);
+            setAvatars(avatarUris);
             setIsInteractionsComplete(true);
         });
 

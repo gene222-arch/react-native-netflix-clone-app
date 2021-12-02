@@ -14,15 +14,16 @@ import { authSelector, selectAuthErrorMessages, selectAuthHasErrorMessages } fro
 import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import StyledTextInput from './../../../components/styled-components/StyledTextInput';
-import { TouchableOpacity, TouchableNativeFeedback } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AvatarList from './AvatarList';
+import avatarUris from './../../../services/app-avatar-uris/avatar.uris';
 
 const PROFILE_DEFAULT_PROPS = { 
     id: '', 
     name: '', 
     is_for_kids: false,
-    avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/84c20033850498.56ba69ac290ea.png',
+    avatar: avatarUris[0],
     avatar_file: null
 };
 
