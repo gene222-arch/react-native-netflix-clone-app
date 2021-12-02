@@ -11,6 +11,7 @@ import { useDispatch, connect, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { movieSelector } from './../../../redux/modules/movie/selectors';
 import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
+import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
@@ -63,6 +64,24 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
         }
     }    
 
+    const handleCreateMovie = (movieParam) => 
+    {
+        dispatch(MOVIE_ACTION.createMovie({ movie: movieParam }));
+    }
+
+    const handleReleasedMovie = (comingSoonMovieId) => 
+    {
+        const payload = {
+            id: comingSoonMovieId
+        };
+
+        batch(() => 
+        {
+            dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById(payload));
+            dispatch(AUTH_ACTION.updateRemindMeIsReleasedProperty(payload));
+        });
+    }
+
     useEffect(() => 
     {
         batch(() => {
@@ -80,22 +99,22 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
             MovieCreatedEvent.listen(response => 
             {
                 if (isForKids && response.data.age_restriction <= 12) {
-                    dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
+                    handleCreateMovie(response.data);
                 }
 
                 if (! isForKids) {
-                    dispatch(MOVIE_ACTION.createMovie({ movie: response.data }));
+                    handleCreateMovie(response.data);
                 }
             });
 
             ComingSoonMovieReleasedEvent.listen(response => 
             {
                 if (isForKids && response.data.age_restriction <= 12) {
-                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                    handleReleasedMovie(response.data.id);
                 }
 
                 if (! isForKids) {
-                    dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById({ id: response.data.id }));
+                    handleReleasedMovie(response.data.id);
                 }
             });
             
