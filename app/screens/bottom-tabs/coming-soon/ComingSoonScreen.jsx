@@ -44,28 +44,29 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
     const handlePressInfo = (id) => navigation.navigate('TrailerInfo', { id });
 
+    const handleCreateComingSoonMovie = (comingSoonMovieParam) => 
+    {
+        batch(() => {
+            dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ comingSoonMovieParam.title }` }));
+            dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: comingSoonMovieParam }));
+            dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
+        });
+    }
+
     const runAfterInteractions = () => 
     {
+        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: isForKids }));
+        
         ComingSoonMovieCreatedEvent.listen(response => 
         {
             if (isForKids && response.data.age_restriction <= 12) {
-                batch(() => {
-                    dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
-                    dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
-                    dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
-                });
+                handleCreateComingSoonMovie(response.data);
             }
 
             if (! isForKids) {
-                batch(() => {
-                    dispatch(TOAST_ACTION.createToastMessageStart({ message: `Coming Soon ${ response.data.title }` }));
-                    dispatch(COMING_SOON_MOVIE_ACTION.createComingSoonMovie({ comingSoonMovie: response.data }));
-                    dispatch(COMING_SOON_MOVIE_ACTION.incrementComingSoonMovieCount());
-                });
+                handleCreateComingSoonMovie(response.data);
             }
         });
-
-        dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: isForKids }));
         
         setIsInteractionsComplete(true);
     }
