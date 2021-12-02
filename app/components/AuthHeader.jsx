@@ -40,7 +40,13 @@ const AuthHeader = () =>
 {
     const navigation = useNavigation();
 
-    const handlePressNavigate = async () => await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/privacy`);
+    const handlePressNavigate = async () => {
+        try {
+            await WebBrowser.openBrowserAsync(`${ ENV.DEVELOPMENT_MODE_WEB_APP_URL }/legal/privacy`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <View style={ styles.container }>
