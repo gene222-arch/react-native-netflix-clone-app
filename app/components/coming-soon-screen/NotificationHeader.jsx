@@ -34,7 +34,7 @@ const NotificationHeader = ({ AUTH_PROFILE }) =>
         return () => {
             setNotifCount(0);
         }
-    }, [])
+    }, [AUTH_PROFILE.reminded_coming_soon_movies])
 
     return (
         <TouchableOpacity onPress={ handlePressNavigateToNotifList }>
