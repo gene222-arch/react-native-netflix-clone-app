@@ -79,6 +79,26 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         }
     }, [AUTH_PROFILE.id]); 
 
+
+    const handleRenderItem = ({ item, index }) => 
+    {
+        let isReminded = AUTH_PROFILE
+            .reminded_coming_soon_movies
+            .find(({ coming_soon_movie_id }) => coming_soon_movie_id === item.id);
+
+        return  (
+            <ComingSoonMovieItem 
+                movie={ item }
+                shouldShowPoster={ focusedIndex !== index }
+                shouldFocus={ focusedIndex === index }
+                shouldPlay={ focusedIndex === index && isFocused }
+                handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
+                handlePressInfo={ () => handlePressInfo(item.id) }
+                isReminded={ Boolean(isReminded) }
+            />
+        )
+    }
+
     useFocusEffect(
         useCallback(() => {
             if (COMING_SOON_MOVIE.totalUpcomingMovies) {
@@ -106,21 +126,7 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
                             keyExtractor={ ({ id }) => id.toString() }
                             onScroll={ handleOnScroll }
                             data={ COMING_SOON_MOVIE.comingSoonMovies }
-                            renderItem={ ({ item, index }) => {
-                                let isReminded = AUTH_PROFILE.reminded_coming_soon_movies.find(({ coming_soon_movie_id }) => coming_soon_movie_id === item.id);
-
-                                return  (
-                                    <ComingSoonMovieItem 
-                                        movie={ item }
-                                        shouldShowPoster={ focusedIndex !== index }
-                                        shouldFocus={ focusedIndex === index }
-                                        shouldPlay={ focusedIndex === index && isFocused }
-                                        handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
-                                        handlePressInfo={ () => handlePressInfo(item.id) }
-                                        isReminded={ Boolean(isReminded) }
-                                    />
-                                )
-                            }}
+                            renderItem={ handleRenderItem }
                             ListHeaderComponent={ 
                                 isInteractionsComplete && <NotificationHeader />
                             }
