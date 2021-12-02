@@ -48,6 +48,7 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
+    UPDATE_REMIND_ME_IS_RELEASED_PROPERTY,
     UPDATE_AUTHENTICATED_PROFILE_START,
     UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
     UPDATE_AUTHENTICATED_PROFILE_FAILED,
@@ -543,6 +544,31 @@ export default (state = initialState, { type, payload }) =>
             newProfiles = profiles.map(prof => {
                 return (prof.id === loggedInProfile.id) 
                     ? { ...prof, reminded_coming_soon_movies: remindedMovies } 
+                    : prof;
+            });
+
+            return {
+                ...state,
+                profiles: newProfiles,
+                isLoading,
+                errors
+            }
+
+
+        case UPDATE_REMIND_ME_IS_RELEASED_PROPERTY:
+
+            let remindedComingSoonMovies_ = [ ...loggedInProfile.reminded_coming_soon_movies ];
+
+            remindedComingSoonMovies_
+                .map(remindedComingSoonMovie => {
+                    return remindedComingSoonMovie.coming_soon_movie_id === payload.coming_soon_movie_id
+                        ? ({ ...remindedComingSoonMovie, is_released: true })
+                        : remindedComingSoonMovie
+                });
+
+            newProfiles = profiles.map(prof => {
+                return (prof.id === loggedInProfile.id) 
+                    ? { ...prof, reminded_coming_soon_movies: remindedComingSoonMovies_ } 
                     : prof;
             });
 

@@ -48,6 +48,7 @@ const {
     TOGGLE_ADD_TO_MY_LIST_START,
     TOGGLE_ADD_TO_MY_LIST_SUCCESS,
     TOGGLE_ADD_TO_MY_LIST_FAILED,
+    UPDATE_REMIND_ME_IS_RELEASED_PROPERTY,
     UPDATE_AUTHENTICATED_PROFILE_START,
     UPDATE_AUTHENTICATED_PROFILE_SUCCESS,
     UPDATE_AUTHENTICATED_PROFILE_FAILED,
@@ -309,6 +310,12 @@ export const toggleAddToMyListSuccess = (payload) => ({
 
 export const toggleAddToMyListFailed = (payload) => ({
     type: TOGGLE_ADD_TO_MY_LIST_FAILED,
+    payload
+});
+
+
+export const updateRemindMeIsReleasedProperty = (payload) => ({
+    type: UPDATE_REMIND_ME_IS_RELEASED_PROPERTY,
     payload
 });
 
