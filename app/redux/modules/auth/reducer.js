@@ -568,7 +568,7 @@ export default (state = initialState, { type, payload }) =>
             remindedComingSoonMovies_
                 .map(remindedComingSoonMovie => {
                     return remindedComingSoonMovie.coming_soon_movie_id === payload.id
-                        ? ({ ...remindedComingSoonMovie, is_released: true })
+                        ? ({ ...remindedComingSoonMovie, is_released: 1 })
                         : remindedComingSoonMovie
                 });
 

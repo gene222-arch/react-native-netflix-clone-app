@@ -8,7 +8,7 @@ import { connect, useDispatch, batch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { authSelector } from './../../../redux/modules/auth/selectors';
 import * as AUTH_ACTION from './../../../redux/modules/auth/actions'
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import DisplayProfile from '../../../components/select-profile-item';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import NAV_LOGO from './../../../assets/logotop.png'
@@ -34,10 +34,8 @@ const NETWORK_DEFAULT_PROPS = {
 
 const SelectProfileScreen = ({ AUTH }) => 
 {
-    console.log(AUTH.auth)
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const route = useRoute();
     const isFocused = useIsFocused();
     const authenticatedUserId = AUTH.auth.user.id;
 
