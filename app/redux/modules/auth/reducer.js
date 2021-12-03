@@ -565,7 +565,7 @@ export default (state = initialState, { type, payload }) =>
 
             let remindedComingSoonMovies_ = [ ...loggedInProfile.reminded_coming_soon_movies ];
 
-            remindedComingSoonMovies_
+            remindedComingSoonMovies_ = remindedComingSoonMovies_
                 .map(remindedComingSoonMovie => {
                     return remindedComingSoonMovie.coming_soon_movie_id === payload.id
                         ? ({ ...remindedComingSoonMovie, is_released: 1 })
