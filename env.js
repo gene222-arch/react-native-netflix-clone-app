@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 
-const HOST = '192.168.1.33';
+const HOST = '192.168.1.10';
 
 const DEVELOPMENT_MODE_API_URL = `http://${HOST}:8000/api`;
 const DEVELOPMENT_MODE_BROADCAST_URL = `http://${HOST}:8000/broadcasting/auth`;
@@ -45,17 +45,18 @@ const ENVIRONMENT_VARIABLES =
     }
 };
 
-const env = (env = Constants.manifest.releaseChannel) => 
+const env = () => 
 {
+    const ENV = Constants.manifest.releaseChannel;
     const { dev, staging, production } = ENVIRONMENT_VARIABLES;
 
-    if (env === null || env === undefined || env === "") return dev;
+    if (ENV === null || ENV === undefined || ENV === "") return dev;
 
-    if (env.indexOf('dev') !== -1) return dev;
+    if (ENV.indexOf('dev') !== -1) return dev;
 
-    if (env.indexOf('staging') !== -1) return staging;
+    if (ENV.indexOf('staging') !== -1) return staging;
 
-    if (env.indexOf('prod') !== -1) return production;
+    if (ENV.indexOf('prod') !== -1) return production;
 }
 
 export default env();
