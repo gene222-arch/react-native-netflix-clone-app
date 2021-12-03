@@ -534,7 +534,13 @@ export default (state = initialState, { type, payload }) =>
 
             if (! isReminded) {
                 remindedMovies.push({
-                    coming_soon_movie_id: movieID
+                    coming_soon_movie_id: movieID,
+                    id: (new Date()).toLocaleString(),
+                    is_released: 0,
+                    read_at: null,
+                    reminded_at: (new Date()).toLocaleString(),
+                    user_id: state.auth?.user.id,
+                    user_profile_id: loggedInProfile.id,
                 });
             }
             else {

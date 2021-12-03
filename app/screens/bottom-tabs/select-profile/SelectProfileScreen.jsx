@@ -34,6 +34,7 @@ const NETWORK_DEFAULT_PROPS = {
 
 const SelectProfileScreen = ({ AUTH }) => 
 {
+    console.log(AUTH.auth)
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const route = useRoute();
