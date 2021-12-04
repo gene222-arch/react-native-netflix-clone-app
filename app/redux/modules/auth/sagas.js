@@ -4,6 +4,7 @@ import * as RootNavigation from './../../../navigation/RootNavigation'
 import * as LOGIN_API from './../../../services/auth/login'
 import * as AUTH_API from './../../../services/auth/auth'
 import * as USER_API from './../../../services/User'
+import * as COMING_SOON_MOVIE_API from './../../../services/movie/coming.soon.movies'
 import * as REMIND_ME_API from './../../../services/movie/remind.me'
 import * as RECENTLY_WATCHED_MOVIE_API from './../../../services/recently-watched-movie/recently.watched.movie'
 import * as SecureStoreInstance from '../../../utils/SecureStoreInstance'
@@ -19,6 +20,7 @@ const {
     LOGIN_START,
     LOGOUT_START,
     MARK_REMINDED_MOVIE_AS_READ_START,
+    NOTIFY_USER_ON_MOVIE_RELEASED_START,
     RATE_SHOW_START,
     RATE_RECENTLY_WATCHED_MOVIE_START,
     REMOVE_TO_RECENT_WATCHES_START,
@@ -84,6 +86,16 @@ function* markRemindedMovieAsReadSaga(payload)
         yield put(ACTION.markRemindedMovieAsReadSuccess(payload));
     } catch ({ message }) {
         yield put(ACTION.markRemindedMovieAsReadFailed({ message }));
+    }
+}
+
+function* notifyUserOnMovieReleasedSaga(comingSoonMovieId)  
+{
+    try {
+        yield call(COMING_SOON_MOVIE_API.notifyUserOnMovieReleasedAsync, comingSoonMovieId);
+        yield put(ACTION.notifyUserOnMovieReleasedSuccess());
+    } catch ({ message }) {
+        yield put(ACTION.notifyUserOnMovieReleasedFailed({ message }));
     }
 }
 
@@ -308,6 +320,14 @@ function* markRemindedMovieAsReadWatcher()
     }
 }
 
+function* notifyUserOnMovieReleasedWatcher()
+{
+    while (true) {
+        const { payload } = yield take(NOTIFY_USER_ON_MOVIE_RELEASED_START);
+        yield call(notifyUserOnMovieReleasedSaga, payload);
+    }
+}
+
 function* rateShowWatcher()
 {
     while (true) {
@@ -391,6 +411,7 @@ export default function* ()
         loginWatcher(),
         logoutWatcher(),
         markRemindedMovieAsReadWatcher(),
+        notifyUserOnMovieReleasedWatcher(),
         rateShowWatcher(),
         rateRecentlyWatchedMovieWatcher(),
         removeToRecentWatchesWatcher(),

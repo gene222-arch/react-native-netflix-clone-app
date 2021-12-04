@@ -23,6 +23,9 @@ const {
     MARK_REMINDED_MOVIE_AS_READ_START,
     MARK_REMINDED_MOVIE_AS_READ_SUCCESS,
     MARK_REMINDED_MOVIE_AS_READ_FAILED,
+    NOTIFY_USER_ON_MOVIE_RELEASED_START,
+    NOTIFY_USER_ON_MOVIE_RELEASED_SUCCESS,
+    NOTIFY_USER_ON_MOVIE_RELEASED_FAILED,
     RATE_SHOW_START,
     RATE_SHOW_SUCCESS,
     RATE_SHOW_FAILED,
@@ -136,6 +139,7 @@ export default (state = initialState, { type, payload }) =>
         case LOGIN_START:
         case LOGOUT_START:
         case MARK_REMINDED_MOVIE_AS_READ_START:
+        case NOTIFY_USER_ON_MOVIE_RELEASED_START:
         case RATE_SHOW_START:
         case RATE_RECENTLY_WATCHED_MOVIE_START:
         case REMOVE_TO_RECENT_WATCHES_START:
@@ -386,6 +390,7 @@ export default (state = initialState, { type, payload }) =>
                 errors: payload.message
             }
 
+
         case MARK_REMINDED_MOVIE_AS_READ_SUCCESS: 
 
             const remindedComingSoonMovies = loggedInProfile
@@ -413,6 +418,14 @@ export default (state = initialState, { type, payload }) =>
                 profiles: newProfiles,
                 errors,
                 isLoading
+            }
+
+
+        case NOTIFY_USER_ON_MOVIE_RELEASED_SUCCESS:
+            return {
+                ...state,
+                isLoading,
+                errors
             }
 
         case CLEAR_RECENT_WATCHES_SUCCESS:
@@ -665,6 +678,7 @@ export default (state = initialState, { type, payload }) =>
         case CREATE_PROFILE_FAILED:
         case DELETE_PROFILE_FAILED:
         case MARK_REMINDED_MOVIE_AS_READ_FAILED:
+        case NOTIFY_USER_ON_MOVIE_RELEASED_FAILED:
         case SELECT_PROFILE_FAILED:
         case SHOW_SUBSCRIBER_FAILED:
         case RATE_SHOW_FAILED:
