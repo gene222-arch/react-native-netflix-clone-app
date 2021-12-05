@@ -77,6 +77,7 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
 
         batch(() => 
         {
+            dispatch(AUTH_ACTION.notifyUserOnMovieReleasedStart(payload));
             dispatch(COMING_SOON_MOVIE_ACTION.deleteComingSoonMovieById(payload));
             dispatch(AUTH_ACTION.updateRemindMeIsReleasedProperty(payload));
         });

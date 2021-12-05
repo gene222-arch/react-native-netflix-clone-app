@@ -89,10 +89,10 @@ function* markRemindedMovieAsReadSaga(payload)
     }
 }
 
-function* notifyUserOnMovieReleasedSaga(comingSoonMovieId)  
+function* notifyUserOnMovieReleasedSaga(payload)  
 {
     try {
-        yield call(COMING_SOON_MOVIE_API.notifyUserOnMovieReleasedAsync, comingSoonMovieId);
+        yield call(COMING_SOON_MOVIE_API.notifyUserOnMovieReleasedAsync, payload.id);
         yield put(ACTION.notifyUserOnMovieReleasedSuccess());
     } catch ({ message }) {
         yield put(ACTION.notifyUserOnMovieReleasedFailed({ message }));
