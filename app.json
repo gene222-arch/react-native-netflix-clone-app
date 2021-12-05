@@ -43,6 +43,8 @@
       "permissions": [
         "RECEIVE_BOOT_COMPLETED"
       ],
+      "package": "com.flicklifyorg.flicklify",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#000000"
