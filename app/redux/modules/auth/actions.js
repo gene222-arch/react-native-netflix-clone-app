@@ -39,9 +39,6 @@ const {
     SELECT_PROFILE_SUCCESS,
     SELECT_PROFILE_FAILED,
     SET_PROFILE_COUNT_TO_DISABLE,
-    NOTIFY_USER_ON_MOVIE_RELEASED_START,
-    NOTIFY_USER_ON_MOVIE_RELEASED_SUCCESS,
-    NOTIFY_USER_ON_MOVIE_RELEASED_FAILED,
     SHOW_SUBSCRIBER_START,
     SHOW_SUBSCRIBER_SUCCESS,
     SHOW_SUBSCRIBER_FAILED,
@@ -177,21 +174,6 @@ export const markRemindedMovieAsReadSuccess = (payload) => ({
 
 export const markRemindedMovieAsReadFailed = (payload) => ({
     type: MARK_REMINDED_MOVIE_AS_READ_FAILED,
-    payload
-});
-
-export const notifyUserOnMovieReleasedStart = (payload) => ({
-    type: NOTIFY_USER_ON_MOVIE_RELEASED_START,
-    payload
-});
-
-export const notifyUserOnMovieReleasedSuccess = (payload) => ({
-    type: NOTIFY_USER_ON_MOVIE_RELEASED_SUCCESS,
-    payload
-});
-
-export const notifyUserOnMovieReleasedFailed = (payload) => ({
-    type: NOTIFY_USER_ON_MOVIE_RELEASED_FAILED,
     payload
 });
 
