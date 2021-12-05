@@ -74,7 +74,9 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const handleClickChangeMovie = (selectedMovie) => 
     {
         setMovie(selectedMovie);
-        
+     
+        handleMovieHistory(selectedMovie.id);
+
         navigations.setParams({
             headerTitle: selectedMovie.title
         });
@@ -148,6 +150,20 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         }
     }
 
+    const handleMovieHistory = (selectedMovieId) => 
+    {
+        const findMovieInRecents = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === parseInt(selectedMovieId));
+
+        if (! findMovieInRecents) {
+            setIsRecentlyWatched(false);
+        }
+
+        if (findMovieInRecents) {
+            setIsRecentlyWatched(true);
+            setLastPlayedPositionMillis(findMovieInRecents.last_played_position_millis);
+        }
+    }
+
     const runAfterInteractions = () => {
         onLoadSetMovie();
         setIsInteractionsComplete(true);
@@ -181,16 +197,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     }, [isFullscreen]);
 
     useEffect(() => {
-        const findMovieInRecents = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === parseInt(movieId));
-
-        if (! findMovieInRecents) {
-            setIsRecentlyWatched(false);
-        }
-
-        if (findMovieInRecents) {
-            setIsRecentlyWatched(true);
-            setLastPlayedPositionMillis(findMovieInRecents.last_played_position_millis);
-        }
+        handleMovieHistory(movieId);
     }, [AUTH_PROFILE.recently_watched_movies]);
 
     if (! isInteractionsComplete || !movie) return <MovieDetailScreenLoader />
