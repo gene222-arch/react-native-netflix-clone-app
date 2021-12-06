@@ -1,6 +1,7 @@
 import { all, take, put, call } from 'redux-saga/effects'
 import ACTION_TYPES from './action.types'
 import * as API from './../../../services/movie/movie'
+import * as MOVIE_NOTIFICATION_API from './../../../services/movie/movie.notification'
 import { 
     incrementMovieViewsSuccess,
     incrementMovieViewsFailed,
@@ -10,6 +11,8 @@ import {
     getCategorizedMoviesFailed,
     getMoviesSuccess, 
     getMoviesFailed, 
+    getMovieNotificationsSuccess,
+    getMovieNotificationsFailed,
     getLatestTwentyMoviesSuccess, 
     getLatestTwentyMoviesFailed,
     getTopSearchedMoviesSuccess,
@@ -23,6 +26,7 @@ const {
     INCREMENT_MOVIE_SEARCH_COUNT_START,
     GET_CATEGORIZED_MOVIES_START,
     GET_MOVIES_START,
+    GET_MOVIE_NOTIFICATIONS_START,
     GET_LATEST_TWENTY_MOVIES_START,
     GET_TOP_SEARCHED_MOVIES_START,
     GET_MOST_LIKED_MOVIES_START
@@ -48,6 +52,16 @@ function* getMoviesSaga(payload)
         yield put(getMoviesSuccess({ movies }));
     } catch ({ message }) {
         yield put(getMoviesFailed({ message }));
+    }
+}
+
+function* getMovieNotificationsSaga()  
+{
+    try {
+        const { data: movieNotifications } = yield call(MOVIE_NOTIFICATION_API.fetchAllAsync);
+        yield put(getMovieNotificationsSuccess({ movieNotifications }));
+    } catch ({ message }) {
+        yield put(getMovieNotificationsFailed({ message }));
     }
 }
 
@@ -127,6 +141,15 @@ function* getMoviesWatcher()
     }
 }
 
+function* getMovieNotificationsWatcher()
+{
+    while (true) {
+        yield take(GET_MOVIE_NOTIFICATIONS_START);
+        yield call(getMovieNotificationsSaga);
+    }
+}
+
+
 function* getLatestTwentyMoviesWatcher()
 {
     while (true) {
@@ -166,6 +189,7 @@ export default function* ()
         incrementMovieViewsWatcher(),
         getCategorizedMoviesWatcher(),
         getMoviesWatcher(),
+        getMovieNotificationsWatcher(),
         getLatestTwentyMoviesWatcher(),
         getTopSearchedMoviesWatcher(),
         getMostLikedMoviesWatcher()

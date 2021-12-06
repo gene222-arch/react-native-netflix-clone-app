@@ -8,6 +8,9 @@ const {
     GET_MOVIES_START,
     GET_MOVIES_SUCCESS,
     GET_MOVIES_FAILED,
+    GET_MOVIE_NOTIFICATIONS_START,
+    GET_MOVIE_NOTIFICATIONS_SUCCESS,
+    GET_MOVIE_NOTIFICATIONS_FAILED,
     GET_LATEST_TWENTY_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_SUCCESS,
     GET_LATEST_TWENTY_MOVIES_FAILED,
@@ -66,6 +69,24 @@ export const getMoviesSuccess = (payload) => ({
 
 export const getMoviesFailed = (payload) => ({
     type: GET_MOVIES_FAILED,
+    payload
+});
+
+/** 
+ * Get movies notifications
+ */
+ export const getMovieNotificationsStart = (payload) => ({
+    type: GET_MOVIE_NOTIFICATIONS_START,
+    payload
+});
+
+export const getMovieNotificationsSuccess = (payload) => ({
+    type: GET_MOVIE_NOTIFICATIONS_SUCCESS,
+    payload
+});
+
+export const getMovieNotificationsFailed = (payload) => ({
+    type: GET_MOVIE_NOTIFICATIONS_FAILED,
     payload
 });
 

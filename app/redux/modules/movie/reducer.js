@@ -8,6 +8,9 @@ const {
     GET_MOVIES_START,
     GET_MOVIES_SUCCESS,
     GET_MOVIES_FAILED,
+    GET_MOVIE_NOTIFICATIONS_START,
+    GET_MOVIE_NOTIFICATIONS_SUCCESS,
+    GET_MOVIE_NOTIFICATIONS_FAILED,
     GET_LATEST_TWENTY_MOVIES_START,
     GET_LATEST_TWENTY_MOVIES_SUCCESS,
     GET_LATEST_TWENTY_MOVIES_FAILED,
@@ -35,6 +38,7 @@ const CATEGORY_DEFAULT_PROPS = [
 
 const initialState = {
     movies: [],
+    movieNotifications: [],
     categories: CATEGORY_DEFAULT_PROPS,
     most_liked_movies: [],
     topSearches: [],
@@ -56,6 +60,7 @@ export default (state = initialState, { type, payload }) =>
         case GET_TOP_SEARCHED_MOVIES_START:
         case GET_MOST_LIKED_MOVIES_START:
         case GET_MOVIES_START:
+        case GET_MOVIE_NOTIFICATIONS_START:
             return { 
                 ...state, 
                 isLoading: true
@@ -91,6 +96,14 @@ export default (state = initialState, { type, payload }) =>
             return { 
                 ...state, 
                 movies: payload.movies,
+                isLoading,
+                errors
+            }
+
+        case GET_MOVIE_NOTIFICATIONS_SUCCESS:
+            return { 
+                ...state, 
+                movieNotifications: payload.movieNotifications,
                 isLoading,
                 errors
             }
@@ -139,6 +152,7 @@ export default (state = initialState, { type, payload }) =>
         case GET_CATEGORIZED_MOVIES_FAILED:
         case GET_LATEST_TWENTY_MOVIES_FAILED:
         case GET_MOVIES_FAILED:
+        case GET_MOVIE_NOTIFICATIONS_FAILED:
         case GET_TOP_SEARCHED_MOVIES_FAILED:
         case GET_MOST_LIKED_MOVIES_FAILED:
             return { 
