@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import View from '../../../../components/View';
 import styles from './../../../../assets/stylesheets/myList';
 import { FlatList, TouchableOpacity } from 'react-native';
@@ -9,34 +9,33 @@ import { InteractionManager } from 'react-native'
 import ShowInfo from './../../../../components/continue-watching-for-item/Info';
 import MyListScreenLoader from '../../../../components/loading-skeletons/MyListScreenLoader';
 import { Image } from 'react-native-expo-image-cache';
-import { useFocusEffect } from '@react-navigation/core';
 import MyListScreenEmpty from './../../../../components/empty-data/MyListScreenEmpty';
+import { useRoute } from '@react-navigation/native';
 
 
 const MyListScreen = ({ AUTH_PROFILE }) => 
 {
+    const { name } = useRoute();
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ show, setShow ] = useState(null);
     const [ shouldDisplayShowInfo, setShouldDisplayShowInfo ] = useState(false);
 
-    const handlePressDisplayShowInfo = (show) => {
+    const handlePressDisplayShowInfo = (selectedShow) => {
         setShouldDisplayShowInfo(true);
-        setShow(show);
+        setShow(selectedShow);
     }
 
-    useFocusEffect(
-        useCallback(() => {
-            InteractionManager.runAfterInteractions(() => {
-                setIsInteractionsComplete(true);
-            });
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(() => {
+            setIsInteractionsComplete(true);
+        });
 
-            return () => {
-                setIsInteractionsComplete(false);
-                setShow(null);
-                setShouldDisplayShowInfo(false);
-            }
-        }, [])
-    )
+        return () => {
+            setIsInteractionsComplete(false);
+            setShow(null);
+            setShouldDisplayShowInfo(false);
+        }
+    }, [])
 
     if (! isInteractionsComplete) return <MyListScreenLoader />
 
@@ -48,6 +47,7 @@ const MyListScreen = ({ AUTH_PROFILE }) =>
                 selectedShow={ show }
                 isVisible={ shouldDisplayShowInfo }
                 setIsVisible={ setShouldDisplayShowInfo }
+                isScreenMyList={ true }
             />
             <FlatList
                 keyExtractor={ (item, index) => index.toString() }

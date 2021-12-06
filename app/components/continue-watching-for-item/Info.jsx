@@ -18,12 +18,12 @@ import MaturityRatingBadge from '../MaturityRatingBadge';
 import WarningGenreBadge from '../WarningGenreBadge';
 
 
-const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) => 
+const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible, isScreenMyList = false }) => 
 {   
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const [ isMovieAddedToMyList, setIsMovieAddedToMyList ] = useState(false);
+    const [ isMovieAddedToMyList, setIsMovieAddedToMyList ] = useState(isScreenMyList);
 
     const handlePressPlay = () => 
     {
@@ -72,6 +72,10 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
 
     const handleToggleAddToMyList = () => 
     {
+        if (isScreenMyList) {
+            setIsVisible(false);
+        }
+
         setIsMovieAddedToMyList(! isMovieAddedToMyList);
 
         const message = isMovieAddedToMyList ? 'Removed from My List' : 'Added to My List';
@@ -83,8 +87,10 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
     }
 
     const onLoadSetIsMovieAddedToMyList = () => {
-        const isAddedToList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === selectedShow?.id);
-        setIsMovieAddedToMyList(isAddedToList);
+        if (! isScreenMyList) {
+            const isAddedToList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === selectedShow?.id);
+            setIsMovieAddedToMyList(isAddedToList);
+        }
     }
 
     useEffect(() => 
@@ -92,7 +98,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
         onLoadSetIsMovieAddedToMyList();
 
         return () => {
-            setIsMovieAddedToMyList(false);
+            setIsMovieAddedToMyList(isScreenMyList);
         }
     }, [AUTH_PROFILE.my_lists])
 
