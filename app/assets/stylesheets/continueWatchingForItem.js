@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     continueWatchingForHeader: {
-        fontSize: 20,
+        color: Colors.grey,
+        fontSize: 18,
         fontWeight: 'bold',
         paddingLeft: 10
     },  
@@ -32,6 +33,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
         borderBottomRightRadius: 5,
         borderBottomLeftRadius: 5
+    },
+    name: {
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     playIconContainer: {
         position: 'absolute',
