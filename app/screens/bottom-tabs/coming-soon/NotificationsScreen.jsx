@@ -2,38 +2,30 @@ import React, { useState, useEffect } from 'react'
 import View from './../../../components/View';
 import { StyleSheet, FlatList, InteractionManager } from 'react-native'
 import NotificationItem from '../../../components/coming-soon-screen/NotificationItem';
-import * as MOVIE_NOTIFICATION_API from './../../../services/movie/movie.notification'
 import { createStructuredSelector } from 'reselect';
+import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
 import { movieSelector } from './../../../redux/modules/movie/selectors';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import NotificationsScreenLoader from './../../../components/loading-skeletons/NotificationsScreenLoader';
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 
 const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
-    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ notifications, setNotifications ] = useState([]);
+    const dispatch = useDispatch();
 
-    const onLoadFetchMovieNotifications = async () => 
-    {
-        try {
-            const { data } = await MOVIE_NOTIFICATION_API.fetchAllAsync(AUTH_PROFILE.is_for_kids);
-            setNotifications(data);
-        } catch ({ message }) {
-            console.log(message);
-        }
-    }
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(MOVIE.movieNotifications.length);
+
+    const onLoadDispatchGetMovieNotifications = () => dispatch(MOVIE_ACTION.getMovieNotificationsStart());
 
     useEffect(() => 
     {
         InteractionManager.runAfterInteractions(() => {
-            onLoadFetchMovieNotifications();
+            onLoadDispatchGetMovieNotifications();
             setIsInteractionsComplete(true);
-        });  
+        });
 
         return () => {
             setIsInteractionsComplete(false);
-            setNotifications([]);
         }
     }, [MOVIE.movies]);
 
@@ -43,7 +35,7 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
         <View style={ styles.container }>
             <FlatList 
                 keyExtractor={ (item, index) => index.toString() }
-                data={ notifications }
+                data={ MOVIE.movieNotifications }
                 renderItem={ ({ item }) => 
                 {
                     let isReminded = false;
