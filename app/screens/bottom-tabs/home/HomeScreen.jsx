@@ -128,9 +128,7 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
         }   
     }, []);
 
-    if (! isInteractionsComplete) {
-        return <HomeFrontPageLoader />
-    }
+    if (! isInteractionsComplete) return <HomeFrontPageLoader />
 
     return (
         <View>
