@@ -8,7 +8,7 @@ const axiosInstance = () =>
     const headers = {};
 
     const axiosInstance = Axios.create({
-        baseURL: ENV.DEVELOPMENT_MODE_API_URL,
+        baseURL: ENV.LARAVEL_APP_API_URL,
         headers
     });
 

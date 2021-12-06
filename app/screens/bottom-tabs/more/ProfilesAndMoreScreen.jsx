@@ -85,7 +85,7 @@ const ProfilesAndMoreScreen = ({ AUTH, AUTH_PROFILE, ORDERED_PROFILES }) =>
 
             const queryParams = `?token=${ accessToken }&profileId=${ AUTH_PROFILE.id }&path=home`;
     
-            await WebBrowser.openBrowserAsync(`${ ENV.DEVELOPMENT_MODE_WEB_APP_URL }/auth/sign-in` + queryParams);
+            await WebBrowser.openBrowserAsync(`${ ENV.REACT_APP_URL }/auth/sign-in` + queryParams);
         } catch (error) {
             console.log(error);
         }

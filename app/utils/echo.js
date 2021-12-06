@@ -16,7 +16,7 @@ export default async () =>
 		},
 	};
 
-	const authEndpoint = ENV.DEVELOPMENT_MODE_BROADCAST_URL;
+	const authEndpoint = ENV.LARAVEL_APP_BROADCAST_URL;
 
 	const config = 
 	{
