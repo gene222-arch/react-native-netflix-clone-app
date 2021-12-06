@@ -90,7 +90,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
         return () => {
             setShowMovieInfo(false);
         }
-    }, []);
+    }, [AUTH_PROFILE.my_lists]);
 
     return (
         <View style={ styles.frontPageOptions }>

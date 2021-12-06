@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     previewBtn: {
         width: '100%',
         backgroundColor: Colors.darkGrey,
-        paddingHorizontal: 45,
         paddingVertical: 5
     },
     showDetails: {

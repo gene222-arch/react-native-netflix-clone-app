@@ -1,5 +1,5 @@
-import React from 'react'
-import { TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { TouchableOpacity, ToastAndroid } from 'react-native'
 import { BottomSheet, ListItem, Divider, Button } from 'react-native-elements';
 import styles from './../../assets/stylesheets/info';
 import Text from './../Text';
@@ -23,6 +23,8 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
+    const [ isMovieAddedToMyList, setIsMovieAddedToMyList ] = useState(false);
+
     const handlePressPlay = () => 
     {
         const recentWatch = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === selectedShow?.id);
@@ -37,7 +39,7 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                 duration_in_millis: durationInMillis,
                 last_played_position_millis: lastPlayedPositionMillis
             }));
-        }, 10);
+        }, 0);
 
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
@@ -67,6 +69,32 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
             headerTitle: selectedShow?.title
         });
     }
+
+    const handleToggleAddToMyList = () => 
+    {
+        setIsMovieAddedToMyList(! isMovieAddedToMyList);
+
+        const message = isMovieAddedToMyList ? 'Removed from My List' : 'Added to My List';
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+
+        setTimeout(() => {
+            dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie: selectedShow, user_profile_id: AUTH_PROFILE.id }));
+        }, 0);
+    }
+
+    const onLoadSetIsMovieAddedToMyList = () => {
+        const isAddedToList = AUTH_PROFILE.my_lists.find(({ movie_id }) => movie_id === selectedShow?.id);
+        setIsMovieAddedToMyList(isAddedToList);
+    }
+
+    useEffect(() => 
+    {
+        onLoadSetIsMovieAddedToMyList();
+
+        return () => {
+            setIsMovieAddedToMyList(false);
+        }
+    }, [AUTH_PROFILE.my_lists])
 
     return (
         <BottomSheet
@@ -136,6 +164,21 @@ const MovieInfo = ({ AUTH_PROFILE, selectedShow, isVisible, setIsVisible }) =>
                         buttonStyle={ styles.previewBtn }
                         titleStyle={ styles.actionBtnTitle }
                         onPress={ handlePressPreview }
+                    />
+                    <Button
+                        type='clear' 
+                        title='My List'
+                        icon={
+                            <FeatherIcon 
+                                name={ isMovieAddedToMyList ? 'check' : 'plus' }
+                                size={ 26 }
+                                color='#fff'
+                            />
+                        }
+                        iconPosition='top'
+                        buttonStyle={ styles.previewBtn }
+                        titleStyle={ styles.actionBtnTitle }
+                        onPress={ handleToggleAddToMyList }
                     />
                 </View>          
             </View>
