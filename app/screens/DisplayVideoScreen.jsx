@@ -24,6 +24,10 @@ const DisplayVideoScreen = () =>
 
     useEffect(() => 
     {
+        if (! isInteractionsComplete) {
+            onLoadLockToLandscape();
+        }
+
         InteractionManager.runAfterInteractions(async () => 
         {
             try {
@@ -57,12 +61,7 @@ const DisplayVideoScreen = () =>
         }
     }, [route.params])
 
-    useFocusEffect(useCallback(() => 
-    {
-        if (! isInteractionsComplete) {
-            onLoadLockToLandscape();
-        }
-
+    useFocusEffect(useCallback(() => {
         return () => {
             onUnloadUnlockLandscape();
         }

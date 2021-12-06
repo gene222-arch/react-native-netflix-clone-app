@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { BackHandler } from 'react-native'
 import { Video } from 'expo-av'
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation';
 import VideoPlayer from 'expo-video-player'
 import Text from './Text';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../constants/Dimensions';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/core'
 import * as AUTH_ACTION from './../redux/modules/auth/actions'
 import { useDispatch, connect } from 'react-redux';
@@ -62,6 +63,12 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
 
     useEffect(() => {
         onEnterFullScreen();
+
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            onExitFullScreen();
+
+            return true;
+        });
 
         return () => 
         {
