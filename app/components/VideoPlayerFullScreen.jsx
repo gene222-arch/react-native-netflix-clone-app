@@ -20,12 +20,12 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    const posMillis = useRef(0);
+    const durationMillis = useRef(0);
     const video = useRef(null);
     const [ inFullscreen, setInFullscreen ] = useState(false);
     const [ videoStatus, setVideoStatus ] = useState(null);
     const [ isLoaded, setIsLoaded ] = useState(false);
-    const [ positionMillis, setPositionMillis ] = useState(0);
-    const [ durationMillis, setDurationMillis ] = useState(0);
 
     const onEnterFullScreen = async () => 
     {
@@ -52,31 +52,73 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
             setTimeout(() => {
                 dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
                     movieId, 
-                    positionMillis, 
+                    positionMillis: posMillis.current, 
                     user_profile_id: AUTH_PROFILE.id,
-                    duration_in_millis: durationMillis
+                    duration_in_millis: durationMillis.current
                 }));
             }, 10);
         }
+
         navigation.goBack();
     };
+
+    const handlePlaybackCallback = status => 
+    {   
+        if (status.isPlaying) {
+            posMillis.current = parseInt(status.positionMillis);
+        }
+
+        if (! isLoaded) 
+        {
+            durationMillis.current = parseInt(status.durationMillis);
+            setVideoStatus(() => ({
+                ...status,
+                positionMillis: lastPlayedPositionMillis
+            }));
+
+            setIsLoaded(true);
+        }
+    }
 
     useEffect(() => {
         onEnterFullScreen();
 
-        BackHandler.addEventListener('hardwareBackPress', () => {
-            onExitFullScreen();
+        BackHandler.addEventListener('hardwareBackPress', async () => 
+        {
+            setStatusBarHidden(false);
 
+            video?.current?.unloadAsync();
+    
+            video?.current?.pauseAsync();
+    
+            setInFullscreen(false);
+    
+            await ScreenOrientation.unlockAsync();
+
+            if (hasLastPlayedPositionMillis) {
+                setTimeout(() => {
+                    dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
+                        movieId, 
+                        positionMillis: posMillis.current, 
+                        user_profile_id: AUTH_PROFILE.id,
+                        duration_in_millis: durationMillis.current
+                    }));
+                }, 10);
+            }
+
+            navigation.goBack();
+            
             return true;
         });
 
         return () => 
         {
+            posMillis.current = 0;
+            durationMillis.current = 0;
             video.current = null;
             setInFullscreen(false);
             setIsLoaded(false);
             setVideoStatus(null);
-            setPositionMillis(0);
         }
     }, [])
 
@@ -106,23 +148,7 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
                 height: inFullscreen ? DEVICE_WIDTH : 160,
                 width: inFullscreen ? DEVICE_HEIGHT : 320,
             }}
-            playbackCallback={status => 
-            {
-                if (status.isPlaying) {
-                    setPositionMillis(parseInt(status.positionMillis));
-                }
-
-                if (! isLoaded) 
-                {
-                    setDurationMillis(status.durationMillis);
-                    setVideoStatus(() => ({
-                        ...status,
-                        positionMillis: lastPlayedPositionMillis
-                    }));
-
-                    setIsLoaded(true);
-                }
-            }}
+            playbackCallback={ handlePlaybackCallback }
         />
     )
 }
