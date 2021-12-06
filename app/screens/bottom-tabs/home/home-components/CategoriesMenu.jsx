@@ -9,9 +9,12 @@ import Text from './../../../../components/Text';
 import { FlatList } from 'react-native';
 import categoriesConfig, { CATEGORY_NAMES } from './../../../../config/home.menu.category.list'
 import { useFocusEffect } from '@react-navigation/core';
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
 
-const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) => 
+const CategoriesMenu = ({ AUTH_PROFILE, defaultCategory = 'Home', isVisible, setIsVisible }) => 
 {
     const navigation = useNavigation();
     const [ selectedCategory, setSelectedCategory ] = useState(defaultCategory);
@@ -55,6 +58,7 @@ const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) =
         sportsOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SPORTS),
         suspenseOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.SUSPENSE),
         thrillerOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.THRILLER),
+        isForKids: AUTH_PROFILE.is_for_kids
     });
 
     useFocusEffect(
@@ -102,4 +106,8 @@ const CategoriesMenu = ({ defaultCategory = 'Home', isVisible, setIsVisible }) =
     )
 }
 
-export default CategoriesMenu
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(CategoriesMenu)

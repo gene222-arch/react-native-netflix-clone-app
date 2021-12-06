@@ -41,10 +41,12 @@ export default ({
     romanticComedyOnPress,
     sportsOnPress,
     suspenseOnPress,
-    thrillerOnPress
+    thrillerOnPress,
+    isForKids = false
 }) => 
 {
-    return [
+    const defaultCategories = 
+    [
         { 
             title: CATEGORY_NAMES.HOME,
             onPress: homeOnPress
@@ -74,28 +76,20 @@ export default ({
             onPress: comedyOnPress 
         },
         { 
-            title: CATEGORY_NAMES.CRIME,
-            onPress: crimeOnPress 
-        },
-        { 
             title: CATEGORY_NAMES.DOCUMENTARY,
             onPress: documentaryOnPress 
-        },
-        { 
-            title: CATEGORY_NAMES.DRAMA,
-            onPress: dramaOnPress 
         },
         { 
             title: CATEGORY_NAMES.FANTASY,
             onPress: fantasyOnPress 
         },
-        { 
-            title: CATEGORY_NAMES.HORROR,
-            onPress: horrorOnPress 
-        },
         {
             title: CATEGORY_NAMES.HISTORY,
             onPress: historyOnPress
+        },
+        { 
+            title: CATEGORY_NAMES.HORROR,
+            onPress: horrorOnPress 
         },
         {
             title: CATEGORY_NAMES.ROMANCE,
@@ -108,6 +102,22 @@ export default ({
         {
             title: CATEGORY_NAMES.SPORTS,
             onPress: sportsOnPress
+        },
+    ];
+
+    if (isForKids) {
+        return defaultCategories;
+    }
+
+    return [
+        ...defaultCategories,
+        { 
+            title: CATEGORY_NAMES.CRIME,
+            onPress: crimeOnPress 
+        },
+        { 
+            title: CATEGORY_NAMES.DRAMA,
+            onPress: dramaOnPress 
         },
         {
             title: CATEGORY_NAMES.SUSPENSE,
