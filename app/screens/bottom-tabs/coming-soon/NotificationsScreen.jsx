@@ -29,7 +29,12 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
         InteractionManager.runAfterInteractions(() => {
             onLoadFetchMovieNotifications();
             setIsInteractionsComplete(true);
-        });    
+        });  
+
+        return () => {
+            setIsInteractionsComplete(false);
+            setNotifications([]);
+        }
     }, [MOVIE.movies]);
 
     if (! isInteractionsComplete) return <NotificationsScreenLoader />
