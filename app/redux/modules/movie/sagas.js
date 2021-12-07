@@ -55,10 +55,10 @@ function* getMoviesSaga(payload)
     }
 }
 
-function* getMovieNotificationsSaga()  
+function* getMovieNotificationsSaga(payload)  
 {
     try {
-        const { data: movieNotifications } = yield call(MOVIE_NOTIFICATION_API.fetchAllAsync);
+        const { data: movieNotifications } = yield call(MOVIE_NOTIFICATION_API.fetchAllAsync, payload.isForKids);
         yield put(getMovieNotificationsSuccess({ movieNotifications }));
     } catch ({ message }) {
         yield put(getMovieNotificationsFailed({ message }));
@@ -144,8 +144,8 @@ function* getMoviesWatcher()
 function* getMovieNotificationsWatcher()
 {
     while (true) {
-        yield take(GET_MOVIE_NOTIFICATIONS_START);
-        yield call(getMovieNotificationsSaga);
+        const { payload } = yield take(GET_MOVIE_NOTIFICATIONS_START);
+        yield call(getMovieNotificationsSaga, payload);
     }
 }
 

@@ -15,7 +15,11 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(MOVIE.movieNotifications.length);
 
-    const onLoadDispatchGetMovieNotifications = () => dispatch(MOVIE_ACTION.getMovieNotificationsStart());
+    const onLoadDispatchGetMovieNotifications = () => {
+        dispatch(MOVIE_ACTION.getMovieNotificationsStart({
+            isForKids: AUTH_PROFILE.is_for_kids
+        }));
+    }
 
     useEffect(() => 
     {
