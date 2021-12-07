@@ -70,7 +70,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
                     user_profile_id: AUTH_PROFILE.id, 
                     model_type: modelType 
                 }));
-            }, 10);
+            }, 0);
             setIsMovieLiked(!isMovieLiked);
             ToastAndroid.show( message, ToastAndroid.SHORT);
         }
@@ -80,7 +80,7 @@ const ActionButton = ({ AUTH, AUTH_PROFILE, movie, modelType = 'Movie' }) =>
     {
         setIsSharing(true);
         try {
-            const downloadPath = FileSystem.documentDirectory + `${ modelType }${ movie.id }.jpg`;
+            const downloadPath = FileSystem.documentDirectory + `${ movie.title }.jpg`;
 
             const { exists } = await FileSystem.getInfoAsync(downloadPath);
             let localUri = null;
