@@ -3,7 +3,6 @@ import { TouchableOpacity } from 'react-native'
 import styles from './../../assets/stylesheets/continueWatchingForItem';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import View from './../View';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoreActionList from './MoreActionList';
 import Info from './Info';
 import { createStructuredSelector } from 'reselect';

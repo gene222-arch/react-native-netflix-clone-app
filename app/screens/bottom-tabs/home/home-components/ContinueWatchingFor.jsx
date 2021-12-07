@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { FlatList } from 'react-native'
 import { createStructuredSelector } from 'reselect';
 import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
