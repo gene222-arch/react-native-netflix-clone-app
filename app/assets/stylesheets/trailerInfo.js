@@ -99,9 +99,9 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     trailerTitleLogo: {
-        width: DEVICE_WIDTH,
-        height: 100,
-        resizeMode: 'contain',
+        width: 150,
+        height: 60,
+        marginLeft: 20
     },
     yearDuration: {
         width: '45%',
