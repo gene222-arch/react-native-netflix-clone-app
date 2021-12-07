@@ -54,7 +54,12 @@ const MoreLikeThis = ({ MOVIE, comingSoonMovie }) =>
         setSimilarMovies(similarMovies);
     }, []);
 
-    useEffect(() => {
+    useEffect(() => 
+    {
+        if (isInteractionsComplete) {
+            filterViaLevenshteinAlgo();
+        }
+
         InteractionManager.runAfterInteractions(() => {
             filterViaLevenshteinAlgo();
             setIsInteractionsComplete(true);
@@ -66,9 +71,8 @@ const MoreLikeThis = ({ MOVIE, comingSoonMovie }) =>
         }
     }, []);
 
-    if (!isInteractionsComplete) {
-        return <LoadingScreen />
-    }
+    
+    if (! isInteractionsComplete) return <LoadingScreen />
 
     return (
         <View style={ styles.moreLikeThisContainer }>
