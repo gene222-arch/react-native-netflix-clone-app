@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useRef, useCallback } from 'react'
 import { Video } from 'expo-av';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import View from './../View';
@@ -12,37 +12,26 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
     const isFocused = useIsFocused();
     const video = useRef(null);
 
-    const [ isFullscreen, setIsFullscreen ] = useState(false);
-
-
     const onChangeSourceRestartVideo = async () => {
         try {
             await video?.current?.unloadAsync();
             await video?.current?.loadAsync({ uri: movie.video_trailer_path }, {}, false);
             video.current = null;
         } catch ({ message }) {}
-    } 
-
-    const onUnloadUnlockLandscape = async () => {
+    }
+    
+    const handleFullscreenUpdate = async (e) => 
+    {
         try {
-            await ScreenOrientation.unlockAsync();
+            if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT) {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+            }
+
+            if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) { 
+                await ScreenOrientation.unlockAsync();
+            }
         } catch (error) {
             console.log(error);
-        }
-    }
-    
-    const onLoadLockToLandscape = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
-    }
-    
-    const handleFullscreenUpdate = e => 
-    {
-        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) {
-            setIsFullscreen(false);
-        }
-
-        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT) {
-            setIsFullscreen(true);
         }
     }
 
@@ -52,18 +41,7 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
                 onChangeSourceRestartVideo();
             }
         }, [])
-    )
-
-    useEffect(() => {
-        if (! isFullscreen) {
-            onUnloadUnlockLandscape();
-        }
-
-        if (isFullscreen) {
-            onLoadLockToLandscape();
-            video.current?.presentFullscreenPlayer();    
-        }
-    }, [isFullscreen])
+    );
 
     return (
         <View style={{ ...styles.container, opacity: shouldFocus ? 1 : 0.25 }}>
