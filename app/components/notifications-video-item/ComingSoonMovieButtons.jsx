@@ -3,8 +3,10 @@ import View from './../View';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import { TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Text from './../Text';
 import { Image } from 'react-native-expo-image-cache';
+import Colors from './../../constants/Colors';
 
 const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressInfo, isReminded = false}) => 
 {
@@ -19,10 +21,10 @@ const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressI
             <View style={ styles.remindMeInfoContainer }>
                 <TouchableOpacity onPress={ handlePressToggleRemindMe }>
                     <View style={ styles.remindMeContainer }>
-                        <FeatherIcon 
+                        <MaterialCommunityIcon 
                             name={ !isReminded ? 'bell' : 'check' }
                             size={ 28 }
-                            color='#fff'
+                            color={ !isReminded ? '#FFF' : Colors.netFlixRed }
                         />
                         <Text style={ styles.remindMeInfoText }>Remind Me</Text>
                     </View>
