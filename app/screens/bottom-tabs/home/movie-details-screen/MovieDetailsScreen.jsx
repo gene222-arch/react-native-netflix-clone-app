@@ -164,6 +164,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             setMovie(null);
             setSimilarMovies([]);
             setPages([]);
+            setPageIndex(0);
             setDefaultPageList([]);
             setSelectedPage(1);
             setVideoStatus(null);
