@@ -27,14 +27,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         padding: 20,
-    },
+    }, 
     similarMoviesNotFoundCaption: {
         color: Colors.grey,
         fontSize: 18,
     },
     moreLikeThisImg: {
         flex: 1,
-        width: (DEVICE_WIDTH / 3) - 20,
+        width: (DEVICE_WIDTH / 3) - 10,
         height: 170,
         resizeMode: 'contain',
         borderRadius: 5,
