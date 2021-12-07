@@ -33,13 +33,14 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         setFocusedIndex(offset);
     }, [focusedIndex]);
 
-    const handlePressToggleRemindMe = (movieID, isReminded = false) => {
-        batch(() => {
-            dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
-            setTimeout(() => {
+    const handlePressToggleRemindMe = (movieID, isReminded) => 
+    {
+        setTimeout(() => {
+            batch(() => {
+                dispatch(AUTH_ACTION.toggleRemindMeOfComingShowStart({ user_profile_id: AUTH_PROFILE.id, movieID }));
                 !isReminded && dispatch(TOAST_ACTION.createToastMessageStart({ message: 'Reminded' }));
-            }, 10);
-        });
+            });
+        }, 0);
     }
 
     const handlePressInfo = (id) => navigation.navigate('TrailerInfo', { id });
@@ -83,19 +84,14 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
 
     const handleRenderItem = ({ item, index }) => 
     {
-        let isReminded = AUTH_PROFILE
-            .reminded_coming_soon_movies
-            .find(({ coming_soon_movie_id }) => coming_soon_movie_id === item.id);
-
         return  (
             <ComingSoonMovieItem 
                 movie={ item }
                 shouldShowPoster={ focusedIndex !== index }
                 shouldFocus={ focusedIndex === index }
                 shouldPlay={ focusedIndex === index && isFocused }
-                handlePressToggleRemindMe={ () => handlePressToggleRemindMe(item.id, isReminded) }
+                handlePressToggleRemindMe={ handlePressToggleRemindMe }
                 handlePressInfo={ () => handlePressInfo(item.id) }
-                isReminded={ Boolean(isReminded) }
             />
         )
     }

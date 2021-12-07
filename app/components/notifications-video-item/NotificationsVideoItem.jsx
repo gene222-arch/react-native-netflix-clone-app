@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Video } from 'expo-av';
 import styles from './../../assets/stylesheets/notificationsVideoItem';
 import View from './../View';
@@ -6,11 +6,16 @@ import ComingSoonMovieDetails from './ComingSoonMovieDetails';
 import ComingSoonMovieButtons from './ComingSoonMovieButtons';
 import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import * as ScreenOrientation from 'expo-screen-orientation'
+import { createStructuredSelector } from 'reselect';
+import { authProfileSelector } from './../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
-const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPlay, handlePressToggleRemindMe, handlePressInfo, isReminded }) => 
+const NotificationsVideoItem = ({ AUTH_PROFILE, movie, shouldShowPoster, shouldFocus, shouldPlay, handlePressToggleRemindMe, handlePressInfo }) => 
 {
     const isFocused = useIsFocused();
     const video = useRef(null);
+
+    const [ isMovieReminded, setIsMovieReminded ] = useState(false);
 
     const onChangeSourceRestartVideo = async () => {
         try {
@@ -35,6 +40,15 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
         }
     }
 
+    const onLoadCheckIfMovieIsReminded = () => 
+    {
+        const isReminded = AUTH_PROFILE
+            .reminded_coming_soon_movies
+            .find(({ coming_soon_movie_id }) => coming_soon_movie_id === movie.id);
+
+        setIsMovieReminded(isReminded)
+    }
+
     useFocusEffect(
         useCallback(() => {
             return () => {
@@ -42,6 +56,14 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
             }
         }, [])
     );
+
+    useEffect(() => 
+    {
+        onLoadCheckIfMovieIsReminded();
+        return () => {
+            setIsMovieReminded(false);
+        }
+    }, []);
 
     return (
         <View style={{ ...styles.container, opacity: shouldFocus ? 1 : 0.25 }}>
@@ -60,9 +82,12 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
 
             <ComingSoonMovieButtons 
                 movie={ movie } 
-                handlePressToggleRemindMe={ handlePressToggleRemindMe }
+                handlePressToggleRemindMe={ () => {
+                    setIsMovieReminded(! isMovieReminded);
+                    handlePressToggleRemindMe(movie.id, isMovieReminded);
+                } }
                 handlePressInfo={ handlePressInfo }
-                isReminded={ isReminded }
+                isReminded={ isMovieReminded }
             />
 
             <ComingSoonMovieDetails movie={ movie } />
@@ -70,4 +95,8 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
     )
 }
 
-export default NotificationsVideoItem
+const mapStateToProps = createStructuredSelector({
+    AUTH_PROFILE: authProfileSelector
+});
+
+export default connect(mapStateToProps)(NotificationsVideoItem)
