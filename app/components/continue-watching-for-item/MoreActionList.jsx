@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -12,13 +12,40 @@ import View from './../View';
 const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, handlePressRemoveRate, isVisible, setIsVisible }) => 
 {
     const navigation = useNavigation();
-
     const getMovieRatingDetails = selectedVideo.user_ratings[0];
+
+    const [ rate, setRate ] = useState(getMovieRatingDetails?.rate);
 
     const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
         id: selectedVideo?.id,
         headerTitle: selectedVideo?.title
     });
+
+    const handlePressLike = () => 
+    {
+        if (! rate) {
+            setRate('like');
+            handleToggleLike();
+        }
+
+        if (rate === 'like') {
+            setRate('');
+            handlePressRemoveRate();
+        }
+    }
+
+    const handlePressDisLike = () => 
+    {
+        if (! rate) {
+            setRate('dislike');
+            handleToggleDisLike();
+        }
+
+        if (rate === 'dislike') {
+            setRate('');
+            handlePressRemoveRate();
+        }
+    }
 
     const actionList = 
     [
@@ -29,39 +56,46 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             show: true,
             onPressEndIcon: () => setIsVisible(false),
             titleStyle: styles.moreActionHeader,
-            containerStyle: styles.moreActionHeaderContainer,
+            containerStyle: styles.moreActionHeaderContainer
         },
         { 
             title: 'Similar Movies and Info', 
             iconType: 'feather',
             iconName: 'info',
             onPress: () => handlePressNavigateToShowDetailScreen(),
-            show: true,
+            show: true
         },
         { 
-            title: !getMovieRatingDetails?.rate ? 'Like' : 'Rated', 
+            title: rate ? 'Like' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
-            isSolid: getMovieRatingDetails?.rate === 'like',
-            onPress: () => !getMovieRatingDetails?.rate ? handleToggleLike() : handlePressRemoveRate(),
-            show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'like',
+            isSolid: (rate === 'like'),
+            onPress: () => handlePressLike(),
+            show: !rate || (rate === 'like')
         },
         { 
-            title: !getMovieRatingDetails?.rate ? 'Not For Me' : 'Rated', 
+            title: rate ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
-            isSolid: getMovieRatingDetails?.rate === 'dislike',
-            onPress: () => !getMovieRatingDetails?.rate ? handleToggleDisLike() : handlePressRemoveRate(),
-            show: !getMovieRatingDetails?.rate || getMovieRatingDetails?.rate === 'dislike',
+            isSolid: (rate === 'dislike'),
+            onPress: () => handlePressDisLike(),
+            show: !rate || (rate === 'dislike')
         },
         {
             title: !AUTH.isLoading ? 'Remove From Row' : 'Removing from row...',
             iconType: 'font-awesome-5',
             iconName: 'ban',
             onPress: () => handlePressRemove(),
-            show: true,
+            show: true
         },
     ];
+
+    useEffect(() => 
+    {
+        return () => {
+            setRate('');
+        }
+    }, []);
 
     return (
         <View style={ styles.container }>

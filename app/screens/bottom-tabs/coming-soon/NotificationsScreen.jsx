@@ -19,6 +19,10 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
 
     useEffect(() => 
     {
+        if (isInteractionsComplete) {
+            onLoadDispatchGetMovieNotifications();
+        }
+        
         InteractionManager.runAfterInteractions(() => {
             onLoadDispatchGetMovieNotifications();
             setIsInteractionsComplete(true);
