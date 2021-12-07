@@ -72,12 +72,7 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 
     return (
         <View style={ styles.container }>
-            {
-                AUTH.isLoading 
-                    ? <TextLoader />
-                    : <Text style={ styles.continueWatchingForHeader }>Continue Watching For <Text style={ styles.name }>{ name.toUpperCase() }</Text></Text>
-            }
-
+            <Text style={ styles.continueWatchingForHeader }>Continue Watching For <Text style={ styles.name }>{ name.toUpperCase() }</Text></Text>
             <FlatList 
                 keyExtractor={ (item, index) => index.toString() }
                 data={ recently_watched_movies }
