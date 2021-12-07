@@ -302,42 +302,47 @@ export default (state = initialState, { type, payload }) =>
             }
 
         case RATE_RECENTLY_WATCHED_MOVIE_SUCCESS:
-            let newLikedMovies_ = [];
+            const currentLikedMovies = [ ...loggedInProfile.liked_movies ];
+            let updatedLikedMovies = [];
             
-            let isMovieLiked_ = loggedInProfile.liked_movies.find(({ movie_id }) => movie_id === payload.movie.id);
+            const isMovieLiked = currentLikedMovies.find(({ movie_id }) => movie_id === payload.movie.id);
             
-            if (! isMovieLiked_) {
-                newLikedMovies_.push(payload.movie);
-            }
-            else {
-                newLikedMovies_ = loggedInProfile.liked_movies.filter(({ movie_id }) => movie_id !== payload.movie.id);
+            if (! isMovieLiked) {
+                updatedLikedMovies.push(payload.movie);
             }
             
-            let user_ratings = [];
-            
-            let recentlyWatchedMovies = loggedInProfile
-                .recently_watched_movies.map(movie => {
-                    if (movie.id === payload.movie.id) 
+            if (isMovieLiked) {
+                updatedLikedMovies = currentLikedMovies.filter(({ movie_id }) => movie_id !== payload.movie.id);
+            }
+
+            const mapRecentlyWatchedMovies = (movie) => 
+            {
+                if (movie.id === payload.movie.id) 
+                {
+                    if (!movie.rate || movie.rate) 
                     {
-                        if (! movie.rate || movie.rate) {
-                            user_ratings = [{
+                        return ({ 
+                            ...movie, 
+                            user_ratings: [{
                                 movie_id: movie.id,
                                 model_type: payload.model,
                                 rate: payload.rate
-                            }];
+                            }]
+                        });
+                    } 
 
-                            return { ...movie, user_ratings };
-                        } else {
-                            return { ...movie, user_ratings: [] };
-                        }
-                    }
+                    return ({ ...movie, user_ratings: [] });
+                }
+        
+                return movie;
+            }
             
-                    return movie;
-            });
+            const recentlyWatchedMovies = loggedInProfile.recently_watched_movies.map(mapRecentlyWatchedMovies);
 
-            newProfiles = profiles.map(prof => {
+            newProfiles = profiles.map(prof => 
+            {
                 return (prof.id === loggedInProfile.id) 
-                    ? { ...prof, recently_watched_movies: recentlyWatchedMovies, liked_movies: newLikedMovies_ } 
+                    ? { ...prof, recently_watched_movies: recentlyWatchedMovies, liked_movies: updatedLikedMovies } 
                     : prof;
             });
 
