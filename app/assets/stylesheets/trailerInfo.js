@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     },
     moreLikeThisImg: {
         flex: 1,
-        width: 125,
+        width: (DEVICE_WIDTH / 3) - 20,
         height: 170,
         resizeMode: 'contain',
         borderRadius: 5,
