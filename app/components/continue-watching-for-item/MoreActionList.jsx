@@ -15,7 +15,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
     const navigation = useNavigation();
     const getMovieRatingDetails = selectedVideo.user_ratings[0];
 
-    const [ rate, setRate ] = useState(getMovieRatingDetails?.rate);
+    const [ rate, setRate ] = useState('');
 
     const handlePressNavigateToShowDetailScreen = () => navigation.navigate('MovieDetailScreen', { 
         id: selectedVideo?.id,
@@ -107,6 +107,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
 
     useEffect(() => 
     {
+        setRate(getMovieRatingDetails?.rate);
         return () => {
             setRate('');
         }
