@@ -27,12 +27,12 @@ const NotificationsVideoItem = ({ movie, shouldShowPoster, shouldFocus, shouldPl
         try {
             await ScreenOrientation.unlockAsync();
         } catch (error) {
-            
+            console.log(error);
         }
     }
     
     const onLoadLockToLandscape = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
     }
     
     const handleFullscreenUpdate = e => 

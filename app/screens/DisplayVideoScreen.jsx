@@ -19,7 +19,7 @@ const DisplayVideoScreen = () =>
     const onUnloadUnlockLandscape = async () => await ScreenOrientation.unlockAsync();
 
     const onLoadLockToLandscape = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
     }
 
     useEffect(() => 
