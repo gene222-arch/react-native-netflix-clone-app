@@ -222,6 +222,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                         pages={ pages }
                         selectedPage={ selectedPage }
                         handleChangePage={ handleChangePage }
+                        hasSimilarMovies={ Boolean(similarMovies.length) }
                     />
                 }
             />

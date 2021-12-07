@@ -16,7 +16,8 @@ const ListHeader = ({
     handlePressPlayVideo,  
     pages, 
     selectedPage, 
-    handleChangePage  
+    handleChangePage,
+    hasSimilarMovies
 }) => {
     return (
         <View style={ styles.movieContainer }>
@@ -29,7 +30,7 @@ const ListHeader = ({
             />
             <MovieDescription movie={ movie } />
             <ActionButton movie={ movie } />
-            <Text style={ styles.similarMoviesText }>Similar Movies</Text>
+            { hasSimilarMovies && <Text style={ styles.similarMoviesText }>Similar Movies</Text> }
             {
                 pages > 1 && (
                     <PaginationPicker 
