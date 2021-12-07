@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { ToastAndroid } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -23,20 +24,20 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
 
     const handlePressLike = () => 
     {
+        if (AUTH.isLoading) {
+            ToastAndroid.show('Please Wait...', ToastAndroid.SHORT);
+        }
+
         if (! AUTH.isLoading)
         {
             if (! rate) {
                 setRate('like');
-                setTimeout(() => {
-                    handleToggleLike();
-                }, 0);
+                handleToggleLike();
             }
     
             if (rate === 'like') {
                 setRate('');
-                setTimeout(() => {
-                    handlePressRemoveRate();
-                }, 0);
+                handlePressRemoveRate();
             }
         }
     }
