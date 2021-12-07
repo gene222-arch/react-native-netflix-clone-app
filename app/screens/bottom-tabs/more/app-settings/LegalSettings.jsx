@@ -15,7 +15,7 @@ const AboutSettings = () =>
     const handlePressPrivacy = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/privacy`);
+            await WebBrowser.openBrowserAsync(`${ ENV.REACT_APP_URL }/legal/privacy`);
         } catch (error) {
             console.log(error);
         }
@@ -24,7 +24,7 @@ const AboutSettings = () =>
     const handlePressCookies = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/terms-and-conditions`);
+            await WebBrowser.openBrowserAsync(`${ ENV.REACT_APP_URL }/legal/terms-and-conditions`);
         } catch (error) {
             console.log(error);
         }
@@ -33,7 +33,7 @@ const AboutSettings = () =>
     const handlePressTermsAndConditions = async () => 
     {
         try {
-            await WebBrowser.openBrowserAsync(`${ ENV.WEB_APP_URL }/legal/terms-and-conditions`);
+            await WebBrowser.openBrowserAsync(`${ ENV.REACT_APP_URL }/legal/terms-and-conditions`);
         } catch (error) {
             console.log(error);
         }
