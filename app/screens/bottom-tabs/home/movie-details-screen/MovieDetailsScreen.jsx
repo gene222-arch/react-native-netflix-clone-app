@@ -13,7 +13,6 @@ import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import MovieDetailScreenLoader from '../../../../components/loading-skeletons/MovieDetailScreenLoader';
 import ListHeader from './ListHeader';
 import { useNavigation } from '@react-navigation/native';
-import * as ScreenOrientation from 'expo-screen-orientation';
 
 const PER_PAGE = 3;
 
