@@ -17,45 +17,52 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
     
     const { id, name, recently_watched_movies } = AUTH_PROFILE;
 
-    const handleToggleLike = (movie) => {
-        const likePayload = {
+    const handleToggleLike = (movie) => 
+    {
+        const payload = {
             movie,
             user_profile_id: id,
             rate: 'like',
             model_type: 'Movie'
         };
 
-        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(likePayload));
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(payload));
     }
 
-    const handleToggleDisLike = (movie) => {
-        const dislikePayload = {
+    const handleToggleDisLike = (movie) => 
+    {
+        const payload = {
             movie,
             user_profile_id: id,
             rate: 'dislike',
             model_type: 'Movie'
         };
 
-        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(dislikePayload));
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(payload));
     }
 
-    const handlePressRemoveRate = (movie) => {
-        const likePayload = {
+    const handlePressRemoveRate = (movie) => 
+    {
+        const payload = {
             movie,
             user_profile_id: id,
             rate: '',
             model_type: 'Movie'
         };
 
-        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(likePayload));
+        dispatch(AUTH_ACTION.rateRecentlyWatchedMovieStart(payload));
     }
 
-    const handlePressRemove = (id) => dispatch(AUTH_ACTION.removeToRecentWatchesStart({
-        movie_id: id,
-        user_profile_id: AUTH_PROFILE.id
-    }));
+    const handlePressRemove = (id) => 
+    {
+        dispatch(AUTH_ACTION.removeToRecentWatchesStart({
+            movie_id: id,
+            user_profile_id: AUTH_PROFILE.id
+        }));
+    }
 
-    if (! recently_watched_movies.length) {
+    if (! recently_watched_movies.length) 
+    {
         return (
             <View style={ styles.emptyRecentWatchesContainer }>
                 <Text h4 style={ styles.emptyRecentWatchesText }>Your recently watched movie's will be shown here.</Text>
