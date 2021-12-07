@@ -10,7 +10,7 @@ const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressI
 {
     return (
         <View style={ styles.comingSoonVideoContainer }>
-            <View>
+            <View style={ styles.titleLogoContainer }>
                 <Image 
                     uri={ movie.title_logo_path }
                     style={ styles.titleLogo }

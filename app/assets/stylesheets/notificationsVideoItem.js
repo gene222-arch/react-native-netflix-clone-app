@@ -57,10 +57,13 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     titleLogo: {
-        width: 315,
+        width: '100%',
+        height: '100%'
+    },
+    titleLogoContainer: {
+        width: 150,
         height: 60,
-        marginTop: 5,
-        resizeMode: 'contain'
+        marginLeft: 20
     },
     posterStyle: {
         width: '100%',
