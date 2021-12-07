@@ -11,9 +11,9 @@ import Text from './../../../../components/Text';
 const ListHeader = ({ 
     movie, 
     videoStatus, 
+    isResumable,
     handlePressPauseVideo, 
     handlePressPlayVideo,  
-    isRecentlyWatched,
     pages, 
     selectedPage, 
     handleChangePage  
@@ -22,7 +22,7 @@ const ListHeader = ({
         <View style={ styles.movieContainer }>
             <Header movie={ movie } />
             <MovieDetailPlayButton
-                isRecentlyWatched={ isRecentlyWatched }
+                isResumable={ isResumable }
                 videoStatus={ videoStatus }
                 handlePressPauseVideo={ handlePressPauseVideo }
                 handlePressPlayVideo={ handlePressPlayVideo }

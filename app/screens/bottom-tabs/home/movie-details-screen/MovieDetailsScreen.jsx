@@ -32,9 +32,8 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const [ pageIndex, setPageIndex ] = useState(0);
     const [ defaultPageList, setDefaultPageList ] = useState([]);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
-    const [ isRecentlyWatched, setIsRecentlyWatched ] = useState(false);
     const [ lastPlayedPositionMillis, setLastPlayedPositionMillis ] = useState(0);
-    const [ isFullscreen, setIsFullscreen ] = useState(false);
+    const [ isResumable, setIsResumable ] = useState(false);
 
     const handlePressPlayVideo = () => 
     {   
@@ -137,13 +136,17 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     {
         const findMovieInRecents = AUTH_PROFILE.recently_watched_movies.find(({ id }) => id === parseInt(selectedMovieId));
 
-        if (! findMovieInRecents) {
-            setIsRecentlyWatched(false);
+        if (! findMovieInRecents) 
+        {
+            setLastPlayedPositionMillis(0);
+            setIsResumable(false);
         }
 
-        if (findMovieInRecents) {
-            setIsRecentlyWatched(true);
+        if (findMovieInRecents) 
+        {
             setLastPlayedPositionMillis(findMovieInRecents.last_played_position_millis);
+
+            !findMovieInRecents.last_played_position_millis ? setIsResumable(false) : setIsResumable(true);
         }
     }
 
@@ -157,6 +160,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
         return () => 
         {
+            setIsResumable(false);
             setMovie(null);
             setSimilarMovies([]);
             setPages([]);
@@ -164,7 +168,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             setSelectedPage(1);
             setVideoStatus(null);
             setIsInteractionsComplete(false);
-            setIsRecentlyWatched(false);
             setLastPlayedPositionMillis(0);
             videoRef.current = null;
         }
@@ -212,10 +215,10 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     <ListHeader 
                         movie={ movie }
                         videoStatus={ videoStatus }
+                        isResumable={ isResumable }
                         handlePressPlayVideo={ handlePressPlayVideo }
                         handlePressPauseVideo={ handlePressPauseVideo }
                         pages={ pages }
-                        isRecentlyWatched={ isRecentlyWatched }
                         selectedPage={ selectedPage }
                         handleChangePage={ handleChangePage }
                     />
