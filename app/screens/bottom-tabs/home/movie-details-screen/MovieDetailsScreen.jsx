@@ -13,6 +13,7 @@ import { movieSelector } from './../../../../redux/modules/movie/selectors';
 import MovieDetailScreenLoader from '../../../../components/loading-skeletons/MovieDetailScreenLoader';
 import ListHeader from './ListHeader';
 import { useNavigation } from '@react-navigation/native';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const PER_PAGE = 3;
 
@@ -33,6 +34,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isRecentlyWatched, setIsRecentlyWatched ] = useState(false);
     const [ lastPlayedPositionMillis, setLastPlayedPositionMillis ] = useState(0);
+    const [ isFullscreen, setIsFullscreen ] = useState(false);
 
     const handlePressPlayVideo = () => 
     {   
@@ -86,9 +88,18 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         setDefaultPageList(newMovies);
     }
 
-    const handleFullscreenUpdate = e => 
+    const handleFullscreenUpdate = async (e) => 
     {
-
+        try {
+            if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT) {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+            }
+            if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) { 
+                await ScreenOrientation.unlockAsync();
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const onLoadSetMovie = () => 
@@ -173,9 +184,8 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     width: '100%',
                     aspectRatio: 16/9
                 }}
-                source={{ uri: movie.video_path }}
-                usePoster={ !videoStatus?.isPlaying }
-                posterSource={{ uri: movie.wallpaper_path }}
+                shouldPlay={ true }
+                source={{ uri: movie.video_preview_path }}
                 posterStyle={{
                     width: '100%',
                     aspectRatio: 16/9
@@ -184,6 +194,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 resizeMode='contain'
                 onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
                 onFullscreenUpdate={ handleFullscreenUpdate }
+                
             />
 
             <FlatList 
