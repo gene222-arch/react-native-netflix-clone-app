@@ -20,7 +20,7 @@ const PER_PAGE = 3;
 const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) => 
 {   
     const dispatch = useDispatch();
-    const navigations = useNavigation();
+    const navigation = useNavigation();
     const { id: movieId } = route.params;
 
     const videoRef = useRef(null);
@@ -34,22 +34,20 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ isRecentlyWatched, setIsRecentlyWatched ] = useState(false);
     const [ lastPlayedPositionMillis, setLastPlayedPositionMillis ] = useState(0);
-    const [ isFullscreen, setIsFullscreen ] = useState(true);
 
     const handlePressPlayVideo = () => 
-    {
-        onLoadLockToLandscape();
+    {   
+        navigation.navigate('DisplayVideoRoot', 
+        {
+            screen: 'DisplayVideoScreen',
+            params: {
+                title: movie.title,
+                videoUri: movie.video_path, 
+                id: movie.id,
+                lastPlayedPositionMillis
+            }
+        });
 
-        videoRef.current?.presentFullscreenPlayer();
-
-        setIsFullscreen(true);
-
-        if (isRecentlyWatched) {
-            videoRef.current?.setPositionAsync(lastPlayedPositionMillis);
-        }
-
-        videoRef.current.playAsync();
-        
         batch(() => 
         {
             dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
@@ -77,7 +75,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
      
         handleMovieHistory(selectedMovie.id);
 
-        navigations.setParams({
+        navigation.setParams({
             headerTitle: selectedMovie.title
         });
 
@@ -89,34 +87,9 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         setDefaultPageList(newMovies);
     }
 
-    const onUnloadUnlockLandscape = async () => {
-        try {
-            await ScreenOrientation.unlockAsync();
-        } catch (error) {
-            
-        }
-    }
-
-    const onLoadLockToLandscape = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-    }
-
     const handleFullscreenUpdate = e => 
     {
-        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) {
-            setIsFullscreen(false);
-            handlePressPauseVideo();
-            dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
-                movieId, 
-                positionMillis: videoStatus?.positionMillis, 
-                user_profile_id: AUTH_PROFILE.id,
-                duration_in_millis: videoStatus?.durationMillis
-            }));
-        }
 
-        if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT) {
-            setIsFullscreen(true);
-        }
     }
 
     const onLoadSetMovie = () => 
@@ -174,8 +147,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
 
         return () => 
         {
-            onUnloadUnlockLandscape();
-
             setMovie(null);
             setSimilarMovies([]);
             setPages([]);
@@ -188,13 +159,6 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
             videoRef.current = null;
         }
     }, [movieId]);
-
-    useEffect(() => 
-    {
-        if (! isFullscreen) {
-            onUnloadUnlockLandscape();
-        }
-    }, [isFullscreen]);
 
     useEffect(() => {
         handleMovieHistory(movieId);
