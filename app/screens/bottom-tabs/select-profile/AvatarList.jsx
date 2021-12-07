@@ -177,7 +177,8 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile }) =>
                         <Image uri={ item } preview={{ uri: item }} style={ styles.img } />
                     </TouchableOpacity>
                 )}
-                numColumns={ 3 }
+                numColumns={ 5 }
+                horizontal
                 ListHeaderComponent={ 
                     <>
                         {
