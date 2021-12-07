@@ -23,27 +23,41 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
 
     const handlePressLike = () => 
     {
-        if (! rate) {
-            setRate('like');
-            handleToggleLike();
-        }
-
-        if (rate === 'like') {
-            setRate('');
-            handlePressRemoveRate();
+        if (! AUTH.isLoading)
+        {
+            if (! rate) {
+                setRate('like');
+                setTimeout(() => {
+                    handleToggleLike();
+                }, 0);
+            }
+    
+            if (rate === 'like') {
+                setRate('');
+                setTimeout(() => {
+                    handlePressRemoveRate();
+                }, 0);
+            }
         }
     }
 
     const handlePressDisLike = () => 
     {
-        if (! rate) {
-            setRate('dislike');
-            handleToggleDisLike();
-        }
-
-        if (rate === 'dislike') {
-            setRate('');
-            handlePressRemoveRate();
+        if (! AUTH.isLoading)
+        {
+            if (! rate) {
+                setRate('dislike');
+                setTimeout(() => {
+                    handleToggleDisLike();
+                }, 0);
+            }
+    
+            if (rate === 'dislike') {
+                setRate('');
+                setTimeout(() => {
+                    handlePressRemoveRate();
+                }, 0);
+            }
         }
     }
 
@@ -66,7 +80,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             show: true
         },
         { 
-            title: rate ? 'Like' : 'Rated', 
+            title: rate !== 'like' ? 'Like' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-up',
             isSolid: (rate === 'like'),
@@ -74,7 +88,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             show: !rate || (rate === 'like')
         },
         { 
-            title: rate ? 'Not For Me' : 'Rated', 
+            title: rate !== 'dislike' ? 'Not For Me' : 'Rated', 
             iconType: 'font-awesome-5',
             iconName: 'thumbs-down',
             isSolid: (rate === 'dislike'),

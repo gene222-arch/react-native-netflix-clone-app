@@ -102,9 +102,8 @@ function* rateRecentlyWatchedMovieSaga(payload)
 {
     try {
         const { movie, ...rest } = payload;
-        
-        yield put(ACTION.rateRecentlyWatchedMovieSuccess(payload));
         yield call(AUTH_API.rateMovieAsync, { movie_id: movie.id, ...rest });
+        yield put(ACTION.rateRecentlyWatchedMovieSuccess(payload));
     } catch ({ message }) {
         yield put(ACTION.rateRecentlyWatchedMovieFailed({ message }));
     }
