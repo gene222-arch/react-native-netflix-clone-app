@@ -58,8 +58,15 @@ function* getMoviesSaga(payload)
 function* getMovieNotificationsSaga(payload)  
 {
     try {
-        const { data: movieNotifications } = yield call(MOVIE_NOTIFICATION_API.fetchAllAsync, payload.isForKids);
-        yield put(getMovieNotificationsSuccess({ movieNotifications }));
+        const { data: movieNotifications, status } = yield call(MOVIE_NOTIFICATION_API.fetchAllAsync, payload.isForKids);
+        
+        if (status === 'success') {
+            yield put(getMovieNotificationsSuccess({ movieNotifications }));
+        }
+
+        if (status !== 'success') {
+            yield put(getMovieNotificationsSuccess({ movieNotifications: [] }));
+        }
     } catch ({ message }) {
         yield put(getMovieNotificationsFailed({ message }));
     }
