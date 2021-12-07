@@ -24,7 +24,7 @@ const ComingSoonMovieButtons = ({ movie, handlePressToggleRemindMe, handlePressI
                         <MaterialCommunityIcon 
                             name={ !isReminded ? 'bell' : 'check' }
                             size={ 28 }
-                            color={ !isReminded ? '#FFF' : Colors.netFlixRed }
+                            color={ !isReminded ? Colors.gold : Colors.netFlixRed }
                         />
                         <Text style={ styles.remindMeInfoText }>Remind Me</Text>
                     </View>
