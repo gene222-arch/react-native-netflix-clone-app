@@ -168,6 +168,23 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile }) =>
 
     return (
         <View style={ styles.container }>
+                <View>
+                {
+                    profile.previous_avatar && (
+                        <View>
+                            <Text h4 style={ styles.lastAvatarText }>Last Avatar</Text>
+                            <TouchableOpacity onPress={ () => handlePress(profile.previous_avatar) }>
+                                <Image 
+                                    uri={ profile.previous_avatar } 
+                                    preview={{ uri: profile.previous_avatar }} 
+                                    style={ styles.previousAvatar } 
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    )
+                }
+                <Text h4 style={ styles.defaulAvatarsListText }>Default Lists</Text>
+            </View>
             <FlatList 
                 contentContainerStyle={ styles.contentContainer }
                 keyExtractor={ (item, index) => index.toString() }
@@ -177,27 +194,7 @@ const AvatarList = ({ AUTH, handlePress, profile, setProfile }) =>
                         <Image uri={ item } preview={{ uri: item }} style={ styles.img } />
                     </TouchableOpacity>
                 )}
-                numColumns={ 5 }
                 horizontal
-                ListHeaderComponent={ 
-                    <>
-                        {
-                            profile.previous_avatar && (
-                                <>
-                                    <Text h4 style={ styles.lastAvatarText }>Last Avatar</Text>
-                                    <TouchableOpacity onPress={ () => handlePress(profile.previous_avatar) }>
-                                        <Image 
-                                            uri={ profile.previous_avatar } 
-                                            preview={{ uri: profile.previous_avatar }} 
-                                            style={ styles.previousAvatar } 
-                                        />
-                                    </TouchableOpacity>
-                                </>
-                            )
-                        }
-                        <Text h4 style={ styles.defaulAvatarsListText }>Default Lists</Text>
-                    </>
-                }
             />
             {
                 AUTH.subscription_details.type === 'Premium' && (
