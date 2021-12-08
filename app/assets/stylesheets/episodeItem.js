@@ -5,8 +5,8 @@ import Colors from './../../constants/Colors';
 const styles = StyleSheet.create({
     container: {
         marginVertical: 10,
-        paddingHorizontal: 5,
-        width: DEVICE_WIDTH
+        paddingHorizontal: 10,
+        width: DEVICE_WIDTH - 20
     },
     duration: {
         color: Colors.grey,
