@@ -165,8 +165,8 @@ function* removeToRecentWatchesSaga(payload)
 {
     try {
         const { movie_id } = payload;
-        yield put(ACTION.removeToRecentWatchesSuccess({ movie_id }));
         yield call(RECENTLY_WATCHED_MOVIE_API.destroyAsync, payload);
+        yield put(ACTION.removeToRecentWatchesSuccess({ movie_id }));
     } catch ({ message }) {
         yield put(ACTION.removeToRecentWatchesFailed({ message }));
     }
