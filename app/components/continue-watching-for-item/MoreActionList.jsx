@@ -56,6 +56,12 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
         }
     }
 
+    const handlePressRemoveMovie = () => 
+    {
+        setIsVisible(false);
+        handlePressRemove();
+    }
+
     const actionList = 
     [
         {
@@ -94,7 +100,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             title: !AUTH.isLoading ? 'Remove From Row' : 'Removing from row...',
             iconType: 'font-awesome-5',
             iconName: 'ban',
-            onPress: () => handlePressRemove(),
+            onPress: () => handlePressRemoveMovie(),
             show: true
         },
     ];
