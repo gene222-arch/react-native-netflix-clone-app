@@ -42,19 +42,6 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
         const lastPlayedPositionMillis = !recentWatch ? 0 : recentWatch.last_played_position_millis;
         const durationInMillis = !recentWatch ? (frontPage.duration_in_minutes * 60000): recentWatch.duration_in_millis;
 
-        setTimeout(() => {
-            batch(() => {
-                dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
-                    movie: frontPage, 
-                    user_profile_id: AUTH_PROFILE.id, 
-                    duration_in_millis: durationInMillis,
-                    last_played_position_millis: lastPlayedPositionMillis
-                }));
-    
-                dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId: frontPage.id }));
-            });
-        }, 100);
-
         navigation.navigate('DisplayVideoRoot', {
             screen: 'DisplayVideoScreen',
             params: {
@@ -63,6 +50,17 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
                 title: frontPage.title,
                 lastPlayedPositionMillis: !recentWatch ? (frontPage.last_played_position_millis || 0) : recentWatch.last_played_position_millis
             }
+        });
+
+        batch(() => {
+            dispatch(AUTH_ACTION.addToRecentWatchesStart({ 
+                movie: frontPage, 
+                user_profile_id: AUTH_PROFILE.id, 
+                duration_in_millis: durationInMillis,
+                last_played_position_millis: lastPlayedPositionMillis
+            }));
+
+            dispatch(MOVIE_ACTION.incrementMovieViewsStart({ movieId: frontPage.id }));
         });
     }
 
