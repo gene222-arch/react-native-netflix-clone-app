@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Input } from 'react-native-elements'
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -6,22 +6,20 @@ import Colors from './../../../constants/Colors';
 
 const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel }) => 
 {
-    const inputRef = useRef('mic');
-    const [ loading, setLoading ] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(false);
 
     const onChangeText = (text) => 
     {
-        setLoading(true);
+        setIsLoading(true);
         handleChangeSearchInput(text);
-
-        inputRef.current = !text.length ? 'mic' : 'x';
-        setTimeout(() => setLoading(false), 10);
+        setIsLoading(false);
     }
 
-    const onCancel = () => {
-        handleOnCancel();
-        inputRef.current = 'mic';
-    }
+    useEffect(() => {
+        return () => {
+            setIsLoading(false);
+        }
+    }, []);
 
     return (
         <Input
@@ -41,16 +39,18 @@ const SearchBar = ({ searchInput, handleChangeSearchInput, handleOnCancel }) =>
                 />
             }
             rightIcon={ 
-                !loading 
-                    ? <TouchableOpacity>
-                        <FeatherIcon 
-                            name={ inputRef.current }
-                            color='#fff'
-                            size={ 24 }
-                            onPress={ () => inputRef.current === 'mic' ? console.log('Listening to voice') : onCancel() }
-                        />
-                    </TouchableOpacity>
-                    : <ActivityIndicator color='#fff' />
+                isLoading 
+                    ? <ActivityIndicator color='#fff' /> 
+                    : Boolean(searchInput.length) && (
+                        <TouchableOpacity onPress={ handleOnCancel }>
+                            <FeatherIcon 
+                                name='x'
+                                color='#dddddd'
+                                size={ 24 }
+                                style={ styles.searchIcon }
+                            />
+                        </TouchableOpacity>
+                    )
             }
         />
     )
