@@ -1,4 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { DEVICE_WIDTH } from '../../constants/Dimensions';
 import Colors from './../../constants/Colors';
 
 const styles = StyleSheet.create({
@@ -14,11 +15,11 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        width: 125,
+        width: (DEVICE_WIDTH / 3) - 10,
         height: 170,
         resizeMode: 'cover',
         borderRadius: 5,
-        marginRight: 5,
+        marginRight: 10,
         marginBottom: 5
     },
     listContentText: {
