@@ -11,10 +11,14 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.darkMode
     },
     image: {
-        height: 90,
-        width: 150,
+        width: '100%',
+        height: '100%',
         borderTopRightRadius: 8,
         borderBottomRightRadius: 8,
+    },
+    imageContainer: {
+        height: 90,
+        width: 150,
     },
     title: {
         flex: 1,

@@ -12,11 +12,13 @@ const SearchItem = ({ uri, title, onPress }) =>
     return (
         <TouchableOpacity onPress={ onPress }>
             <View style={ styles.container }>
-                <Image  
-                    preview={{ uri }}
-                    uri={ uri }
-                    style={ styles.image }
-                />
+                <View style={ styles.imageContainer }>
+                    <Image  
+                        preview={{ uri }}
+                        uri={ uri }
+                        style={ styles.image }
+                    />
+                </View>
                 <View style={ styles.titlePlayIconContainer }>
                     <Text style={ styles.title }>{ title }</Text>
                     <Ionicon 
