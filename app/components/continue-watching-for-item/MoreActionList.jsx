@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { ToastAndroid } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -10,7 +9,8 @@ import styles from './../../assets/stylesheets/moreActionList';
 import DisplayAction from './DisplayAction';
 import View from './../View';
 
-const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, handlePressRemoveRate, isVisible, setIsVisible }) => 
+
+const MoreActionList = ({ AUTH_PROFILE, selectedVideo, handlePressRemove, handleToggleLike, handleToggleDisLike, handlePressRemoveRate, isVisible, setIsVisible }) => 
 {
     const navigation = useNavigation();
     const getMovieRatingDetails = selectedVideo.user_ratings[0];
@@ -97,7 +97,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             show: !rate || (rate === 'dislike')
         },
         {
-            title: !AUTH.isLoading ? 'Remove From Row' : 'Removing from row...',
+            title: 'Remove From Row',
             iconType: 'font-awesome-5',
             iconName: 'ban',
             onPress: () => handlePressRemoveMovie(),
@@ -111,7 +111,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
         return () => {
             setRate('');
         }
-    }, []);
+    }, [AUTH_PROFILE.recently_watched_movies]);
 
     return (
         <View style={ styles.container }>
@@ -133,7 +133,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
 
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authProfileSelector
+    AUTH_PROFILE: authProfileSelector
 });
 
 export default connect(mapStateToProps)(MoreActionList)
