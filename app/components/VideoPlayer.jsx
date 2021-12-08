@@ -106,7 +106,7 @@ const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, s
                 onFullscreenUpdate={ handleFullscreenUpdate }
             />
             {
-                !shouldPlayVideo && (
+                !status?.isPlaying && (
                     <TouchableOpacity onPress={ handlePressPlayBtn } style={ styles.playIcon }>
                         <Ionicon 
                             name='play-circle-outline'

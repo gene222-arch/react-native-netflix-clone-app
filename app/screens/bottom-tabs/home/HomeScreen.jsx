@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { FlatList, Platform, StatusBar } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react'
+import { FlatList, Platform, StatusBar, BackHandler } from 'react-native';
 import { ImageBackground, InteractionManager } from 'react-native'
 import View from './../../../components/View';
 import HomeCategory from '../../../components/home-category/HomeCategory';
@@ -20,6 +20,7 @@ import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.mov
 import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
 import * as MOVIE_API from './../../../services/movie/movie'
 import { useIsFocused } from '@react-navigation/core';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 
 const DEFAULT_FRONT_PAGE_PROPS = {
@@ -36,6 +37,7 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
 {
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const isForKids = Boolean(AUTH_PROFILE.is_for_kids);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
@@ -127,6 +129,16 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
             setIsInteractionsComplete(false);
         }   
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => true);
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                navigation.navigate('Home');
+                return true;
+            });
+        }, [])
+    )
 
     if (! isInteractionsComplete) return <HomeFrontPageLoader />
 

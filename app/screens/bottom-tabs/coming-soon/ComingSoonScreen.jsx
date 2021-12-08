@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { InteractionManager } from 'react-native'
-import { FlatList, Platform, StatusBar } from 'react-native';
+import { FlatList, Platform, StatusBar, BackHandler } from 'react-native';
 import { useIsFocused } from '@react-navigation/core'
 import { createStructuredSelector } from 'reselect';
 import { useDispatch, connect, batch } from 'react-redux';
@@ -64,6 +64,21 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         }
     }
 
+
+    const handleRenderItem = ({ item, index }) => 
+    {
+        return  (
+            <ComingSoonMovieItem 
+                movie={ item }
+                shouldShowPoster={ focusedIndex !== index }
+                shouldFocus={ focusedIndex === index }
+                shouldPlay={ focusedIndex === index && isFocused }
+                handlePressToggleRemindMe={ handlePressToggleRemindMe }
+                handlePressInfo={ () => handlePressInfo(item.id) }
+            />
+        )
+    }
+
     const runAfterInteractions = () => 
     {
         onLoadLockToPortrait();
@@ -92,23 +107,15 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         }
     }, [AUTH_PROFILE.id]); 
 
-
-    const handleRenderItem = ({ item, index }) => 
-    {
-        return  (
-            <ComingSoonMovieItem 
-                movie={ item }
-                shouldShowPoster={ focusedIndex !== index }
-                shouldFocus={ focusedIndex === index }
-                shouldPlay={ focusedIndex === index && isFocused }
-                handlePressToggleRemindMe={ handlePressToggleRemindMe }
-                handlePressInfo={ () => handlePressInfo(item.id) }
-            />
-        )
-    }
-
     useFocusEffect(
-        useCallback(() => {
+        useCallback(() => 
+        {
+            BackHandler.removeEventListener('hardwareBackPress', () => true);
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                navigation.navigate('Home');
+                return true;
+            });
+
             if (COMING_SOON_MOVIE.totalUpcomingMovies) {
                 dispatch(COMING_SOON_MOVIE_ACTION.viewComingSoonMovies());
             }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import View from './../../../components/View';
-import { StyleSheet, FlatList, InteractionManager } from 'react-native'
+import { StyleSheet, FlatList, InteractionManager, BackHandler } from 'react-native'
 import NotificationItem from '../../../components/coming-soon-screen/NotificationItem';
 import { createStructuredSelector } from 'reselect';
 import * as MOVIE_ACTION from './../../../redux/modules/movie/actions';
@@ -8,10 +8,13 @@ import { movieSelector } from './../../../redux/modules/movie/selectors';
 import { connect, useDispatch } from 'react-redux';
 import NotificationsScreenLoader from './../../../components/loading-skeletons/NotificationsScreenLoader';
 import { authProfileSelector } from './../../../redux/modules/auth/selectors';
+import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/core';
 
 const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(MOVIE.movieNotifications.length);
 
@@ -36,6 +39,16 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
             setIsInteractionsComplete(false);
         }
     }, [MOVIE.movies]);
+
+    useFocusEffect(
+        useCallback(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => true);
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                navigation.navigate('ComingSoon');
+                return true;
+            });
+        }, [])
+    )
 
     if (! isInteractionsComplete) return <NotificationsScreenLoader />
 

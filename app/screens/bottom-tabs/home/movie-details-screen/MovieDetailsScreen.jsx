@@ -1,5 +1,5 @@
-import React,{ useState, useEffect, useRef } from 'react'
-import { InteractionManager, FlatList } from 'react-native'
+import React,{ useState, useEffect, useRef, useCallback } from 'react'
+import { InteractionManager, FlatList, BackHandler } from 'react-native'
 import { useDispatch, connect, batch } from 'react-redux';
 import { Video } from 'expo-av'
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions'
@@ -14,7 +14,7 @@ import MovieDetailScreenLoader from '../../../../components/loading-skeletons/Mo
 import ListHeader from './ListHeader';
 import { useNavigation } from '@react-navigation/native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { useIsFocused } from '@react-navigation/core';
+import { useIsFocused, useFocusEffect } from '@react-navigation/core';
 
 const PER_PAGE = 3;
 
@@ -160,7 +160,8 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         }
     }
 
-    const runAfterInteractions = () => {
+    const runAfterInteractions = () => 
+    {
         onLoadSetMovie();
         setIsInteractionsComplete(true);
     }
@@ -188,6 +189,17 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     useEffect(() => {
         handleMovieHistory(movieId);
     }, [AUTH_PROFILE.recently_watched_movies]);
+
+    useFocusEffect(
+        useCallback(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => true);
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                navigation.navigate('Home');
+                return true;
+            });
+        }, [])
+    )
+
 
     if (! isInteractionsComplete || !movie) return <MovieDetailScreenLoader />
 
