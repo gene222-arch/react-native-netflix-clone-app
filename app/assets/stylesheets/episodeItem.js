@@ -16,13 +16,6 @@ const styles = StyleSheet.create({
         color: Colors.grey,
         marginVertical: 15
     },
-    posterImg: {
-        height: 95,
-        width: 150,
-        resizeMode: 'contain',
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-    },
     title: {
         fontWeight: 'bold'
     },  
@@ -33,6 +26,17 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         padding: 5,
         marginLeft: 15
+    },
+    wallpaperImage: {
+        height: '100%',
+        width: '100%',
+        resizeMode: 'contain',
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+    },
+    wallpaperImageContainer: {
+        height: 95,
+        width: 160,
     }
 });
 

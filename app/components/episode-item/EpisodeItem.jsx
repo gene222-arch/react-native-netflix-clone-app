@@ -15,10 +15,12 @@ const EpisodeItem = ({ number, movie, onPress }) =>
         <Pressable onPress={ onPress }>
             <View style={ styles.container }>
                 <View row={ true } alignItems='center' padding={ 2 }>
-                    <Image 
-                        uri={ wallpaper_path }
-                        style={ styles.posterImg }
-                    />
+                    <View style={ styles.wallpaperImageContainer }>
+                        <Image 
+                            uri={ wallpaper_path }
+                            style={ styles.wallpaperImage }
+                        />
+                    </View>
                     <View style={ styles.titleContainer }>
                         <Text style={ styles.title }>{ `${ number }. ${ title }` }</Text>
                         <Text style={ styles.duration }>{ duration_in_minutes }m</Text>

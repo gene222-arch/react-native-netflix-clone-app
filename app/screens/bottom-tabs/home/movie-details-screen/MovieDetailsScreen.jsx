@@ -205,9 +205,9 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 keyExtractor={ ({ id }) => id.toString() }
                 data={ defaultPageList }
                 ListHeaderComponentStyle={ styles.listHeaderComponent }
-                renderItem={ ({ item }) => (
+                renderItem={ ({ item, index}) => (
                     <EpisodeItem 
-                        number={ 1 + 1 } 
+                        number={ ++index } 
                         movie={ item } 
                         onPress={ () => handleClickChangeMovie(item) } 
                     />
