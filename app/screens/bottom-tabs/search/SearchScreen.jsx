@@ -67,8 +67,31 @@ const SearchScreen = ({ AUTH_PROFILE, MOVIE }) =>
                     return 0;
                 });
 
-            const filterByAuthors = MOVIE.movies.filter(({ authors }) => authors.split(',').find(author => author.indexOf(textInput) !== -1));
-            const filterByGenres = MOVIE.movies.filter(({ genres }) => genres.split(',').find(genre => genre.indexOf(textInput) !== -1));
+            const filterByAuthors = MOVIE
+                .movies
+                .filter(({ authors }) => 
+                {
+                    const contains = authors
+                        .split(',')
+                        .map(author => author.trim().toLowerCase())
+                        .filter(author => author.indexOf(textInput) !== -1)
+                        .length;
+
+                    return Boolean(contains);
+                });
+
+            const filterByGenres = MOVIE
+                .movies
+                .filter(({ genres }) => 
+                {
+                    const contains = genres
+                        .split(',')
+                        .map(genre => genre.trim().toLowerCase())
+                        .filter(genre => genre.indexOf(textInput) !== -1)
+                        .length;
+
+                    return Boolean(contains);
+                });
 
             filteredList = [
                 ...filterByTitles,
