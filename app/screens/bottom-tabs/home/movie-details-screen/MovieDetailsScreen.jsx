@@ -14,6 +14,7 @@ import MovieDetailScreenLoader from '../../../../components/loading-skeletons/Mo
 import ListHeader from './ListHeader';
 import { useNavigation } from '@react-navigation/native';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { useIsFocused } from '@react-navigation/core';
 
 const PER_PAGE = 3;
 
@@ -22,6 +23,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const { id: movieId } = route.params;
+    const isFocused = useIsFocused();
 
     const videoRef = useRef(null);
     const [ videoStatus, setVideoStatus ] = useState(null);
@@ -197,7 +199,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                     width: '100%',
                     aspectRatio: 16/9
                 }}
-                shouldPlay={ true }
+                shouldPlay={ isFocused }
                 source={{ uri: movie.video_preview_path }}
                 posterStyle={{
                     width: '100%',
