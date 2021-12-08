@@ -1,12 +1,26 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import View from './../../../../components/View';
 import Text from './../../../../components/Text';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, BackHandler } from 'react-native';
 import AboutSettings from './AboutSettings';
 import LegalSettings from './LegalSettings';
+import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/core';
 
 const SettingsContainer = ({ title, component: Component }) => 
 {
+    const navigation = useNavigation();
+
+    useFocusEffect(
+        useCallback(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => true);
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                navigation.navigate('ProfilesAndMore');
+                return true;
+            });
+        }, [])
+    )
+
     return (
         <View style={ styles.settingsContainer }>
             <Text style={ styles.settingsTitle }>{ title }</Text>

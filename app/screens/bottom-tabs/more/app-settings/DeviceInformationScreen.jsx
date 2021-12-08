@@ -1,15 +1,18 @@
-import React from 'react'
-import View from './../../../../components/View';
+import React, { useCallback } from 'react'
 import { ListItem } from 'react-native-elements';
-import { StyleSheet } from 'react-native'
+import { StyleSheet, BackHandler } from 'react-native'
 import Colors from './../../../../constants/Colors';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import * as Device from 'expo-device';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 
 
 const DeviceInformationScreen = () => 
 {
+    const navigation = useNavigation();
+
     const list = 
     [
         {
@@ -63,6 +66,16 @@ const DeviceInformationScreen = () =>
             subTitle: Device.supportedCpuArchitectures,
         }
     ];
+
+    useFocusEffect(
+        useCallback(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => true);
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                navigation.navigate('AppSettingsScreen');
+                return true;
+            });
+        }, [])
+    )
 
     return (
         <ScrollView>
