@@ -87,6 +87,14 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
         setDefaultPageList(newMovies);
     }
 
+    const onLoadLockToPortrait = async () => {
+        try {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleFullscreenUpdate = async (e) => 
     {
         try {
@@ -94,7 +102,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
                 await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
             }
             if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) { 
-                await ScreenOrientation.unlockAsync();
+                onLoadLockToPortrait();
             }
         } catch (error) {
             console.log(error);
@@ -156,6 +164,7 @@ const MovieDetailsScreen = ({ AUTH_PROFILE, route, MOVIE }) =>
     }
 
     useEffect(() => {
+        onLoadLockToPortrait();
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => 
