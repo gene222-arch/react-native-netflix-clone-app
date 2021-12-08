@@ -33,7 +33,7 @@ const NotificationsVideoItem = ({ AUTH_PROFILE, movie, shouldShowPoster, shouldF
             }
 
             if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) { 
-                await ScreenOrientation.unlockAsync();
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
             }
         } catch (error) {
             console.log(error);

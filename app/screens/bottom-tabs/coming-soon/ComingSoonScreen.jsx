@@ -17,6 +17,8 @@ import * as ComingSoonMovieCreatedEvent from './../../../events/coming.soon.movi
 import * as TOAST_ACTION from './../../../redux/modules/toast/actions'
 import ComingSoonScreenLoader from '../../../components/loading-skeletons/ComingSoonScreenLoader';
 import NotificationHeader from '../../../components/coming-soon-screen/NotificationHeader';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
 
 const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) => 
 {
@@ -54,8 +56,17 @@ const ComingSoonScreen = ({ AUTH_PROFILE, COMING_SOON_MOVIE }) =>
         });
     }
 
+    const onLoadLockToPortrait = async () => {
+        try {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const runAfterInteractions = () => 
     {
+        onLoadLockToPortrait();
         dispatch(COMING_SOON_MOVIE_ACTION.getComingSoonMoviesStart({ is_for_kids: isForKids }));
         
         ComingSoonMovieCreatedEvent.listen(response => 
