@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         color: Colors.white
     },
     image: {
-        width: 120,
+        width: (DEVICE_WIDTH / 3) - 10,
         height: 160,
         resizeMode: 'cover',
         margin: 5,
