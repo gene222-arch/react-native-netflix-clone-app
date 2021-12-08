@@ -1,17 +1,16 @@
 import React from 'react'
 import { FlatList } from 'react-native'
 import { createStructuredSelector } from 'reselect';
-import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
 import { connect, useDispatch } from 'react-redux';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import View from '../../../../components/View';
 import Text from '../../../../components/Text';
 import styles from './../../../../assets/stylesheets/continueWatchingForItem';
 import ContinueWatchingForItem from './../../../../components/continue-watching-for-item/ContinueWatchingForItem';
-import TextLoader from './../../../../components/loading-skeletons/TextLoader';
 
 
-const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) => 
+const ContinueWatchingFor = ({ AUTH_PROFILE }) => 
 {
     const dispatch  = useDispatch();
     
@@ -92,7 +91,6 @@ const ContinueWatchingFor = ({ AUTH, AUTH_PROFILE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 });
 
