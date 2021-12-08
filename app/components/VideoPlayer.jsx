@@ -5,6 +5,8 @@ import styles from './../assets/stylesheets/videoPlayer';
 import View from './View';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/core';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
 
 const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, shouldShowPoster = false }) => 
 {
@@ -40,19 +42,22 @@ const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, s
         } catch ({ message }) {
             console.log(message);
         }
-    } 
+    }
 
-    // useEffect(() => {
+    const handleFullscreenUpdate = async (e) => 
+    {
+        try {
+            if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT) {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+            }
+            if (e.fullscreenUpdate === Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS) { 
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
-    //     return () => {
-    //         setStatus({});
-    //         setUsePoster(false);
-    //         video.current = null;
-    //         setShouldPlayVideo(false);
-    //         onChangeSourceRestartVideo();
-    //     }
-    // }, [videoPath]);
-
     useFocusEffect(
         useCallback(() => {
             setStatus({});
@@ -78,6 +83,7 @@ const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, s
                 resizeMode='contain'
                 onPlaybackStatusUpdate={ handleUpdateStatus }
                 shouldPlay={ shouldPlayVideo }
+                onFullscreenUpdate={ handleFullscreenUpdate }
             />
         )
     }
@@ -97,6 +103,7 @@ const VideoPlayer = ({ videoPath = null, posterPath = null, shouldPlay = true, s
                 resizeMode='contain'
                 onPlaybackStatusUpdate={ handleUpdateStatus }
                 shouldPlay={ shouldPlayVideo }
+                onFullscreenUpdate={ handleFullscreenUpdate }
             />
             {
                 !shouldPlayVideo && (
