@@ -2,14 +2,17 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { ListItem, Icon } from 'react-native-elements';
 import styles from './../../assets/stylesheets/moreActionList';
+import { createStructuredSelector } from 'reselect';
+import { authSelector } from '../../redux/modules/auth/selectors';
+import { connect } from 'react-redux';
 
-const DisplayAction = ({ isLoading = false, actionType }) => 
+const DisplayAction = ({ AUTH, actionType }) => 
 {
     return (
         <ListItem 
             containerStyle={[ styles.listItemContainer, actionType.containerStyle ]} 
             onPress={ actionType.onPress }
-            disabled={ isLoading }
+            disabled={ AUTH.isLoading }
         >
             {
                 actionType.iconName && (
@@ -41,5 +44,8 @@ const DisplayAction = ({ isLoading = false, actionType }) =>
     )
 }
 
+const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector
+});
 
-export default DisplayAction
+export default connect(mapStateToProps)(DisplayAction)

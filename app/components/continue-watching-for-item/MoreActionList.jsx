@@ -24,41 +24,35 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
 
     const handlePressLike = () => 
     {
-        if (AUTH.isLoading) {
-            ToastAndroid.show('Please Wait...', ToastAndroid.SHORT);
+        if (! rate) {
+            setRate('like');
+            setTimeout(() => {
+                handleToggleLike();
+            }, 0);
         }
 
-        if (! AUTH.isLoading)
-        {
-            if (! rate) {
-                setRate('like');
-                handleToggleLike();
-            }
-    
-            if (rate === 'like') {
-                setRate('');
+        if (rate === 'like') {
+            setRate('');
+            setTimeout(() => {
                 handlePressRemoveRate();
-            }
+            }, 0);
         }
     }
 
     const handlePressDisLike = () => 
     {
-        if (! AUTH.isLoading)
-        {
-            if (! rate) {
-                setRate('dislike');
-                setTimeout(() => {
-                    handleToggleDisLike();
-                }, 0);
-            }
-    
-            if (rate === 'dislike') {
-                setRate('');
-                setTimeout(() => {
-                    handlePressRemoveRate();
-                }, 0);
-            }
+        if (! rate) {
+            setRate('dislike');
+            setTimeout(() => {
+                handleToggleDisLike();
+            }, 0);
+        }
+
+        if (rate === 'dislike') {
+            setRate('');
+            setTimeout(() => {
+                handlePressRemoveRate();
+            }, 0);
         }
     }
 
@@ -123,7 +117,7 @@ const MoreActionList = ({ AUTH, selectedVideo, handlePressRemove, handleToggleLi
             >
             {
                 actionList.map((action, index) => (
-                    action.show && <DisplayAction key={ index } isLoading={ AUTH.isLoading } actionType={ action }/> 
+                    action.show && <DisplayAction key={ index } actionType={ action }/> 
                 ))
             }
             </BottomSheet>
