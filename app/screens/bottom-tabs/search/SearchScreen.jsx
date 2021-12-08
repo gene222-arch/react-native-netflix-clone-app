@@ -24,7 +24,7 @@ const DisplayList = ({ isLoading = false, searchInput = '', filteredMovies, defa
     )
 }
 
-const SearchScreen = ({ AUTH_PROFILE, MOVIE, route }) => 
+const SearchScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const dispatch = useDispatch();
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
