@@ -7,7 +7,7 @@ import styles from './../../../../assets/stylesheets/homeScreen';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createStructuredSelector } from 'reselect';
-import { authProfileSelector } from './../../../../redux/modules/auth/selectors';
+import { authProfileSelector, authSelector } from './../../../../redux/modules/auth/selectors';
 import { connect, useDispatch, batch } from 'react-redux';
 import * as AUTH_ACTION from './../../../../redux/modules/auth/actions';
 import * as MOVIE_ACTION from './../../../../redux/modules/movie/actions'
@@ -26,7 +26,7 @@ const Genre = ({ genres }) =>
     )
 }
 
-const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) => 
+const FrontPageOptions = ({ AUTH, AUTH_PROFILE, frontPage }) => 
 {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -66,14 +66,14 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
 
     const handleToggleAddToMyList = () => 
     {
+        setTimeout(() => {
+            dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie: frontPage, user_profile_id: AUTH_PROFILE.id }));
+        }, 0);
+        
         setIsMovieAddedToMyList(! isMovieAddedToMyList);
 
         const message = isMovieAddedToMyList ? 'Removed from My List' : 'Added to My List';
         ToastAndroid.show(message, ToastAndroid.SHORT);
-
-        setTimeout(() => {
-            dispatch(AUTH_ACTION.toggleAddToMyListStart({ movie: frontPage, user_profile_id: AUTH_PROFILE.id }));
-        }, 0);
     }
 
     const onLoadSetIsMovieAddedToMyList = () => {
@@ -103,7 +103,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
             </View>
 
             <View style={ styles.actionBtnsContainer }>
-                <TouchableOpacity onPress={ handleToggleAddToMyList }>
+                <TouchableOpacity onPress={ handleToggleAddToMyList } disabled={ AUTH.isLoading }>
                     <View style={ styles.myListInfoActionContainer }>
                         <FeatherIcon 
                             name={ isMovieAddedToMyList ? 'check' : 'plus' }
@@ -143,6 +143,7 @@ const FrontPageOptions = ({ AUTH_PROFILE, frontPage }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
+    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector
 }); 
 

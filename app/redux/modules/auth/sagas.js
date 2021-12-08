@@ -206,9 +206,8 @@ function* toggleAddToMyListSaga(payload)
 {
     try {
         const { movie, user_profile_id } = payload;
-
-        yield put(ACTION.toggleAddToMyListSuccess({ movie }));
         yield call(AUTH_API.toggleMyListAsync, { movie_id: movie.id, user_profile_id });
+        yield put(ACTION.toggleAddToMyListSuccess({ movie }));
     } catch ({ message }) {
         yield put(ACTION.toggleAddToMyListFailed({ message }));
     }
