@@ -39,10 +39,12 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
 
     const handlePressLogin = () => dispatch(AUTH_ACTION.loginStart(credentials));
 
-    const onUnloadUnlockPortrait = async () => await ScreenOrientation.unlockAsync();
-
     const onLoadLockToPortrait = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        try {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const handlePressHelp = async () => 
@@ -68,7 +70,6 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
         return () => {
             setIsChecked(false);
             setCredentials(AUTH.credentials);
-            onUnloadUnlockPortrait();
             setShowPassword(false);
         }
     }, []);
@@ -89,9 +90,7 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
         }, [])
     )
 
-    if (AUTH.isLoading) {
-        return <LoadingSpinner message='Signing In' />
-    }
+    if (AUTH.isLoading) return <LoadingSpinner message='Signing In' />
 
     return (
         <View style={ styles.container }>
