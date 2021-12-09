@@ -106,6 +106,6 @@ export const registerForPushNotificationsAsync = async () =>
 		return token;
 
 	} catch (error) {
-		
+		console.log(error);		
 	}
 }
