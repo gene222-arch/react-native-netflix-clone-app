@@ -22,7 +22,6 @@ import * as MOVIE_API from './../../../services/movie/movie'
 import { useIsFocused } from '@react-navigation/core';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-
 const DEFAULT_FRONT_PAGE_PROPS = {
     id: '',
     title: '',
@@ -86,13 +85,13 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
 
     useEffect(() => 
     {
+        onLoadSetFrontPage();
+
         batch(() => {
             dispatch(MOVIE_ACTION.getCategorizedMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMoviesStart({ is_for_kids: AUTH_PROFILE.is_for_kids }));
             dispatch(MOVIE_ACTION.getMostLikedMoviesStart());
         });
-
-        onLoadSetFrontPage();
     }, [AUTH_PROFILE.id]);
 
     useEffect(() => {

@@ -13,7 +13,6 @@ import {
 } from './../../redux/modules/auth/selectors'
 import { TouchableOpacity } from 'react-native';
 import StyledTextInput from './../../components/styled-components/StyledTextInput';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import LoadingSpinner from './../../components/LoadingSpinner';
 import { useFocusEffect } from '@react-navigation/core';
 import * as WebBrowser from 'expo-web-browser';
@@ -39,14 +38,6 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
 
     const handlePressLogin = () => dispatch(AUTH_ACTION.loginStart(credentials));
 
-    const onLoadLockToPortrait = async () => {
-        try {
-            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const handlePressHelp = async () => 
     {
         try {
@@ -64,8 +55,6 @@ const LoginScreen = ({ AUTH, AUTH_ERROR_MESSAGE, AUTH_HAS_ERROR_MESSAGE, route }
                 email: route.params.email
             });
         }
-
-        onLoadLockToPortrait();
 
         return () => {
             setIsChecked(false);

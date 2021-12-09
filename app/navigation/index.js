@@ -14,13 +14,24 @@ import NavigationBottomTabs from './NavigationBottomTabs';
 import AuthenticationStack from './AuthenticationStack';
 import { navigationRef } from './RootNavigation';
 import { toastSelector } from './../redux/modules/toast/selectors';
-
+import * as ScreenOrientation from 'expo-screen-orientation'
 
 enableScreens(true);
 
 const Navigation = ({ AUTH, TOAST }) => 
 {
-    useEffect(() => {
+    const onLoadLockToPortrait = async () => {
+        try {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => 
+    {
+        onLoadLockToPortrait();
+
         if (TOAST.message) {
             ToastAndroid.show(
                 TOAST.message, 

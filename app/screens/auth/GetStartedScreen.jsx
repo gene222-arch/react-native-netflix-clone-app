@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useRef } from 'react'
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import WelcomeScreen from './get-started-carousel/WelcomeScreen';
 import UnlimitedMoviesScreen from './get-started-carousel/UnlimitedMoviesScreen';
@@ -8,8 +8,6 @@ import { Button, Overlay } from 'react-native-elements';
 import Colors from './../../constants/Colors';
 import View from '../../components/View';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from './../../constants/Dimensions';
-import { useFocusEffect } from '@react-navigation/core';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import InputEmail from './get-started-carousel/InputEmail';
 
 
@@ -47,12 +45,6 @@ const GetStartedScreen = () =>
     const [ showOverlay, setShowOverlay ] = useState(false);
     const [ activeSlideIndex, setActiveSlideIndex ] = useState(0);
 
-    const onUnloadUnlockPortrait = async () => await ScreenOrientation.unlockAsync();
-
-    const onLoadLockToPortrait = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-    }
-
     const handleToggleOverLay = () => setShowOverlay(! showOverlay);
 
     const entries = [
@@ -60,16 +52,6 @@ const GetStartedScreen = () =>
         <UnlimitedMoviesScreen />,
         <NoPeskyContractsScreen />
     ];
-    
-    useFocusEffect(
-        useCallback(() => {
-            onLoadLockToPortrait();
-            
-            return () => {
-                onUnloadUnlockPortrait();
-            }
-        }, [])
-    )
 
     return (
         <View style={ styles.container }>
