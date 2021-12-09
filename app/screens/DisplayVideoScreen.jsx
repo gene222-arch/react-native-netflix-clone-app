@@ -6,20 +6,32 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as FileSystem from 'expo-file-system'
 import { ensureFileExists } from './../utils/cacheImage';
+import { useIsFocused } from '@react-navigation/core';
 
 const DisplayVideoScreen = () => 
 {
     const route = useRoute();
+    const isFocused = useIsFocused();
     
     const [ uri, setUri ] = useState(null);
     const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(false);
     const [ lastPlayedPositionMillis, setLastPlayedPositionMillis ] = useState(0);
     const [ hasLastPlayedPositionMillis, setHasLastPlayedPositionMillis ] = useState(false);
 
-    const onUnloadUnlockLandscape = async () => await ScreenOrientation.unlockAsync();
+    const onUnloadUnlockLandscape = async () => {
+        try {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const onLoadLockToLandscape = async () => {
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+        try {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => 
@@ -55,7 +67,6 @@ const DisplayVideoScreen = () =>
 
         return () => {
             setUri(null);
-            setIsInteractionsComplete(false);
             setLastPlayedPositionMillis(0);
             setHasLastPlayedPositionMillis(false);
         }
@@ -64,10 +75,11 @@ const DisplayVideoScreen = () =>
     useFocusEffect(useCallback(() => {
         return () => {
             onUnloadUnlockLandscape();
+            setIsInteractionsComplete(false);
         }
     }, []))
 
-    if (! isInteractionsComplete) return <LoadingSpinner message='Loading' />
+    if (! isInteractionsComplete && isFocused) return <LoadingSpinner message='Loading' />
 
     return (
         <VideoPlayerFullScreen

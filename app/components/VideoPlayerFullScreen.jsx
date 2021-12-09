@@ -29,10 +29,7 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
 
     const onEnterFullScreen = async () => 
     {
-        setInFullscreen(true);  
-
-        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-
+        setInFullscreen(true);
         setStatusBarHidden(true);
     }
 
@@ -46,9 +43,8 @@ const VideoPlayerFullScreen = ({ AUTH_PROFILE, uri, movieId, hasLastPlayedPositi
 
         setInFullscreen(false);
 
-        await ScreenOrientation.unlockAsync();
-
-        if (hasLastPlayedPositionMillis) {
+        if (hasLastPlayedPositionMillis) 
+        {
             setTimeout(() => {
                 dispatch(AUTH_ACTION.updateRecentlyWatchedAtPositionMillisStart({ 
                     movieId, 
