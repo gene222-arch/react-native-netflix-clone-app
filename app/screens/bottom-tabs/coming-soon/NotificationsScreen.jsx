@@ -16,7 +16,7 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(MOVIE.movieNotifications.length);
+    const [ isInteractionsComplete, setIsInteractionsComplete ] = useState(Boolean(MOVIE.movieNotifications.length));
 
     const onLoadDispatchGetMovieNotifications = () => {
         dispatch(MOVIE_ACTION.getMovieNotificationsStart({
@@ -38,7 +38,7 @@ const NotificationsScreen = ({ AUTH_PROFILE, MOVIE }) =>
         return () => {
             setIsInteractionsComplete(false);
         }
-    }, [MOVIE.movies]);
+    }, [MOVIE.movies, AUTH_PROFILE.id]);
 
     useFocusEffect(
         useCallback(() => {
