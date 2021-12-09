@@ -15,7 +15,7 @@ import * as AUTH_ACTION from './../../../redux/modules/auth/actions';
 import HomeFrontPageLoader from './../../../components/loading-skeletons/HomeFrontPageLoader';
 import AppBar from './../../AppBar';
 import * as MovieCreatedEvent from './../../../events/movie.created.event'
-import { authProfileSelector, authSelector } from './../../../redux/modules/auth/selectors';
+import { authProfileSelector } from './../../../redux/modules/auth/selectors';
 import * as ComingSoonMovieReleasedEvent from './../../../events/coming.soon.movie.released.event'
 import * as COMING_SOON_MOVIE_ACTION from './../../../redux/modules/coming-soon/actions'
 import * as MOVIE_API from './../../../services/movie/movie'
@@ -32,7 +32,7 @@ const DEFAULT_FRONT_PAGE_PROPS = {
     title_logo_path: null
 };
 
-const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) => 
+const HomeScreen = ({ AUTH_PROFILE, MOVIE }) => 
 {
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
@@ -176,7 +176,6 @@ const HomeScreen = ({ AUTH, AUTH_PROFILE, MOVIE }) =>
 }
 
 const mapStateToProps = createStructuredSelector({
-    AUTH: authSelector,
     AUTH_PROFILE: authProfileSelector,
     MOVIE: movieSelector
 });
