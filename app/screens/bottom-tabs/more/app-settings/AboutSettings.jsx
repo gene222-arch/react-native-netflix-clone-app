@@ -22,7 +22,7 @@ const AboutSettings = ({ AUTH_PROFILE, USER }) =>
             const accessToken = await SecureStoreInstance.getAccessToken();
             const queryParams = `?token=${ accessToken }&profileId=${ AUTH_PROFILE.id }&path=home`;
     
-            await WebBrowser.openBrowserAsync(ENV.WEB_APP_URL + queryParams);
+            await WebBrowser.openBrowserAsync(ENV.REACT_APP_URL + queryParams);
         } catch (error) {
             console.log(error);
         }
