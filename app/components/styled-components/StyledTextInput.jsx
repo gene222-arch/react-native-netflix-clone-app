@@ -11,7 +11,7 @@ const StyledTextInput = forwardRef(({ error = false, helperText = '', style = []
             ref={ ref }
             style={[ Array.isArray(style) ? [...style] : style, styles(error).textField ]}
         />
-        {helperText.length > 0 && (
+        {Boolean(helperText.length) && (
             <Text style={ styles(error).helperText } >{ helperText }</Text>
         )}
     </View>
