@@ -36,27 +36,44 @@ const CategoriesScreen = ({ MOVIE, route }) =>
 
     const handlePressChangeMainCategory = (selectedCategory) => 
     {
-        setSelectedCategory(selectedCategory);
-
+        const lowerCasedSelectedCategory = selectedCategory.toLowerCase();
         let movies = [ ...MOVIE.movies ];
-        movies = movies.filter(movie => movie.genres.split(', ').includes(selectedCategory));
+        let categorizedMovies = [ ...MOVIE.categories ];
 
-        !movies.length ? setHasMovies(false) : setHasMovies(true);
+        movies = movies.filter(movie => 
+        {
+            const containsSelectedGenre = movie
+                .genres
+                .split(', ')
+                .map(genre => genre.trim().toLowerCase())
+                .includes(lowerCasedSelectedCategory);
 
-        setFrontPage(movies[Math.floor(Math.random() * (movies.length - 1))]);
+            return containsSelectedGenre;
+        });
 
-        const newCategories = MOVIE.categories.map(category => 
+        const newCategories = categorizedMovies.map(category => 
         {
             const filterMovies = category
                 .movies
-                .filter(({ genres }) => genres.split(', ').includes(selectedCategory));
+                .filter(({ genres }) => 
+                {
+                    const containsSelectedGenre = genres
+                        .split(', ')
+                        .map(genre => genre.trim().toLowerCase())
+                        .includes(lowerCasedSelectedCategory);
 
-            return { 
+                    return containsSelectedGenre;
+                });
+
+            return ({ 
                 ...category, 
                 movies: filterMovies 
-            };
+            });
         });
 
+        setHasMovies(Boolean(movies.length));
+        setFrontPage(movies[Math.floor(Math.random() * (movies.length - 1))]);
+        setSelectedCategory(selectedCategory);
         setCategoryItems(newCategories);
     }
 
@@ -66,7 +83,8 @@ const CategoriesScreen = ({ MOVIE, route }) =>
         setIsInteractionsComplete(true);
     }
 
-    useEffect(() => {
+    useEffect(() => 
+    {
         InteractionManager.runAfterInteractions(runAfterInteractions);
 
         return () => {
@@ -78,23 +96,28 @@ const CategoriesScreen = ({ MOVIE, route }) =>
     }, []);
 
     useFocusEffect(
-        useCallback(() => {
-            handlePressChangeMainCategory(headerTitle);
+        useCallback(() => 
+        {
+            if (isInteractionsComplete) {
+                handlePressChangeMainCategory(headerTitle);
+            }
 
             return () => {
                 setSelectedCategory('');
             }
         }, [headerTitle])
-    )
+    );
 
     if (! isInteractionsComplete) return <CategoriesScreenLoader />
 
-    if (! hasMovies) return (
-        <>
-            <NavBar selectedCategory={ selectedCategory } />
-            <CategoriesScreenEmpty />
-        </>
-    )
+    if (! hasMovies) {
+        return (
+            <>
+                <NavBar selectedCategory={ selectedCategory } />
+                <CategoriesScreenEmpty />
+            </>
+        )
+    }
     
     return (
         <View style={ styles.container }>
