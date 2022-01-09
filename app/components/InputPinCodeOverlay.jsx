@@ -17,13 +17,17 @@ const InputPinCodeOverlay = ({ AUTH, profileId, pinCode, isVisible, setIsVisible
 {
     const handleClickForgotPinCode = async () => 
     {
-        const accessToken = await SecureStoreInstance.getAccessToken();
+        try {
+            const accessToken = await SecureStoreInstance.getAccessToken();
 
-        const url = `${ ENV.REACT_APP_URL }/auth/sign-in`;
-        const queryParams = `?token=${ accessToken }&profileId=${ profileId }&path=profile-lock`;
+            const url = `${ ENV.REACT_APP_URL }/auth/sign-in`;
+            const queryParams = `?token=${ accessToken }&profileId=${ profileId }&path=profile-lock`;
 
-        await WebBrowser.openBrowserAsync(url + queryParams);
-        setIsVisible(false);
+            await WebBrowser.openBrowserAsync(url + queryParams);
+            setIsVisible(false);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
