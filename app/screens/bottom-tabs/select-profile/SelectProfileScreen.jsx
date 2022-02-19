@@ -199,11 +199,7 @@ const SelectProfileScreen = ({ AUTH }) =>
                 });
 
                 SUBSCRIBER_PROFILE_CREATED_EVENT.listen(authenticatedUserId, response => {
-                    if (response.platform === 'web') {
-                        dispatch(AUTH_ACTION.broadcastCreateProfile({
-                            profile: response.data
-                        }));
-                    }
+                    dispatch(AUTH_ACTION.showSubscriberStart());
                 });
 
                 SUBSCRIBER_PROFILE_UPDATED_EVENT.listen(authenticatedUserId, response => {
