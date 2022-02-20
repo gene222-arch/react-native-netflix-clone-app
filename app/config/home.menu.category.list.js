@@ -4,6 +4,7 @@ export const CATEGORY_NAMES =
 {
     HOME: 'Home',
     MY_LIST: 'My List',
+    ADVENTURE: 'Adventure',
     ANIMATION: 'Animation',
     ANIME: 'Anime',
     ACTION: 'Action',
@@ -28,6 +29,7 @@ export default ({
     myListOnPress, 
     animationOnPress,
     animeOnPress,
+    adventureOnPress,
     actionOnPress,
     childrenAndFamilyOnPress,
     comedyOnPress,
@@ -54,6 +56,10 @@ export default ({
         { 
             title: CATEGORY_NAMES.MY_LIST,
             onPress: myListOnPress
+        },
+        { 
+            title: CATEGORY_NAMES.ADVENTURE,
+            onPress: adventureOnPress 
         },
         { 
             title: CATEGORY_NAMES.ACTION,

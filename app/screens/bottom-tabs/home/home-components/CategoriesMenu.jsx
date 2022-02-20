@@ -43,6 +43,7 @@ const CategoriesMenu = ({ AUTH_PROFILE, defaultCategory = 'Home', isVisible, set
     const menuList = categoriesConfig({
         homeOnPress: handlePressHome,
         myListOnPress: handlePressNavigateToMyList,
+        adventureOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ADVENTURE),
         animationOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIMATION),
         animeOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ANIME),
         actionOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.ACTION),
@@ -50,6 +51,7 @@ const CategoriesMenu = ({ AUTH_PROFILE, defaultCategory = 'Home', isVisible, set
         comedyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.COMEDY),
         crimeOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.CRIME),
         dramaOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.DRAMA),
+        documentaryOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.DOCUMENTARY),
         fantasyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.FANTASY),
         horrorOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.HORROR),
         historyOnPress: () => handlePressCategoryOnChange(CATEGORY_NAMES.HISTORY),
